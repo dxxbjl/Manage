@@ -35,31 +35,29 @@ public class SwaggerConfig {
 
     @Value("${swagger.enable}")
     private boolean enable;
-
     /**
-     * swagger2的配置文件，这里可以配置swagger2的一些基本的内容，比如扫描的包等等
+     * 创建API
      */
     @Bean
-    public Docket createRestApi() {
-        ParameterBuilder ticketPar = new ParameterBuilder();
-        List<Parameter> pars = new ArrayList<>();
-        //设置所有接口的请求头
-        ticketPar.name("token").description("用户token信息")
-                .modelRef(new ModelRef("string")).parameterType("header")
-                //header中的ticket参数非必填，传空也可以
-                .required(false).build();
-        pars.add(ticketPar.build());    //根据每个方法名也知道当前方法在设置什么参数
+    public Docket createRestApi()
+    {
         return new Docket(DocumentationType.SWAGGER_2)
-                //接扣文档的相关信息
-                .apiInfo(apiInfo())
                 //配置是否启用swagger
                 .enable(enable)
+                // 用来创建该API的基本信息，展示在文档的页面中（自定义展示的信息）
+                .apiInfo(apiInfo())
+                // 设置哪些接口暴露给Swagger展示
                 .select()
+                // 扫描所有有注解的api，用这种方式更灵活
                 .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
+                // 扫描所有 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
                 .build()
-                .globalOperationParameters(pars);
+                .globalOperationParameters(globalOperation());
     }
+
+
+
 
     @Bean
     public Docket appV1(){
