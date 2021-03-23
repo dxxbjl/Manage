@@ -1,5 +1,8 @@
 package io.github.yangyouwang.core.config;
 
+import io.github.yangyouwang.common.annotation.ApiVersion;
+import io.github.yangyouwang.common.constant.ApiVersionConstant;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +19,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -51,10 +55,39 @@ public class SwaggerConfig {
                 //配置是否启用swagger
                 .enable(enable)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("io.github.yangyouwang.system.controller"))
+                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.any())
                 .build()
                 .globalOperationParameters(pars);
+    }
+
+    @Bean
+    public Docket appV1(){
+        return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(apiInfo())
+                .groupName(ApiVersionConstant.SWAGGER_API_V1)
+                .select()
+                .apis(input -> {
+                    ApiVersion apiVersion = input.getHandlerMethod().getMethodAnnotation(ApiVersion.class);
+                    if(apiVersion != null && Arrays.asList(apiVersion.group()).contains(ApiVersionConstant.SWAGGER_API_V1)){
+                        return true;
+                    }
+                    return false;
+                })
+                .paths(PathSelectors.any())
+                .build()
+                .globalOperationParameters(globalOperation());
+    }
+
+    private List<Parameter> globalOperation(){
+        List<Parameter> pars = new ArrayList<>();
+        ParameterBuilder tokenPar = new ParameterBuilder();
+        tokenPar.name("Authorization").description("token").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
+        pars.add(tokenPar.build());
+        ParameterBuilder versionPar = new ParameterBuilder();
+        versionPar.name("version").description("版本").modelRef(new ModelRef("string")).parameterType("path").defaultValue("v1").required(true).build();
+        pars.add(versionPar.build());
+        return pars;
     }
 
     /***
