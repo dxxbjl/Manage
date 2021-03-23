@@ -1,0 +1,59 @@
+server:
+  port: 8080
+  servlet:
+    context-path: / # 应用的访问路径
+  tomcat:
+    uri-encoding: UTF-8
+    context-path: /tale_blog
+spring:
+  mvc:
+    static-path-pattern: /static/**
+  # 多环境配置
+  profiles:
+    active: @profile.active@
+  # 服务模块
+  devtools:
+    restart:
+      # 热部署开关
+      enabled: true
+  # 格式化JSON日期
+  jackson:
+   time-zone: GMT+8
+   date-format: yyyy-MM-dd HH:mm:ss
+   default-property-inclusion: always
+  # jpa配置
+  jpa:
+    database: MYSQL
+    show-sql: true
+    hibernate:
+     ddl-auto: update
+     naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+     hibernate:
+      temp:
+       use_jdbc_metadata_defaults: false
+      dialect: org.hibernate.dialect.MySQL5Dialect
+# 启用swagger
+swagger:
+  enable: false
+##############################################
+#
+# thymeleaf静态资源配置
+#
+##############################################
+thymeleaf:
+  # 默认路径
+  prefix: classpath:/templates/
+  # 后缀
+  suffix: .html
+  # 模版样式
+  mode: HTML5
+  encoding: UTF-8
+  content-type: text/html
+  cache: false
+  enabled: true
+# 日志配置
+logging:
+   level:
+     io.github: debug
+     org.springframework: warn
