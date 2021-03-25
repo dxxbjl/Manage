@@ -3,7 +3,6 @@ package io.github.yangyouwang.core.config;
 import io.github.yangyouwang.common.annotation.ApiVersion;
 import io.github.yangyouwang.common.constant.ApiVersionConstant;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -33,8 +32,6 @@ import java.util.List;
 @EnableSwagger2
 public class SwaggerConfig {
 
-    @Value("${swagger.enable}")
-    private boolean enable;
     /**
      * 创建API
      */
@@ -42,22 +39,16 @@ public class SwaggerConfig {
     public Docket createRestApi()
     {
         return new Docket(DocumentationType.SWAGGER_2)
-                //配置是否启用swagger
-                .enable(enable)
                 // 用来创建该API的基本信息，展示在文档的页面中（自定义展示的信息）
                 .apiInfo(apiInfo())
                 // 设置哪些接口暴露给Swagger展示
                 .select()
-                // 扫描所有有注解的api，用这种方式更灵活
-                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
-                // 扫描所有 .apis(RequestHandlerSelectors.any())
+                // 扫描
+                .apis(RequestHandlerSelectors.basePackage("io.github.yangyouwang.api"))
                 .paths(PathSelectors.any())
                 .build()
                 .globalOperationParameters(globalOperation());
     }
-
-
-
 
     @Bean
     public Docket appV1(){

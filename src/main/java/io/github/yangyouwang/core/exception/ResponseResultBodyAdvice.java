@@ -1,4 +1,4 @@
-package io.github.yangyouwang.core.web.interceptor;
+package io.github.yangyouwang.core.exception;
 
 import io.github.yangyouwang.common.annotation.ResponseResultBody;
 import io.github.yangyouwang.common.domain.Result;

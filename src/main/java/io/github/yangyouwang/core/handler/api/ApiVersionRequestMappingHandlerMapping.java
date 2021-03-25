@@ -1,4 +1,4 @@
-package io.github.yangyouwang.core.web.api;
+package io.github.yangyouwang.core.handler.api;
 
 import io.github.yangyouwang.common.annotation.ApiVersion;
 import lombok.extern.java.Log;
@@ -10,16 +10,16 @@ import java.lang.reflect.Method;
 
 /**
  * @author yangyouwang
- * @title: ApiVersioningRequestMappingHandlerMapping
+ * @title: ApiVersionRequestMappingHandlerMapping
  * @projectName ruoyi
  * @description:
  * @date 2020/10/24下午11:49
  */
 @Log
-public class ApiVersioningRequestMappingHandlerMapping extends RequestMappingHandlerMapping {
+public class ApiVersionRequestMappingHandlerMapping extends RequestMappingHandlerMapping {
 
-    public ApiVersioningRequestMappingHandlerMapping() {
-        log.info("ApiVersioningRequestMappingHandlerMapping Init...");
+    public ApiVersionRequestMappingHandlerMapping() {
+        log.info("ApiVersionRequestMappingHandlerMapping Init...");
     }
 
     @Override

@@ -1,6 +1,6 @@
 package io.github.yangyouwang.core.config;
 
-import io.github.yangyouwang.core.web.api.ApiVersioningRequestMappingHandlerMapping;
+import io.github.yangyouwang.core.handler.api.ApiVersionRequestMappingHandlerMapping;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcRegistrations;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
@@ -17,6 +17,6 @@ public class WebMvcRegistrationsConfig implements WebMvcRegistrations {
 
     @Override
     public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
-        return new ApiVersioningRequestMappingHandlerMapping();
+        return new ApiVersionRequestMappingHandlerMapping();
     }
 }

@@ -68,8 +68,8 @@
                 <div class="layui-logo" lay-href="/mainPage">
                     <span>layuiAdmin</span>
                 </div>
-                <ul th:each="menu,menuStat:${sysMenus}" class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
-                    <li class="layui-nav-item">
+                <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
+                    <li th:each="menu,menuStat:${sysMenus}" class="layui-nav-item">
                         <a href="javascript:;" lay-direction="2">
                             <i class="layui-icon layui-icon-home"></i>
                             <cite>[[${menu.menuName}]]</cite>

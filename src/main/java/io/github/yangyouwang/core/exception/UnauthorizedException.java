@@ -1,4 +1,4 @@
-package io.github.yangyouwang.core.web.exception;
+package io.github.yangyouwang.core.exception;
 
 /**
  * @program: ruoyi

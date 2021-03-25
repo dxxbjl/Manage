@@ -33,9 +33,7 @@ spring:
       temp:
        use_jdbc_metadata_defaults: false
       dialect: org.hibernate.dialect.MySQL5Dialect
-# 启用swagger
-swagger:
-  enable: false
+
 ##############################################
 #
 # thymeleaf静态资源配置
@@ -49,9 +47,10 @@ thymeleaf:
   # 模版样式
   mode: HTML5
   encoding: UTF-8
-  content-type: text/html
   cache: false
-  enabled: true
+  servlet:
+    content-type: text/html
+
 # 日志配置
 logging:
    level:

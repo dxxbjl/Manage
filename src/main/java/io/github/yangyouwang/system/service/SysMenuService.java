@@ -31,7 +31,7 @@ public class SysMenuService {
      */
     public List<SysMenu> selectMenusByUser(Long id) {
         List<SysMenu> menus;
-        if (userId == id) {
+        if (userId.equals(id)) {
             menus = this.sysMenuRepository.findSysMenuByMenuTypeAndVisible();
         } else {
             menus = this.sysMenuRepository.findSysMenuByUserId(id);

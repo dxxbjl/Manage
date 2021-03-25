@@ -26,19 +26,10 @@ public class SysLoginController {
     private SysMenuService sysMenuService;
 
     /**
-     * 跳转到登陆页面
-     * @return 登陆页面
-     */
-    @GetMapping("/loginPage")
-    public String loginPage(){
-        return "/login";
-    }
-
-    /**
      * 跳转到首页页面
      * @return 首页页面
      */
-    @GetMapping("/indexPage")
+    @GetMapping("/")
     public String indexPage(ModelMap map) {
         SysUser sysUser = (SysUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Assert.notNull(sysUser,"该用户未登陆");
@@ -46,6 +37,15 @@ public class SysLoginController {
         map.put("sysMenus",sysMenus);
         map.put("sysUser",sysUser);
         return "/index";
+    }
+
+    /**
+     * 跳转到登陆页面
+     * @return 登陆页面
+     */
+    @GetMapping("/loginPage")
+    public String loginPage(){
+        return "/login";
     }
 
     /**

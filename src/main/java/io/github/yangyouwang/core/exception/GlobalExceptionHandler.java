@@ -1,4 +1,4 @@
-package io.github.yangyouwang.core.web.exception;
+package io.github.yangyouwang.core.exception;
 
 import io.github.yangyouwang.common.domain.Result;
 import org.springframework.http.HttpHeaders;
