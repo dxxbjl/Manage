@@ -3,11 +3,8 @@ package io.github.yangyouwang.core.config;
 import io.github.yangyouwang.core.interceptor.RestApiInteceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.web.csrf.CsrfFilter;
-import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -44,17 +41,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder.build();
-    }
-
-    /**
-     * 配置CsrfFilter
-     */
-    @Bean
-    public FilterRegistrationBean csrfFilter() {
-        FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(new CsrfFilter(new HttpSessionCsrfTokenRepository()));
-        registration.addUrlPatterns("/*");
-        return registration;
     }
 
     /**

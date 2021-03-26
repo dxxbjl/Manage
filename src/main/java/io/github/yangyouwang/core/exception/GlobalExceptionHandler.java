@@ -1,14 +1,12 @@
 package io.github.yangyouwang.core.exception;
 
 import io.github.yangyouwang.common.domain.Result;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import io.github.yangyouwang.common.enums.ResultStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import org.springframework.web.util.WebUtils;
+
+import java.nio.file.AccessDeniedException;
 
 /**
  * @author yangyouwang
@@ -17,43 +15,34 @@ import org.springframework.web.util.WebUtils;
  * @description: 全局异常处理
  * @date 2021/3/209:31 PM
  */
+@Slf4j
 @RestControllerAdvice
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+public class GlobalExceptionHandler {
 
     /**
-     * 提供对标准Spring MVC异常的处理
-     *
-     * @param ex      the target exception
-     * @param request the current request
+     * 处理空指针的异常
      */
-    @ExceptionHandler(Exception.class)
-    public final ResponseEntity<Result<?>> exceptionHandler(Exception ex, WebRequest request) {
-        HttpHeaders headers = new HttpHeaders();
-        return this.handleException(ex, headers, request);
-    }
-
-
-    /** 异常类的统一处理 */
-    protected ResponseEntity<Result<?>> handleException(Exception ex, HttpHeaders headers, WebRequest request) {
-        Result<?> body = Result.failure();
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        return this.handleExceptionInternal(ex, body, headers, status, request);
+    @ExceptionHandler(value = NullPointerException.class)
+    public Result exceptionHandler(NullPointerException e){
+        log.error("发生空指针异常！原因是:",e);
+        return Result.ok(ResultStatus.ERROR.code, e.getMessage(), null);
     }
 
     /**
-     * org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler#handleExceptionInternal(java.lang.Exception, java.lang.Object, org.springframework.http.HttpHeaders, org.springframework.http.HttpStatus, org.springframework.web.context.request.WebRequest)
-     * <p>
-     * A single place to customize the response body of all exception types.
-     * <p>The default implementation sets the {@link WebUtils#ERROR_EXCEPTION_ATTRIBUTE}
-     * request attribute and creates a {@link ResponseEntity} from the given
-     * body, headers, and status.
+     * 处理权限的异常
      */
-    protected ResponseEntity<Result<?>> handleExceptionInternal(
-            Exception ex, Result<?> body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    @ExceptionHandler(value = AccessDeniedException.class)
+    public Result exceptionHandler(AccessDeniedException e){
+        log.error("发生权限异常！原因是:",e);
+        return Result.ok(ResultStatus.ERROR.code, e.getMessage(), null);
+    }
 
-        if (HttpStatus.INTERNAL_SERVER_ERROR.equals(status)) {
-            request.setAttribute(WebUtils.ERROR_EXCEPTION_ATTRIBUTE, ex, WebRequest.SCOPE_REQUEST);
-        }
-        return new ResponseEntity<>(body, headers, status);
+    /**
+     * 处理其他异常
+     */
+    @ExceptionHandler(value =Exception.class)
+    public Result exceptionHandler(Exception e){
+        log.error("未知异常！原因是:",e);
+        return Result.ok(ResultStatus.ERROR.getCode(), e.getMessage(), null);
     }
 }

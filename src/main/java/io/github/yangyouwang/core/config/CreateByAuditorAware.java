@@ -1,8 +1,9 @@
 package io.github.yangyouwang.core.config;
 
-import io.github.yangyouwang.system.model.SysUser;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Optional;
@@ -15,14 +16,15 @@ import java.util.Optional;
  * @date 2021/3/2311:17 AM
  */
 @Configuration
-public class CreateByAuditorAware implements AuditorAware<Long> {
+@EnableJpaAuditing
+public class CreateByAuditorAware implements AuditorAware<String> {
 
     @Override
-    public Optional<Long> getCurrentAuditor() {
+    public Optional<String> getCurrentAuditor() {
         //项目中获取登录用户id的方法
-        SysUser sysUser = (SysUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(sysUser != null){
-            return Optional.of(sysUser.getId());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication != null){
+            return Optional.of(authentication.getName());
         }
         return Optional.empty();
     }

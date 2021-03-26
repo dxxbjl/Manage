@@ -1,9 +1,7 @@
 package io.github.yangyouwang.system.model;
 
 import io.github.yangyouwang.common.domain.BaseEntity;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
@@ -18,8 +16,6 @@ import java.util.List;
 @Data
 @Entity
 @Table(name="sys_menu")
-@AllArgsConstructor
-@NoArgsConstructor
 public class SysMenu extends BaseEntity {
     /**
      * 主键id

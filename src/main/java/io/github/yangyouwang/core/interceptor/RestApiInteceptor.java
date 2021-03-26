@@ -3,7 +3,6 @@ package io.github.yangyouwang.core.interceptor;
 import io.github.yangyouwang.common.annotation.PassToken;
 import io.github.yangyouwang.common.constant.JwtConstants;
 import io.github.yangyouwang.core.util.JwtTokenUtil;
-import io.github.yangyouwang.core.exception.UnauthorizedException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -49,6 +48,6 @@ public class RestApiInteceptor extends HandlerInterceptorAdapter {
                 return true;
             }
         }
-        throw new UnauthorizedException();
+        throw new RuntimeException("token验证失败");
     }
 }

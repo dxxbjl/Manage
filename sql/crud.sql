@@ -11,7 +11,7 @@
  Target Server Version : 50733
  File Encoding         : 65001
 
- Date: 25/03/2021 11:28:35
+ Date: 26/03/2021 16:58:37
 */
 
 SET NAMES utf8mb4;
@@ -38,18 +38,18 @@ CREATE TABLE `sys_menu` (
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) COLLATE utf8_bin DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=116 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='菜单权限表';
+) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='菜单权限表';
 
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, 1, '#', '', 'M', '0', '', 'fa fa-gear', 'admin', '2018-03-16 11:33:00', 'ry', '2018-03-16 11:33:00', '系统管理目录');
-INSERT INTO `sys_menu` VALUES (3, '系统工具', 0, 3, '#', '', 'M', '0', '', 'fa fa-bars', 'admin', '2018-03-16 11:33:00', 'ry', '2018-03-16 11:33:00', '系统工具目录');
-INSERT INTO `sys_menu` VALUES (100, '用户管理', 1, 1, '/sysUser/user', '', 'C', '0', 'system:user:view', '#', 'admin', '2018-03-16 11:33:00', 'ry', '2018-03-16 11:33:00', '用户管理菜单');
-INSERT INTO `sys_menu` VALUES (101, '角色管理', 1, 2, '/system/role', '', 'C', '0', 'system:role:view', '#', 'admin', '2018-03-16 11:33:00', 'ry', '2018-03-16 11:33:00', '角色管理菜单');
-INSERT INTO `sys_menu` VALUES (102, '菜单管理', 1, 3, '/system/menu', '', 'C', '0', 'system:menu:view', '#', 'admin', '2018-03-16 11:33:00', 'ry', '2018-03-16 11:33:00', '菜单管理菜单');
-INSERT INTO `sys_menu` VALUES (115, '系统接口', 3, 3, '/sysTool/swagger', '', 'C', '0', 'tool:swagger:view', '#', 'admin', '2018-03-16 11:33:00', 'ry', '2018-03-16 11:33:00', '系统接口菜单');
+INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, 1, '#', '', 'M', '0', '', 'fa fa-gear', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '系统管理目录');
+INSERT INTO `sys_menu` VALUES (3, '系统工具', 0, 3, '#', '', 'M', '0', '', 'fa fa-bars', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '系统工具目录');
+INSERT INTO `sys_menu` VALUES (100, '用户管理', 1, 1, '/sysUser/listPage', '', 'C', '0', 'system:user:view', '#', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '用户管理菜单');
+INSERT INTO `sys_menu` VALUES (101, '角色管理', 1, 2, '/system/role', '', 'C', '0', 'system:role:view', '#', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '角色管理菜单');
+INSERT INTO `sys_menu` VALUES (102, '菜单管理', 1, 3, '/system/menu', '', 'C', '0', 'system:menu:view', '#', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '菜单管理菜单');
+INSERT INTO `sys_menu` VALUES (115, '系统接口', 3, 3, '/sysTool/swagger', '', 'C', '0', 'tool:swagger:view', '#', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '系统接口菜单');
 COMMIT;
 
 -- ----------------------------
@@ -61,6 +61,10 @@ CREATE TABLE `sys_role` (
   `role_name` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT '名称',
   `role_key` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT '标识',
   `remark` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT '描述',
+  `create_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '创建者',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='角色表';
 
@@ -68,8 +72,8 @@ CREATE TABLE `sys_role` (
 -- Records of sys_role
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_role` VALUES (1, '超级管理员', 'ADMIN', '超级管理员');
-INSERT INTO `sys_role` VALUES (2, '基本角色', 'USER', '基本角色');
+INSERT INTO `sys_role` VALUES (1, '超级管理员', 'ADMIN', '超级管理员', '', NULL, '', NULL);
+INSERT INTO `sys_role` VALUES (2, '基本角色', 'USER', '基本角色', '', NULL, '', NULL);
 COMMIT;
 
 -- ----------------------------
@@ -99,18 +103,27 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE `sys_user` (
-  `id` bigint(20) NOT NULL COMMENT '主键',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `user_name` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT '账户',
   `pass_word` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '密码',
   `enabled` char(1) COLLATE utf8_bin DEFAULT NULL COMMENT '是否启用',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='用户表';
+  `email` varchar(50) COLLATE utf8_bin DEFAULT '' COMMENT '用户邮箱',
+  `phonenumber` varchar(11) COLLATE utf8_bin DEFAULT '' COMMENT '手机号码',
+  `sex` char(1) COLLATE utf8_bin DEFAULT '0' COMMENT '用户性别（0男 1女 2未知）',
+  `avatar` varchar(100) COLLATE utf8_bin DEFAULT '' COMMENT '头像路径',
+  `create_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '创建者',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='用户表';
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_user` VALUES (1, 'admin', '$2a$10$XcigeMfToGQ2bqRToFtUi.sG1V.HhrJV6RBjji1yncXReSNNIPl1K', '1');
+INSERT INTO `sys_user` VALUES (1, 'admin', '$2a$10$XcigeMfToGQ2bqRToFtUi.sG1V.HhrJV6RBjji1yncXReSNNIPl1K', '1', '', '', '0', '', '', NULL, '', NULL, NULL);
 COMMIT;
 
 -- ----------------------------
@@ -125,8 +138,7 @@ CREATE TABLE `sys_user_role` (
   UNIQUE KEY `UK_fxu3td9m5o7qov1kbdvmn0g0x` (`role_id`),
   KEY `FKb40xxfch70f5qnyfw8yme1n1s` (`user_id`),
   CONSTRAINT `FKb40xxfch70f5qnyfw8yme1n1s` FOREIGN KEY (`user_id`) REFERENCES `sys_user` (`id`),
-  CONSTRAINT `FKhh52n8vd4ny9ff4x9fb8v65qx` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`id`),
-  CONSTRAINT `FKj2axct0wsavvl3vm4i0ukw5ex` FOREIGN KEY (`user_id`) REFERENCES `sys_role` (`id`)
+  CONSTRAINT `FKhh52n8vd4ny9ff4x9fb8v65qx` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='用户角色关联表';
 
 -- ----------------------------

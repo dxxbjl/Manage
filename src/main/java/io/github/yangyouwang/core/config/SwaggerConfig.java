@@ -44,7 +44,7 @@ public class SwaggerConfig {
                 // 设置哪些接口暴露给Swagger展示
                 .select()
                 // 扫描
-                .apis(RequestHandlerSelectors.basePackage("io.github.yangyouwang.api"))
+                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.any())
                 .build()
                 .globalOperationParameters(globalOperation());

@@ -1,9 +1,9 @@
 package io.github.yangyouwang.system.model;
 
+import io.github.yangyouwang.common.domain.BaseEntity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -15,8 +15,8 @@ import java.util.List;
  */
 @Data
 @Entity
-@Table(name="sysRole")
-public class SysRole implements Serializable {
+@Table(name="sys_role")
+public class SysRole extends BaseEntity {
 
     /**
      * 主键id
@@ -35,11 +35,6 @@ public class SysRole implements Serializable {
      */
     @Column(name="role_key")
     private String roleKey;
-    /**
-     * 描述
-     */
-    @Column(name="remark")
-    private String remark;
     /**
      * 一个角色对应多个用户
      */

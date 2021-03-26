@@ -1,5 +1,7 @@
 package io.github.yangyouwang.system.model;
 
+import io.github.yangyouwang.common.constant.Constants;
+import io.github.yangyouwang.common.domain.BaseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,8 +19,8 @@ import java.util.List;
  * @date 2021/3/2112:22 AM
  */
 @Entity
-@Table(name="sysUser")
-public class SysUser implements UserDetails {
+@Table(name="sys_user")
+public class SysUser extends BaseEntity implements UserDetails  {
 
     private static final long serialVersionUID = 1960027566696794847L;
     /**
@@ -42,7 +44,27 @@ public class SysUser implements UserDetails {
      * 启用
      */
     @Column(name="enabled")
-    private boolean enabled;
+    private String enabled;
+    /**
+     * 邮箱
+     */
+    @Column(name="email")
+    private String email;
+    /**
+     * 手机号码
+     */
+    @Column(name="phonenumber")
+    private String phonenumber;
+    /**
+     * 用户性别（0男 1女 2未知）
+     */
+    @Column(name="sex")
+    private String sex;
+    /**
+     * 头像
+     */
+    @Column(name="avatar")
+    private String avatar;
 
     /**
      * 多个用户对应一个角色
@@ -90,11 +112,7 @@ public class SysUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return this.enabled;
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
+        return Constants.ENABLED_YES.equals(this.enabled);
     }
 
     public Long getId() {
@@ -121,8 +139,44 @@ public class SysUser implements UserDetails {
         this.passWord = passWord;
     }
 
-    public void setEnabled(boolean enabled) {
+    public String getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(String enabled) {
         this.enabled = enabled;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhonenumber() {
+        return phonenumber;
+    }
+
+    public void setPhonenumber(String phonenumber) {
+        this.phonenumber = phonenumber;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public List<SysRole> getRoles() {
