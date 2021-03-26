@@ -56,6 +56,7 @@ public class SysUserService implements UserDetailsService {
         SysUser sysUser = sysUserRepository.findById(id).orElse(new SysUser());
         SysUserResp sysUserResp = new SysUserResp();
         BeanUtils.copyProperties(sysUser,sysUserResp);
+        sysUserResp.setEnabled(sysUser.getEnabled());
         return sysUserResp;
     }
 
@@ -77,9 +78,9 @@ public class SysUserService implements UserDetailsService {
         if (Objects.nonNull(sysUser)) {
             throw new RuntimeException("用户已存在");
         }
-        String passWord = passwordEncoder.encode(sysUserAddReq.getPassWord());
         sysUser = new SysUser();
         BeanUtils.copyProperties(sysUserAddReq,sysUser);
+        String passWord = passwordEncoder.encode(sysUserAddReq.getPassWord());
         sysUser.setPassWord(passWord);
         sysUserRepository.save(sysUser);
     }

@@ -61,7 +61,8 @@
   </div>
 
   <script th:src="@{/static/layuiadmin/layui/layui.js}"></script>
-  <script>
+  <script th:inline="javascript">
+  var ctx = [[${#request.getContextPath()}]];
   layui.config({
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
@@ -69,7 +70,26 @@
   }).use(['index', 'form'], function(){
     var $ = layui.$
     ,form = layui.form;
-  })
+    form.on('submit(save-submit)', function(data){
+          $.ajax({
+              type: 'POST',
+              url:  ctx + '/sysUser/add',
+              data: JSON.stringify(data.field),
+              contentType:'application/json;charset=UTF-8',
+              dataType: 'json',
+              success: function(result) {
+                  layer.msg(result.message);
+                  if (result.code == 200) {
+                      var index = parent.layer.getFrameIndex(window.name);
+                      // 关闭
+                      parent.layer.close(index);
+                      // 刷新
+                      parent.location.reload();
+                  }
+              }
+          });
+      });
+  });
   </script>
 </body>
 </html>

@@ -2,7 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8">
-  <title>layuiAdmin 网站用户</title>
+  <title>用户列表</title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -36,7 +36,7 @@
             <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
               <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
             </button>
-            <button class="layui-btn layuiadmin-btn-useradmin" data-type="add">添加</button>
+            <button class="layui-btn layuiadmin-btn-useradmin" data-type="addView">添加</button>
           </div>
         </div>
       </div>
@@ -81,10 +81,13 @@
           }
           ,parseData: function (result) {
               return {
-                   "code":0,
-                   "count": result.totalElements,
-                   "data": result.content
+                   "code":result.code,
+                   "count": result.data.totalElements,
+                   "data": result.data.content
               }
+          }
+          ,response: {
+               statusCode: 200 //成功的状态码，默认：0
           }
           ,cols: [[ //表头
               {field: 'id', title: 'ID', sort: true, fixed: 'left'}
@@ -124,45 +127,64 @@
           var data = obj.data //获得当前行数据
               ,layEvent = obj.event;
           if(layEvent === 'edit'){
+              active.editView(data.id);
+          } else if(layEvent === 'del'){
+              active.del(data.id);
+          }
+      });
+
+      $('.layui-btn').on('click', function(){
+          var type = $(this).data('type');
+          active[type] && active[type].call(this);
+      });
+
+      /* 触发弹层 */
+      var active = {
+          /**
+           * 添加
+           * */
+          addView: function(){
               layer.open({
-                  type: 2
-                  ,title: '修改用户'
-                  ,content: ctx + '/sysUser/editPage/' + data.id
+                  type: 2,
+                  title: "添加用户",
+                  content: ctx + '/sysUser/addPage'
                   ,maxmin: true
                   ,area: ['500px', '450px']
                   ,btn: ['确定', '取消']
                   ,yes: function(index, layero){
-                      var iframeWindow = window['layui-layer-iframe'+ index]
-                          ,submitID = 'save-submit'
-                          ,submit = layero.find('iframe').contents().find('#'+ submitID);
-                      //监听提交
-                      iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
-                          //请求添加接口
-                          $.ajax({
-                              type: 'POST',
-                              url:  ctx + '/sysUser/edit',
-                              data: JSON.stringify(data.field),
-                              contentType:'application/json;charset=UTF-8',
-                              dataType: 'json',
-                              success: function(result) {
-                                  layer.msg(result.message);
-                                  if (result.code == 200) {
-                                      table.reload('userTable'); //数据刷新
-                                      layer.close(index); //关闭弹层
-                                  }
-                              }
-                          });
-
-                      });
+                      var submit = layero.find('iframe').contents().find('#save-submit');
                       submit.trigger('click');
                   }
               });
-          } else if(layEvent === 'del'){
+          },
+          /**
+           * 编辑
+           * @param id id
+           * */
+          editView: function(id){
+              layer.open({
+                  type: 2
+                  ,title: '修改用户'
+                  ,content: ctx + '/sysUser/editPage/' + id
+                  ,maxmin: true
+                  ,area: ['500px', '450px']
+                  ,btn: ['确定', '取消']
+                  ,yes: function(index, layero){
+                      var submit = layero.find('iframe').contents().find('#save-submit');
+                      submit.trigger('click');
+                  }
+              });
+          },
+          /**
+           * 删除
+           * @param id id
+           */
+          del: function(id){
               layer.confirm('真的删除行么', function(index){
                   //向服务端发送删除指令
                   $.ajax({
                       type: 'DELETE',
-                      url:  ctx + '/sysUser/del/' + data.id,
+                      url:  ctx + '/sysUser/del/' + id,
                       contentType:'application/json;charset=UTF-8',
                       dataType: 'json',
                       success: function(result) {
@@ -175,51 +197,7 @@
                   });
               });
           }
-      });
-
-      $('.layui-btn').on('click', function(){
-          var type = $(this).data('type');
-          active[type] && active[type].call(this);
-      });
-
-      /* 触发弹层 */
-      var active = {
-          add: function(){
-              layer.open({
-                  type: 2
-                  ,title: '添加用户'
-                  ,content: ctx + '/sysUser/addPage'
-                  ,maxmin: true
-                  ,area: ['500px', '450px']
-                  ,btn: ['确定', '取消']
-                  ,yes: function(index, layero){
-                      var iframeWindow = window['layui-layer-iframe'+ index]
-                          ,submitID = 'save-submit'
-                          ,submit = layero.find('iframe').contents().find('#'+ submitID);
-                      //监听提交
-                      iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
-                          //请求添加接口
-                          $.ajax({
-                              type: 'POST',
-                              url:  ctx + '/sysUser/add',
-                              data: JSON.stringify(data.field),
-                              contentType:'application/json;charset=UTF-8',
-                              dataType: 'json',
-                              success: function(result) {
-                                  layer.msg(result.message);
-                                  if (result.code == 200) {
-                                      table.reload('userTable'); //数据刷新
-                                      layer.close(index); //关闭弹层
-                                  }
-                              }
-                          });
-
-                      });
-                      submit.trigger('click');
-                  }
-              });
-          }
-      };
+      }
   });
   </script>
 </body>

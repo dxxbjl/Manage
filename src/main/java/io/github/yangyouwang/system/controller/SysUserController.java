@@ -7,7 +7,6 @@ import io.github.yangyouwang.system.model.req.SysUserListReq;
 import io.github.yangyouwang.system.model.resp.SysUserResp;
 import io.github.yangyouwang.system.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -85,8 +84,8 @@ public class SysUserController {
      */
     @GetMapping("/list")
     @ResponseBody
-    public Page<SysUserResp> list(SysUserListReq sysUserListReq){
-        return sysUserService.list(sysUserListReq);
+    public Result list(SysUserListReq sysUserListReq){
+        return Result.success(sysUserService.list(sysUserListReq));
     }
 
     /**
