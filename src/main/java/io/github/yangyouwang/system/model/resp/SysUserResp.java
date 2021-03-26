@@ -47,4 +47,6 @@ public class SysUserResp implements Serializable {
      * 头像
      */
     private String avatar;
+    /** 备注 */
+    private String remark;
 }

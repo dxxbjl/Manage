@@ -3,6 +3,7 @@ package io.github.yangyouwang.system.controller;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.system.model.req.SysUserAddReq;
 import io.github.yangyouwang.system.model.req.SysUserEditReq;
+import io.github.yangyouwang.system.model.req.SysUserListReq;
 import io.github.yangyouwang.system.model.resp.SysUserResp;
 import io.github.yangyouwang.system.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,10 +85,8 @@ public class SysUserController {
      */
     @GetMapping("/list")
     @ResponseBody
-    public Page<SysUserResp> list(@RequestParam(value = "userName",required = false) String userName,
-                                  @RequestParam(value = "pageNum") Integer pageNum,
-                                  @RequestParam(value = "pageSize") Integer pageSize){
-        return sysUserService.list(userName, pageNum, pageSize);
+    public Page<SysUserResp> list(SysUserListReq sysUserListReq){
+        return sysUserService.list(sysUserListReq);
     }
 
     /**

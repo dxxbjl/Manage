@@ -4,6 +4,7 @@ import io.github.yangyouwang.system.dao.SysUserRepository;
 import io.github.yangyouwang.system.model.SysUser;
 import io.github.yangyouwang.system.model.req.SysUserAddReq;
 import io.github.yangyouwang.system.model.req.SysUserEditReq;
+import io.github.yangyouwang.system.model.req.SysUserListReq;
 import io.github.yangyouwang.system.model.resp.SysUserResp;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -63,10 +63,9 @@ public class SysUserService implements UserDetailsService {
      * 列表请求
      * @return 列表
      */
-    public Page<SysUserResp> list(@Nullable String userName, Integer pageNum, Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNum - 1,pageSize);
-        Page<SysUserResp> page = sysUserRepository.findPage(userName, pageable);
-        return page;
+    public Page<SysUserResp> list(SysUserListReq sysUserListReq) {
+        Pageable pageable = PageRequest.of(sysUserListReq.getPageNum() - 1,sysUserListReq.getPageSize());
+        return sysUserRepository.findPage(sysUserListReq, pageable);
     }
 
     /**
@@ -90,7 +89,7 @@ public class SysUserService implements UserDetailsService {
      * @return 编辑状态
      */
     public void edit(SysUserEditReq sysUserEditReq) {
-        SysUser sysUser = new SysUser();
+        SysUser sysUser = sysUserRepository.findById(sysUserEditReq.getId()).get();
         BeanUtils.copyProperties(sysUserEditReq,sysUser);
         sysUserRepository.save(sysUser);
     }

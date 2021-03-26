@@ -1,6 +1,7 @@
 package io.github.yangyouwang.system.dao;
 
 import io.github.yangyouwang.system.model.SysUser;
+import io.github.yangyouwang.system.model.req.SysUserListReq;
 import io.github.yangyouwang.system.model.resp.SysUserResp;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,10 +26,16 @@ public interface SysUserRepository extends JpaRepository<SysUser,Long> {
 
     /**
      * 查询分页数据
-     * @param userName 查询条件
+     * @param sysUserListReq 查询条件
      * @return 用户列表
      */
-    @Query(value = "select new io.github.yangyouwang.system.model.resp.SysUserResp(id,userName,enabled,email,phonenumber,sex,avatar) from SysUser where 1=1 and (userName like CONCAT('%',?1,'%') or ?1 is null)",
-            countQuery = "from SysUser u where 1=1 and (userName like CONCAT('%',?1,'%') or ?1 is null)")
-    Page<SysUserResp> findPage(@Param("userName") String userName, Pageable pageable);
+    @Query(value = "select new io.github.yangyouwang.system.model.resp.SysUserResp(id,userName,enabled,email,phonenumber,sex,avatar,remark) from SysUser where 1=1 " +
+            "and (userName like CONCAT(:#{#sysUser.userName},'%') or :#{#sysUser.userName} is null)"+
+            "and (phonenumber =:#{#sysUser.phonenumber} or :#{#sysUser.phonenumber} is null or :#{#sysUser.phonenumber} = '')"+
+            "and (email = :#{#sysUser.email} or :#{#sysUser.email} is null or :#{#sysUser.email} = '')",
+            countQuery = "from SysUser u where 1=1" +
+                    " and (userName like CONCAT(:#{#sysUser.userName},'%') or :#{#sysUser.userName} is null)" +
+                    " and (phonenumber =:#{#sysUser.phonenumber} or :#{#sysUser.phonenumber} is null or :#{#sysUser.phonenumber} = '')"+
+                    " and (email = :#{#sysUser.email} or :#{#sysUser.email} is null or :#{#sysUser.email} = '')")
+    Page<SysUserResp> findPage(@Param("sysUser") SysUserListReq sysUserListReq, Pageable pageable);
 }
