@@ -33,7 +33,7 @@ public interface SysUserRepository extends JpaRepository<SysUser,Long> {
             "and (userName like CONCAT(:#{#sysUser.userName},'%') or :#{#sysUser.userName} is null)"+
             "and (phonenumber =:#{#sysUser.phonenumber} or :#{#sysUser.phonenumber} is null or :#{#sysUser.phonenumber} = '')"+
             "and (email = :#{#sysUser.email} or :#{#sysUser.email} is null or :#{#sysUser.email} = '')",
-            countQuery = "from SysUser u where 1=1" +
+            countQuery = "from SysUser where 1=1" +
                     " and (userName like CONCAT(:#{#sysUser.userName},'%') or :#{#sysUser.userName} is null)" +
                     " and (phonenumber =:#{#sysUser.phonenumber} or :#{#sysUser.phonenumber} is null or :#{#sysUser.phonenumber} = '')"+
                     " and (email = :#{#sysUser.email} or :#{#sysUser.email} is null or :#{#sysUser.email} = '')")

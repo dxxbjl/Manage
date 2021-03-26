@@ -2,7 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8">
-  <title>用户列表</title>
+  <title>角色列表</title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -15,21 +15,15 @@
       <div class="layui-form layui-card-header layuiadmin-card-header-auto">
         <div class="layui-form-item">
           <div class="layui-inline">
-            <label class="layui-form-label">用户名</label>
+            <label class="layui-form-label">角色名称</label>
             <div class="layui-input-block">
-              <input type="text" name="userName" placeholder="请输入用户名" class="layui-input">
+              <input type="text" name="roleName" placeholder="请输入角色名称" class="layui-input">
             </div>
           </div>
           <div class="layui-inline">
-            <label class="layui-form-label">邮箱</label>
+            <label class="layui-form-label">角色key</label>
             <div class="layui-input-block">
-              <input type="text" name="email" placeholder="请输入邮箱" class="layui-input">
-            </div>
-          </div>
-          <div class="layui-inline">
-            <label class="layui-form-label">手机号</label>
-            <div class="layui-input-block">
-              <input type="text" name="phonenumber" placeholder="请输入手机号" class="layui-input">
+              <input type="text" name="roleKey" placeholder="请输入角色key" class="layui-input">
             </div>
           </div>
           <div class="layui-inline">
@@ -41,7 +35,7 @@
         </div>
       </div>
       <div class="layui-card-body">
-        <table id="userTable" lay-filter="userTable"></table>
+        <table id="roleTable" lay-filter="roleTable"></table>
         <script type="text/html" id="tableBar">
           <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
           <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
@@ -64,15 +58,15 @@
       form.on('submit(search)', function(data){
           var field = data.field;
           //执行重载
-          table.reload('userTable', {
+          table.reload('roleTable', {
               where: field
           });
       });
       // 查询列表接口
       table.render({
-          elem: '#userTable'
+          elem: '#roleTable'
           ,height: 'full-110'
-          ,url:  ctx + '/sysUser/list'
+          ,url:  ctx + '/sysRole/list'
           ,page: true //开启分页,
           ,limit: 10 // 多少条
           ,request: {
@@ -91,39 +85,15 @@
           }
           ,cols: [[ //表头
               {field: 'id', title: 'ID', sort: true, fixed: 'left'}
-              ,{field: 'avatar', title: "头像",
-                  templet:function (d) { return '<div><img alt="" width="50%" height="50%" src='+d.avatar+'></div>' }
-              }
-              ,{field: 'userName', title: '账户'}
-              ,{field: 'email', title: '邮箱'}
-              ,{field: 'phonenumber', title: '手机号码'}
-              ,{field: 'sex', title: "性别",
-                  templet:function (d) { 
-                    if (d.sex == 0) {
-                        return "男";
-                    } else if (d.sex == 1) {
-                        return "女";
-                    } else {
-                        return "未知";
-                    }
-                  }
-               }
-              ,{field: 'enabled', title: '是否启用',
-                  templet:function (d) {
-                      if (d.enabled == 1) {
-                          return "是";
-                      } else {
-                          return "否";
-                      }
-                  }
-              }
+              ,{field: 'roleName', title: '角色名称'}
+              ,{field: 'roleKey', title: '角色key'}
               ,{field: 'remark', title: '备注'}
               ,{toolbar: '#tableBar', title: '操作', width: 165, align:'center',fixed: 'right'}
           ]]
       });
 
       //监听行工具事件
-      table.on('tool(userTable)', function(obj){
+      table.on('tool(roleTable)', function(obj){
           var data = obj.data //获得当前行数据
               ,layEvent = obj.event;
           if(layEvent === 'edit'){
@@ -146,8 +116,8 @@
           addView: function(){
               layer.open({
                   type: 2,
-                  title: "添加用户",
-                  content: ctx + '/sysUser/addPage'
+                  title: "添加角色",
+                  content: ctx + '/sysRole/addPage'
                   ,maxmin: true
                   ,area: ['500px', '450px']
                   ,btn: ['确定', '取消']
@@ -164,8 +134,8 @@
           editView: function(id){
               layer.open({
                   type: 2
-                  ,title: '修改用户'
-                  ,content: ctx + '/sysUser/editPage/' + id
+                  ,title: '修改角色'
+                  ,content: ctx + '/sysRole/editPage/' + id
                   ,maxmin: true
                   ,area: ['500px', '450px']
                   ,btn: ['确定', '取消']
@@ -184,14 +154,14 @@
                   //向服务端发送删除指令
                   $.ajax({
                       type: 'DELETE',
-                      url:  ctx + '/sysUser/del/' + id,
+                      url:  ctx + '/sysRole/del/' + id,
                       contentType:'application/json;charset=UTF-8',
                       dataType: 'json',
                       success: function(result) {
                           layer.msg(result.message);
                           if (result.code == 200) {
                               layer.close(index);
-                              table.reload('userTable');
+                              table.reload('roleTable');
                           }
                       }
                   });

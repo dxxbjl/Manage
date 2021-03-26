@@ -2,7 +2,7 @@ package io.github.yangyouwang.system.model.req;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 
@@ -19,12 +19,12 @@ public class SysUserAddReq implements Serializable {
     /**
      * 账号
      */
-    @NotNull(message = "账号不能为空")
+    @NotBlank(message = "账号不能为空")
     private String userName;
     /**
      * 密码
      */
-    @NotNull(message = "密码不能为空")
+    @NotBlank(message = "密码不能为空")
     private String passWord;
     /**
      * 启用

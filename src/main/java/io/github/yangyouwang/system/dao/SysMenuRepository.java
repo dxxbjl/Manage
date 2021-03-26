@@ -13,7 +13,7 @@ import java.util.List;
  * @description: 菜单Dao接口
  * @date 2021/3/2112:25 AM
  */
-public interface SysMenuRepository extends JpaRepository<SysMenu,Integer> {
+public interface SysMenuRepository extends JpaRepository<SysMenu,Long> {
     /**
      * 根据菜单类型和状态查询菜单
      * @return 菜单列表

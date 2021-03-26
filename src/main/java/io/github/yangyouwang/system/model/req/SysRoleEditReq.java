@@ -2,19 +2,20 @@ package io.github.yangyouwang.system.model.req;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 
 /**
  * @author yangyouwang
- * @title: SysUserAddReq
+ * @title: SysRoleEditReq
  * @projectName crud
- * @description: 用户编辑
+ * @description: 角色编辑
  * @date 2021/3/269:56 AM
  */
 @Data
-public class SysUserEditReq implements Serializable {
+public class SysRoleEditReq implements Serializable {
 
     /**
      * 主键id
@@ -22,26 +23,15 @@ public class SysUserEditReq implements Serializable {
     @NotNull(message = "id不能为空")
     private Long id;
     /**
-     * 启用
+     * 角色名称
      */
-    private String enabled;
-
+    @NotBlank(message = "角色名称不能为空")
+    private String roleName;
     /**
-     * 邮箱
+     * 角色标识
      */
-    private String email;
-    /**
-     * 手机号码
-     */
-    private String phonenumber;
-    /**
-     * 用户性别（0男 1女 2未知）
-     */
-    private String sex;
-    /**
-     * 头像
-     */
-    private String avatar;
+    @NotBlank(message = "角色标识不能为空")
+    private String roleKey;
 
     /** 备注 */
     private String remark;
