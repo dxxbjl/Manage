@@ -2,6 +2,11 @@ package io.github.yangyouwang.system.service;
 
 import io.github.yangyouwang.system.dao.SysMenuRepository;
 import io.github.yangyouwang.system.model.SysMenu;
+import io.github.yangyouwang.system.model.req.SysMenuAddReq;
+import io.github.yangyouwang.system.model.req.SysMenuEditReq;
+import io.github.yangyouwang.system.model.req.SysMenuListReq;
+import io.github.yangyouwang.system.model.resp.SysMenuResp;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -114,5 +119,52 @@ public class SysMenuService {
     private boolean hasChild(List<SysMenu> list, SysMenu t)
     {
         return getChildList(list, t).size() > 0 ? true : false;
+    }
+
+    /**
+     * 跳转编辑
+     * @return 编辑页面
+     */
+    public SysMenuResp detail(Long id) {
+        SysMenu sysMenu = sysMenuRepository.findById(id).orElse(new SysMenu());
+        SysMenuResp sysMenuResp = new SysMenuResp();
+        BeanUtils.copyProperties(sysMenu,sysMenuResp);
+        return sysMenuResp;
+    }
+
+    /**
+     * 列表请求
+     * @return 请求列表
+     */
+    public Object list(SysMenuListReq sysMenuListReq) {
+        return null;
+    }
+
+    /**
+     * 添加请求
+     * @return 添加状态
+     */
+    public void add(SysMenuAddReq sysMenuAddReq) {
+        SysMenu sysMenu = new SysMenu();
+        BeanUtils.copyProperties(sysMenuAddReq,sysMenu);
+        sysMenuRepository.save(sysMenu);
+    }
+
+    /**
+     * 编辑请求
+     * @return 编辑状态
+     */
+    public void edit(SysMenuEditReq sysMenuEditReq) {
+        SysMenu sysUser = sysMenuRepository.findById(sysMenuEditReq.getId()).get();
+        BeanUtils.copyProperties(sysMenuEditReq,sysUser);
+        sysMenuRepository.save(sysUser);
+    }
+
+    /**
+     * 删除请求
+     * @return 删除状态
+     */
+    public void del(Long id) {
+        sysMenuRepository.deleteById(id);
     }
 }

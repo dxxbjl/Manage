@@ -9,8 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ApiContext {
 
-    private static final Map<String, Object> CONTEXT = new ConcurrentHashMap<String, Object>(16) {
-    };
+    private static final Map<String, Object> CONTEXT = new ConcurrentHashMap<>(16);
 
     public static void setUserId(String userId) {
         CONTEXT.put("userId", userId);

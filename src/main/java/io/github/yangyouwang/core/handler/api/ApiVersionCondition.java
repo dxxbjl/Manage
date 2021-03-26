@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 /**
  * @author yangyouwang
  * @title: ApiVersionCondition
- * @projectName ruoyi
+ * @projectName crud
  * @description: 匹配规则版本号
  * @date 2020/10/24下午11:47
  */

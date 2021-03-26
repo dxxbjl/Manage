@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
- * @program: ruoyi
+ * @program: crud
  * @description: JwtTokenUtil
  * @author: 杨有旺
  * @create: 2019-09-04 14:35

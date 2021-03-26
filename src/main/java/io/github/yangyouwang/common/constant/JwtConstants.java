@@ -1,7 +1,7 @@
 package io.github.yangyouwang.common.constant;
 
 /**
- * @program: ruoyi
+ * @program: crud
  * @description: Jwt常量
  * @author: 杨有旺
  * @create: 2019-09-04 14:32

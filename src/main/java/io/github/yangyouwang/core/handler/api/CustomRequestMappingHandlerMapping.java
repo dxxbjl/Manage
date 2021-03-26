@@ -13,7 +13,7 @@ import java.util.Objects;
 /**
  * @author yangyouwang
  * @title: CustomRequestMappingHandlerMapping
- * @projectName ruoyi
+ * @projectName crud
  * @description: 重写RequestMappingHandlerMapping方法
  * @date 2020/10/24下午11:49
  */

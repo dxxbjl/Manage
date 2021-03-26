@@ -3,7 +3,7 @@ package io.github.yangyouwang.common.constant;
 /**
  * @author yangyouwang
  * @title: ApiVersionConstant
- * @projectName ruoyi
+ * @projectName crud
  * @description: api版本号常量类
  * @date 2020/10/25上午9:09
  */

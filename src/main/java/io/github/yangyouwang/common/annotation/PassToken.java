@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @program: ruoyi
+ * @program: crud
  * @description: 跳过认证
  * @author: 杨有旺
  * @create: 2019-09-04 14:28

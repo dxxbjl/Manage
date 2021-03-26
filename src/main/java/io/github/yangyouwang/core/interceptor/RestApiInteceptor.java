@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 
 /**
- * @program: ruoyi
+ * @program: crud
  * @description: Rest Api接口鉴权
  * @author: 杨有旺
  * @create: 2019-09-04 14:31
