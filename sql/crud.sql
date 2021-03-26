@@ -11,7 +11,7 @@
  Target Server Version : 50733
  File Encoding         : 65001
 
- Date: 26/03/2021 16:58:37
+ Date: 26/03/2021 22:31:43
 */
 
 SET NAMES utf8mb4;
@@ -46,10 +46,11 @@ CREATE TABLE `sys_menu` (
 BEGIN;
 INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, 1, '#', '', 'M', '0', '', 'fa fa-gear', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '系统管理目录');
 INSERT INTO `sys_menu` VALUES (3, '系统工具', 0, 3, '#', '', 'M', '0', '', 'fa fa-bars', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '系统工具目录');
-INSERT INTO `sys_menu` VALUES (100, '用户管理', 1, 1, '/sysUser/listPage', '', 'C', '0', 'system:user:view', '#', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '用户管理菜单');
-INSERT INTO `sys_menu` VALUES (101, '角色管理', 1, 2, '/system/role', '', 'C', '0', 'system:role:view', '#', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '角色管理菜单');
-INSERT INTO `sys_menu` VALUES (102, '菜单管理', 1, 3, '/system/menu', '', 'C', '0', 'system:menu:view', '#', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '菜单管理菜单');
-INSERT INTO `sys_menu` VALUES (115, '系统接口', 3, 3, '/sysTool/swagger', '', 'C', '0', 'tool:swagger:view', '#', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '系统接口菜单');
+INSERT INTO `sys_menu` VALUES (100, '用户管理', 1, 1, '/sysUser/listPage', '', 'C', '0', '', '#', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '用户管理菜单');
+INSERT INTO `sys_menu` VALUES (101, '角色管理', 1, 2, '/sysRole/listPage', '', 'C', '0', '', '#', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '角色管理菜单');
+INSERT INTO `sys_menu` VALUES (102, '菜单管理', 1, 3, '/sysMenu/listPage', '', 'C', '0', '', '#', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '菜单管理菜单');
+INSERT INTO `sys_menu` VALUES (115, '系统接口', 3, 3, '/sysTool/swagger', '', 'C', '0', '', '#', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '系统接口菜单');
+INSERT INTO `sys_menu` VALUES (116, '数据库监控', 3, 3, '/sysTool/druid', '', 'C', '0', '', '#', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '系统接口菜单');
 COMMIT;
 
 -- ----------------------------
@@ -66,7 +67,7 @@ CREATE TABLE `sys_role` (
   `update_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='角色表';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='角色表';
 
 -- ----------------------------
 -- Records of sys_role
@@ -117,13 +118,13 @@ CREATE TABLE `sys_user` (
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='用户表';
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_user` VALUES (1, 'admin', '$2a$10$XcigeMfToGQ2bqRToFtUi.sG1V.HhrJV6RBjji1yncXReSNNIPl1K', '1', '', '', '0', '', '', NULL, '', NULL, NULL);
+INSERT INTO `sys_user` VALUES (1, 'admin', '$2a$10$XcigeMfToGQ2bqRToFtUi.sG1V.HhrJV6RBjji1yncXReSNNIPl1K', '1', '123', '123', '0', 'https://www.baidu.com/img/flexible/logo/pc/result@2.png', '', NULL, 'admin', '2021-03-26 21:42:29', '123');
 COMMIT;
 
 -- ----------------------------
@@ -140,12 +141,5 @@ CREATE TABLE `sys_user_role` (
   CONSTRAINT `FKb40xxfch70f5qnyfw8yme1n1s` FOREIGN KEY (`user_id`) REFERENCES `sys_user` (`id`),
   CONSTRAINT `FKhh52n8vd4ny9ff4x9fb8v65qx` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='用户角色关联表';
-
--- ----------------------------
--- Records of sys_user_role
--- ----------------------------
-BEGIN;
-INSERT INTO `sys_user_role` VALUES (1, 1, 1);
-COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
