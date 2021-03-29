@@ -11,7 +11,7 @@
  Target Server Version : 50733
  File Encoding         : 65001
 
- Date: 26/03/2021 22:31:43
+ Date: 29/03/2021 12:57:54
 */
 
 SET NAMES utf8mb4;
@@ -27,11 +27,9 @@ CREATE TABLE `sys_menu` (
   `parent_id` bigint(20) DEFAULT '0' COMMENT '父菜单ID',
   `order_num` int(4) DEFAULT '0' COMMENT '显示顺序',
   `url` varchar(200) COLLATE utf8_bin DEFAULT '#' COMMENT '请求地址',
-  `target` varchar(20) COLLATE utf8_bin DEFAULT '' COMMENT '打开方式（menuItem页签 menuBlank新窗口）',
   `menu_type` char(1) COLLATE utf8_bin DEFAULT '' COMMENT '菜单类型（M目录 C菜单 F按钮）',
   `visible` char(1) COLLATE utf8_bin DEFAULT '0' COMMENT '菜单状态（Y显示 N隐藏）',
   `perms` varchar(100) COLLATE utf8_bin DEFAULT NULL COMMENT '权限标识',
-  `icon` varchar(100) COLLATE utf8_bin DEFAULT '#' COMMENT '菜单图标',
   `create_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '创建者',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
@@ -44,13 +42,13 @@ CREATE TABLE `sys_menu` (
 -- Records of sys_menu
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, 1, '#', '', 'M', '0', '', 'fa fa-gear', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '系统管理目录');
-INSERT INTO `sys_menu` VALUES (3, '系统工具', 0, 3, '#', '', 'M', '0', '', 'fa fa-bars', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '系统工具目录');
-INSERT INTO `sys_menu` VALUES (100, '用户管理', 1, 1, '/sysUser/listPage', '', 'C', '0', '', '#', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '用户管理菜单');
-INSERT INTO `sys_menu` VALUES (101, '角色管理', 1, 2, '/sysRole/listPage', '', 'C', '0', '', '#', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '角色管理菜单');
-INSERT INTO `sys_menu` VALUES (102, '菜单管理', 1, 3, '/sysMenu/listPage', '', 'C', '0', '', '#', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '菜单管理菜单');
-INSERT INTO `sys_menu` VALUES (115, '系统接口', 3, 3, '/sysTool/swagger', '', 'C', '0', '', '#', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '系统接口菜单');
-INSERT INTO `sys_menu` VALUES (116, '数据库监控', 3, 3, '/sysTool/druid', '', 'C', '0', '', '#', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '系统接口菜单');
+INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, 1, '#', 'M', 'Y', '', '1', '2018-03-16 11:33:00', 'admin', '2021-03-28 20:25:29', '系统管理目录');
+INSERT INTO `sys_menu` VALUES (3, '系统工具', 0, 3, '#', 'M', 'Y', '', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '系统工具目录');
+INSERT INTO `sys_menu` VALUES (100, '用户管理', 1, 1, '/sysUser/listPage', 'C', 'Y', '1', '1', '2018-03-16 11:33:00', 'admin', '2021-03-29 12:51:20', '用户管理菜单');
+INSERT INTO `sys_menu` VALUES (101, '角色管理', 1, 2, '/sysRole/listPage', 'C', 'Y', '', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '角色管理菜单');
+INSERT INTO `sys_menu` VALUES (102, '菜单管理', 1, 3, '/sysMenu/listPage', 'C', 'Y', '', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '菜单管理菜单');
+INSERT INTO `sys_menu` VALUES (115, '系统接口', 3, 3, '/sysTool/swagger', 'C', 'Y', '', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '系统接口菜单');
+INSERT INTO `sys_menu` VALUES (116, '数据库监控', 3, 3, '/sysTool/druid', 'C', 'Y', '', '1', '2018-03-16 11:33:00', '1', '2018-03-16 11:33:00', '系统接口菜单');
 COMMIT;
 
 -- ----------------------------
@@ -74,7 +72,7 @@ CREATE TABLE `sys_role` (
 -- ----------------------------
 BEGIN;
 INSERT INTO `sys_role` VALUES (1, '超级管理员', 'ADMIN', '超级管理员', '', NULL, '', NULL);
-INSERT INTO `sys_role` VALUES (2, '基本角色', 'USER', '基本角色', '', NULL, '', NULL);
+INSERT INTO `sys_role` VALUES (2, '基本角色', 'USER', '基本角色', '', NULL, 'admin', '2021-03-26 22:44:48');
 COMMIT;
 
 -- ----------------------------
@@ -118,13 +116,13 @@ CREATE TABLE `sys_user` (
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='用户表';
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_user` VALUES (1, 'admin', '$2a$10$XcigeMfToGQ2bqRToFtUi.sG1V.HhrJV6RBjji1yncXReSNNIPl1K', '1', '123', '123', '0', 'https://www.baidu.com/img/flexible/logo/pc/result@2.png', '', NULL, 'admin', '2021-03-26 21:42:29', '123');
+INSERT INTO `sys_user` VALUES (1, 'admin', '$2a$10$XcigeMfToGQ2bqRToFtUi.sG1V.HhrJV6RBjji1yncXReSNNIPl1K', '1', '123', '123', '0', NULL, '', NULL, 'admin', '2021-03-29 10:26:05', '123');
 COMMIT;
 
 -- ----------------------------

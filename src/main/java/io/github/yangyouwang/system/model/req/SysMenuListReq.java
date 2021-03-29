@@ -15,11 +15,7 @@ import java.io.Serializable;
 @Data
 public class SysMenuListReq implements Serializable {
     /**
-     * pageNum
+     * 菜单名称
      */
-    private Integer pageNum;
-    /**
-     * pageSize
-     */
-    private Integer pageSize;
+    private String menuName;
 }

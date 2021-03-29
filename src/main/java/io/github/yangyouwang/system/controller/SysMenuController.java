@@ -1,6 +1,7 @@
 package io.github.yangyouwang.system.controller;
 
 import io.github.yangyouwang.common.domain.Result;
+import io.github.yangyouwang.common.domain.TreeNode;
 import io.github.yangyouwang.system.model.req.*;
 import io.github.yangyouwang.system.model.resp.SysMenuResp;
 import io.github.yangyouwang.system.service.SysMenuService;
@@ -11,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author yangyouwang
@@ -105,5 +107,17 @@ public class SysMenuController {
     public Result del(@PathVariable Long id){
         sysMenuService.del(id);
         return Result.success();
+    }
+
+    /**
+     * 查询菜单列表
+     * @param id id
+     * @return 菜单列表
+     */
+    @GetMapping(value = {"/treeSelect","/treeSelect/{id}"})
+    @ResponseBody
+    public List<TreeNode> treeSelect(@PathVariable(value = "id",required = false) Long id) {
+        List<TreeNode> sysMenus = sysMenuService.treeSelect(id);
+        return sysMenus;
     }
 }

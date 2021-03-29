@@ -15,15 +15,9 @@
       <div class="layui-form layui-card-header layuiadmin-card-header-auto">
         <div class="layui-form-item">
           <div class="layui-inline">
-            <label class="layui-form-label">角色名称</label>
+            <label class="layui-form-label">菜单名称</label>
             <div class="layui-input-block">
-              <input type="text" name="roleName" placeholder="请输入角色名称" class="layui-input">
-            </div>
-          </div>
-          <div class="layui-inline">
-            <label class="layui-form-label">角色key</label>
-            <div class="layui-input-block">
-              <input type="text" name="roleKey" placeholder="请输入角色key" class="layui-input">
+              <input type="text" name="menuName" placeholder="请输入菜单名称" class="layui-input">
             </div>
           </div>
           <div class="layui-inline">
@@ -35,7 +29,7 @@
         </div>
       </div>
       <div class="layui-card-body">
-        <table id="roleTable" lay-filter="roleTable"></table>
+        <table id="menuTable" lay-filter="menuTable"></table>
         <script type="text/html" id="tableBar">
           <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
           <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
@@ -50,50 +44,60 @@
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
     index: 'lib/index' //主入口模块
-  }).use(['index', 'useradmin', 'table'], function() {
+  }).use(['index', 'useradmin','treetable','table'], function() {
       var $ = layui.$
           ,form = layui.form
-          , table = layui.table;
+          ,table = layui.table
+          , treetable = layui.treetable;
       //监听搜索
       form.on('submit(search)', function(data){
           var field = data.field;
           //执行重载
-          table.reload('roleTable', {
-              where: field
-          });
-      });
-      // 查询列表接口
-      table.render({
-          elem: '#roleTable'
-          ,height: 'full-110'
-          ,url:  ctx + '/sysRole/list'
-          ,page: true //开启分页,
-          ,limit: 10 // 多少条
-          ,request: {
-            pageName: 'pageNum', //页码的参数名称，默认：page
-            limitName: 'pageSize' //每页数据量的参数名，默认：limit
-          }
-          ,parseData: function (result) {
-              return {
-                   "code":result.code,
-                   "count": result.data.totalElements,
-                   "data": result.data.content
-              }
-          }
-          ,response: {
-               statusCode: 200 //成功的状态码，默认：0
-          }
-          ,cols: [[ //表头
-              {field: 'id', title: 'ID', sort: true, fixed: 'left'}
-              ,{field: 'roleName', title: '角色名称'}
-              ,{field: 'roleKey', title: '角色key'}
-              ,{field: 'remark', title: '备注'}
-              ,{toolbar: '#tableBar', title: '操作', width: 165, align:'center',fixed: 'right'}
-          ]]
+          initTable(field);
       });
 
+      var initTable = function (data){
+          return treetable.render({
+              treeColIndex: 1,          // 树形图标显示在第几列
+              treeSpid: 0,            // 最上级的父级id
+              treeIdName: 'id',       // id字段的名称
+              treePidName: 'parentId',     // 父级节点字段
+              treeDefaultClose: true,   // 是否默认折叠
+              treeLinkage: true,        // 父级展开时是否自动展开所有子级
+              elem: '#menuTable',
+              url:  ctx + '/sysMenu/list',
+              where: data,
+              parseData: function (result) {
+                  return {
+                      "code": result.code,
+                      "count": result.data.totalElements,
+                      "data": result.data.content
+                  }
+              },
+              response: {
+                  statusCode: 200 //成功的状态码，默认：0
+              },
+              cols: [[ //表头
+                  {field: 'id', title: 'ID', sort: true, fixed: 'left'},
+                  {field: 'menuName', title: '菜单名称'},
+                  {field: 'menuType', title: '菜单类型'},
+                  {field: 'visible', title: '菜单状态',
+                      templet:function (d) {
+                          if (d.visible == 'Y') {
+                              return "显示";
+                          } else {
+                              return "隐藏";
+                          }
+                      }},
+                  {toolbar: '#tableBar', title: '操作', width: 165, align:'center',fixed: 'right'}
+              ]]
+          });
+      };
+
+      initTable();
+
       //监听行工具事件
-      table.on('tool(roleTable)', function(obj){
+      table.on('tool(menuTable)', function(obj){
           var data = obj.data //获得当前行数据
               ,layEvent = obj.event;
           if(layEvent === 'edit'){
@@ -117,7 +121,7 @@
               layer.open({
                   type: 2,
                   title: "添加角色",
-                  content: ctx + '/sysRole/addPage'
+                  content: ctx + '/sysMenu/addPage'
                   ,maxmin: true
                   ,area: ['500px', '450px']
                   ,btn: ['确定', '取消']
@@ -135,7 +139,7 @@
               layer.open({
                   type: 2
                   ,title: '修改角色'
-                  ,content: ctx + '/sysRole/editPage/' + id
+                  ,content: ctx + '/sysMenu/editPage/' + id
                   ,maxmin: true
                   ,area: ['500px', '450px']
                   ,btn: ['确定', '取消']
@@ -154,14 +158,14 @@
                   //向服务端发送删除指令
                   $.ajax({
                       type: 'DELETE',
-                      url:  ctx + '/sysRole/del/' + id,
+                      url:  ctx + '/sysMenu/del/' + id,
                       contentType:'application/json;charset=UTF-8',
                       dataType: 'json',
                       success: function(result) {
                           layer.msg(result.message);
                           if (result.code == 200) {
                               layer.close(index);
-                              table.reload('roleTable');
+                              initTable();
                           }
                       }
                   });

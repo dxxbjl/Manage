@@ -38,10 +38,6 @@ public class SysMenuEditReq implements Serializable {
      */
     private String url;
     /**
-     * 打开方式（menuItem页签 menuBlank新窗口）
-     */
-    private String target;
-    /**
      * 菜单类型（M目录 C菜单 F按钮）
      */
     private String menuType;

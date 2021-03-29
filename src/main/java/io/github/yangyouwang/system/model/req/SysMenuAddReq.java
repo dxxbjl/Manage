@@ -2,7 +2,6 @@ package io.github.yangyouwang.system.model.req;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 
@@ -15,5 +14,36 @@ import java.io.Serializable;
  */
 @Data
 public class SysMenuAddReq implements Serializable {
-
+    /**
+     * 菜单名称
+     */
+    private String menuName;
+    /**
+     * 父菜单ID
+     */
+    private Long parentId;
+    /**
+     * 显示顺序
+     */
+    private Integer orderNum;
+    /**
+     * 请求地址
+     */
+    private String url;
+    /**
+     * 菜单类型（M目录 C菜单 F按钮）
+     */
+    private String menuType;
+    /**
+     * 菜单状态（Y显示 N隐藏）
+     */
+    private String visible;
+    /**
+     * 权限标识
+     */
+    private String perms;
+    /**
+     * 菜单图标
+     */
+    private String icon;
 }

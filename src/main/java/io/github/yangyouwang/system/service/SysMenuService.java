@@ -1,18 +1,22 @@
 package io.github.yangyouwang.system.service;
-
+import io.github.yangyouwang.common.domain.TreeNode;
+import io.github.yangyouwang.core.converter.ListToTree;
+import io.github.yangyouwang.core.converter.impl.ListToTreeImpl;
 import io.github.yangyouwang.system.dao.SysMenuRepository;
 import io.github.yangyouwang.system.model.SysMenu;
 import io.github.yangyouwang.system.model.req.SysMenuAddReq;
 import io.github.yangyouwang.system.model.req.SysMenuEditReq;
 import io.github.yangyouwang.system.model.req.SysMenuListReq;
 import io.github.yangyouwang.system.model.resp.SysMenuResp;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
+import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author yangyouwang
@@ -29,6 +33,7 @@ public class SysMenuService {
     @Autowired
     private SysMenuRepository sysMenuRepository;
 
+
     /**
      * 根据用户查询菜单
      * @param id 用户id
@@ -37,96 +42,21 @@ public class SysMenuService {
     public List<SysMenu> selectMenusByUser(Long id) {
         List<SysMenu> menus;
         if (userId.equals(id)) {
-            menus = this.sysMenuRepository.findSysMenuByMenuTypeAndVisible();
+            menus = this.sysMenuRepository.findAll();
         } else {
             menus = this.sysMenuRepository.findSysMenuByUserId(id);
         }
-        return getChildPerms(menus, 0);
+        ListToTree treeBuilder = new ListToTreeImpl();
+        return treeBuilder.toTree(menus);
     }
 
-    /**
-     * 根据父节点的ID获取所有子节点
-     *
-     * @param list 分类表
-     * @param parentId 传入的父节点ID
-     * @return String
-     */
-    public List<SysMenu> getChildPerms(List<SysMenu> list, int parentId)
-    {
-        List<SysMenu> returnList = new ArrayList<>();
-        for (Iterator<SysMenu> iterator = list.iterator(); iterator.hasNext();)
-        {
-            SysMenu t = iterator.next();
-            // 一、根据传入的某个父节点ID,遍历该父节点的所有子节点
-            if (t.getParentId() == parentId)
-            {
-                recursionFn(list, t);
-                returnList.add(t);
-            }
-        }
-        return returnList;
-    }
-
-
-    /**
-     * 递归列表
-     *
-     * @param list
-     * @param t
-     */
-    private void recursionFn(List<SysMenu> list, SysMenu t)
-    {
-        // 得到子节点列表
-        List<SysMenu> childList = getChildList(list, t);
-        t.setChildren(childList);
-        for (SysMenu tChild : childList)
-        {
-            if (hasChild(list, tChild))
-            {
-                // 判断是否有子节点
-                Iterator<SysMenu> it = childList.iterator();
-                while (it.hasNext())
-                {
-                    SysMenu n = it.next();
-                    recursionFn(list, n);
-                }
-            }
-        }
-    }
-
-
-    /**
-     * 得到子节点列表
-     */
-    private List<SysMenu> getChildList(List<SysMenu> list, SysMenu t)
-    {
-        List<SysMenu> tlist = new ArrayList<>();
-        Iterator<SysMenu> it = list.iterator();
-        while (it.hasNext())
-        {
-            SysMenu n = it.next();
-            if (n.getParentId().longValue() == t.getId().longValue())
-            {
-                tlist.add(n);
-            }
-        }
-        return tlist;
-    }
-
-    /**
-     * 判断是否有子节点
-     */
-    private boolean hasChild(List<SysMenu> list, SysMenu t)
-    {
-        return getChildList(list, t).size() > 0 ? true : false;
-    }
 
     /**
      * 跳转编辑
      * @return 编辑页面
      */
     public SysMenuResp detail(Long id) {
-        SysMenu sysMenu = sysMenuRepository.findById(id).orElse(new SysMenu());
+        SysMenu sysMenu = sysMenuRepository.findSysMenuById(id);
         SysMenuResp sysMenuResp = new SysMenuResp();
         BeanUtils.copyProperties(sysMenu,sysMenuResp);
         return sysMenuResp;
@@ -136,8 +66,20 @@ public class SysMenuService {
      * 列表请求
      * @return 请求列表
      */
-    public Object list(SysMenuListReq sysMenuListReq) {
-        return null;
+    public List<SysMenuResp> list(SysMenuListReq sysMenuListReq) {
+        Specification<SysMenu> query = (Specification<SysMenu>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            if(Strings.isNotBlank(sysMenuListReq.getMenuName())){
+                predicates.add(criteriaBuilder.like(root.get("menuName"),"%" +sysMenuListReq.getMenuName() + "%"));
+            }
+            return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
+        };
+        List<SysMenu> sysMenus = sysMenuRepository.findAll(query);
+        return sysMenus.stream().map(s -> {
+            SysMenuResp sysMenuResp = new SysMenuResp();
+            BeanUtils.copyProperties(s,sysMenuResp);
+            return sysMenuResp;
+        }).collect(Collectors.toList());
     }
 
     /**
@@ -166,5 +108,29 @@ public class SysMenuService {
      */
     public void del(Long id) {
         sysMenuRepository.deleteById(id);
+    }
+
+    /**
+     * 查询菜单列表
+     * @param id id
+     * @return 菜单列表
+     */
+    public List<TreeNode> treeSelect(Long id) {
+        List<SysMenu> menus;
+        if (null == id) {
+            menus = this.sysMenuRepository.findAll();
+        } else {
+            menus = this.sysMenuRepository.findSysMenuByParentId(id);
+        }
+        ListToTree treeBuilder = new ListToTreeImpl();
+        return treeBuilder.toTree(menus.stream().map(sysMenu -> {
+            TreeNode treeNode = new TreeNode();
+            treeNode.setId(sysMenu.getId());
+            treeNode.setParentId(sysMenu.getParentId());
+            treeNode.setName(sysMenu.getMenuName());
+            treeNode.setChecked(false);
+            treeNode.setOpen(false);
+            return treeNode;
+        }).collect(Collectors.toList()));
     }
 }

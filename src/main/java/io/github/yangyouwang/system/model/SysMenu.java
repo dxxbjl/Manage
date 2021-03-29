@@ -1,6 +1,7 @@
 package io.github.yangyouwang.system.model;
 
 import io.github.yangyouwang.common.domain.BaseEntity;
+import io.github.yangyouwang.core.converter.Treeable;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -16,7 +17,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name="sys_menu")
-public class SysMenu extends BaseEntity {
+public class SysMenu extends BaseEntity implements Treeable {
     /**
      * 主键id
      */
@@ -45,11 +46,6 @@ public class SysMenu extends BaseEntity {
     @Column(name="url")
     private String url;
     /**
-     * 打开方式（menuItem页签 menuBlank新窗口）
-     */
-    @Column(name="target")
-    private String target;
-    /**
      * 菜单类型（M目录 C菜单 F按钮）
      */
     @Column(name="menu_type")
@@ -64,11 +60,6 @@ public class SysMenu extends BaseEntity {
      */
     @Column(name="perms")
     private String perms;
-    /**
-     * 菜单图标
-     */
-    @Column(name="icon")
-    private String icon;
 
     /**
      * 一个菜单对应多个角色
@@ -83,4 +74,29 @@ public class SysMenu extends BaseEntity {
     /** 子菜单 */
     @Transient
     private List<SysMenu> children;
+    /**
+     * 父菜单名称
+     */
+    @Transient
+    private String parentName;
+
+    @Override
+    public Long getMapKey() {
+        return parentId;
+    }
+
+    @Override
+    public Long getChildrenKey() {
+        return id;
+    }
+
+    @Override
+    public Long getRootKey() {
+        return 0L;
+    }
+
+    @Override
+    public void setChildren(List children) {
+        this.children = children;
+    }
 }
