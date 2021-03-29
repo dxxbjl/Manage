@@ -69,20 +69,30 @@
                     <span>layuiAdmin</span>
                 </div>
                 <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
-                    <li th:each="menu,menuStat:${sysMenus}" class="layui-nav-item">
-                        <a href="javascript:;" lay-direction="2">
-                            <i class="layui-icon layui-icon-home"></i>
-                            <cite>[[${menu.menuName}]]</cite>
-                        </a>
-                        <dl th:each="children,childrenStat:${menu.children}" class="layui-nav-child">
-                            <dd>
-                                <a th:lay-href="${children.url}">[[${children.menuName}]]</a>
-                            </dd>
-                        </dl>
-                    </li>
+                    <th:block th:include="this::row(${sysMenus})"/>
                 </ul>
             </div>
         </div>
+
+        <!-- 递归查询菜单 -->
+        <th:block th:fragment="row(menus)">
+            <li th:each="menu,menuStat:${menus}" class="layui-nav-item">
+                <a href="javascript:;" th:if="${menu.parentId eq 0}">
+                    <i class="layui-icon layui-icon-home"></i>
+                    <cite>[[${menu.menuName}]]</cite>
+                </a>
+                <dl class="layui-nav-child">
+                    <dd>
+                        <a th:lay-href="${menu.url}" th:if="${menu.parentId ne 0}">
+                            [[${menu.menuName}]]
+                        </a>
+                        <dl class="layui-nav-child" th:if="not ${#lists.isEmpty(menu.children)}">
+                            <th:block th:include="this::row(${menu.children})"></th:block>
+                        </dl>
+                    </dd>
+                </dl>
+            </li>
+        </th:block>
 
         <!-- 页面标签 -->
         <div class="layadmin-pagetabs" id="LAY_app_tabs">

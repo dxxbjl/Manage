@@ -5,6 +5,7 @@ import io.github.yangyouwang.core.converter.Treeable;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -73,7 +74,7 @@ public class SysMenu extends BaseEntity implements Treeable {
 
     /** 子菜单 */
     @Transient
-    private List<SysMenu> children;
+    private List<SysMenu> children = new ArrayList<>();
     /**
      * 父菜单名称
      */

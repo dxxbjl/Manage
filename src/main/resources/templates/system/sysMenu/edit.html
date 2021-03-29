@@ -119,7 +119,10 @@
             success: function (d) {
                 console.log(d);
                 //选中节点，根据id筛选
-               treeSelect.checkNode('tree', $("#parentId").val());
+                var parentId = $("#parentId").val();
+                if (parentId != 0) {
+                    treeSelect.checkNode('tree', parentId);
+                }
             }
         });
     })
