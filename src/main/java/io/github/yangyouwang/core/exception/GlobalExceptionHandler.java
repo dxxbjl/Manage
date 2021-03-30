@@ -4,8 +4,8 @@ import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.enums.ResultStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.nio.file.AccessDeniedException;
 
 /**
@@ -18,8 +18,6 @@ import java.nio.file.AccessDeniedException;
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
-    private static final String SUFFIX = "/error";
 
     /**
      * 处理空指针的异常
@@ -41,23 +39,20 @@ public class GlobalExceptionHandler {
         return Result.ok(ResultStatus.NO_PERMISSION);
     }
 
-
     /**
      * 处理权限的异常
      */
     @ExceptionHandler(value = AccessDeniedException.class)
-    public ModelAndView exceptionHandler(AccessDeniedException e){
+    public void exceptionHandler(HttpServletRequest request, AccessDeniedException e){
         log.error("发生权限异常！原因是:",e);
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName(SUFFIX + "/error");
-        modelAndView.addObject("error", e.getMessage());
-        return modelAndView;
+        request.setAttribute("error", e.getMessage());
     }
 
     /**
      * 处理其他异常
      */
     @ExceptionHandler(value =Exception.class)
+    @ResponseBody
     public Result exceptionHandler(Exception e){
         log.error("未知异常！原因是:",e);
         return Result.ok(ResultStatus.ERROR.getCode(), e.getMessage(), null);

@@ -14,6 +14,7 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.util.ArrayUtils;
 
@@ -49,7 +50,7 @@ public class SysMenuService {
             menus = this.sysMenuRepository.findSysMenuByUserId(id);
         }
         if (menus.size() == 0) {
-            throw new RuntimeException("暂未分配菜单");
+            throw new AccessDeniedException("暂未分配菜单");
         }
         ListToTree treeBuilder = new ListToTreeImpl();
         return treeBuilder.toTree(menus);
