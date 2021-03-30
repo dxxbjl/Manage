@@ -48,21 +48,17 @@
         base: '/static/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index', //主入口模块
-        xmSelect: 'xm-select'
-    }).use(['index', 'form','xmSelect'], function(){
+        xmSelect: 'xm-select',
+        crud: 'crud'
+    }).use(['index', 'form','xmSelect','crud'], function(){
         var $ = layui.$
             ,xmSelect = layui.xmSelect
+            ,crud = layui.crud
             ,form = layui.form;
         var sysRole = [[${sysRole}]];
         form.val('sys-role-form', sysRole);
         form.on('submit(save-submit)', function(data){
-            var value = select.getValue();
-            var menuIds = value.map(x => {return x.id});
-            for(var i = 0;i < value.length;i++) {
-                if($.inArray(value[i].parentId,menuIds)==-1) {
-                    menuIds.push(value[i].parentId);
-                }
-            }
+            var menuIds = crud.getXmSelectTreeIds(select);
             data.field.menuIds = menuIds;
             $.ajax({
                 type: 'POST',
