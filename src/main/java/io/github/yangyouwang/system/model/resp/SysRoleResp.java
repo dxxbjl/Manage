@@ -1,8 +1,6 @@
 package io.github.yangyouwang.system.model.resp;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -15,10 +13,7 @@ import java.io.Serializable;
  * @date 2021/3/254:43 PM
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class SysRoleResp implements Serializable {
-
     /**
      * 主键id
      */
@@ -33,4 +28,18 @@ public class SysRoleResp implements Serializable {
     private String roleKey;
     /** 备注 */
     private String remark;
+    /**
+     * 菜单id
+     */
+    private Long[] menuIds;
+
+    public SysRoleResp() {
+    }
+
+    public SysRoleResp(Long id, String roleName, String roleKey, String remark) {
+        this.id = id;
+        this.roleName = roleName;
+        this.roleKey = roleKey;
+        this.remark = remark;
+    }
 }

@@ -39,19 +39,6 @@ public interface SysMenuRepository extends JpaRepository<SysMenu,Long>,JpaSpecif
     List<SysMenu> findSysMenuByUserId(Long id);
 
     /**
-     * 根据父id查询菜单
-     */
-    @Query(nativeQuery = true,
-            value = "select distinct m.id, m.parent_id, m.menu_name, m.url, m.visible, ifnull(m.perms,'') as perms, m.menu_type, m.order_num, m.create_by, m.create_time, m.update_by, m.update_time, m.remark" +
-                    " from sys_menu m" +
-                    " left join sys_role_menu rm on m.id = rm.menu_id" +
-                    " left join sys_user_role ur on rm.role_id = ur.role_id" +
-                    " left join sys_role ro on ur.role_id = ro.id" +
-                    " where m.parent_id = ?1 and m.menu_type in ('M', 'C') and m.visible = 0" +
-                    " order by m.parent_id, m.order_num")
-    List<SysMenu> findSysMenuByParentId(Long id);
-
-    /**
      * 根据id查询菜单
      */
     @Query(nativeQuery = true,

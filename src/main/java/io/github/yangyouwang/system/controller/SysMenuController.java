@@ -1,7 +1,8 @@
 package io.github.yangyouwang.system.controller;
 
 import io.github.yangyouwang.common.domain.Result;
-import io.github.yangyouwang.common.domain.TreeNode;
+import io.github.yangyouwang.common.domain.TreeSelectNode;
+import io.github.yangyouwang.common.domain.XmSelectNode;
 import io.github.yangyouwang.system.model.req.*;
 import io.github.yangyouwang.system.model.resp.SysMenuResp;
 import io.github.yangyouwang.system.service.SysMenuService;
@@ -111,13 +112,26 @@ public class SysMenuController {
 
     /**
      * 查询菜单列表
-     * @param id id
+     * @param ids ids
      * @return 菜单列表
      */
-    @GetMapping(value = {"/treeSelect","/treeSelect/{id}"})
+    @GetMapping("/treeSelect")
     @ResponseBody
-    public List<TreeNode> treeSelect(@PathVariable(value = "id",required = false) Long id) {
-        List<TreeNode> sysMenus = sysMenuService.treeSelect(id);
+    public List<TreeSelectNode> treeSelect(@RequestParam(value = "ids",required = false) Long[] ids) {
+        List<TreeSelectNode> sysMenus = sysMenuService.treeSelect(ids);
+        return sysMenus;
+    }
+
+
+    /**
+     * 查询菜单列表
+     * @param ids ids
+     * @return 菜单列表
+     */
+    @GetMapping("/xmSelect")
+    @ResponseBody
+    public List<XmSelectNode> xmSelect(@RequestParam(value = "ids",required = false) Long[] ids) {
+        List<XmSelectNode> sysMenus = sysMenuService.xmSelect(ids);
         return sysMenus;
     }
 }

@@ -63,18 +63,15 @@ public class SysMenu extends BaseEntity implements Treeable {
     private String perms;
 
     /**
-     * 一个菜单对应多个角色
+     * 关联角色
      */
-    @ManyToMany(targetEntity = SysUser.class)
-    @JoinTable(name="sys_role_menu",
-            joinColumns={@JoinColumn(name="menu_id",referencedColumnName="id")},
-            inverseJoinColumns={@JoinColumn(name="role_id",referencedColumnName="id")}
-    )
+    @ManyToMany(mappedBy = "menus")
     private List<SysRole> roles;
 
     /** 子菜单 */
     @Transient
     private List<SysMenu> children = new ArrayList<>();
+
     /**
      * 父菜单名称
      */

@@ -67,13 +67,12 @@ public class SysUser extends BaseEntity implements UserDetails  {
     private String avatar;
 
     /**
-     * 多个用户对应一个角色
+     * 多个用户对应多个角色
      */
     @ManyToMany(targetEntity = SysRole.class,fetch = FetchType.EAGER)
-    @JoinTable(name="sys_user_role",
-            joinColumns={@JoinColumn(name="user_id",referencedColumnName="id")},
-            inverseJoinColumns={@JoinColumn(name="role_id",referencedColumnName="id")}
-    )
+    @JoinTable(name = "sys_user_role",
+            joinColumns = @JoinColumn(name="user_id",referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id",referencedColumnName = "id"))
     private List<SysRole> roles;
 
     @Override

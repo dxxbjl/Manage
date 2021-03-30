@@ -35,13 +35,20 @@ public class SysRole extends BaseEntity {
      */
     @Column(name="role_key")
     private String roleKey;
+
     /**
-     * 一个角色对应多个用户
+     * 关联用户
      */
-    @ManyToMany(targetEntity = SysUser.class)
-    @JoinTable(name="sys_user_role",
-            joinColumns={@JoinColumn(name="user_id",referencedColumnName="id")},
-            inverseJoinColumns={@JoinColumn(name="role_id",referencedColumnName="id")}
-    )
+    @ManyToMany(mappedBy = "roles")
     private List<SysUser> users;
+
+    /**
+     * 多个角色对应多个菜单
+     */
+    @ManyToMany(targetEntity = SysMenu.class)
+    @JoinTable(name="sys_role_menu",
+            joinColumns={@JoinColumn(name="role_id",referencedColumnName="id")},
+            inverseJoinColumns={@JoinColumn(name="menu_id",referencedColumnName="id")}
+    )
+    private List<SysMenu> menus;
 }

@@ -1,8 +1,6 @@
 package io.github.yangyouwang.system.model.resp;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -15,8 +13,6 @@ import java.io.Serializable;
  * @date 2021/3/254:43 PM
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class SysUserResp implements Serializable {
 
     /**
@@ -49,4 +45,18 @@ public class SysUserResp implements Serializable {
     private String avatar;
     /** 备注 */
     private String remark;
+
+    public SysUserResp() {
+    }
+
+    public SysUserResp(Long id, String userName, String enabled, String email, String phonenumber, String sex, String avatar, String remark) {
+        this.id = id;
+        this.userName = userName;
+        this.enabled = enabled;
+        this.email = email;
+        this.phonenumber = phonenumber;
+        this.sex = sex;
+        this.avatar = avatar;
+        this.remark = remark;
+    }
 }

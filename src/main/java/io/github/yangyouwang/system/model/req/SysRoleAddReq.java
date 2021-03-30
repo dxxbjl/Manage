@@ -28,4 +28,9 @@ public class SysRoleAddReq implements Serializable {
 
     /** 备注 */
     private String remark;
+
+    /**
+     * 菜单
+     */
+    private Long[] menuIds;
 }

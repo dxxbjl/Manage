@@ -1,8 +1,6 @@
 package io.github.yangyouwang.system.model.resp;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -15,8 +13,6 @@ import java.io.Serializable;
  * @date 2021/3/254:43 PM
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class SysMenuResp implements Serializable {
 
     /**
@@ -59,4 +55,20 @@ public class SysMenuResp implements Serializable {
      * 父菜单名称
      */
     private String parentName;
+
+    public SysMenuResp() {
+    }
+
+    public SysMenuResp(Long id, String menuName, Long parentId, Integer orderNum, String url, String menuType, String visible, String perms, String remark, String parentName) {
+        this.id = id;
+        this.menuName = menuName;
+        this.parentId = parentId;
+        this.orderNum = orderNum;
+        this.url = url;
+        this.menuType = menuType;
+        this.visible = visible;
+        this.perms = perms;
+        this.remark = remark;
+        this.parentName = parentName;
+    }
 }

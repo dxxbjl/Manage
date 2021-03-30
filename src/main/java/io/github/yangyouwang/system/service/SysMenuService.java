@@ -1,5 +1,6 @@
 package io.github.yangyouwang.system.service;
-import io.github.yangyouwang.common.domain.TreeNode;
+import io.github.yangyouwang.common.domain.TreeSelectNode;
+import io.github.yangyouwang.common.domain.XmSelectNode;
 import io.github.yangyouwang.core.converter.ListToTree;
 import io.github.yangyouwang.core.converter.impl.ListToTreeImpl;
 import io.github.yangyouwang.system.dao.SysMenuRepository;
@@ -112,24 +113,48 @@ public class SysMenuService {
 
     /**
      * 查询菜单列表
-     * @param id id
+     * @param ids ids
      * @return 菜单列表
      */
-    public List<TreeNode> treeSelect(Long id) {
-        List<SysMenu> menus;
-        if (null == id) {
-            menus = this.sysMenuRepository.findAll();
-        } else {
-            menus = this.sysMenuRepository.findSysMenuByParentId(id);
-        }
+    public List<TreeSelectNode> treeSelect(Long[] ids) {
+        List<SysMenu> menus = this.sysMenuRepository.findAll();
         ListToTree treeBuilder = new ListToTreeImpl();
         return treeBuilder.toTree(menus.stream().map(sysMenu -> {
-            TreeNode treeNode = new TreeNode();
+            TreeSelectNode treeNode = new TreeSelectNode();
             treeNode.setId(sysMenu.getId());
             treeNode.setParentId(sysMenu.getParentId());
             treeNode.setName(sysMenu.getMenuName());
-            treeNode.setChecked(false);
-            treeNode.setOpen(false);
+            for(Long id : ids) {
+                if (id.intValue() == sysMenu.getId().intValue()) {
+                    treeNode.setChecked(true);
+                    break;
+                }
+            }
+            return treeNode;
+        }).collect(Collectors.toList()));
+    }
+
+
+    /**
+     * 查询菜单列表
+     * @param ids ids
+     * @return 菜单列表
+     */
+    public List<XmSelectNode> xmSelect(Long[] ids) {
+        List<SysMenu> menus = this.sysMenuRepository.findAll();
+        ListToTree treeBuilder = new ListToTreeImpl();
+        return treeBuilder.toTree(menus.stream().map(sysMenu -> {
+            XmSelectNode treeNode = new XmSelectNode();
+            treeNode.setName(sysMenu.getMenuName());
+            treeNode.setValue(sysMenu.getId());
+            treeNode.setId(sysMenu.getId());
+            treeNode.setParentId(sysMenu.getParentId());
+            for(Long id : ids) {
+                if (id.intValue() == sysMenu.getId().intValue()) {
+                    treeNode.setSelected(true);
+                    break;
+                }
+            }
             return treeNode;
         }).collect(Collectors.toList()));
     }

@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * @author yangyouwang
- * @title: TreeNode
+ * @title: TreeSelectNode
  * @projectName crud
  * @description: 节点类（必须继承Treeable）
  * @date 2021/3/2910:47 AM
@@ -17,7 +17,16 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TreeNode implements Treeable {
+public class XmSelectNode implements Treeable {
+
+    /**
+     * 名称
+     */
+    private String name;
+    /**
+     * 值
+     */
+    private Long value;
     /**
      * id
      */
@@ -27,21 +36,17 @@ public class TreeNode implements Treeable {
      */
     private Long parentId;
     /**
-     * 名称
+     * 是否展示
      */
-    private String name;
+    private Boolean disabled = false;
     /**
      * 是否选中
      */
-    private Boolean checked;
-    /**
-     * 是否打开
-     */
-    private Boolean open;
+    private Boolean selected = false;
     /**
      * 节点
      */
-    private List<TreeNode> children;
+    private List<XmSelectNode> children;
 
 
     @Override
@@ -51,7 +56,7 @@ public class TreeNode implements Treeable {
 
     @Override
     public Long getChildrenKey() {
-        return id;
+        return value;
     }
 
     @Override

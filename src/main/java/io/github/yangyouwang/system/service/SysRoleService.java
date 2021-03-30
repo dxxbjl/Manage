@@ -1,6 +1,8 @@
 package io.github.yangyouwang.system.service;
 
+import io.github.yangyouwang.system.dao.SysMenuRepository;
 import io.github.yangyouwang.system.dao.SysRoleRepository;
+import io.github.yangyouwang.system.model.SysMenu;
 import io.github.yangyouwang.system.model.SysRole;
 import io.github.yangyouwang.system.model.req.SysRoleAddReq;
 import io.github.yangyouwang.system.model.req.SysRoleEditReq;
@@ -14,7 +16,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author yangyouwang
@@ -30,6 +35,9 @@ public class SysRoleService {
     @Autowired
     private SysRoleRepository sysRoleRepository;
 
+    @Autowired
+    private SysMenuRepository sysMenuRepository;
+
     /**
      * 跳转编辑
      * @return 编辑页面
@@ -38,6 +46,8 @@ public class SysRoleService {
         SysRole sysRole = sysRoleRepository.findById(id).orElse(new SysRole());
         SysRoleResp sysRoleResp = new SysRoleResp();
         BeanUtils.copyProperties(sysRole,sysRoleResp);
+        Long[] menuIds = sysRole.getMenus().stream().map(s -> s.getId()).toArray(Long[]::new);
+        sysRoleResp.setMenuIds(menuIds);
         return sysRoleResp;
     }
 
@@ -61,6 +71,13 @@ public class SysRoleService {
         }
         sysRole = new SysRole();
         BeanUtils.copyProperties(sysRoleAddReq,sysRole);
+        // 查询菜单
+        List<SysMenu> sysMenus = Arrays.stream(sysRoleAddReq.getMenuIds()).map(s -> {
+            SysMenu sysMenu = sysMenuRepository.findById(s).orElse(new SysMenu());
+            return sysMenu;
+        }).collect(Collectors.toList());
+        sysRole.setMenus(sysMenus);
+        // 添加角色
         sysRoleRepository.save(sysRole);
     }
 
@@ -71,6 +88,12 @@ public class SysRoleService {
     public void edit(SysRoleEditReq sysRoleEditReq) {
         SysRole sysRole = sysRoleRepository.findById(sysRoleEditReq.getId()).get();
         BeanUtils.copyProperties(sysRoleEditReq,sysRole);
+        // 查询菜单
+        List<SysMenu> sysMenus = Arrays.stream(sysRoleEditReq.getMenuIds()).map(s -> {
+            SysMenu sysMenu = sysMenuRepository.findById(s).orElse(new SysMenu());
+            return sysMenu;
+        }).collect(Collectors.toList());
+        sysRole.setMenus(sysMenus);
         sysRoleRepository.save(sysRole);
     }
 
