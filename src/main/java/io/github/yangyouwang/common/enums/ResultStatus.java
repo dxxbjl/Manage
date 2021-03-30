@@ -14,7 +14,8 @@ import lombok.ToString;
 public enum ResultStatus {
 
     SUCCESS(200, "OK"),
-    ERROR(500, "Server Error");
+    ERROR(500, "Server Error"),
+    NO_PERMISSION(401,"No Permission");
 
     /** 业务异常码 */
     public Integer code;

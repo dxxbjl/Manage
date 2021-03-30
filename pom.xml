@@ -28,6 +28,7 @@
 		<jjwt.version>0.9.0</jjwt.version>
 		<joda.version>2.9.9</joda.version>
 		<commons.version>2.5</commons.version>
+		<commons-codec>1.10</commons-codec>
 	</properties>
 
 	<dependencies>
@@ -142,6 +143,12 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>${commons.version}</version>
+		</dependency>
+		<!--commons-codec-->
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>${commons-codec}</version>
 		</dependency>
 	</dependencies>
 
