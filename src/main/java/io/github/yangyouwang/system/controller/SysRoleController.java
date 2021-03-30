@@ -1,6 +1,7 @@
 package io.github.yangyouwang.system.controller;
 
 import io.github.yangyouwang.common.domain.Result;
+import io.github.yangyouwang.common.domain.XmSelectNode;
 import io.github.yangyouwang.system.model.req.*;
 import io.github.yangyouwang.system.model.resp.SysRoleResp;
 import io.github.yangyouwang.system.service.SysRoleService;
@@ -11,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author yangyouwang
@@ -105,5 +107,17 @@ public class SysRoleController {
     public Result del(@PathVariable Long id){
         sysRoleService.del(id);
         return Result.success();
+    }
+
+    /**
+     * 查询角色列表
+     * @param ids ids
+     * @return 角色列表
+     */
+    @GetMapping("/xmSelect")
+    @ResponseBody
+    public List<XmSelectNode> xmSelect(@RequestParam(value = "ids",required = false) Long[] ids) {
+        List<XmSelectNode> sysMenus = sysRoleService.xmSelect(ids);
+        return sysMenus;
     }
 }

@@ -1,5 +1,6 @@
 package io.github.yangyouwang.system.service;
 
+import io.github.yangyouwang.common.domain.XmSelectNode;
 import io.github.yangyouwang.system.dao.SysMenuRepository;
 import io.github.yangyouwang.system.dao.SysRoleRepository;
 import io.github.yangyouwang.system.model.SysMenu;
@@ -14,11 +15,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.ArrayUtils;
 
 import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -46,7 +49,7 @@ public class SysRoleService {
         SysRole sysRole = sysRoleRepository.findById(id).orElse(new SysRole());
         SysRoleResp sysRoleResp = new SysRoleResp();
         BeanUtils.copyProperties(sysRole,sysRoleResp);
-        Long[] menuIds = sysRole.getMenus().stream().map(s -> s.getId()).toArray(Long[]::new);
+        Long[] menuIds = sysRole.getMenus().stream().filter(sysMenu -> 0 != sysMenu.getParentId().intValue()).map(s -> s.getId()).toArray(Long[]::new);
         sysRoleResp.setMenuIds(menuIds);
         return sysRoleResp;
     }
@@ -103,5 +106,22 @@ public class SysRoleService {
      */
     public void del(Long id) {
         sysRoleRepository.deleteById(id);
+    }
+
+    /**
+     * 查询角色列表
+     * @param ids ids
+     * @return 角色列表
+     */
+    public List<XmSelectNode> xmSelect(Long[] ids) {
+        List<SysRole> sysRoles = this.sysRoleRepository.findAll();
+        return sysRoles.stream().map(sysMenu -> {
+            XmSelectNode treeNode = new XmSelectNode();
+            treeNode.setName(sysMenu.getRoleName());
+            treeNode.setValue(sysMenu.getId());
+            treeNode.setId(sysMenu.getId());
+            Optional.ofNullable(ids).ifPresent(optIds -> treeNode.setSelected(ArrayUtils.contains(optIds,sysMenu.getId())));
+            return treeNode;
+        }).collect(Collectors.toList());
     }
 }

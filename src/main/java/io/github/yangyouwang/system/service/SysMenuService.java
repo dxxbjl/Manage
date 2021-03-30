@@ -1,4 +1,5 @@
 package io.github.yangyouwang.system.service;
+import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.common.domain.TreeSelectNode;
 import io.github.yangyouwang.common.domain.XmSelectNode;
 import io.github.yangyouwang.core.converter.ListToTree;
@@ -14,9 +15,12 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.ArrayUtils;
+
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -29,11 +33,8 @@ import java.util.stream.Collectors;
 @Service
 public class SysMenuService {
 
-    private static final Long userId = 1L;
-
     @Autowired
     private SysMenuRepository sysMenuRepository;
-
 
     /**
      * 根据用户查询菜单
@@ -42,10 +43,13 @@ public class SysMenuService {
      */
     public List<SysMenu> selectMenusByUser(Long id) {
         List<SysMenu> menus;
-        if (userId.equals(id)) {
+        if (Constants.ADMINISTRATOR_USER_ID.equals(id)) {
             menus = this.sysMenuRepository.findAll();
         } else {
             menus = this.sysMenuRepository.findSysMenuByUserId(id);
+        }
+        if (menus.size() == 0) {
+            throw new RuntimeException("暂未分配菜单");
         }
         ListToTree treeBuilder = new ListToTreeImpl();
         return treeBuilder.toTree(menus);
@@ -118,20 +122,16 @@ public class SysMenuService {
      */
     public List<TreeSelectNode> treeSelect(Long[] ids) {
         List<SysMenu> menus = this.sysMenuRepository.findAll();
-        ListToTree treeBuilder = new ListToTreeImpl();
-        return treeBuilder.toTree(menus.stream().map(sysMenu -> {
+        List<TreeSelectNode> result = menus.stream().map(sysMenu -> {
             TreeSelectNode treeNode = new TreeSelectNode();
             treeNode.setId(sysMenu.getId());
             treeNode.setParentId(sysMenu.getParentId());
             treeNode.setName(sysMenu.getMenuName());
-            for(Long id : ids) {
-                if (id.intValue() == sysMenu.getId().intValue()) {
-                    treeNode.setChecked(true);
-                    break;
-                }
-            }
+            Optional.ofNullable(ids).ifPresent(optIds -> treeNode.setChecked(ArrayUtils.contains(optIds,sysMenu.getId())));
             return treeNode;
-        }).collect(Collectors.toList()));
+        }).collect(Collectors.toList());
+        ListToTree treeBuilder = new ListToTreeImpl();
+        return treeBuilder.toTree(result);
     }
 
 
@@ -142,20 +142,16 @@ public class SysMenuService {
      */
     public List<XmSelectNode> xmSelect(Long[] ids) {
         List<SysMenu> menus = this.sysMenuRepository.findAll();
-        ListToTree treeBuilder = new ListToTreeImpl();
-        return treeBuilder.toTree(menus.stream().map(sysMenu -> {
+        List<XmSelectNode> result = menus.stream().map(sysMenu -> {
             XmSelectNode treeNode = new XmSelectNode();
             treeNode.setName(sysMenu.getMenuName());
             treeNode.setValue(sysMenu.getId());
             treeNode.setId(sysMenu.getId());
             treeNode.setParentId(sysMenu.getParentId());
-            for(Long id : ids) {
-                if (id.intValue() == sysMenu.getId().intValue()) {
-                    treeNode.setSelected(true);
-                    break;
-                }
-            }
+            Optional.ofNullable(ids).ifPresent(optIds -> treeNode.setSelected(ArrayUtils.contains(optIds,sysMenu.getId())));
             return treeNode;
-        }).collect(Collectors.toList()));
+        }).collect(Collectors.toList());
+        ListToTree treeBuilder = new ListToTreeImpl();
+        return treeBuilder.toTree(result);
     }
 }

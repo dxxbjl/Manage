@@ -54,7 +54,13 @@
         ,form = layui.form;
 
     form.on('submit(save-submit)', function(data){
-         var menuIds = select.getValue().map(x => {return x.value});
+         var value = select.getValue();
+         var menuIds = value.map(x => {return x.id});
+         for(var i = 0;i < value.length;i++) {
+             if($.inArray(value[i].parentId,menuIds)==-1) {
+                 menuIds.push(value[i].parentId);
+             }
+         }
          data.field.menuIds = menuIds;
           $.ajax({
               type: 'POST',

@@ -50,6 +50,12 @@
       <input type="text" name="remark" class="layui-input">
     </div>
   </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">角色</label>
+    <div class="layui-input-inline">
+      <div id="roleName" class="xm-select-demo"></div>
+    </div>
+  </div>
   <div class="layui-form-item layui-hide">
     <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
   </div>
@@ -61,13 +67,17 @@
     layui.config({
         base: '/static/layuiadmin/' //静态资源所在路径
     }).extend({
-        index: 'lib/index' //主入口模块
-    }).use(['index', 'form'], function(){
+        index: 'lib/index', //主入口模块
+        xmSelect: 'xm-select'
+    }).use(['index', 'form','xmSelect'], function(){
         var $ = layui.$
+            ,xmSelect = layui.xmSelect
             ,form = layui.form;
         var sysUser = [[${sysUser}]];
         form.val('sys-user-form', sysUser);
-        form.on('submit(save-submit)', function(data){
+        form.on('submit(save-submit)', function(data) {
+            var roleIds = select.getValue().map(x => {return x.id});
+            data.field.roleIds = roleIds;
             $.ajax({
                 type: 'POST',
                 url:  ctx + '/sysUser/edit',
@@ -85,6 +95,24 @@
                     }
                 }
             });
+        });
+
+        var select = xmSelect.render({
+            el: '#roleName',
+            tips:"选择角色",
+            autoRow: true,
+            data: []
+        });
+
+        $.ajax({
+            type: 'get',
+            url: ctx + '/sysRole/xmSelect?ids=' + sysUser.roleIds,
+            success: function(res) {
+                select.update({
+                    data: res,
+                    autoRow: true,
+                })
+            }
         });
     })
 </script>

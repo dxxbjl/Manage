@@ -1,6 +1,8 @@
 package io.github.yangyouwang.system.service;
 
+import io.github.yangyouwang.system.dao.SysRoleRepository;
 import io.github.yangyouwang.system.dao.SysUserRepository;
+import io.github.yangyouwang.system.model.SysRole;
 import io.github.yangyouwang.system.model.SysUser;
 import io.github.yangyouwang.system.model.req.SysUserAddReq;
 import io.github.yangyouwang.system.model.req.SysUserEditReq;
@@ -18,7 +20,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author yangyouwang
@@ -33,6 +38,9 @@ public class SysUserService implements UserDetailsService {
 
     @Autowired
     private SysUserRepository sysUserRepository;
+
+    @Autowired
+    private SysRoleRepository sysRoleRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -56,6 +64,8 @@ public class SysUserService implements UserDetailsService {
         SysUser sysUser = sysUserRepository.findById(id).orElse(new SysUser());
         SysUserResp sysUserResp = new SysUserResp();
         BeanUtils.copyProperties(sysUser,sysUserResp);
+        Long[] roleIds = sysUser.getRoles().stream().map(s -> s.getId()).toArray(Long[]::new);
+        sysUserResp.setRoleIds(roleIds);
         sysUserResp.setEnabled(sysUser.getEnabled());
         return sysUserResp;
     }
@@ -82,6 +92,12 @@ public class SysUserService implements UserDetailsService {
         BeanUtils.copyProperties(sysUserAddReq,sysUser);
         String passWord = passwordEncoder.encode(sysUserAddReq.getPassWord());
         sysUser.setPassWord(passWord);
+        // 查询角色
+        List<SysRole> sysRoles = Arrays.stream(sysUserAddReq.getRoleIds()).map(s -> {
+            SysRole sysRole = sysRoleRepository.findById(s).orElse(new SysRole());
+            return sysRole;
+        }).collect(Collectors.toList());
+        sysUser.setRoles(sysRoles);
         sysUserRepository.save(sysUser);
     }
 
@@ -92,6 +108,12 @@ public class SysUserService implements UserDetailsService {
     public void edit(SysUserEditReq sysUserEditReq) {
         SysUser sysUser = sysUserRepository.findById(sysUserEditReq.getId()).get();
         BeanUtils.copyProperties(sysUserEditReq,sysUser);
+        // 查询角色
+        List<SysRole> sysRoles = Arrays.stream(sysUserEditReq.getRoleIds()).map(s -> {
+            SysRole sysRole = sysRoleRepository.findById(s).orElse(new SysRole());
+            return sysRole;
+        }).collect(Collectors.toList());
+        sysUser.setRoles(sysRoles);
         sysUserRepository.save(sysUser);
     }
 
