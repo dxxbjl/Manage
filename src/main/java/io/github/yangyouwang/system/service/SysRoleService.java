@@ -49,7 +49,7 @@ public class SysRoleService {
         SysRole sysRole = sysRoleRepository.findById(id).orElse(new SysRole());
         SysRoleResp sysRoleResp = new SysRoleResp();
         BeanUtils.copyProperties(sysRole,sysRoleResp);
-        Long[] menuIds = sysRole.getMenus().stream().filter(sysMenu -> 0 != sysMenu.getParentId().intValue()).map(s -> s.getId()).toArray(Long[]::new);
+        Long[] menuIds = sysRole.getMenus().stream().map(s -> s.getId()).toArray(Long[]::new);
         sysRoleResp.setMenuIds(menuIds);
         return sysRoleResp;
     }

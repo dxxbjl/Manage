@@ -83,15 +83,17 @@
   layui.config({
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
-    index: 'lib/index', //主入口模块
-    xmSelect: 'xm-select'
-  }).use(['index', 'form','xmSelect','upload'], function(){
+     index: 'lib/index', //主入口模块
+     xmSelect: 'xm-select',
+     crud: 'crud'
+  }).use(['index', 'form','xmSelect','upload','crud'], function(){
     var $ = layui.$
         ,xmSelect = layui.xmSelect
         ,upload = layui.upload
+        ,crud = layui.crud
       ,form = layui.form;
       form.on('submit(save-submit)', function(data) {
-          var roleIds = select.getValue().map(x => {return x.id});
+          var roleIds = crud.getXmSelectTreeIds(select);
           data.field.roleIds = roleIds;
           $.ajax({
               type: 'POST',
