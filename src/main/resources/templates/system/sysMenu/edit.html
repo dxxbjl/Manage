@@ -22,7 +22,7 @@
     <label class="layui-form-label">父级编号</label>
     <div class="layui-input-inline">
       <input id="parentId" name="parentId" type="hidden">
-      <div id="parentName" class="xm-select-demo"></div>
+      <div id="parentName" lay-filter="parentName" class="xm-select-demo"></div>
     </div>
   </div>
   <div class="layui-form-item">
@@ -122,10 +122,9 @@
             // 加载完成后的回调函数
             success: function (d) {
                 console.log(d);
-                //选中节点，根据id筛选
-                var parentId = $("#parentId").val();
-                if (parentId != 0) {
-                    treeSelect.checkNode('tree', parentId);
+                if (sysMenu.parentId != 0) {
+                    treeSelect.checkNode('parentName', sysMenu.parentId);
+                    treeSelect.refresh('parentName');
                 }
             }
         });

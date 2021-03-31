@@ -118,17 +118,15 @@ public class SysMenuService {
 
     /**
      * 查询菜单列表
-     * @param ids ids
      * @return 菜单列表
      */
-    public List<TreeSelectNode> treeSelect(Long[] ids) {
+    public List<TreeSelectNode> treeSelect() {
         List<SysMenu> menus = this.sysMenuRepository.findAll();
         List<TreeSelectNode> result = menus.stream().map(sysMenu -> {
             TreeSelectNode treeNode = new TreeSelectNode();
             treeNode.setId(sysMenu.getId());
             treeNode.setParentId(sysMenu.getParentId());
             treeNode.setName(sysMenu.getMenuName());
-            Optional.ofNullable(ids).ifPresent(optIds -> treeNode.setChecked(ArrayUtils.contains(optIds,sysMenu.getId())));
             return treeNode;
         }).collect(Collectors.toList());
         ListToTree treeBuilder = new ListToTreeImpl();

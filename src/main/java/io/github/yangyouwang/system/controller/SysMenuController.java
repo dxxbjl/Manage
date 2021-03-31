@@ -112,13 +112,12 @@ public class SysMenuController {
 
     /**
      * 查询菜单列表
-     * @param ids ids
      * @return 菜单列表
      */
     @GetMapping("/treeSelect")
     @ResponseBody
-    public List<TreeSelectNode> treeSelect(@RequestParam(value = "ids",required = false) Long[] ids) {
-        List<TreeSelectNode> sysMenus = sysMenuService.treeSelect(ids);
+    public List<TreeSelectNode> treeSelect() {
+        List<TreeSelectNode> sysMenus = sysMenuService.treeSelect();
         return sysMenus;
     }
 
