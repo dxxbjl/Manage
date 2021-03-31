@@ -1,7 +1,11 @@
 server:
   port: 8080
   servlet:
-    context-path: / # 应用的访问路径
+    #session会话超时时间
+    session:
+      timeout: 60
+    # 应用的访问路径
+    context-path: /
   tomcat:
     uri-encoding: UTF-8
     context-path: /tale_blog

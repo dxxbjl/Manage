@@ -1,6 +1,7 @@
 package io.github.yangyouwang.core.exception;
 
 import io.github.yangyouwang.common.domain.Result;
+import io.github.yangyouwang.common.enums.ResultStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.AccessDeniedException;
@@ -34,7 +35,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public Result exceptionHandler(UnauthorizedException e){
         log.error("发生token认证异常！原因是:",e);
-        return Result.failure(e.getMessage());
+        return Result.ok(ResultStatus.NO_PERMISSION);
     }
 
     /**

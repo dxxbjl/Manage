@@ -12,6 +12,17 @@
 <body>
 <div class="layui-form" lay-filter="sys-user-form" id="sys-user-form"  style="padding: 20px 0 0 0;">
   <input type="hidden" name="id" id="id">
+  <input type="hidden" id="avatar" name="avatar">
+  <div class="layui-form-item">
+    <label class="layui-form-label">头像</label>
+    <div class="layui-input-inline layui-upload">
+      <button type="button" class="layui-btn" id="upload-btn">上传图片</button>
+      <div class="layui-upload-list">
+        <img class="layui-upload-img" id="upload-img" width="100px" height="100px">
+        <p id="upload-text"></p>
+      </div>
+    </div>
+  </div>
   <div class="layui-form-item">
     <label class="layui-form-label">账号</label>
     <div class="layui-input-inline">
@@ -69,12 +80,16 @@
     }).extend({
         index: 'lib/index', //主入口模块
         xmSelect: 'xm-select'
-    }).use(['index', 'form','xmSelect'], function(){
+    }).use(['index', 'form','xmSelect','upload'], function(){
         var $ = layui.$
             ,xmSelect = layui.xmSelect
+            ,upload = layui.upload
             ,form = layui.form;
+
         var sysUser = [[${sysUser}]];
+        $('#upload-img').attr('src', sysUser.avatar); //图片链接（base64）
         form.val('sys-user-form', sysUser);
+
         form.on('submit(save-submit)', function(data) {
             var roleIds = select.getValue().map(x => {return x.id});
             data.field.roleIds = roleIds;
@@ -112,6 +127,32 @@
                     data: res,
                     autoRow: true,
                 })
+            }
+        });
+
+        //普通图片上传
+        var uploadInst = upload.render({
+            elem: '#upload-btn'
+            ,url: ctx + '/sysCommon/upload'
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#upload-img').attr('src', result); //图片链接（base64）
+                });
+            }
+            ,done: function(res){
+                if (res.code == 200) {
+                    $("#avatar").val(res.data.url);
+                    return layer.msg('上传成功');
+                }
+            }
+            ,error: function(){
+                //演示失败状态，并实现重传
+                var uploadText = $('#upload-text');
+                uploadText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                uploadText.find('.demo-reload').on('click', function(){
+                    uploadInst.upload();
+                });
             }
         });
     })

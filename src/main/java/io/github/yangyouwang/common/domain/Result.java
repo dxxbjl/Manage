@@ -22,6 +22,12 @@ public class Result<T> {
     /** 返回参数 */
     private T data;
 
+    private Result(ResultStatus resultStatus, T data) {
+        this.code = resultStatus.CODE;
+        this.message = resultStatus.MESSAGE;
+        this.data = data;
+    }
+
     private Result(Integer code, String message, T data) {
         this.code = code;
         this.message = message;
@@ -99,5 +105,14 @@ public class Result<T> {
      */
     public static <T> Result<T> failure(String message,T data) {
         return new Result<>(ResultStatus.ERROR.CODE, message,data);
+    }
+
+    /***
+     * 返回自定义状态
+     * @param resultStatus 状态枚举
+     * @return 消息
+     */
+    public static <T> Result<T> ok(ResultStatus resultStatus) {
+        return new Result<>(resultStatus, null);
     }
 }

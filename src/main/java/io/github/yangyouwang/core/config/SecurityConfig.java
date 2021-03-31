@@ -60,6 +60,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) {
         // 不需要权限能访问的资源
         web.ignoring()
+                // 接口放行
+                .antMatchers("/api/**")
                 // 静态资源
                 .antMatchers("/static/**")
                 // 给 swagger 放行
@@ -73,7 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // 设置哪些页面可以直接访问，哪些需要验证
         http.authorizeRequests()
-                .antMatchers("/loginPage","/api/**").permitAll() // 放过
+                .antMatchers("/loginPage").permitAll() // 放过
                 .anyRequest().authenticated() // 剩下的所有的地址都是需要在认证状态下才可以访问
         .and()
         // 配置登录功能
