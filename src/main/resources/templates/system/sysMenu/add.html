@@ -33,12 +33,16 @@
     <div class="layui-form-item">
       <label class="layui-form-label">菜单类型</label>
       <div class="layui-input-inline">
-        <input type="text" name="menuType" lay-verify="required" placeholder="请输入菜单类型" class="layui-input">
+        <select lay-filter="menuType" name="menuType">
+          <option value="M">目录</option>
+          <option value="C">菜单</option>
+          <option value="F">按钮</option>
+        </select>
       </div>
     </div>
     <div class="layui-form-item">
       <label class="layui-form-label">菜单状态</label>
-      <div class="layui-input-block">
+      <div class="layui-input-inline">
         <input type="radio" name="visible" value="Y" title="启用" checked>
         <input type="radio" name="visible" value="N" title="禁用">
       </div>

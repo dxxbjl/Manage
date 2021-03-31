@@ -23,7 +23,7 @@ public interface SysMenuRepository extends JpaRepository<SysMenu,Long>,JpaSpecif
             " from sys_menu m" +
             " where m.menu_type in ('M', 'C') and m.visible = 0" +
             " order by m.parent_id, m.order_num")
-    List<SysMenu> findAll();
+    List<SysMenu> findSysMenu();
 
     /**
      * 根据用户id查询菜单

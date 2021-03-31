@@ -80,7 +80,15 @@
               cols: [[ //表头
                   {field: 'id', title: 'ID', sort: true, fixed: 'left'},
                   {field: 'menuName', title: '菜单名称'},
-                  {field: 'menuType', title: '菜单类型'},
+                  {field: 'menuType', title: '菜单类型', templet:function (d) {
+                          if (d.menuType == 'M') {
+                              return "目录";
+                          }else if (d.menuType == 'C') {
+                              return "菜单";
+                          } else {
+                              return "按钮"
+                          }
+                   }},
                   {field: 'visible', title: '菜单状态',
                       templet:function (d) {
                           if (d.visible == 'Y') {
@@ -88,7 +96,7 @@
                           } else {
                               return "隐藏";
                           }
-                      }},
+                  }},
                   {toolbar: '#tableBar', title: '操作', width: 165, align:'center',fixed: 'right'}
               ]]
           });

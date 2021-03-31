@@ -45,7 +45,7 @@ public class SysMenuService {
     public List<SysMenu> selectMenusByUser(Long id) {
         List<SysMenu> menus;
         if (Constants.ADMINISTRATOR_USER_ID.equals(id)) {
-            menus = this.sysMenuRepository.findAll();
+            menus = this.sysMenuRepository.findSysMenu();
         } else {
             menus = this.sysMenuRepository.findSysMenuByUserId(id);
         }

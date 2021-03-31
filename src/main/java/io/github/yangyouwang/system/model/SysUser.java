@@ -2,6 +2,7 @@ package io.github.yangyouwang.system.model;
 
 import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.common.domain.BaseEntity;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -79,6 +80,11 @@ public class SysUser extends BaseEntity implements UserDetails  {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
         for (SysRole role : this.roles) {
+            for (SysMenu sysMenu : role.getMenus()) {
+                if (Strings.isNotBlank(sysMenu.getPerms())) {
+                    authorities.add(new SimpleGrantedAuthority(sysMenu.getPerms()));
+                }
+            }
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRoleKey()));
         }
         return authorities;
