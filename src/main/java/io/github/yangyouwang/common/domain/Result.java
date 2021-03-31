@@ -28,44 +28,76 @@ public class Result<T> {
         this.data = data;
     }
 
-    private Result(ResultStatus resultStatus, T data) {
-        this.code = resultStatus.getCode();
-        this.message = resultStatus.getMessage();
-        this.data = data;
-    }
-
-    /** 业务成功返回业务代码和描述信息 */
+    /**
+     * 返回成功消息
+     * @return 成功消息
+     */
     public static <T> Result<T> success() {
-        return new Result<>(ResultStatus.SUCCESS, null);
+        return Result.success(ResultStatus.SUCCESS.MESSAGE);
     }
 
-    /** 业务异常返回业务代码和描述信息 */
-    public static <T> Result<T> failure() {
-        return new Result<>(ResultStatus.ERROR, null);
+    /**
+     * 返回成功消息
+     * @param message 内容
+     * @return 成功消息
+     */
+    public static <T> Result<T> success(String message) {
+        return Result.success(message, null);
     }
 
-    /** 业务成功返回业务代码和描述信息 */
+    /**
+     * 返回成功消息
+     * @param data 数据对象
+     * @return 成功消息
+     */
     public static <T> Result<T> success(T data) {
-        return new Result<>(ResultStatus.SUCCESS, data);
+        return Result.success(ResultStatus.SUCCESS.MESSAGE,data);
     }
 
-    /** 业务异常返回业务代码和描述信息 */
+    /**
+     * 返回成功消息
+     * @param message 内容
+     * @param data 数据对象
+     * @return 成功消息
+     */
+    public static <T> Result<T> success(String message,T data) {
+        return new Result<>(ResultStatus.SUCCESS.CODE, message ,data);
+    }
+
+    /**
+     * 返回错误消息
+     * @return 错误消息
+     */
+    public static <T> Result<T> failure() {
+        return Result.success(ResultStatus.ERROR.MESSAGE);
+    }
+
+    /**
+     * 返回错误消息
+     * @param message 内容
+     * @return 错误消息
+     */
+    public static <T> Result<T> failure(String message) {
+        return Result.failure(message,null);
+    }
+
+    /**
+     * 返回错误消息
+     * @param data 数据对象
+     * @return 错误消息
+     */
     public static <T> Result<T> failure(T data) {
-        return new Result<>(ResultStatus.ERROR, data);
+        return Result.failure(ResultStatus.ERROR.MESSAGE, data);
     }
 
-    /** 返回自定义状态 */
-    public static <T> Result<T> ok(ResultStatus resultStatus) {
-        return new Result<>(resultStatus, null);
-    }
 
-    /** 返回自定义状态、数据 */
-    public static <T> Result<T> ok(ResultStatus resultStatus, T data) {
-        return new Result<>(resultStatus, data);
-    }
-
-    /** 返回自定义状态、消息、数据 */
-    public static <T> Result<T> ok(Integer code, String message, T data) {
-        return new Result<>(code, message ,data);
+    /**
+     * 返回错误消息
+     * @param message 内容
+     * @param data 数据对象
+     * @return 错误消息
+     */
+    public static <T> Result<T> failure(String message,T data) {
+        return new Result<>(ResultStatus.ERROR.CODE, message,data);
     }
 }

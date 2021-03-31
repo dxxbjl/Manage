@@ -18,12 +18,12 @@ public enum ResultStatus {
     NO_PERMISSION(401,"No Permission");
 
     /** 业务异常码 */
-    public Integer code;
+    public Integer CODE;
     /** 业务异常信息描述 */
-    public String message;
+    public String MESSAGE;
 
-    ResultStatus(Integer code, String message) {
-        this.code = code;
-        this.message = message;
+    ResultStatus(Integer CODE, String MESSAGE) {
+        this.CODE = CODE;
+        this.MESSAGE = MESSAGE;
     }
 }
