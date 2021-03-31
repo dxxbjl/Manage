@@ -17,4 +17,15 @@ public interface ApiVersionConstant {
      * swagger v1
      */
     String SWAGGER_API_V1 = "v1";
+
+
+
+    /**
+     * app v2
+     */
+    int API_V2 = 2;
+    /**
+     * swagger v2
+     */
+    String SWAGGER_API_V2 = "v2";
 }

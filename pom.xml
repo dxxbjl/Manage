@@ -33,6 +33,7 @@
 		<aliyun-java-sdk-core.version>3.0.0</aliyun-java-sdk-core.version>
 		<aliyun-java-sdk-dm.version>3.1.0</aliyun-java-sdk-dm.version>
 		<aliyun-java-sdk-dysmsapi.version>1.0.0</aliyun-java-sdk-dysmsapi.version>
+		<hutool.version>4.1.14</hutool.version>
 	</properties>
 
 	<dependencies>
@@ -177,6 +178,12 @@
 			<groupId>com.aliyun</groupId>
 			<artifactId>aliyun-java-sdk-dysmsapi</artifactId>
 			<version>${aliyun-java-sdk-dysmsapi.version}</version>
+		</dependency>
+		<!-- hutool -->
+		<dependency>
+			<groupId>cn.hutool</groupId>
+			<artifactId>hutool-all</artifactId>
+			<version>${hutool.version}</version>
 		</dependency>
 	</dependencies>
 

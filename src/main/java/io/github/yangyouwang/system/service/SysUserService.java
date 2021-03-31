@@ -1,14 +1,16 @@
 package io.github.yangyouwang.system.service;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import io.github.yangyouwang.system.dao.SysRoleRepository;
 import io.github.yangyouwang.system.dao.SysUserRepository;
 import io.github.yangyouwang.system.model.SysRole;
 import io.github.yangyouwang.system.model.SysUser;
+import io.github.yangyouwang.system.model.req.ModifyPassReq;
 import io.github.yangyouwang.system.model.req.SysUserAddReq;
 import io.github.yangyouwang.system.model.req.SysUserEditReq;
 import io.github.yangyouwang.system.model.req.SysUserListReq;
 import io.github.yangyouwang.system.model.resp.SysUserResp;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +25,7 @@ import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -63,7 +66,7 @@ public class SysUserService implements UserDetailsService {
     public SysUserResp detail(Long id) {
         SysUser sysUser = sysUserRepository.findById(id).orElse(new SysUser());
         SysUserResp sysUserResp = new SysUserResp();
-        BeanUtils.copyProperties(sysUser,sysUserResp);
+        BeanUtil.copyProperties(sysUser,sysUserResp,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
         Long[] roleIds = sysUser.getRoles().stream().map(s -> s.getId()).toArray(Long[]::new);
         sysUserResp.setRoleIds(roleIds);
         sysUserResp.setEnabled(sysUser.getEnabled());
@@ -89,7 +92,7 @@ public class SysUserService implements UserDetailsService {
             throw new RuntimeException("用户已存在");
         }
         sysUser = new SysUser();
-        BeanUtils.copyProperties(sysUserAddReq,sysUser);
+        BeanUtil.copyProperties(sysUserAddReq,sysUser,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
         String passWord = passwordEncoder.encode(sysUserAddReq.getPassWord());
         sysUser.setPassWord(passWord);
         // 查询角色
@@ -107,13 +110,15 @@ public class SysUserService implements UserDetailsService {
      */
     public void edit(SysUserEditReq sysUserEditReq) {
         SysUser sysUser = sysUserRepository.findById(sysUserEditReq.getId()).get();
-        BeanUtils.copyProperties(sysUserEditReq,sysUser);
+        BeanUtil.copyProperties(sysUserEditReq,sysUser,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
         // 查询角色
-        List<SysRole> sysRoles = Arrays.stream(sysUserEditReq.getRoleIds()).map(s -> {
-            SysRole sysRole = sysRoleRepository.findById(s).orElse(new SysRole());
-            return sysRole;
-        }).collect(Collectors.toList());
-        sysUser.setRoles(sysRoles);
+        Optional.ofNullable(sysUserEditReq.getRoleIds()).ifPresent(ids -> {
+            List<SysRole> sysRoles = Arrays.stream(ids).map(s -> {
+                SysRole sysRole = sysRoleRepository.findById(s).orElse(new SysRole());
+                return sysRole;
+            }).collect(Collectors.toList());
+            sysUser.setRoles(sysRoles);
+        });
         sysUserRepository.save(sysUser);
     }
 
@@ -123,5 +128,20 @@ public class SysUserService implements UserDetailsService {
      */
     public void del(Long id) {
         sysUserRepository.deleteById(id);
+    }
+
+    /**
+     * 修改密码
+     * @return 修改密码状态
+     */
+    public void modifyPass(ModifyPassReq modifyPassReq) {
+        SysUser sysUser = sysUserRepository.findById(modifyPassReq.getId()).orElse(new SysUser());
+        boolean matches = passwordEncoder.matches(modifyPassReq.getOldPassword(),sysUser.getPassword());
+        if (!matches) {
+            throw new RuntimeException("旧密码输入错误");
+        }
+        String password = passwordEncoder.encode(modifyPassReq.getPassword());
+        sysUser.setPassWord(password);
+        sysUserRepository.save(sysUser);
     }
 }

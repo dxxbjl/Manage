@@ -1,6 +1,8 @@
 package io.github.yangyouwang.system.controller;
 
 import io.github.yangyouwang.common.domain.Result;
+import io.github.yangyouwang.core.util.SecurityUtils;
+import io.github.yangyouwang.system.model.req.ModifyPassReq;
 import io.github.yangyouwang.system.model.req.SysUserAddReq;
 import io.github.yangyouwang.system.model.req.SysUserEditReq;
 import io.github.yangyouwang.system.model.req.SysUserListReq;
@@ -35,7 +37,9 @@ public class SysUserController {
      * @return 用户信息页面
      */
     @GetMapping("/userInfoPage")
-    public String userInfoPage(){
+    public String userInfoPage(ModelMap map){
+        SysUserResp sysUser = sysUserService.detail(SecurityUtils.getSysUser().getId());
+        map.put("sysUser",sysUser);
         return SUFFIX + "/userInfo";
     }
 
@@ -44,7 +48,9 @@ public class SysUserController {
      * @return 修改密码页面
      */
     @GetMapping("/modifyPassPage")
-    public String modifyPassPage(){
+    public String modifyPassPage(ModelMap map) {
+        SysUserResp sysUser = sysUserService.detail(SecurityUtils.getSysUser().getId());
+        map.put("sysUser",sysUser);
         return SUFFIX + "/password";
     }
 
@@ -124,6 +130,20 @@ public class SysUserController {
     @ResponseBody
     public Result del(@PathVariable Long id){
         sysUserService.del(id);
+        return Result.success();
+    }
+
+    /**
+     * 修改密码
+     * @return 修改状态
+     */
+    @PostMapping("/modifyPass")
+    @ResponseBody
+    public Result modifyPass(@RequestBody @Valid ModifyPassReq modifyPassReq, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()){
+            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+        }
+        sysUserService.modifyPass(modifyPassReq);
         return Result.success();
     }
 }

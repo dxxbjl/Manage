@@ -11,13 +11,13 @@ public class ApiContext {
 
     private static final Map<String, Object> CONTEXT = new ConcurrentHashMap<>(16);
 
-    public static void setUserId(String userId) {
+    public static void setUserId(Long userId) {
         CONTEXT.put("userId", userId);
     }
 
-    public static String getUserId() {
+    public static Long getUserId() {
         if (CONTEXT.containsKey("userId")) {
-            return CONTEXT.get("userId").toString();
+            return Long.parseLong(CONTEXT.get("userId").toString());
         }
         return null;
     }

@@ -75,7 +75,7 @@ public class Result<T> {
      * @return 错误消息
      */
     public static <T> Result<T> failure() {
-        return Result.success(ResultStatus.ERROR.MESSAGE);
+        return Result.failure(ResultStatus.ERROR.MESSAGE);
     }
 
     /**

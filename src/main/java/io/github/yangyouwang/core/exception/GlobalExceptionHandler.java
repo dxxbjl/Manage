@@ -28,6 +28,7 @@ public class GlobalExceptionHandler {
         return Result.failure(e.getMessage());
     }
 
+
     /**
      * 处理token认证异常
      */

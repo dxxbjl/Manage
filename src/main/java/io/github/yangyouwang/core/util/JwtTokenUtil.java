@@ -206,6 +206,6 @@ public class JwtTokenUtil {
     public static void parseJWT(String token) {
         SecretKey key = generateKey(JWT_ALG, JwtConstants.SECRET);
         Claims claims = parseJWT(key, token).getBody();
-        ApiContext.setUserId(claims.getSubject());
+        ApiContext.setUserId(Long.parseLong(claims.getSubject()));
     }
 }

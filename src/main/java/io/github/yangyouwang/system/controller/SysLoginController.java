@@ -1,13 +1,12 @@
 package io.github.yangyouwang.system.controller;
 
+import io.github.yangyouwang.core.util.SecurityUtils;
 import io.github.yangyouwang.system.model.SysMenu;
 import io.github.yangyouwang.system.model.SysUser;
 import io.github.yangyouwang.system.service.SysMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
@@ -31,8 +30,7 @@ public class SysLoginController {
      */
     @GetMapping("/")
     public String indexPage(ModelMap map) {
-        SysUser sysUser = (SysUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Assert.notNull(sysUser,"该用户未登陆");
+        SysUser sysUser = SecurityUtils.getSysUser();
         List<SysMenu> sysMenus = sysMenuService.selectMenusByUser(sysUser.getId());
         map.put("sysMenus",sysMenus);
         map.put("sysUser",sysUser);

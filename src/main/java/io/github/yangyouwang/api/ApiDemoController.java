@@ -31,7 +31,7 @@ public class ApiDemoController {
     @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
     @GetMapping("/hello")
     public Map<String,Object> hello() {
-        String userId = ApiContext.getUserId();
+        Long userId = ApiContext.getUserId();
         Map<String,Object> result = new HashMap<>();
         result.put("userId",userId);
         return result;
@@ -39,7 +39,7 @@ public class ApiDemoController {
 
 
     @ApiOperation(value="获取token")
-    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @ApiVersion(value = ApiVersionConstant.API_V2,group = ApiVersionConstant.SWAGGER_API_V2)
     @GetMapping("/getToken")
     @PassToken
     public Map<String,Object> getToken() {

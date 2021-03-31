@@ -27,7 +27,7 @@ public class DefaultAuthenticationFailureHandler extends SimpleUrlAuthentication
         response.setCharacterEncoding("utf-8");
         response.setContentType("application/json;charset=UTF-8");
         PrintWriter writer = response.getWriter();
-        writer.write(JSON.toJSONString(Result.failure()));
+        writer.write(JSON.toJSONString(Result.failure(exception.getMessage())));
         writer.flush();
     }
 }
