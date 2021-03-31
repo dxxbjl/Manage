@@ -29,3 +29,25 @@ spring:
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
     # 合并多个DruidDataSource的监控数据
     #useGlobalDataSourceStat=true
+
+aliyun:
+  oss:
+    endPoint: oss-cn-beijing.aliyuncs.com
+    url: https://platform-application.oss-cn-beijing.aliyuncs.com/
+    accessKeyId: xxx
+    accessKeySecret: xxx
+    bucketName: xxx
+  sms:
+    accessKeyId: xxx
+    accessKeySecret: xxx
+    signName: 微本地
+  mail:
+    accessKeyId: xxx #邮件服务 accessKeyId
+    accessKeySecret: xxx #邮件服务 accessKeySecret
+    accountName: xxx #邮件服务 发信地址
+    regionId: cn-hangzhou #邮件服务 区域Id
+    sendPersonName: xxx #邮件服务 发信人昵称(程序无法正常读取中文，若是中文应写到程序中)
+    addressType: 1 #邮件服务  取值范围 0~1: 0 为随机账号；1 为发信地址
+    tagName: xxx #邮件服务 控制台创建的标签
+    replyToAddress: false #邮件服务 回信地址
+    toAddress:  #邮件服务  目标地址

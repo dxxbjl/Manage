@@ -29,6 +29,10 @@
 		<joda.version>2.9.9</joda.version>
 		<commons.version>2.5</commons.version>
 		<commons-codec>1.10</commons-codec>
+		<aliyun-oss.version>3.4.2</aliyun-oss.version>
+		<aliyun-java-sdk-core.version>3.0.0</aliyun-java-sdk-core.version>
+		<aliyun-java-sdk-dm.version>3.1.0</aliyun-java-sdk-dm.version>
+		<aliyun-java-sdk-dysmsapi.version>1.0.0</aliyun-java-sdk-dysmsapi.version>
 	</properties>
 
 	<dependencies>
@@ -149,6 +153,30 @@
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
 			<version>${commons-codec}</version>
+		</dependency>
+		<!-- aliYun oss -->
+		<dependency>
+			<groupId>com.aliyun.oss</groupId>
+			<artifactId>aliyun-sdk-oss</artifactId>
+			<version>${aliyun-oss.version}</version>
+		</dependency>
+		<!-- 阿里云服务依赖  -->
+		<dependency>
+			<groupId>com.aliyun</groupId>
+			<artifactId>aliyun-java-sdk-core</artifactId>
+			<version>${aliyun-java-sdk-core.version}</version>
+		</dependency>
+		<!-- 阿里云邮箱服务依赖  -->
+		<dependency>
+			<groupId>com.aliyun</groupId>
+			<artifactId>aliyun-java-sdk-dm</artifactId>
+			<version>${aliyun-java-sdk-dm.version}</version>
+		</dependency>
+		<!-- 阿里云短信 -->
+		<dependency>
+			<groupId>com.aliyun</groupId>
+			<artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+			<version>${aliyun-java-sdk-dysmsapi.version}</version>
 		</dependency>
 	</dependencies>
 
