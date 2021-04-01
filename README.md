@@ -5,8 +5,19 @@
     特点：轻量、简化、避免开发人员重复造轮子。
     
 ## 基于框架
-
-    SpringBoot SpringSecurity JPA Thymeleaf Swagger Validation layuiAdmin
+- 核心框架：Spring Boot
+- 权限框架：SpringSecurity
+- 模板引擎：Thymeleaf
+- 持久层框架：JPA
+- 日志管理：LogBack
+- 工具类：Apache Commons、HuTools
+- 视图框架：Spring MVC
+- 定时器：Quartz
+- 数据库连接池：Druid
+- 日志管理：logback
+- 页面交互：layuiAdmin
+- 验证框架：hibernate-Validation
+- 接口文档：Swagger
 
 ## 操作说明
 
@@ -20,30 +31,32 @@
     
     4.方法中加入@CrudLog注解可拦截异常信息并记录到数据库
     
-    5.security菜单、按钮权限
+    5.使用@CrudLog注解可以将系统错误日志记录到数据库
+    
+    6.security菜单、按钮权限
 ```
 @PreAuthorize("hasAuthority('权限标识')") // java代码
 sec:authorize="hasAuthority('权限标识')" // thymeleaf声明
 ```
     
-    6.获取header传入的token中userId
+    7.获取header传入的token中userId
 ```
  Long userId = ApiContext.getUserId();
 ```
-    7.list转化tree结构
+    8.list转化tree结构
 ```
  ListToTree treeBuilder = new ListToTreeImpl();
  treeBuilder.toTree(menus);
 ```
-    8.发送验证码
+    9.发送验证码
 ```
  SampleEmail.sample(邮件地址,标题,内容);
 ```
-    9.上传文件到oss
+    10.上传文件到oss
 ```
  SampleOSS.upload(文件流, 自定义上传路径);
 ```
-    10.发送短信
+    11.发送短信
 ```
  SampleSms.sendSms(手机号,模版号,签名); 
 ```   
