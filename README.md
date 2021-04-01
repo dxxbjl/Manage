@@ -29,34 +29,32 @@
     
     3.跳过jwt安全认证只需要加入@PassToken注解
     
-    4.方法中加入@CrudLog注解可拦截异常信息并记录到数据库
+    4.使用@CrudLog注解可以将系统错误日志记录到数据库
     
-    5.使用@CrudLog注解可以将系统错误日志记录到数据库
-    
-    6.security菜单、按钮权限
+    5.security菜单、按钮权限
 ```
 @PreAuthorize("hasAuthority('权限标识')") // java代码
 sec:authorize="hasAuthority('权限标识')" // thymeleaf声明
 ```
     
-    7.获取header传入的token中userId
+    6.获取header传入的token中userId
 ```
  Long userId = ApiContext.getUserId();
 ```
-    8.list转化tree结构
+    7.list转化tree结构
 ```
  ListToTree treeBuilder = new ListToTreeImpl();
  treeBuilder.toTree(menus);
 ```
-    9.发送验证码
+    8.发送验证码
 ```
  SampleEmail.sample(邮件地址,标题,内容);
 ```
-    10.上传文件到oss
+    9.上传文件到oss
 ```
  SampleOSS.upload(文件流, 自定义上传路径);
 ```
-    11.发送短信
+    10.发送短信
 ```
  SampleSms.sendSms(手机号,模版号,签名); 
 ```   
