@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+  <meta charset="utf-8">
+  <title>日志列表</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" th:href="@{/static/layuiadmin/layui/css/layui.css}" media="all">
+  <link rel="stylesheet" th:href="@{/static/layuiadmin/style/admin.css}" media="all">
+</head>
+<body>
+  <div class="layui-fluid">
+    <div class="layui-card">
+      <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+        <div class="layui-form-item">
+          <div class="layui-inline">
+            <label class="layui-form-label">类名称</label>
+            <div class="layui-input-block">
+              <input type="text" name="className" placeholder="请输入类名称" class="layui-input">
+            </div>
+          </div>
+          <div class="layui-inline">
+            <label class="layui-form-label">方法名称</label>
+            <div class="layui-input-block">
+              <input type="text" name="methodName" placeholder="请输入方法名称" class="layui-input">
+            </div>
+          </div>
+          <div class="layui-inline">
+            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+              <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="layui-card-body">
+        <table id="logTable" lay-filter="logTable"></table>
+      </div>
+    </div>
+  </div>
+  <script th:src="@{/static/layuiadmin/layui/layui.js}"></script>
+  <script th:inline="javascript">
+  var ctx = [[${#request.getContextPath()}]];
+  layui.config({
+      base: '/static/layuiadmin/' //静态资源所在路径
+  }).extend({
+      index: 'lib/index' //主入口模块
+  }).use(['index', 'useradmin', 'table'], function() {
+      var $ = layui.$
+          ,form = layui.form
+          , table = layui.table;
+      //监听搜索
+      form.on('submit(search)', function(data){
+          var field = data.field;
+          //执行重载
+          table.reload('logTable', {
+              where: field
+          });
+      });
+      // 查询列表接口
+      table.render({
+          elem: '#logTable'
+          ,height: 'full-110'
+          ,url:  ctx + '/sysLog/list'
+          ,page: true //开启分页,
+          ,limit: 10 // 多少条
+          ,request: {
+              pageName: 'pageNum', //页码的参数名称，默认：page
+              limitName: 'pageSize' //每页数据量的参数名，默认：limit
+          }
+          ,parseData: function (result) {
+              return {
+                  "code":result.code,
+                  "count": result.data.totalElements,
+                  "data": result.data.content
+              }
+          }
+          ,response: {
+              statusCode: 200 //成功的状态码，默认：0
+          }
+          ,cols: [[ //表头
+              {field: 'id', title: 'ID', sort: true, fixed: 'left'}
+              ,{field: 'packageName', title: '包名称'}
+              ,{field: 'className', title: '类名称'}
+              ,{field: 'methodName', title: '方法名称'}
+              ,{field: 'argsName', title: '参数名'}
+              ,{field: 'argsValue', title: '参数值'}
+              ,{field: 'exceptionName', title: '异常类型'}
+              ,{field: 'errMsg', title: '错误信息'}
+              ,{field: 'stackTrace', title: '异常堆栈信息'}
+              ,{field: 'createTime', title: '创建时间'}
+          ]]
+      });
+  });
+  </script>
+</body>
+</html>

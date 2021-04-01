@@ -1,6 +1,7 @@
 package io.github.yangyouwang.api;
 
 import io.github.yangyouwang.common.annotation.ApiVersion;
+import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.annotation.PassToken;
 import io.github.yangyouwang.common.annotation.ResponseResultBody;
 import io.github.yangyouwang.common.constant.ApiVersionConstant;
@@ -39,7 +40,7 @@ public class ApiDemoController {
 
 
     @ApiOperation(value="获取token")
-    @ApiVersion(value = ApiVersionConstant.API_V2,group = ApiVersionConstant.SWAGGER_API_V2)
+    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
     @GetMapping("/getToken")
     @PassToken
     public Map<String,Object> getToken() {
@@ -47,4 +48,14 @@ public class ApiDemoController {
         result.put("token",JwtTokenUtil.buildJWT("123"));
         return result;
     }
+
+    @ApiOperation(value="抛异常记录日志接口")
+    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @GetMapping("/log")
+    @CrudLog
+    @PassToken
+    public void log() {
+        int result = 10 / 0; // 会出现错误
+    }
+
 }

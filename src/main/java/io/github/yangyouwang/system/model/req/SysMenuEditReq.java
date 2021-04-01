@@ -49,10 +49,6 @@ public class SysMenuEditReq implements Serializable {
      * 权限标识
      */
     private String perms;
-    /**
-     * 菜单图标
-     */
-    private String icon;
 
     /** 备注 */
     private String remark;
