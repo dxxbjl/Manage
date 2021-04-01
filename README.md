@@ -1,41 +1,52 @@
 ## CRUD企业级脚手架
     当前版本：简约后台管理系统v1.0
     
-    基于框架：SpringBoot SpringSecurity JPA Thymeleaf Swagger Validation layuiAdmin
+## 介绍
+    CRUD企业级脚手架特点：轻量、简化、避免开发人员重复造轮子。
+    
+## 基于框架
+
+    SpringBoot SpringSecurity JPA Thymeleaf Swagger Validation layuiAdmin
 
 ## 操作说明
 
    ![运行截图](https://raw.githubusercontent.com/YangYouWang/crud/master/img/7.png "7.png")
     
-    控制层接口版本管理、包装响应Result返回值进行全局处理，使用@ResponseResultBody注解
+    1.控制层接口版本管理、包装响应Result返回值进行全局处理，使用@ResponseResultBody注解
     
-    定义接口版本，在方法中配置@ApiVersion注解
+    2.定义接口版本，在方法中配置@ApiVersion注解
     
-    跳过jwt安全认证只需要加入@PassToken
+    3.跳过jwt安全认证只需要加入@PassToken注解
     
+    4.方法中加入@CrudLog注解可拦截异常信息并记录到数据库
     
+    5.security菜单、按钮权限
 ```
-Long userId = ApiContext.getUserId(); //  获取header传入的token中userId
+@PreAuthorize("hasAuthority('权限标识')") // java代码
+sec:authorize="hasAuthority('权限标识')" // thymeleaf声明
 ```
-   
+    
+    6.获取header传入的token中userId
+```
+ Long userId = ApiContext.getUserId();
+```
+    7.list转化tree结构
 ```
  ListToTree treeBuilder = new ListToTreeImpl();
- treeBuilder.toTree(menus); // list转化tree结构
+ treeBuilder.toTree(menus);
 ```
-
+    8.发送验证码
 ```
-  SampleEmail.sample(邮件地址,标题,内容); // 发送验证码
+ SampleEmail.sample(邮件地址,标题,内容);
 ```
-
+    9.上传文件到oss
 ```
-  SampleOSS.upload(文件流, 自定义上传路径);// 上传文件到oss
+ SampleOSS.upload(文件流, 自定义上传路径);
 ```
-
+    10.发送短信
 ```
-  SampleSms.sendSms(手机号,模版号,签名); // 发送短信
+ SampleSms.sendSms(手机号,模版号,签名); 
 ```   
-
-    security菜单权限、按钮级别权限配置不多说了都是原生的，没有过度封装。
     
 ## 项目运行截图
     
