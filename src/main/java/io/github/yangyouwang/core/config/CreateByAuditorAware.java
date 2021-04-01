@@ -1,7 +1,7 @@
 package io.github.yangyouwang.core.config;
 
 import io.github.yangyouwang.core.util.SecurityUtils;
-import io.github.yangyouwang.system.model.SysUser;
+import io.github.yangyouwang.crud.system.model.SysUser;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;

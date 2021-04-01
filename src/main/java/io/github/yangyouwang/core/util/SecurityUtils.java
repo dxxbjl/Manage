@@ -1,6 +1,6 @@
 package io.github.yangyouwang.core.util;
 
-import io.github.yangyouwang.system.model.SysUser;
+import io.github.yangyouwang.crud.system.model.SysUser;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.Assert;
 

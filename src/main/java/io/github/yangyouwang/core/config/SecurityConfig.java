@@ -1,7 +1,7 @@
 package io.github.yangyouwang.core.config;
 import io.github.yangyouwang.core.handler.security.DefaultAuthenticationFailureHandler;
 import io.github.yangyouwang.core.handler.security.DefaultAuthenticationSuccessHandler;
-import io.github.yangyouwang.system.service.SysUserService;
+import io.github.yangyouwang.crud.system.service.SysUserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;

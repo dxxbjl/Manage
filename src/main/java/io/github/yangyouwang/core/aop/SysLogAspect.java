@@ -1,8 +1,8 @@
 package io.github.yangyouwang.core.aop;
 
 import io.github.yangyouwang.common.annotation.CrudLog;
-import io.github.yangyouwang.system.dao.SysLogRepository;
-import io.github.yangyouwang.system.model.SysLog;
+import io.github.yangyouwang.crud.system.dao.SysLogRepository;
+import io.github.yangyouwang.crud.system.model.SysLog;
 import org.apache.tomcat.util.buf.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
