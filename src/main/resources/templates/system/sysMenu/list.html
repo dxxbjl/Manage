@@ -24,6 +24,8 @@
             <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
               <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
             </button>
+            <button class="layui-btn layuiadmin-btn-useradmin" data-type="expand">全部展开</button>
+            <button class="layui-btn layuiadmin-btn-useradmin" data-type="fold">全部折叠</button>
             <button sec:authorize="hasAuthority('menu:add')" class="layui-btn layuiadmin-btn-useradmin" data-type="addView">添加</button>
           </div>
         </div>
@@ -122,6 +124,18 @@
 
       /* 触发弹层 */
       var active = {
+          /**
+           * 展开所有
+           */
+          expand: function() {
+              treetable.expandAll('#menuTable');
+          },
+          /**
+           * 折叠所有
+           */
+          fold: function() {
+              treetable.foldAll('#menuTable');
+          },
           /**
            * 添加
            * */
