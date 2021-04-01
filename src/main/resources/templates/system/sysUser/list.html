@@ -42,6 +42,9 @@
       </div>
       <div class="layui-card-body">
         <table id="userTable" lay-filter="userTable"></table>
+        <script type="text/html" id="enabledTpl">
+          <input type="checkbox" lay-filter="enabled" value="{{d.id}}" lay-skin="switch" lay-text="激活|冻结" {{d.enabled==1?'checked':''}} />
+        </script>
         <script type="text/html" id="tableBar">
           <a sec:authorize="hasAuthority('user:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
           <a sec:authorize="hasAuthority('user:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
@@ -67,6 +70,12 @@
           table.reload('userTable', {
               where: field
           });
+      });
+      // 修改user状态
+      form.on('switch(enabled)', function (obj) {
+          var userId = obj.elem.value;
+          var checked = obj.elem.checked ? 1 : 0;
+          active.changeUserEnabled(userId,checked);
       });
       // 查询列表接口
       table.render({
@@ -108,15 +117,7 @@
                     }
                   }
                }
-              ,{field: 'enabled', title: '是否启用',
-                  templet:function (d) {
-                      if (d.enabled == 1) {
-                          return "是";
-                      } else {
-                          return "否";
-                      }
-                  }
-              }
+               ,{field: 'enabled', align: "center", sort: true, templet: '#enabledTpl', title: '状态'}
               ,{field: 'remark', title: '备注'}
               ,{toolbar: '#tableBar', title: '操作', width: 165, align:'center',fixed: 'right'}
           ]]
@@ -196,8 +197,31 @@
                       }
                   });
               });
+          },
+          /**
+           * 修改用户状态
+           * @param userId 用户id
+           * @param checked 状态
+           */
+          changeUserEnabled: function (userId,checked) {
+              $.ajax({
+                  type: 'POST',
+                  url:  ctx + '/sysUser/edit',
+                  data: JSON.stringify({
+                      id: userId,
+                      enabled: checked
+                  }),
+                  contentType:'application/json;charset=UTF-8',
+                  dataType: 'json',
+                  success: function(result) {
+                      layer.msg(result.message);
+                      if (result.code == 200) {
+                          table.reload('userTable');
+                      }
+                  }
+              });
           }
-      }
+      };
   });
   </script>
 </body>
