@@ -1,4 +1,4 @@
-package io.github.yangyouwang.core.handler.api;
+package io.github.yangyouwang.core.web;
 
 import io.github.yangyouwang.common.annotation.ApiVersion;
 import lombok.extern.java.Log;

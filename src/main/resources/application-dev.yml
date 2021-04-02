@@ -29,7 +29,20 @@ spring:
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
     # 合并多个DruidDataSource的监控数据
     #useGlobalDataSourceStat=true
-
+  # redis配置
+  redis:
+    ssl: false
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+    timeout: 1000
+    password:
+    lettuce:
+      pool:
+        max-active: 100
+        max-wait: -1
+        min-idle: 0
+        max-idle: 20
 aliyun:
   oss:
     endPoint: oss-cn-beijing.aliyuncs.com

@@ -79,7 +79,10 @@ thymeleaf:
   cache: false
   servlet:
     content-type: text/html
-
+security:
+  oauth2:
+    resource:
+      filter-order: 3
 # 日志配置
 logging:
    level:
