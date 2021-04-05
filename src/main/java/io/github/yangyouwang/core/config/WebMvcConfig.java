@@ -1,6 +1,7 @@
 package io.github.yangyouwang.core.config;
 
-import io.github.yangyouwang.core.interceptor.RestApiInteceptor;
+import io.github.yangyouwang.core.interceptor.ApiIdempotentInterceptor;
+import io.github.yangyouwang.core.interceptor.ApiRestInteceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +23,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfig implements WebMvcConfigurer {
 
     @Autowired
-    private RestApiInteceptor restApiInteceptor;
+    private ApiRestInteceptor apiRestInteceptor;
+
+    @Autowired
+    private ApiIdempotentInterceptor apiIdempotentInterceptor;
 
     /**
      * 实现静态资源的映射
@@ -49,7 +53,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry)
     {
-        registry.addInterceptor(restApiInteceptor).addPathPatterns("/api/**");
+        registry.addInterceptor(apiRestInteceptor).addPathPatterns("/api/**");
+        registry.addInterceptor(apiIdempotentInterceptor).addPathPatterns("/api/**");
     }
 
     /**

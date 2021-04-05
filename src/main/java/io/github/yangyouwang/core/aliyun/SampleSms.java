@@ -10,9 +10,7 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 import io.github.yangyouwang.core.properties.SmsProperties;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
+import io.github.yangyouwang.core.util.SpringUtils;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -23,7 +21,6 @@ import java.util.Date;
  * @description: 发送短信
  * @date 2020/7/31下午11:26
  */
-@Component
 public class SampleSms {
 
 
@@ -36,8 +33,11 @@ public class SampleSms {
      */
     static final String domain = "dysmsapi.aliyuncs.com";
 
-    @Resource
-    private SmsProperties smsConfig;
+    private static SmsProperties smsConfig;
+
+    static {
+        smsConfig = SpringUtils.getBean(SmsProperties.class);
+    }
 
     /**
      * 发送短信
@@ -46,7 +46,7 @@ public class SampleSms {
      * @param signName 签名
      * @param param 参数
      */
-    public SendSmsResponse sendSms(String mobile, String templateCode, String signName, String param) {
+    public static SendSmsResponse sendSms(String mobile, String templateCode, String signName, String param) {
         try {
             String accessKeyId = smsConfig.getAccessKeyId();
             String accessKeySecret = smsConfig.getAccessKeySecret();
@@ -78,7 +78,7 @@ public class SampleSms {
         }
     }
 
-    public QuerySendDetailsResponse querySendDetails(String mobile, String bizId) {
+    public static QuerySendDetailsResponse querySendDetails(String mobile, String bizId) {
         try {
             String accessKeyId = smsConfig.getAccessKeyId();
             String accessKeySecret = smsConfig.getAccessKeySecret();

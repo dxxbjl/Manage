@@ -56,7 +56,7 @@ public class Result<T> {
      * @param data 数据对象
      * @return 成功消息
      */
-    public static <T> Result<T> success(T data) {
+    public static <T> Result success(T data) {
         return Result.success(ResultStatus.SUCCESS.MESSAGE,data);
     }
 
@@ -114,5 +114,15 @@ public class Result<T> {
      */
     public static <T> Result<T> ok(ResultStatus resultStatus) {
         return new Result<>(resultStatus, null);
+    }
+
+    /***
+     * 返回自定义状态
+     * @param resultStatus 状态枚举
+     * @param data 数据对象
+     * @return 消息
+     */
+    public static <T> Result<T> ok(ResultStatus resultStatus,T data) {
+        return new Result<>(resultStatus, data);
     }
 }

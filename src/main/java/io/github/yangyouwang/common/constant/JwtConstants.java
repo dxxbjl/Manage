@@ -8,6 +8,14 @@ package io.github.yangyouwang.common.constant;
  **/
 public interface JwtConstants {
 
+    /**
+     * token
+     */
+    String TOKEN = "token";
+    /**
+     * token前缀
+     */
+    String REDIS_TOKEN_PREFIX = "token:";
 
     String AUTH_HEADER = "Authorization";
 

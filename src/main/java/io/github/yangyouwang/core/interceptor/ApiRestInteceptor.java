@@ -19,7 +19,7 @@ import java.lang.reflect.Method;
  * @create: 2019-09-04 14:31
  **/
 @Component
-public class RestApiInteceptor extends HandlerInterceptorAdapter {
+public class ApiRestInteceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {

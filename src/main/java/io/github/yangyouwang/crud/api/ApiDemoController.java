@@ -1,9 +1,6 @@
 package io.github.yangyouwang.crud.api;
 
-import io.github.yangyouwang.common.annotation.ApiVersion;
-import io.github.yangyouwang.common.annotation.CrudLog;
-import io.github.yangyouwang.common.annotation.PassToken;
-import io.github.yangyouwang.common.annotation.ResponseResultBody;
+import io.github.yangyouwang.common.annotation.*;
 import io.github.yangyouwang.common.constant.ApiVersionConstant;
 import io.github.yangyouwang.core.context.ApiContext;
 import io.github.yangyouwang.core.util.JwtTokenUtil;
@@ -11,6 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +21,8 @@ import java.util.Map;
  * @date 2021/3/3010:24 PM
  */
 @ResponseResultBody
-@Controller("/demo")
+@Controller
+@RequestMapping("/api/{version}/demo")
 @Api(tags = "ApiDemoController", description = "demo控制层")
 public class ApiDemoController {
 
@@ -43,6 +42,7 @@ public class ApiDemoController {
     @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
     @GetMapping("/getToken")
     @PassToken
+    @ApiIdempotent
     public Map<String,Object> getToken() {
         Map<String,Object> result = new HashMap<>();
         result.put("token",JwtTokenUtil.buildJWT("123"));
