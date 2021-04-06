@@ -70,11 +70,14 @@ public class SwaggerConfig {
 
     private List<Parameter> globalOperation(){
         List<Parameter> pars = new ArrayList<>();
+        ParameterBuilder idempotentPar = new ParameterBuilder();
+        idempotentPar.name("token").description("幂等token").modelRef(new ModelRef("string")).parameterType("query").required(false).build();
+        pars.add(idempotentPar.build());
         ParameterBuilder tokenPar = new ParameterBuilder();
-        tokenPar.name("Authorization").description("token").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
+        tokenPar.name("Authorization").description("授权token").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
         pars.add(tokenPar.build());
         ParameterBuilder versionPar = new ParameterBuilder();
-        versionPar.name("version").description("版本").modelRef(new ModelRef("string")).parameterType("path").defaultValue("v1").required(true).build();
+        versionPar.name("version").description("版本号").modelRef(new ModelRef("string")).parameterType("path").defaultValue("v1").required(true).build();
         pars.add(versionPar.build());
         return pars;
     }
