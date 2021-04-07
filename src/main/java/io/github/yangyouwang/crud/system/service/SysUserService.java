@@ -127,7 +127,9 @@ public class SysUserService implements UserDetailsService {
      * @return 删除状态
      */
     public void del(Long id) {
-        sysUserRepository.deleteById(id);
+        if(sysUserRepository.existsById(id)) {
+            sysUserRepository.deleteById(id);
+        }
     }
 
     /**

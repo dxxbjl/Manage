@@ -105,7 +105,9 @@ public class SysRoleService {
      * @return 删除状态
      */
     public void del(Long id) {
-        sysRoleRepository.deleteById(id);
+        if(sysRoleRepository.existsById(id)) {
+            sysRoleRepository.deleteById(id);
+        }
     }
 
     /**

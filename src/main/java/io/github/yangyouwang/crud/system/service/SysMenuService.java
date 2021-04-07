@@ -113,7 +113,9 @@ public class SysMenuService {
      * @return 删除状态
      */
     public void del(Long id) {
-        sysMenuRepository.deleteById(id);
+        if(sysMenuRepository.existsById(id)) {
+            sysMenuRepository.deleteById(id);
+        }
     }
 
     /**
