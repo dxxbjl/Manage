@@ -89,3 +89,7 @@ logging:
    level:
      io.github: debug
      org.springframework: warn
+     # sql动态参数值
+     org.hibernate.type.descriptor.sql.BasicBinder: trace
+     # sql查询结果
+     org.hibernate.type.descriptor.sql.BasicExecutor: trace
