@@ -1,5 +1,6 @@
 package io.github.yangyouwang.core.config;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.crud.system.dao.SysTaskRepository;
 import io.github.yangyouwang.crud.system.model.SysTask;
@@ -17,6 +18,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
 
 /**
  * @author yangyouwang
@@ -35,6 +39,8 @@ public class QuartzConfig implements SchedulingConfigurer {
     @Autowired
     private ApplicationContext applicationContext;
 
+    private static final int corePoolSize = 5;
+
     @Override
     public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {
         Specification<SysTask> query = (Specification<SysTask>) (root, criteriaQuery, criteriaBuilder) -> {
@@ -44,13 +50,19 @@ public class QuartzConfig implements SchedulingConfigurer {
         };
         // 查询所有启用的任务
         List<SysTask> sysTasks = sysTaskRepository.findAll(query);
+        //设置线程名称
+        ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("quartz-pool-%d").build();
+        //创建线程池
+        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(corePoolSize, namedThreadFactory);
+        // 设置线程池
+        scheduledTaskRegistrar.setScheduler(scheduledExecutorService);
         sysTasks.forEach(sysTask -> {
             scheduledTaskRegistrar.addTriggerTask(
                     () -> {
                         // 任务
                         try {
                             Object obj = applicationContext.getBean(sysTask.getClassName());
-                            Method method = obj.getClass().getMethod(sysTask.getMethodName(),null);
+                            Method method = obj.getClass().getMethod(sysTask.getMethodName());
                             method.invoke(obj);
                         } catch (IllegalAccessException e) {
                             e.printStackTrace();
