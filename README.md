@@ -10,7 +10,7 @@
 - 模板引擎：Thymeleaf
 - 持久层框架：JPA
 - 日志管理：LogBack
-- 工具类：Apache Commons、HuTools
+- 工具类：Apache Commons、Hutool
 - 视图框架：Spring MVC
 - 工作流：activiti6
 - 定时器：Quartz
@@ -22,7 +22,7 @@
 
 ## 操作说明
 
-   ![运行截图](https://raw.githubusercontent.com/YangYouWang/crud/master/img/7.png "7.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/7.png "7.png")
     
     1.控制层接口版本管理、包装响应Result返回值进行全局处理，使用@ResponseResultBody注解
     
@@ -63,23 +63,23 @@ sec:authorize="hasAuthority('权限标识')" // thymeleaf声明
 ## 项目运行截图
     
     登陆功能
-   ![运行截图](https://raw.githubusercontent.com/YangYouWang/crud/master/img/0.png "0.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/0.png "0.png")
     
     首页
-   ![运行截图](https://raw.githubusercontent.com/YangYouWang/crud/master/img/1.png "1.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/1.png "1.png")
    
     用户管理模块
-   ![运行截图](https://raw.githubusercontent.com/YangYouWang/crud/master/img/2.png "2.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/2.png "2.png")
    
     角色管理模块
-   ![运行截图](https://raw.githubusercontent.com/YangYouWang/crud/master/img/3.png "3.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/3.png "3.png")
    
     菜单管理模块
-   ![运行截图](https://raw.githubusercontent.com/YangYouWang/crud/master/img/4.png "4.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/4.png "4.png")
    
     swagger接口文档
-   ![运行截图](https://raw.githubusercontent.com/YangYouWang/crud/master/img/5.png "5.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/5.png "5.png")
    
     druid监控
-   ![运行截图](https://raw.githubusercontent.com/YangYouWang/crud/master/img/6.png "6.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/6.png "6.png")
  **革命尚未成功，同志仍须努力**
