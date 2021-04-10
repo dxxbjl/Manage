@@ -56,7 +56,7 @@ public class Result<T> {
      * @param data 数据对象
      * @return 成功消息
      */
-    public static <T> Result success(T data) {
+    public static <T> Result<T> success(T data) {
         return Result.success(ResultStatus.SUCCESS.MESSAGE,data);
     }
 
