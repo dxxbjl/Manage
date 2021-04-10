@@ -11,7 +11,7 @@
  Target Server Version : 50733
  File Encoding         : 65001
 
- Date: 10/04/2021 11:30:39
+ Date: 10/04/2021 13:42:31
 */
 
 SET NAMES utf8mb4;
@@ -693,7 +693,7 @@ CREATE TABLE `QRTZ_SCHEDULER_STATE` (
 -- Records of QRTZ_SCHEDULER_STATE
 -- ----------------------------
 BEGIN;
-INSERT INTO `QRTZ_SCHEDULER_STATE` VALUES ('clusteredScheduler', 'yangyouwangdeMacBook-Pro.local1618025382755', 1618025433462, 10000);
+INSERT INTO `QRTZ_SCHEDULER_STATE` VALUES ('clusteredScheduler', 'yangyouwangdeMacBook-Pro.local1618033126899', 1618033347755, 10000);
 COMMIT;
 
 -- ----------------------------
@@ -937,7 +937,7 @@ CREATE TABLE `sys_task` (
 -- Records of sys_task
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_task` VALUES (1, '测试job', '*/5 * * * * ?', 'testJob', 'test', '1', '1', '2021-04-09 21:29:48', 'admin', '2021-04-10 11:20:54', '测试');
+INSERT INTO `sys_task` VALUES (1, '测试', '*/1 * * * * ?', 'testJob', 'test', '0', '1', '2021-04-09 21:29:48', 'admin', '2021-04-10 13:42:21', '');
 COMMIT;
 
 -- ----------------------------
