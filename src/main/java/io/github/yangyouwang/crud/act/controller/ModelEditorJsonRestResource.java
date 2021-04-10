@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author Tijs Rademakers
@@ -59,7 +60,7 @@ public class ModelEditorJsonRestResource implements ModelDataJsonConstants {
         }
         modelNode.put(MODEL_ID, model.getId());
         ObjectNode editorJsonNode = (ObjectNode) objectMapper.readTree(
-            new String(repositoryService.getModelEditorSource(model.getId()), "utf-8"));
+            new String(repositoryService.getModelEditorSource(model.getId()), StandardCharsets.UTF_8));
         modelNode.put("model", editorJsonNode);
         
       } catch (Exception e) {

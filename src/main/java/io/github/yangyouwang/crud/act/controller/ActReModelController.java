@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Objects;
 
 /**
  * @author yangyouwang
@@ -112,7 +113,7 @@ public class ActReModelController {
     @ResponseBody
     public Result edit(@RequestBody @Valid ActReModelEditReq actReModelEditReq, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
-            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+            throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
         actReModelService.edit(actReModelEditReq);
         return Result.success();

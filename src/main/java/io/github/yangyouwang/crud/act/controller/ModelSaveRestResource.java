@@ -31,6 +31,7 @@ import javax.annotation.Resource;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author Tijs Rademakers
@@ -63,9 +64,9 @@ public class ModelSaveRestResource implements ModelDataJsonConstants {
       
       repositoryService.saveModel(model);
       
-      repositoryService.addModelEditorSource(model.getId(), saveModelReq.getJson_xml().getBytes("utf-8"));
+      repositoryService.addModelEditorSource(model.getId(), saveModelReq.getJson_xml().getBytes(StandardCharsets.UTF_8));
       
-      InputStream svgStream = new ByteArrayInputStream(saveModelReq.getSvg_xml().getBytes("utf-8"));
+      InputStream svgStream = new ByteArrayInputStream(saveModelReq.getSvg_xml().getBytes(StandardCharsets.UTF_8));
       TranscoderInput input = new TranscoderInput(svgStream);
       
       PNGTranscoder transcoder = new PNGTranscoder();
