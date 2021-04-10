@@ -12,6 +12,7 @@
 - 日志管理：LogBack
 - 工具类：Apache Commons、HuTools
 - 视图框架：Spring MVC
+- 工作流：activiti6
 - 定时器：Quartz
 - 数据库连接池：Druid
 - 日志管理：logback

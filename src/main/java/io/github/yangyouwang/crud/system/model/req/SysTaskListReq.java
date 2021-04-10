@@ -1,0 +1,28 @@
+package io.github.yangyouwang.crud.system.model.req;
+
+import lombok.Data;
+
+import java.io.Serializable;
+
+/**
+ * @author yangyouwang
+ * @title: SysTaskListReq
+ * @projectName crud
+ * @description: 任务列表请求
+ * @date 2021/4/10上午10:34
+ */
+@Data
+public class SysTaskListReq implements Serializable {
+    /**
+     * pageNum
+     */
+    private Integer pageNum;
+    /**
+     * pageSize
+     */
+    private Integer pageSize;
+    /**
+     * 名称
+     */
+    private String name;
+}
