@@ -14,7 +14,7 @@ package io.github.yangyouwang.crud.act.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.github.yangyouwang.crud.act.model.SaveModelParam;
+import io.github.yangyouwang.crud.act.model.req.SaveModelReq;
 import org.activiti.editor.constants.ModelDataJsonConstants;
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.RepositoryService;
@@ -49,23 +49,23 @@ public class ModelSaveRestResource implements ModelDataJsonConstants {
   
   @RequestMapping(value="/model/{modelId}/save", method = RequestMethod.PUT)
   @ResponseStatus(value = HttpStatus.OK)
-  public void saveModel(@PathVariable String modelId, SaveModelParam saveModelParam) {
+  public void saveModel(@PathVariable String modelId, SaveModelReq saveModelReq) {
     try {
       
       Model model = repositoryService.getModel(modelId);
       
       ObjectNode modelJson = (ObjectNode) objectMapper.readTree(model.getMetaInfo());
       
-      modelJson.put(MODEL_NAME, saveModelParam.getName());
-      modelJson.put(MODEL_DESCRIPTION, saveModelParam.getDescription());
+      modelJson.put(MODEL_NAME, saveModelReq.getName());
+      modelJson.put(MODEL_DESCRIPTION, saveModelReq.getDescription());
       model.setMetaInfo(modelJson.toString());
-      model.setName(saveModelParam.getName());
+      model.setName(saveModelReq.getName());
       
       repositoryService.saveModel(model);
       
-      repositoryService.addModelEditorSource(model.getId(), saveModelParam.getJson_xml().getBytes("utf-8"));
+      repositoryService.addModelEditorSource(model.getId(), saveModelReq.getJson_xml().getBytes("utf-8"));
       
-      InputStream svgStream = new ByteArrayInputStream(saveModelParam.getSvg_xml().getBytes("utf-8"));
+      InputStream svgStream = new ByteArrayInputStream(saveModelReq.getSvg_xml().getBytes("utf-8"));
       TranscoderInput input = new TranscoderInput(svgStream);
       
       PNGTranscoder transcoder = new PNGTranscoder();

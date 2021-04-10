@@ -42,4 +42,8 @@ public class SysMenuAddReq implements Serializable {
      * 权限标识
      */
     private String perms;
+    /**
+     * 备注
+     */
+    private String remark;
 }

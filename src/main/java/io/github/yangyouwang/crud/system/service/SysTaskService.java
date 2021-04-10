@@ -79,10 +79,6 @@ public class SysTaskService {
             // 添加任务
             quartzConfig.addTriggerTask(sysTask.getName(),sysTask.getClassName(),sysTask.getMethodName(),sysTask.getCron());
         }
-        if (Constants.ENABLED_NO.equals(sysTask.getEnabled())) {
-            // 取消任务
-            quartzConfig.cancelTriggerTask(sysTask.getName());
-        }
     }
 
     /**

@@ -84,9 +84,7 @@ public class QuartzConfig implements SchedulingConfigurer {
      * @param methodName 方法
      * @param cron 表达式
      */
-    public void addTriggerTask(String name, String className,String methodName,String cron)
-    {
-
+    public void addTriggerTask(String name, String className,String methodName,String cron) {
         // 取消任务
         this.cancelTriggerTask(name);
         TaskScheduler scheduler = scheduledTaskRegistrar.getScheduler();

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.util.ArrayUtils;
 
 import javax.transaction.Transactional;
+import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -67,7 +68,7 @@ public class SysRoleService {
      * 添加请求
      * @return 添加状态
      */
-    public void add(SysRoleAddReq sysRoleAddReq) {
+    public void add(@NotNull SysRoleAddReq sysRoleAddReq) {
         SysRole sysRole = sysRoleRepository.findByRoleKey(sysRoleAddReq.getRoleKey());
         if (Objects.nonNull(sysRole)) {
             throw new RuntimeException("角色已存在");
@@ -88,16 +89,18 @@ public class SysRoleService {
      * 编辑请求
      * @return 编辑状态
      */
-    public void edit(SysRoleEditReq sysRoleEditReq) {
+    public void edit(@NotNull SysRoleEditReq sysRoleEditReq) {
         SysRole sysRole = sysRoleRepository.findById(sysRoleEditReq.getId()).get();
-        BeanUtils.copyProperties(sysRoleEditReq,sysRole);
-        // 查询菜单
-        List<SysMenu> sysMenus = Arrays.stream(sysRoleEditReq.getMenuIds()).map(s -> {
-            SysMenu sysMenu = sysMenuRepository.findById(s).orElse(new SysMenu());
-            return sysMenu;
-        }).collect(Collectors.toList());
-        sysRole.setMenus(sysMenus);
-        sysRoleRepository.save(sysRole);
+        if (Objects.nonNull(sysRole)) {
+            BeanUtils.copyProperties(sysRoleEditReq,sysRole);
+            // 查询菜单
+            List<SysMenu> sysMenus = Arrays.stream(sysRoleEditReq.getMenuIds()).map(s -> {
+                SysMenu sysMenu = sysMenuRepository.findById(s).orElse(new SysMenu());
+                return sysMenu;
+            }).collect(Collectors.toList());
+            sysRole.setMenus(sysMenus);
+            sysRoleRepository.save(sysRole);
+        }
     }
 
     /**

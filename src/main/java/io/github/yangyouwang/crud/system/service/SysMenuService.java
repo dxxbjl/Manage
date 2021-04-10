@@ -1,4 +1,5 @@
 package io.github.yangyouwang.crud.system.service;
+
 import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.common.domain.TreeSelectNode;
 import io.github.yangyouwang.common.domain.XmSelectNode;
@@ -21,6 +22,7 @@ import org.thymeleaf.util.ArrayUtils;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -104,8 +106,10 @@ public class SysMenuService {
      */
     public void edit(SysMenuEditReq sysMenuEditReq) {
         SysMenu sysUser = sysMenuRepository.findById(sysMenuEditReq.getId()).get();
-        BeanUtils.copyProperties(sysMenuEditReq,sysUser);
-        sysMenuRepository.save(sysUser);
+        if (Objects.nonNull(sysUser)) {
+            BeanUtils.copyProperties(sysMenuEditReq,sysUser);
+            sysMenuRepository.save(sysUser);
+        }
     }
 
     /**

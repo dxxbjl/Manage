@@ -112,16 +112,18 @@ public class SysUserService implements UserDetailsService {
      */
     public void edit(SysUserEditReq sysUserEditReq) {
         SysUser sysUser = sysUserRepository.findById(sysUserEditReq.getId()).get();
-        BeanUtil.copyProperties(sysUserEditReq,sysUser,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
-        // 查询角色
-        Optional.ofNullable(sysUserEditReq.getRoleIds()).ifPresent(ids -> {
-            List<SysRole> sysRoles = Arrays.stream(ids).map(s -> {
-                SysRole sysRole = sysRoleRepository.findById(s).orElse(new SysRole());
-                return sysRole;
-            }).collect(Collectors.toList());
-            sysUser.setRoles(sysRoles);
-        });
-        sysUserRepository.save(sysUser);
+        if (Objects.nonNull(sysUser)) {
+            BeanUtil.copyProperties(sysUserEditReq,sysUser,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+            // 查询角色
+            Optional.ofNullable(sysUserEditReq.getRoleIds()).ifPresent(ids -> {
+                List<SysRole> sysRoles = Arrays.stream(ids).map(s -> {
+                    SysRole sysRole = sysRoleRepository.findById(s).orElse(new SysRole());
+                    return sysRole;
+                }).collect(Collectors.toList());
+                sysUser.setRoles(sysRoles);
+            });
+            sysUserRepository.save(sysUser);
+        }
     }
 
     /**

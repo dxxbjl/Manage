@@ -1,4 +1,4 @@
-package io.github.yangyouwang.crud.act.model;
+package io.github.yangyouwang.crud.act.model.req;
 
 import lombok.Data;
 
@@ -10,7 +10,7 @@ import lombok.Data;
  * @date 2020/7/25下午2:16
  */
 @Data
-public class SaveModelParam {
+public class SaveModelReq {
 
     private String name;
 

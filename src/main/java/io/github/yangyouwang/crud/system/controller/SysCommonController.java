@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * 通用请求处理
  * 
- * @author ruoyi
+ * @author crud
  */
 @Controller
 @RequestMapping("/sysCommon")
