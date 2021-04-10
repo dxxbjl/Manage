@@ -30,6 +30,9 @@
       </div>
       <div class="layui-card-body">
         <table id="taskTable" lay-filter="taskTable"></table>
+        <script type="text/html" id="enabledTpl">
+          <input type="checkbox" lay-filter="enabled" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" {{d.enabled==1?'checked':''}} />
+        </script>
         <script type="text/html" id="tableBar">
           <a sec:authorize="hasAuthority('task:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
           <a sec:authorize="hasAuthority('task:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
@@ -83,14 +86,7 @@
               ,{field: 'cron', title: '表达式'}
               ,{field: 'className', title: '类名称'}
               ,{field: 'methodName', title: '方法名'}
-              ,{field: 'enabled', title: '状态',
-               templet:function (d) {
-                if (d.enabled == 0) {
-                  return "禁用";
-                } else {
-                  return "启用";
-                }
-              }}
+              ,{field: 'enabled', align: "center", sort: true, templet: '#enabledTpl', title: '状态'}
               ,{field: 'remark', title: '备注'}
               ,{toolbar: '#tableBar', title: '操作', width: 165, align:'center',fixed: 'right'}
           ]]
@@ -110,6 +106,13 @@
       $('.layui-btn').on('click', function(){
           var type = $(this).data('type');
           active[type] && active[type].call(this);
+      });
+
+      // 修改user状态
+      form.on('switch(enabled)', function (obj) {
+        var id = obj.elem.value;
+        var checked = obj.elem.checked ? 1 : 0;
+        active.changeTaskEnabled(id,checked);
       });
 
       /* 触发弹层 */
@@ -170,7 +173,30 @@
                       }
                   });
               });
-          }
+          },
+        /**
+         * 修改任务状态
+         * @param id 任务id
+         * @param checked 状态
+         */
+        changeTaskEnabled: function (id,checked) {
+          $.ajax({
+            type: 'POST',
+            url:  ctx + '/sysTask/edit',
+            data: JSON.stringify({
+              id: id,
+              enabled: checked
+            }),
+            contentType:'application/json;charset=UTF-8',
+            dataType: 'json',
+            success: function(result) {
+              layer.msg(result.message);
+              if (result.code == 200) {
+                table.reload('taskTable');
+              }
+            }
+          });
+        }
       }
   });
   </script>

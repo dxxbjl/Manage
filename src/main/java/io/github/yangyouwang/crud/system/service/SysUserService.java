@@ -11,6 +11,7 @@ import io.github.yangyouwang.crud.system.model.req.SysUserAddReq;
 import io.github.yangyouwang.crud.system.model.req.SysUserEditReq;
 import io.github.yangyouwang.crud.system.model.req.SysUserListReq;
 import io.github.yangyouwang.crud.system.model.resp.SysUserResp;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +22,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
@@ -66,7 +68,7 @@ public class SysUserService implements UserDetailsService {
     public SysUserResp detail(Long id) {
         SysUser sysUser = sysUserRepository.findById(id).orElse(new SysUser());
         SysUserResp sysUserResp = new SysUserResp();
-        BeanUtil.copyProperties(sysUser,sysUserResp,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+        BeanUtils.copyProperties(sysUser,sysUserResp);
         Long[] roleIds = sysUser.getRoles().stream().map(s -> s.getId()).toArray(Long[]::new);
         sysUserResp.setRoleIds(roleIds);
         sysUserResp.setEnabled(sysUser.getEnabled());
@@ -92,7 +94,7 @@ public class SysUserService implements UserDetailsService {
             throw new RuntimeException("用户已存在");
         }
         sysUser = new SysUser();
-        BeanUtil.copyProperties(sysUserAddReq,sysUser,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+        BeanUtils.copyProperties(sysUserAddReq,sysUser);
         String passWord = passwordEncoder.encode(sysUserAddReq.getPassWord());
         sysUser.setPassWord(passWord);
         // 查询角色
