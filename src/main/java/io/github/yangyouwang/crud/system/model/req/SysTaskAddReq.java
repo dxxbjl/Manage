@@ -2,6 +2,7 @@ package io.github.yangyouwang.crud.system.model.req;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
@@ -17,22 +18,27 @@ public class SysTaskAddReq implements Serializable {
     /**
      * 名称
      */
+    @NotBlank(message = "名称不能为空")
     private String name;
     /**
      * cron表达式
      */
+    @NotBlank(message = "cron表达式不能为空")
     private String cron;
     /**
      * 类名称
      */
+    @NotBlank(message = "类名称不能为空")
     private String className;
     /**
      * 方法名
      */
+    @NotBlank(message = "方法名不能为空")
     private String methodName;
     /**
      * 是否启用
      */
+    @NotBlank(message = "是否启用不能为空")
     private String enabled;
 
     /** 备注 */

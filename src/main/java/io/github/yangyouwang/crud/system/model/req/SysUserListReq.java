@@ -18,10 +18,12 @@ public class SysUserListReq implements Serializable {
     /**
      * pageNum
      */
+    @NotNull(message = "pageNum不能为空")
     private Integer pageNum;
     /**
      * pageSize
      */
+    @NotNull(message = "pageSize不能为空")
     private Integer pageSize;
     /**
      * 账号

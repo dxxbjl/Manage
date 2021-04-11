@@ -2,6 +2,8 @@ package io.github.yangyouwang.crud.system.model.req;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -16,6 +18,7 @@ public class SysTaskEditReq implements Serializable {
     /**
      * id
      */
+    @NotNull(message = "id不能为空")
     private Long id;
     /**
      * 名称
@@ -36,6 +39,7 @@ public class SysTaskEditReq implements Serializable {
     /**
      * 是否启用
      */
+    @NotBlank(message = "是否启用不能为空")
     private String enabled;
 
     /** 备注 */

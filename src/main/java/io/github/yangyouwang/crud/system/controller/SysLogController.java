@@ -5,6 +5,8 @@ import io.github.yangyouwang.crud.system.model.req.SysLogListReq;
 import io.github.yangyouwang.crud.system.service.SysLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -41,7 +43,10 @@ public class SysLogController {
      */
     @GetMapping("/list")
     @ResponseBody
-    public Result list(SysLogListReq sysLogListReq){
+    public Result list(@Validated SysLogListReq sysLogListReq, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()){
+            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+        }
         return Result.success(sysLogService.list(sysLogListReq));
     }
 
