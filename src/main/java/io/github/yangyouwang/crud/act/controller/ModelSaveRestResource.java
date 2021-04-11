@@ -12,6 +12,7 @@
  */
 package io.github.yangyouwang.crud.act.controller;
 
+import cn.hutool.core.io.IoUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.yangyouwang.crud.act.model.req.SaveModelReq;
@@ -51,6 +52,8 @@ public class ModelSaveRestResource implements ModelDataJsonConstants {
   @RequestMapping(value="/model/{modelId}/save", method = RequestMethod.PUT)
   @ResponseStatus(value = HttpStatus.OK)
   public void saveModel(@PathVariable String modelId, SaveModelReq saveModelReq) {
+    InputStream svgStream = null;
+    ByteArrayOutputStream outStream = null;
     try {
       
       Model model = repositoryService.getModel(modelId);
@@ -66,23 +69,26 @@ public class ModelSaveRestResource implements ModelDataJsonConstants {
       
       repositoryService.addModelEditorSource(model.getId(), saveModelReq.getJson_xml().getBytes(StandardCharsets.UTF_8));
       
-      InputStream svgStream = new ByteArrayInputStream(saveModelReq.getSvg_xml().getBytes(StandardCharsets.UTF_8));
+       svgStream = new ByteArrayInputStream(saveModelReq.getSvg_xml().getBytes(StandardCharsets.UTF_8));
       TranscoderInput input = new TranscoderInput(svgStream);
-      
+                      
       PNGTranscoder transcoder = new PNGTranscoder();
       // Setup output
-      ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+      outStream = new ByteArrayOutputStream();
       TranscoderOutput output = new TranscoderOutput(outStream);
       
       // Do the transformation
       transcoder.transcode(input, output);
       final byte[] result = outStream.toByteArray();
       repositoryService.addModelEditorSourceExtra(model.getId(), result);
-      outStream.close();
       
     } catch (Exception e) {
       LOGGER.error("Error saving model", e);
       throw new ActivitiException("Error saving model", e);
+    }finally {
+      IoUtil.close(outStream);
+      IoUtil.close(svgStream);
     }
   }
+  
 }
