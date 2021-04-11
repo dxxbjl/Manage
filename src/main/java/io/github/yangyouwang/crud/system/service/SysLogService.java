@@ -34,7 +34,7 @@ public class SysLogService {
      */
     public Page<SysLog> list(SysLogListReq sysLogListReq) {
         Pageable pageable = PageRequest.of(sysLogListReq.getPageNum() - 1,sysLogListReq.getPageSize());
-        Specification<SysLog> query = (Specification<SysLog>) (root, criteriaQuery, criteriaBuilder) -> {
+        Specification<SysLog> query = (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             String className = sysLogListReq.getClassName();
             if(Strings.isNotBlank(className)){
@@ -44,7 +44,7 @@ public class SysLogService {
             if(Strings.isNotBlank(methodName)){
                 predicates.add(criteriaBuilder.like(root.get("methodName"),"%" +methodName + "%"));
             }
-            return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
        return sysLogRepository.findAll(query,pageable);
     }

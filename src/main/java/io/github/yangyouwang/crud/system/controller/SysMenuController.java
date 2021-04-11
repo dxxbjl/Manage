@@ -3,13 +3,16 @@ package io.github.yangyouwang.crud.system.controller;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.TreeSelectNode;
 import io.github.yangyouwang.common.domain.XmSelectNode;
-import io.github.yangyouwang.crud.system.model.req.*;
+import io.github.yangyouwang.crud.system.model.req.SysMenuAddReq;
+import io.github.yangyouwang.crud.system.model.req.SysMenuEditReq;
+import io.github.yangyouwang.crud.system.model.req.SysMenuListReq;
 import io.github.yangyouwang.crud.system.model.resp.SysMenuResp;
 import io.github.yangyouwang.crud.system.service.SysMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -77,7 +80,7 @@ public class SysMenuController {
      */
     @PostMapping("/add")
     @ResponseBody
-    public Result add(@RequestBody @Valid SysMenuAddReq sysMenuAddReq, BindingResult bindingResult){
+    public Result add(@RequestBody @Validated SysMenuAddReq sysMenuAddReq, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
         }
