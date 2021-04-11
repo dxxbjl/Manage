@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 /**
@@ -54,7 +55,7 @@ public class ActReModelController {
      * @return 编辑页面
      */
     @GetMapping("/editPage/{id}")
-    public String editPage(@PathVariable String id, ModelMap map){
+    public String editPage(@Valid @NotNull(message = "id不能为空")  @PathVariable String id, ModelMap map){
         ActReModelResp actReModel = actReModelService.detail(id);
         map.put("actReModel",actReModel);
         return SUFFIX + "/edit";
@@ -66,7 +67,10 @@ public class ActReModelController {
      */
     @GetMapping("/list")
     @ResponseBody
-    public Result list(ActReModelListReq actReModelListReq){
+    public Result list(@Valid ActReModelListReq actReModelListReq, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()){
+            throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
+        }
         return Result.success(actReModelService.list(actReModelListReq));
     }
 
@@ -88,8 +92,7 @@ public class ActReModelController {
      * 设计流程模型
      */
     @GetMapping("/design/{id}")
-    public String design(@PathVariable("id") String id)
-    {
+    public String design(@Valid @NotNull(message = "id不能为空") @PathVariable("id") String id) {
         return "redirect:/static/modeler.html?modelId=" + id;
     }
 
@@ -99,8 +102,7 @@ public class ActReModelController {
      */
     @GetMapping("/deploy/{id}")
     @ResponseBody
-    public Result deploy(@PathVariable("id") String id)
-    {
+    public Result deploy(@Valid @NotNull(message = "id不能为空")  @PathVariable("id") String id) {
         String flag = actReModelService.deploy(id);
         return Result.success(flag);
     }
@@ -111,7 +113,7 @@ public class ActReModelController {
      */
     @PostMapping("/edit")
     @ResponseBody
-    public Result edit(@RequestBody @Valid ActReModelEditReq actReModelEditReq, BindingResult bindingResult){
+    public Result edit(@RequestBody @Valid ActReModelEditReq actReModelEditReq, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
             throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
@@ -125,7 +127,7 @@ public class ActReModelController {
      */
     @DeleteMapping("/del/{id}")
     @ResponseBody
-    public Result del(@PathVariable String id){
+    public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable String id){
         actReModelService.del(id);
         return Result.success();
     }

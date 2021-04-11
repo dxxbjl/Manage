@@ -10,9 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 
 /**
  * @author yangyouwang
@@ -53,7 +56,7 @@ public class SysTaskController {
      * @return 编辑页面
      */
     @GetMapping("/editPage/{id}")
-    public String editPage(@PathVariable Long id, ModelMap map){
+    public String editPage(@Valid @NotNull(message = "id不能为空") @PathVariable Long id, ModelMap map){
         SysTaskResp sysTask = sysTaskService.detail(id);
         map.put("sysTask",sysTask);
         return SUFFIX + "/edit";
@@ -66,7 +69,10 @@ public class SysTaskController {
      */
     @GetMapping("/list")
     @ResponseBody
-    public Result list(SysTaskListReq sysRoleListReq){
+    public Result list(@Validated SysTaskListReq sysRoleListReq, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()){
+            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+        }
         return Result.success(sysTaskService.list(sysRoleListReq));
     }
 
@@ -76,7 +82,7 @@ public class SysTaskController {
      */
     @PostMapping("/add")
     @ResponseBody
-    public Result add(@RequestBody @Valid SysTaskAddReq sysTaskAddReq, BindingResult bindingResult){
+    public Result add(@RequestBody @Validated SysTaskAddReq sysTaskAddReq, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
             throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
         }
@@ -90,7 +96,7 @@ public class SysTaskController {
      */
     @PostMapping("/edit")
     @ResponseBody
-    public Result edit(@RequestBody @Valid SysTaskEditReq sysTaskEditReq, BindingResult bindingResult){
+    public Result edit(@RequestBody @Validated SysTaskEditReq sysTaskEditReq, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
         }
@@ -104,7 +110,7 @@ public class SysTaskController {
      */
     @DeleteMapping("/del/{id}")
     @ResponseBody
-    public Result del(@PathVariable Long id){
+    public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
         sysTaskService.del(id);
         return Result.success();
     }

@@ -12,9 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 
 /**
  * @author yangyouwang
@@ -77,7 +80,7 @@ public class SysUserController {
      * @return 编辑页面
      */
     @GetMapping("/editPage/{id}")
-    public String editPage(@PathVariable Long id, ModelMap map){
+    public String editPage(@Valid @NotNull(message = "id不能为空") @PathVariable Long id, ModelMap map){
         SysUserResp sysUser = sysUserService.detail(id);
         map.put("sysUser",sysUser);
         return SUFFIX + "/edit";
@@ -90,7 +93,10 @@ public class SysUserController {
      */
     @GetMapping("/list")
     @ResponseBody
-    public Result list(SysUserListReq sysUserListReq){
+    public Result list(@Validated SysUserListReq sysUserListReq,BindingResult bindingResult) {
+        if (bindingResult.hasErrors()){
+            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+        }
         return Result.success(sysUserService.list(sysUserListReq));
     }
 
@@ -100,7 +106,7 @@ public class SysUserController {
      */
     @PostMapping("/add")
     @ResponseBody
-    public Result add(@RequestBody @Valid SysUserAddReq sysUserAddReq,BindingResult bindingResult){
+    public Result add(@RequestBody @Validated SysUserAddReq sysUserAddReq,BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
         }
@@ -114,7 +120,7 @@ public class SysUserController {
      */
     @PostMapping("/edit")
     @ResponseBody
-    public Result edit(@RequestBody @Valid SysUserEditReq sysUserEditReq, BindingResult bindingResult){
+    public Result edit(@RequestBody @Validated SysUserEditReq sysUserEditReq, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
         }
@@ -128,7 +134,7 @@ public class SysUserController {
      */
     @DeleteMapping("/del/{id}")
     @ResponseBody
-    public Result del(@PathVariable Long id){
+    public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
         sysUserService.del(id);
         return Result.success();
     }
@@ -139,7 +145,7 @@ public class SysUserController {
      */
     @PostMapping("/modifyPass")
     @ResponseBody
-    public Result modifyPass(@RequestBody @Valid ModifyPassReq modifyPassReq, BindingResult bindingResult) {
+    public Result modifyPass(@RequestBody @Validated ModifyPassReq modifyPassReq, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
             throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
         }

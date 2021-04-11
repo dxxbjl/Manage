@@ -3,6 +3,7 @@ package io.github.yangyouwang.crud.system.model.req;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
@@ -32,13 +33,11 @@ public class SysRoleEditReq implements Serializable {
      */
     @NotBlank(message = "角色标识不能为空")
     private String roleKey;
-
     /** 备注 */
     private String remark;
-
-
     /**
      * 菜单
      */
+    @NotEmpty(message = "菜单id不能为空")
     private Long[] menuIds;
 }

@@ -2,6 +2,7 @@ package io.github.yangyouwang.crud.system.model.req;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
@@ -24,8 +25,8 @@ public class SysUserEditReq implements Serializable {
     /**
      * 启用
      */
+    @NotBlank(message = "启用不能为空")
     private String enabled;
-
     /**
      * 邮箱
      */
@@ -45,7 +46,6 @@ public class SysUserEditReq implements Serializable {
 
     /** 备注 */
     private String remark;
-
     /**
      * 角色id
      */

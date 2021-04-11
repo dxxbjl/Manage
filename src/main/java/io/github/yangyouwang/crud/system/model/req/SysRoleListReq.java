@@ -2,6 +2,7 @@ package io.github.yangyouwang.crud.system.model.req;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 
@@ -17,10 +18,12 @@ public class SysRoleListReq implements Serializable {
     /**
      * pageNum
      */
+    @NotNull(message = "pageNum不能为空")
     private Integer pageNum;
     /**
      * pageSize
      */
+    @NotNull(message = "pageSize不能为空")
     private Integer pageSize;
     /**
      * 角色名称

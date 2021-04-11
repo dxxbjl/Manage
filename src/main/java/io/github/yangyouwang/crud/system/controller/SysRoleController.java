@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -53,7 +55,7 @@ public class SysRoleController {
      * @return 编辑页面
      */
     @GetMapping("/editPage/{id}")
-    public String editPage(@PathVariable Long id, ModelMap map){
+    public String editPage(@Valid @NotNull(message = "id不能为空") @PathVariable Long id, ModelMap map){
         SysRoleResp sysRole = sysRoleService.detail(id);
         map.put("sysRole",sysRole);
         return SUFFIX + "/edit";
@@ -66,7 +68,10 @@ public class SysRoleController {
      */
     @GetMapping("/list")
     @ResponseBody
-    public Result list(SysRoleListReq sysRoleListReq){
+    public Result list(@Validated SysRoleListReq sysRoleListReq, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()){
+            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+        }
         return Result.success(sysRoleService.list(sysRoleListReq));
     }
 
@@ -76,7 +81,7 @@ public class SysRoleController {
      */
     @PostMapping("/add")
     @ResponseBody
-    public Result add(@RequestBody @Valid SysRoleAddReq sysRoleAddReq, BindingResult bindingResult){
+    public Result add(@RequestBody @Validated SysRoleAddReq sysRoleAddReq, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
         }
@@ -90,7 +95,7 @@ public class SysRoleController {
      */
     @PostMapping("/edit")
     @ResponseBody
-    public Result edit(@RequestBody @Valid SysRoleEditReq sysRoleEditReq, BindingResult bindingResult){
+    public Result edit(@RequestBody @Validated SysRoleEditReq sysRoleEditReq, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
         }
@@ -104,7 +109,7 @@ public class SysRoleController {
      */
     @DeleteMapping("/del/{id}")
     @ResponseBody
-    public Result del(@PathVariable Long id){
+    public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
         sysRoleService.del(id);
         return Result.success();
     }

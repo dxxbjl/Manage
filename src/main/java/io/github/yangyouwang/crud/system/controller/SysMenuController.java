@@ -16,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -57,7 +58,7 @@ public class SysMenuController {
      * @return 编辑页面
      */
     @GetMapping("/editPage/{id}")
-    public String editPage(@PathVariable Long id, ModelMap map){
+    public String editPage(@Valid @NotNull(message = "id不能为空") @PathVariable Long id, ModelMap map){
         SysMenuResp sysMenu = sysMenuService.detail(id);
         map.put("sysMenu",sysMenu);
         return SUFFIX + "/edit";
@@ -94,7 +95,7 @@ public class SysMenuController {
      */
     @PostMapping("/edit")
     @ResponseBody
-    public Result edit(@RequestBody @Valid SysMenuEditReq sysMenuEditReq, BindingResult bindingResult){
+    public Result edit(@RequestBody @Validated SysMenuEditReq sysMenuEditReq, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
         }
@@ -108,7 +109,7 @@ public class SysMenuController {
      */
     @DeleteMapping("/del/{id}")
     @ResponseBody
-    public Result del(@PathVariable Long id){
+    public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
         sysMenuService.del(id);
         return Result.success();
     }
