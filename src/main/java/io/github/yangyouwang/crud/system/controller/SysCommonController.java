@@ -2,8 +2,12 @@ package io.github.yangyouwang.crud.system.controller;
 
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.core.aliyun.SampleOSS;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
@@ -17,6 +21,8 @@ import java.util.Map;
 @Controller
 @RequestMapping("/sysCommon")
 public class SysCommonController {
+    @Autowired
+    private SampleOSS sampleOSS;
 
     /**
      * 通用上传请求
@@ -26,7 +32,7 @@ public class SysCommonController {
     public Result uploadFile(MultipartFile file,
                              @RequestParam(value = "fileDir",required = false,defaultValue = "img/def") String fileDir) {
         // 上传文件路径
-        String url = SampleOSS.upload( file, fileDir);
+        String url = sampleOSS.upload( file, fileDir);
         Map<String,Object> ajax = new HashMap<>();
         ajax.put("fileName", file.getOriginalFilename());
         ajax.put("url", url);
