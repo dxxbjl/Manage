@@ -30,13 +30,12 @@ spring:
     database: MYSQL
     show-sql: true
     hibernate:
-     ddl-auto: update
-    naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+      ddl-auto: update
     properties:
-     hibernate:
-      temp:
-       use_jdbc_metadata_defaults: false
-      dialect: org.hibernate.dialect.MySQL5Dialect
+      hibernate:
+       temp:
+         use_jdbc_metadata_defaults: false
+       dialect: org.hibernate.dialect.MySQL5Dialect
   quartz:
     #相关属性配置
     properties:

@@ -13,9 +13,8 @@ import javax.persistence.*;
  */
 @Data
 @Entity
-@Table(name="sys_dictionary_type")
-public class SysDictionaryType extends BaseEntity {
-
+@Table(name="sys_dict_type")
+public class SysDictType extends BaseEntity {
     /**
      * 主键id
      */
@@ -26,11 +25,21 @@ public class SysDictionaryType extends BaseEntity {
     /**
      * 类型key
      */
-    @Column(name="dictionary_key")
-    private String dictionaryKey;
+    @Column(name="dict_key")
+    private String dictKey;
     /**
      * 类型名称
      */
-    @Column(name="dictionary_name")
-    private String dictionaryName;
+    @Column(name="dict_name")
+    private String dictName;
+    /**
+     * 显示顺序
+     */
+    @Column(name="order_num")
+    private Integer orderNum;
+    /**
+     * 启用
+     */
+    @Column(name="enabled")
+    private String enabled;
 }

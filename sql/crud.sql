@@ -11,7 +11,7 @@
  Target Server Version : 50733
  File Encoding         : 65001
 
- Date: 10/04/2021 20:47:16
+ Date: 12/04/2021 20:47:28
 */
 
 SET NAMES utf8mb4;
@@ -728,7 +728,7 @@ CREATE TABLE `QRTZ_SCHEDULER_STATE` (
 -- Records of QRTZ_SCHEDULER_STATE
 -- ----------------------------
 BEGIN;
-INSERT INTO `QRTZ_SCHEDULER_STATE` VALUES ('clusteredScheduler', 'yangyouwangdeMacBook-Pro.local1618058767096', 1618058828164, 10000);
+INSERT INTO `QRTZ_SCHEDULER_STATE` VALUES ('clusteredScheduler', 'yangyouwangdeMacBook-Pro.local1618231163909', 1618231645365, 10000);
 COMMIT;
 
 -- ----------------------------
@@ -805,6 +805,43 @@ CREATE TABLE `QRTZ_TRIGGERS` (
   KEY `IDX_QRTZ_T_NFT_ST_MISFIRE_GRP` (`SCHED_NAME`,`MISFIRE_INSTR`,`NEXT_FIRE_TIME`,`TRIGGER_GROUP`,`TRIGGER_STATE`),
   CONSTRAINT `QRTZ_TRIGGERS_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) REFERENCES `QRTZ_JOB_DETAILS` (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Table structure for sys_dict_type
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_dict_type`;
+CREATE TABLE `sys_dict_type` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `dict_key` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT '类型key',
+  `dict_name` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT '类型名称',
+  `order_num` int(4) DEFAULT '0' COMMENT '显示顺序',
+  `enabled` varchar(1) COLLATE utf8_bin DEFAULT NULL COMMENT '是否启用 1 启用 0 禁用',
+  `create_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '创建者',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='数据字典类型';
+
+-- ----------------------------
+-- Table structure for sys_dict_value
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_dict_value`;
+CREATE TABLE `sys_dict_value` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `dict_type_id` bigint(20) DEFAULT NULL COMMENT '字典类型ID',
+  `dict_value_key` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT '字典值key',
+  `dict_value_name` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT '字典值名称',
+  `order_num` int(4) DEFAULT '0' COMMENT '显示顺序',
+  `enabled` varchar(1) COLLATE utf8_bin DEFAULT NULL COMMENT '是否启用 1 启用 0 禁用',
+  `create_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '创建者',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='数据字典值';
 
 -- ----------------------------
 -- Table structure for sys_log

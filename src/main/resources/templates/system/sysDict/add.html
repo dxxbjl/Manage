@@ -10,7 +10,7 @@
   <link rel="stylesheet" th:href="@{/static/layuiadmin/style/admin.css}" media="all">
 </head>
 <body>
-  <div class="layui-form" lay-filter="sys-dictionary-form" id="sys-dictionary-form"  style="padding: 20px 0 0 0;">
+  <div class="layui-form" lay-filter="sys-dict-form" id="sys-dict-form"  style="padding: 20px 0 0 0;">
     <div class="layui-form-item">
       <label class="layui-form-label">类型名称</label>
       <div class="layui-input-inline">
@@ -47,19 +47,13 @@
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
      index: 'lib/index', //主入口模块
-     xmSelect: 'xm-select',
-     crud: 'crud'
-  }).use(['index', 'form','xmSelect','crud'], function(){
+  }).use(['index', 'form'], function(){
     var $ = layui.$
-        ,xmSelect = layui.xmSelect
-        ,crud = layui.crud
         ,form = layui.form;
-    form.on('submit(save-submit)', function(data){
-         var menuIds = crud.getXmSelectTreeIds(select);
-         data.field.menuIds = menuIds;
+    form.on('submit(save-submit)', function(data) {
           $.ajax({
               type: 'POST',
-              url:  ctx + '/sysDictionary/add',
+              url:  ctx + '/sysDict/add',
               data: JSON.stringify(data.field),
               contentType:'application/json;charset=UTF-8',
               dataType: 'json',
@@ -75,7 +69,6 @@
               }
           });
     });
-
   });
   </script>
 </body>

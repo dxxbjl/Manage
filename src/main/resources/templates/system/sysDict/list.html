@@ -48,7 +48,7 @@
                 <div class="layui-card-body">
                     <table id="typeTable" lay-filter="typeTable"></table>
                     <script type="text/html" id="typeBar">
-                        <a sec:authorize="hasAuthority('role:del')" class="layui-btn layui-btn-danger layui-btn-xs"
+                        <a sec:authorize="hasAuthority('dist:del')" class="layui-btn layui-btn-danger layui-btn-xs"
                            lay-event="typeDel"><i class="layui-icon layui-icon-delete"></i>删除</a>
                     </script>
                 </div>
@@ -76,7 +76,7 @@
                             <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="valueSearch">
                                 <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
                             </button>
-                            <button sec:authorize="hasAuthority('role:add')" class="layui-btn layuiadmin-btn-useradmin"
+                            <button sec:authorize="hasAuthority('dist:add')" class="layui-btn layuiadmin-btn-useradmin"
                                     data-type="valueAddView">添加
                             </button>
                         </div>
@@ -119,7 +119,7 @@
         table.render({
             elem: '#typeTable'
             , height: 'full-110'
-            , url: ctx + '/sysDictionary/type/list'
+            , url: ctx + '/sysDict/type/list'
             , page: true //开启分页,
             , limit: 10 // 多少条
             , request: {
@@ -138,8 +138,8 @@
             }
             , cols: [[ //表头
                 {field: 'id', title: 'ID', sort: true, fixed: 'left'}
-                , {field: 'dictionaryKey', title: '类型KEY', edit: 'text'}
-                , {field: 'dictionaryName', title: '类型名称', edit: 'text'}
+                , {field: 'dictKey', title: '类型KEY', edit: 'text'}
+                , {field: 'dictName', title: '类型名称', edit: 'text'}
                 , {field: 'remark', title: '备注', edit: 'text'}
                 , {toolbar: '#typeBar', title: '操作', width: 165, align: 'center', fixed: 'right'}
             ]]
@@ -148,7 +148,7 @@
         table.render({
             elem: '#valueTable'
             , height: 'full-110'
-            , url: ctx + '/sysDictionary/value/list'
+            , url: ctx + '/sysDict/value/list'
             , page: true //开启分页,
             , limit: 10 // 多少条
             , request: {
@@ -226,8 +226,8 @@
             addView: function () {
                 layer.open({
                     type: 2,
-                    title: "添加角色",
-                    content: ctx + '/sysDictionary/addPage'
+                    title: "添加字典",
+                    content: ctx + '/sysDict/addPage'
                     , maxmin: true
                     , area: ['800px', '600px']
                     , btn: ['确定', '取消']
@@ -280,7 +280,7 @@
                     //向服务端发送删除指令
                     $.ajax({
                         type: 'DELETE',
-                        url: ctx + '/sysDictionary/del/' + id,
+                        url: ctx + '/sysDict/del/' + id,
                         contentType: 'application/json;charset=UTF-8',
                         dataType: 'json',
                         success: function (result) {
@@ -305,8 +305,8 @@
             addView: function () {
                 layer.open({
                     type: 2,
-                    title: "添加角色",
-                    content: ctx + '/sysDictionary/addPage'
+                    title: "添加字典",
+                    content: ctx + '/sysDict/addPage'
                     , maxmin: true
                     , area: ['800px', '600px']
                     , btn: ['确定', '取消']
@@ -359,7 +359,7 @@
                     //向服务端发送删除指令
                     $.ajax({
                         type: 'DELETE',
-                        url: ctx + '/sysDictionary/del/' + id,
+                        url: ctx + '/sysDict/del/' + id,
                         contentType: 'application/json;charset=UTF-8',
                         dataType: 'json',
                         success: function (result) {

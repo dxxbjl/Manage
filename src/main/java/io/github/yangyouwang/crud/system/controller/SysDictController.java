@@ -1,6 +1,5 @@
 package io.github.yangyouwang.crud.system.controller;
 
-import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import io.github.yangyouwang.common.domain.Result;
 import org.springframework.stereotype.Controller;
@@ -15,10 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @date 2021/4/12 11:00
  */
 @Controller
-@RequestMapping("/sysDictionary")
-public class SysDictionaryController {
+@RequestMapping("/sysDict")
+public class SysDictController {
 
-    private static final String SUFFIX = "/system/sysDictionary";
+    private static final String SUFFIX = "/system/sysDict";
 
     /**
      * 跳转列表
@@ -50,15 +49,15 @@ public class SysDictionaryController {
                 "  \"content\": [\n" +
                 "    {\n" +
                 "      \"id\": 1,\n" +
-                "      \"dictionaryName\": \"类型名称1\",\n" +
-                "      \"dictionaryKey\": \"类型Key1\",\n" +
+                "      \"dictName\": \"类型名称1\",\n" +
+                "      \"dictKey\": \"类型Key1\",\n" +
                 "      \"remark\": \"类型1\",\n" +
                 "      \"menuIds\": null\n" +
                 "    },\n" +
                 "    {\n" +
                 "      \"id\": 2,\n" +
-                "      \"dictionaryName\": \"类型名称2\",\n" +
-                "      \"dictionaryKey\": \"类型Key2\",\n" +
+                "      \"dictName\": \"类型名称2\",\n" +
+                "      \"dictKey\": \"类型Key2\",\n" +
                 "      \"remark\": \"类型2\",\n" +
                 "      \"menuIds\": null\n" +
                 "    }\n" +
