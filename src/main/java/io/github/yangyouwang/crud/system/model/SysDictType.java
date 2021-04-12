@@ -4,6 +4,7 @@ import io.github.yangyouwang.common.domain.BaseEntity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * @author zhixin.yao
@@ -42,4 +43,11 @@ public class SysDictType extends BaseEntity {
      */
     @Column(name="enabled")
     private String enabled;
+
+    /**
+     * 字典类型与字典项 一对多
+     */
+    @OneToMany(targetEntity = SysDictValue.class,cascade = CascadeType.ALL)
+    @JoinColumn(name = "dict_type_id",referencedColumnName = "id")
+    private List<SysDictValue> sysDictValues;
 }

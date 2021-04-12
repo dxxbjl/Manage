@@ -46,9 +46,11 @@ public class SysDictValue extends BaseEntity {
      */
     @Column(name="order_num")
     private Integer orderNum;
+
     /**
-     * 字典类型ID
+     * 字典项与字典类型 多对一
      */
-    @Column(name="dict_type_id")
-    private String dictTypeId;
+    @ManyToOne(targetEntity = SysDictType.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "dict_type_id",referencedColumnName = "id")
+    private SysDictType sysDictType;
 }
