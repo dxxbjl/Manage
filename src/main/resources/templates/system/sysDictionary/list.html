@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="utf-8">
+    <title>数据字典列表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" th:href="@{/static/layuiadmin/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuiadmin/style/admin.css}" media="all">
+    <style>
+        .table-width {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-row">
+    <div class="layui-col-xs6 layui-col-sm6 layui-col-md6">
+        <div class="layui-fluid">
+            <div class="layui-card table-width">
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">类型KEY</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="roleName" placeholder="类型KEY" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">类型名称</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="roleKey" placeholder="类型名称" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="typeSearch">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                            <button sec:authorize="hasAuthority('role:add')" class="layui-btn layuiadmin-btn-useradmin"
+                                    data-type="typeAddView">添加
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-card-body">
+                    <table id="typeTable" lay-filter="typeTable"></table>
+                    <script type="text/html" id="typeBar">
+                        <a sec:authorize="hasAuthority('role:del')" class="layui-btn layui-btn-danger layui-btn-xs"
+                           lay-event="typeDel"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs6 layui-col-sm6 layui-col-md6">
+        <div class="layui-fluid">
+            <div class="layui-card table-width">
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">类型值KEY</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="roleName" placeholder="类型值KEY" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">类型值名称</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="roleKey" placeholder="类型值名称" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="valueSearch">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                            <button sec:authorize="hasAuthority('role:add')" class="layui-btn layuiadmin-btn-useradmin"
+                                    data-type="valueAddView">添加
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-card-body">
+                    <table id="valueTable" lay-filter="valueTable"></table>
+                    <script type="text/html" id="valueBar">
+                        <a sec:authorize="hasAuthority('role:del')" class="layui-btn layui-btn-danger layui-btn-xs"
+                           lay-event="valueDel"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/static/layuiadmin/layui/layui.js}"></script>
+<script th:inline="javascript">
+    var ctx = [[${#request.getContextPath()}]];
+    var typeSearchWhere = {};
+    var valueSearchWhere = {};
+    layui.config({
+        base: '/static/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'useradmin', 'table'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , table = layui.table;
+        //监听搜索
+        form.on('submit(search)', function (data) {
+            var field = data.field;
+            typeSearchWhere = field;
+            //执行重载
+            table.reload('roleTable', {
+                where: typeSearchWhere
+            });
+        });
+        // 查询列表接口
+        table.render({
+            elem: '#typeTable'
+            , height: 'full-110'
+            , url: ctx + '/sysDictionary/type/list'
+            , page: true //开启分页,
+            , limit: 10 // 多少条
+            , request: {
+                pageName: 'pageNum', //页码的参数名称，默认：page
+                limitName: 'pageSize' //每页数据量的参数名，默认：limit
+            }
+            , parseData: function (result) {
+                return {
+                    "code": result.code,
+                    "count": result.data.totalElements,
+                    "data": result.data.content
+                }
+            }
+            , response: {
+                statusCode: 200 //成功的状态码，默认：0
+            }
+            , cols: [[ //表头
+                {field: 'id', title: 'ID', sort: true, fixed: 'left'}
+                , {field: 'dictionaryKey', title: '类型KEY', edit: 'text'}
+                , {field: 'dictionaryName', title: '类型名称', edit: 'text'}
+                , {field: 'remark', title: '备注', edit: 'text'}
+                , {toolbar: '#typeBar', title: '操作', width: 165, align: 'center', fixed: 'right'}
+            ]]
+        });
+        // 查询列表接口
+        table.render({
+            elem: '#valueTable'
+            , height: 'full-110'
+            , url: ctx + '/sysDictionary/value/list'
+            , page: true //开启分页,
+            , limit: 10 // 多少条
+            , request: {
+                pageName: 'pageNum', //页码的参数名称，默认：page
+                limitName: 'pageSize' //每页数据量的参数名，默认：limit
+            }
+            , parseData: function (result) {
+                return {
+                    "code": result.code,
+                    "count": result.data.totalElements,
+                    "data": result.data.content
+                }
+            }
+            , response: {
+                statusCode: 200 //成功的状态码，默认：0
+            }
+            , cols: [[ //表头
+                {field: 'id', title: 'ID', sort: true, fixed: 'left'}
+                , {field: 'dictionaryValueKey', title: '类型值KEY', edit: 'text'}
+                , {field: 'dictionaryValueName', title: '类型值名称', edit: 'text'}
+                , {field: 'remark', title: '备注', edit: 'text'}
+                , {toolbar: '#valueBar', title: '操作', width: 165, align: 'center', fixed: 'right'}
+            ]]
+        });
+
+        //监听行工具事件
+        table.on('tool(typeTable)', function (obj) {
+            console.info('typeTable', obj);
+            var data = obj.data //获得当前行数据
+                , layEvent = obj.event;
+            if (layEvent === 'typeSearch') {
+                typeActive.typeSearch(data);
+            }else if (layEvent === 'typeDel') {
+                typeActive.del(data.id);
+            }
+        });
+        //监听行工具事件
+        table.on('tool(valueTable)', function (obj) {
+            console.info('valueTable', obj);
+            var data = obj.data //获得当前行数据
+                , layEvent = obj.event;
+            if (layEvent === 'valueSearch') {
+                valueActive.valueSearch(data);
+            }else if (layEvent === 'valueDel') {
+                valueActive.del(data.id);
+            }
+        });
+        //监听单元格编辑
+        table.on('edit(typeTable)', function (obj) {
+            typeActive.editView(obj);
+        });
+        //监听单元格编辑
+        table.on('edit(valueTable)', function (obj) {
+            valueActive.editView(obj);
+        });
+        $('.layui-btn').on('click', function (obj) {
+            console.info('valueTable', obj);
+            console.info('click', $(this));
+            var type = $(this).data('type');
+            typeActive[type] && typeActive[type].call(this);
+        });
+        // $('.layui-btn').on('click', function () {
+        //     var type = $(this).data('type');
+        //     valueActive[type] && valueActive[type].call(this);
+        // });
+
+        /* 触发弹层 */
+        var typeActive = {
+            typeSearch: function(data) {
+                typeSearchWhere = data;
+            },
+            /**
+             * 添加
+             * */
+            addView: function () {
+                layer.open({
+                    type: 2,
+                    title: "添加角色",
+                    content: ctx + '/sysDictionary/addPage'
+                    , maxmin: true
+                    , area: ['800px', '600px']
+                    , btn: ['确定', '取消']
+                    , yes: function (index, layero) {
+                        var submit = layero.find('iframe').contents().find('#save-submit');
+                        submit.trigger('click');
+                    }
+                });
+            },
+            /**
+             * 编辑
+             * @param id id
+             * */
+            editView: function (obj) {
+                var value = obj.value //得到修改后的值
+                    , data = obj.data //得到所在行所有键值
+                    , field = obj.field; //得到字段
+                layer.open({
+                    content: '确认保存为' + value
+                    ,btn: ['保存', '取消']
+                    //按钮【按钮一】的回调
+                    ,yes: function(index, layero){
+                        console.info("保存", obj);
+                        console.info("保存", index);
+                        console.info("保存", layero);
+                    }
+                    //按钮【按钮二】的回调
+                    ,btn2: function(index, layero){
+                        table.reload('typeTable', {
+                            where: typeSearchWhere
+                        });
+
+                        //return false; 开启该代码可禁止点击该按钮关闭
+                    }
+                    //右上角关闭回调
+                    ,cancel: function(){
+                        table.reload('typeTable', {
+                            where: typeSearchWhere
+                        });
+                        //return false 开启该代码可禁止点击该按钮关闭
+                    }
+                });
+            },
+            /**
+             * 删除
+             * @param id id
+             */
+            del: function (id) {
+                layer.confirm('真的删除行么', function (index) {
+                    //向服务端发送删除指令
+                    $.ajax({
+                        type: 'DELETE',
+                        url: ctx + '/sysDictionary/del/' + id,
+                        contentType: 'application/json;charset=UTF-8',
+                        dataType: 'json',
+                        success: function (result) {
+                            layer.msg(result.message);
+                            if (result.code == 200) {
+                                layer.close(index);
+                                table.reload('roleTable');
+                            }
+                        }
+                    });
+                });
+            }
+        }
+        /* 触发弹层 */
+        var valueActive = {
+            valueSearch: function(data) {
+                valueSearchWhere = data;
+            },
+            /**
+             * 添加
+             * */
+            addView: function () {
+                layer.open({
+                    type: 2,
+                    title: "添加角色",
+                    content: ctx + '/sysDictionary/addPage'
+                    , maxmin: true
+                    , area: ['800px', '600px']
+                    , btn: ['确定', '取消']
+                    , yes: function (index, layero) {
+                        var submit = layero.find('iframe').contents().find('#save-submit');
+                        submit.trigger('click');
+                    }
+                });
+            },
+            /**
+             * 编辑
+             * @param id id
+             * */
+            editView: function (obj) {
+                var value = obj.value //得到修改后的值
+                    , data = obj.data //得到所在行所有键值
+                    , field = obj.field; //得到字段
+                layer.open({
+                    content: '确认保存为' + value
+                    ,btn: ['保存', '取消']
+                    //按钮【按钮一】的回调
+                    ,yes: function(index, layero){
+                        console.info("保存", obj);
+                        console.info("保存", index);
+                        console.info("保存", layero);
+                    }
+                    //按钮【按钮二】的回调
+                    ,btn2: function(index, layero){
+                        table.reload('valueTable', {
+                            where: valueSearchWhere
+                        });
+
+                        //return false; 开启该代码可禁止点击该按钮关闭
+                    }
+                    //右上角关闭回调
+                    ,cancel: function(){
+                        table.reload('valueTable', {
+                            where: valueSearchWhere
+                        });
+                        //return false 开启该代码可禁止点击该按钮关闭
+                    }
+                });
+            },
+            /**
+             * 删除
+             * @param id id
+             */
+            del: function (id) {
+                layer.confirm('真的删除行么', function (index) {
+                    //向服务端发送删除指令
+                    $.ajax({
+                        type: 'DELETE',
+                        url: ctx + '/sysDictionary/del/' + id,
+                        contentType: 'application/json;charset=UTF-8',
+                        dataType: 'json',
+                        success: function (result) {
+                            layer.msg(result.message);
+                            if (result.code == 200) {
+                                layer.close(index);
+                                table.reload('roleTable');
+                            }
+                        }
+                    });
+                });
+            }
+        }
+    });
+</script>
+</body>
+</html>
