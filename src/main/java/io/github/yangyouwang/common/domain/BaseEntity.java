@@ -28,6 +28,8 @@ import java.util.Date;
 @SelectBeforeUpdate
 public abstract class BaseEntity implements Serializable {
 
+    private static final Long serialVersionUID = 1L;
+
     /** 创建者 */
     @CreatedBy
     @Column(name = "create_by",updatable = false)
