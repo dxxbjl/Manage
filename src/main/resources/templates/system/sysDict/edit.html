@@ -2,7 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8">
-  <title>添加字典</title>
+  <title>编辑字典</title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -11,6 +11,7 @@
 </head>
 <body>
   <div class="layui-form" lay-filter="sys-dict-form" id="sys-dict-form"  style="padding: 20px 0 0 0;">
+    <input type="hidden" name="id" id="id">
     <div class="layui-form-item">
       <label class="layui-form-label">字典名称</label>
       <div class="layui-input-inline">
@@ -57,10 +58,12 @@
   }).use(['index', 'form'], function(){
     var $ = layui.$
         ,form = layui.form;
+    var sysDict = [[${sysDict}]];
+    form.val('sys-dict-form', sysDict);
     form.on('submit(save-submit)', function(data) {
           $.ajax({
               type: 'POST',
-              url:  ctx + '/sysDict/add',
+              url:  ctx + '/sysDict/edit',
               data: JSON.stringify(data.field),
               contentType:'application/json;charset=UTF-8',
               dataType: 'json',

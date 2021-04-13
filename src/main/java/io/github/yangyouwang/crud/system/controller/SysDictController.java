@@ -1,16 +1,23 @@
 package io.github.yangyouwang.crud.system.controller;
 
-import cn.hutool.json.JSONUtil;
 import io.github.yangyouwang.common.domain.Result;
+import io.github.yangyouwang.crud.system.model.req.*;
+import io.github.yangyouwang.crud.system.model.resp.SysDictResp;
+import io.github.yangyouwang.crud.system.service.SysDictService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author zhixin.yao
  * @version 1.0
- * @description:
+ * @description: 字典控制层
  * @date 2021/4/12 11:00
  */
 @Controller
@@ -18,6 +25,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class SysDictController {
 
     private static final String SUFFIX = "/system/sysDict";
+
+    @Autowired
+    private SysDictService sysDictService;
 
     /**
      * 跳转列表
@@ -37,114 +47,66 @@ public class SysDictController {
         return SUFFIX + "/add";
     }
 
+    /**
+     * 跳转编辑
+     * @return 编辑页面
+     */
+    @GetMapping("/editPage/{id}")
+    public String editPage(@Valid @NotNull(message = "id能为空") @PathVariable Long id, ModelMap map){
+        SysDictResp sysDict = sysDictService.detail(id);
+        map.put("sysDict",sysDict);
+        return SUFFIX + "/edit";
+    }
 
     /**
      * 列表请求
      * @return 请求列表
      */
-    @GetMapping("/type/list")
+    @GetMapping("/list")
     @ResponseBody
-    public Result typeList() {
-        String data = "{\n" +
-                "  \"content\": [\n" +
-                "    {\n" +
-                "      \"id\": 1,\n" +
-                "      \"dictName\": \"类型名称1\",\n" +
-                "      \"dictKey\": \"类型Key1\",\n" +
-                "      \"remark\": \"类型1\",\n" +
-                "      \"menuIds\": null\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"id\": 2,\n" +
-                "      \"dictName\": \"类型名称2\",\n" +
-                "      \"dictKey\": \"类型Key2\",\n" +
-                "      \"remark\": \"类型2\",\n" +
-                "      \"menuIds\": null\n" +
-                "    }\n" +
-                "  ],\n" +
-                "  \"pageable\": {\n" +
-                "    \"sort\": {\n" +
-                "      \"sorted\": false,\n" +
-                "      \"unsorted\": true,\n" +
-                "      \"empty\": true\n" +
-                "    },\n" +
-                "    \"offset\": 0,\n" +
-                "    \"pageSize\": 10,\n" +
-                "    \"pageNumber\": 0,\n" +
-                "    \"paged\": true,\n" +
-                "    \"unpaged\": false\n" +
-                "  },\n" +
-                "  \"totalPages\": 1,\n" +
-                "  \"last\": true,\n" +
-                "  \"totalElements\": 2,\n" +
-                "  \"number\": 0,\n" +
-                "  \"size\": 10,\n" +
-                "  \"sort\": {\n" +
-                "    \"sorted\": false,\n" +
-                "    \"unsorted\": true,\n" +
-                "    \"empty\": true\n" +
-                "  },\n" +
-                "  \"numberOfElements\": 2,\n" +
-                "  \"first\": true,\n" +
-                "  \"empty\": false\n" +
-                "}";
-        return Result.success(JSONUtil.parseObj(data));
+    public Result list(@Validated SysDictListReq sysDictListReq, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()){
+            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+        }
+        return Result.success(sysDictService.list(sysDictListReq));
     }
-
 
     /**
-     * 列表请求
-     * @return 请求列表
+     * 添加请求
+     * @return 添加状态
      */
-    @GetMapping("/value/list")
+    @PostMapping("/add")
     @ResponseBody
-    public Result valueList() {
-        String data = "{\n" +
-                "  \"content\": [\n" +
-                "    {\n" +
-                "      \"id\": 1,\n" +
-                "      \"typeId\": \"1\",\n" +
-                "      \"dictionaryValueName\": \"类型值名称1\",\n" +
-                "      \"dictionaryValueKey\": \"类型值Key1\",\n" +
-                "      \"remark\": \"类型1\",\n" +
-                "      \"menuIds\": null\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"id\": 2,\n" +
-                "      \"typeId\": \"1\",\n" +
-                "      \"dictionaryValueName\": \"类型值名称2\",\n" +
-                "      \"dictionaryValueKey\": \"类型值Key2\",\n" +
-                "      \"remark\": \"类型2\",\n" +
-                "      \"menuIds\": null\n" +
-                "    }\n" +
-                "  ],\n" +
-                "  \"pageable\": {\n" +
-                "    \"sort\": {\n" +
-                "      \"sorted\": false,\n" +
-                "      \"unsorted\": true,\n" +
-                "      \"empty\": true\n" +
-                "    },\n" +
-                "    \"offset\": 0,\n" +
-                "    \"pageSize\": 10,\n" +
-                "    \"pageNumber\": 0,\n" +
-                "    \"paged\": true,\n" +
-                "    \"unpaged\": false\n" +
-                "  },\n" +
-                "  \"totalPages\": 1,\n" +
-                "  \"last\": true,\n" +
-                "  \"totalElements\": 2,\n" +
-                "  \"number\": 0,\n" +
-                "  \"size\": 10,\n" +
-                "  \"sort\": {\n" +
-                "    \"sorted\": false,\n" +
-                "    \"unsorted\": true,\n" +
-                "    \"empty\": true\n" +
-                "  },\n" +
-                "  \"numberOfElements\": 2,\n" +
-                "  \"first\": true,\n" +
-                "  \"empty\": false\n" +
-                "}";
-        return Result.success(JSONUtil.parseObj(data));
+    public Result add(@RequestBody @Validated SysDictAddReq sysDictAddReq, BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+        }
+        sysDictService.add(sysDictAddReq);
+        return Result.success();
     }
 
+    /**
+     * 编辑请求
+     * @return 编辑状态
+     */
+    @PostMapping("/edit")
+    @ResponseBody
+    public Result edit(@RequestBody @Validated SysDictEditReq sysDictEditReq, BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+        }
+        sysDictService.edit(sysDictEditReq);
+        return Result.success();
+    }
+
+    /**
+     * 删除请求
+     * @return 删除状态
+     */
+    @DeleteMapping("/del/{id}")
+    @ResponseBody
+    public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
+        sysDictService.del(id);
+        return Result.success();
+    }
 }

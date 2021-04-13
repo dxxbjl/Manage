@@ -106,12 +106,11 @@ public class SysTaskService {
      * @return 删除状态
      */
     public void del(Long id) {
-        SysTask sysTask = sysTaskRepository.findById(id).get();
-        if (Objects.nonNull(sysTask)) {
-            // 删除任务
-            sysTaskRepository.deleteById(id);
-            // 取消任务
-            quartzConfig.cancelTriggerTask(sysTask.getName());
-        }
+       sysTaskRepository.findById(id).ifPresent(sysTask -> {
+           // 删除任务
+           sysTaskRepository.deleteById(id);
+           // 取消任务
+           quartzConfig.cancelTriggerTask(sysTask.getName());
+       });
     }
 }

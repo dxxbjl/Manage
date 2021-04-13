@@ -90,8 +90,7 @@ public class SysRoleService {
      * @return 编辑状态
      */
     public void edit(@NotNull SysRoleEditReq sysRoleEditReq) {
-        SysRole sysRole = sysRoleRepository.findById(sysRoleEditReq.getId()).get();
-        if (Objects.nonNull(sysRole)) {
+        sysRoleRepository.findById(sysRoleEditReq.getId()).ifPresent( sysRole -> {
             BeanUtils.copyProperties(sysRoleEditReq,sysRole);
             // 查询菜单
             List<SysMenu> sysMenus = Arrays.stream(sysRoleEditReq.getMenuIds()).map(s -> {
@@ -100,7 +99,7 @@ public class SysRoleService {
             }).collect(Collectors.toList());
             sysRole.setMenus(sysMenus);
             sysRoleRepository.save(sysRole);
-        }
+        });
     }
 
     /**

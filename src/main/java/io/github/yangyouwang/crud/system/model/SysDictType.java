@@ -47,7 +47,7 @@ public class SysDictType extends BaseEntity {
     /**
      * 字典类型与字典项 一对多
      */
-    @OneToMany(targetEntity = SysDictValue.class,cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = SysDictValue.class,cascade = CascadeType.ALL,fetch=FetchType.EAGER)
     @JoinColumn(name = "dict_type_id",referencedColumnName = "id")
     private List<SysDictValue> sysDictValues;
 }

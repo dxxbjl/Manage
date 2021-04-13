@@ -22,7 +22,6 @@ import org.thymeleaf.util.ArrayUtils;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -105,11 +104,10 @@ public class SysMenuService {
      * @return 编辑状态
      */
     public void edit(SysMenuEditReq sysMenuEditReq) {
-        SysMenu sysUser = sysMenuRepository.findById(sysMenuEditReq.getId()).get();
-        if (Objects.nonNull(sysUser)) {
-            BeanUtils.copyProperties(sysMenuEditReq,sysUser);
-            sysMenuRepository.save(sysUser);
-        }
+       sysMenuRepository.findById(sysMenuEditReq.getId()).ifPresent(sysMenu -> {
+            BeanUtils.copyProperties(sysMenuEditReq,sysMenu);
+            sysMenuRepository.save(sysMenu);
+        });
     }
 
     /**
