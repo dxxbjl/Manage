@@ -22,8 +22,6 @@ import java.util.List;
 @Entity
 @Table(name="sys_user")
 public class SysUser extends BaseEntity implements UserDetails  {
-
-    private static final long serialVersionUID = 1960027566696794847L;
     /**
      * 主键id
      */
