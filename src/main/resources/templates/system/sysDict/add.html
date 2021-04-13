@@ -10,54 +10,76 @@
   <link rel="stylesheet" th:href="@{/static/layuiadmin/style/admin.css}" media="all">
 </head>
 <body>
-  <div class="layui-form" lay-filter="sys-dict-form" id="sys-dict-form"  style="padding: 20px 0 0 0;">
-    <div class="layui-form-item">
-      <label class="layui-form-label">字典名称</label>
-      <div class="layui-input-inline">
-        <input type="text" name="dictName" lay-verify="required" placeholder="请输入字典名称" class="layui-input">
-      </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">字典别名</label>
-      <div class="layui-input-inline">
-        <input type="text" name="dictKey" lay-verify="required" placeholder="请输入字典别名" class="layui-input">
-      </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">排序</label>
-      <div class="layui-input-inline">
-        <input type="number" name="orderNum" lay-verify="required" placeholder="请输入排序" class="layui-input">
-      </div>
-    </div>
-    <div class="layui-form-item" lay-filter="sex">
-      <label class="layui-form-label">状态</label>
-      <div class="layui-input-block">
-        <input type="radio" name="enabled" value="1" title="启用" checked>
-        <input type="radio" name="enabled" value="0" title="禁用">
-      </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">备注</label>
-      <div class="layui-input-inline">
-        <input type="text" name="remark" placeholder="请输入备注" class="layui-input">
-      </div>
-    </div>
-    <div class="layui-form-item layui-hide">
-      <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
+<div class="layui-form" lay-filter="sys-dict-form" id="sys-dict-form" style="padding: 20px 0 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">字典名称</label>
+    <div class="layui-input-inline">
+      <input type="text" name="dictName" lay-verify="required" placeholder="请输入字典名称" class="layui-input">
     </div>
   </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">字典别名</label>
+    <div class="layui-input-inline">
+      <input type="text" name="dictKey" lay-verify="required" placeholder="请输入字典别名" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">排序</label>
+    <div class="layui-input-inline">
+      <input type="number" name="orderNum" lay-verify="required" placeholder="请输入排序" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item" lay-filter="sex">
+    <label class="layui-form-label">状态</label>
+    <div class="layui-input-block">
+      <input type="radio" name="enabled" value="1" title="启用" checked>
+      <input type="radio" name="enabled" value="0" title="禁用">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">备注</label>
+    <div class="layui-input-inline">
+      <input type="text" name="remark" placeholder="请输入备注" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item layui-hide">
+    <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
+  </div>
+</div>
 
+<div class="layui-card">
+  <div class="layui-card-header">字典项</div>
+  <div class="layui-card-body">
+    <table id="dictTable" lay-filter="dictTable"></table>
+    <script type="text/html" id="tableBar">
+      <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="add"><i class="layui-icon layui-icon-edit"></i>添加</a>
+      <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+    </script>
+  </div>
+</div>
   <script th:src="@{/static/layuiadmin/layui/layui.js}"></script>
   <script th:inline="javascript">
-  var ctx = [[${#request.getContextPath()}]];
+    let defJson = {
+      "dictValueName": ""
+      ,"dictValueKey": ""
+      ,"orderNum": ""
+      ,"remark": ""
+   };
+   let dictValues = [];
+   dictValues.push(defJson);
+
+   var ctx = [[${#request.getContextPath()}]];
   layui.config({
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
      index: 'lib/index', //主入口模块
-  }).use(['index', 'form'], function(){
+  }).use(['index', 'form','table'], function(){
     var $ = layui.$
-        ,form = layui.form;
+        , form = layui.form
+        , table = layui.table;
     form.on('submit(save-submit)', function(data) {
+          var values = table.cache['dictTable'];
+          data.field.sysDictValues = values;
           $.ajax({
               type: 'POST',
               url:  ctx + '/sysDict/add',
@@ -75,6 +97,52 @@
                   }
               }
           });
+    });
+    /**
+     * 字典值列表
+     */
+    table.render({
+      elem: '#dictTable'
+      ,cellMinWidth: 80
+      ,cols: [
+              [
+               {field: 'dictValueName', edit: 'text', title: '字典值名称'}
+              ,{field: 'dictValueKey', edit: 'text', title: '字典值别名'}
+              ,{field: 'remark', edit: 'text', title: '备注'}
+              ,{field: 'orderNum', edit: 'text', title: '序号'}
+              ,{toolbar: '#tableBar', title: '操作', width: 165, align:'center',fixed: 'right'}
+            ]
+      ]
+      ,data: dictValues
+      ,even: true
+      ,done: function (res, curr, count) {
+        //数据渲染完的回调。
+        //由于layui 设置了超出隐藏，所以这里改变下，以兼容操作按钮的下拉菜单
+        $(".layui-table-body, .layui-table-box, .layui-table-cell").css('overflow', 'visible'); }
+    });
+
+    //监听单元格编辑
+    table.on('edit(dictTable)', function(obj){
+      var value = obj.value //得到修改后的值
+              ,field = obj.field; //得到字段
+      layer.msg(field + ' 字段更改为：'+ value);
+    });
+
+    //监听行工具事件
+    table.on('tool(dictTable)', function(obj){
+      var layEvent = obj.event;
+      if(layEvent === 'add'){
+        var json = table.cache['dictTable'];
+        json.push(defJson);
+        table.reload('dictTable',{
+          data: json
+        });
+      } else if(layEvent === 'del'){
+        layer.confirm('真的删除行么', function(index){
+          obj.del();
+          layer.close(index);
+        });
+      }
     });
   });
   </script>

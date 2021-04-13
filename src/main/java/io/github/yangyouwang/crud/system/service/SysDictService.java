@@ -2,6 +2,7 @@ package io.github.yangyouwang.crud.system.service;
 
 import io.github.yangyouwang.crud.system.dao.SysDictTypeRepository;
 import io.github.yangyouwang.crud.system.model.SysDictType;
+import io.github.yangyouwang.crud.system.model.SysDictValue;
 import io.github.yangyouwang.crud.system.model.req.SysDictAddReq;
 import io.github.yangyouwang.crud.system.model.req.SysDictEditReq;
 import io.github.yangyouwang.crud.system.model.req.SysDictListReq;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Service;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author yangyouwang
  * @title: SysDictService
@@ -60,6 +63,12 @@ public class SysDictService {
         SysDictType sysDict = sysDictTypeRepository.findById(id).get();
         SysDictResp sysDictResp = new SysDictResp();
         BeanUtils.copyProperties(sysDict,sysDictResp);
+        List<SysDictResp.SysDictValueDto> sysDictValues = sysDict.getSysDictValues().stream().map(sysDictValue -> {
+            SysDictResp.SysDictValueDto sysDictValueDto = new SysDictResp.SysDictValueDto();
+            BeanUtils.copyProperties(sysDictValue, sysDictValueDto);
+            return sysDictValueDto;
+        }).collect(Collectors.toList());
+        sysDictResp.setSysDictValues(sysDictValues);
         return sysDictResp;
     }
 
@@ -69,6 +78,12 @@ public class SysDictService {
     public void add(SysDictAddReq sysDictAddReq) {
         SysDictType sysDict = new SysDictType();
         BeanUtils.copyProperties(sysDictAddReq,sysDict);
+        List<SysDictValue> sysDictValues = sysDictAddReq.getSysDictValues().stream().map(sysDictValueDto -> {
+            SysDictValue sysDictValue = new SysDictValue();
+            BeanUtils.copyProperties(sysDictValueDto, sysDictValue);
+            return sysDictValue;
+        }).collect(Collectors.toList());
+        sysDict.setSysDictValues(sysDictValues);
         sysDictTypeRepository.save(sysDict);
     }
 
@@ -76,10 +91,17 @@ public class SysDictService {
      * 编辑请求
      */
     public void edit(SysDictEditReq sysDictEditReq) {
-      sysDictTypeRepository.findById(sysDictEditReq.getId()).ifPresent(sysDict -> {
-            BeanUtils.copyProperties(sysDictEditReq,sysDict);
-            sysDictTypeRepository.save(sysDict);
-        });
+      // 删除字典值
+      this.del(sysDictEditReq.getId());
+      SysDictType sysDict = new SysDictType();
+      List<SysDictValue> sysDictValues = sysDictEditReq.getSysDictValues().stream().map(sysDictValueDto -> {
+            SysDictValue sysDictValue = new SysDictValue();
+            BeanUtils.copyProperties(sysDictValueDto, sysDictValue);
+            return sysDictValue;
+      }).collect(Collectors.toList());
+      sysDict.setSysDictValues(sysDictValues);
+      BeanUtils.copyProperties(sysDictEditReq,sysDict);
+      sysDictTypeRepository.save(sysDict);
     }
 
     /**

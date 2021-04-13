@@ -1,6 +1,5 @@
 package io.github.yangyouwang.crud.system.model.req;
 
-import io.github.yangyouwang.crud.system.model.SysDictValue;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -42,5 +41,24 @@ public class SysDictEditReq implements Serializable {
     /**
      * 字典类型与字典项 一对多
      */
-    private List<SysDictValue> sysDictValues;
+    private List<SysDictValueDto> sysDictValues;
+
+    @Data
+    public static class SysDictValueDto {
+        /**
+         * 字典值key
+         */
+        private String dictValueKey;
+
+        /**
+         * 字典值名称
+         */
+        private String dictValueName;
+        /**
+         * 显示顺序
+         */
+        private Integer orderNum;
+        /** 备注 */
+        private String remark;
+    }
 }

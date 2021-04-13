@@ -35,22 +35,9 @@ public class SysDictValue extends BaseEntity {
      */
     @Column(name="dict_value_name")
     private String dictValueName;
-
-    /**
-     * 启用
-     */
-    @Column(name="enabled")
-    private String enabled;
     /**
      * 显示顺序
      */
     @Column(name="order_num")
     private Integer orderNum;
-
-    /**
-     * 字典项与字典类型 多对一
-     */
-    @ManyToOne(targetEntity = SysDictType.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "dict_type_id",referencedColumnName = "id")
-    private SysDictType sysDictType;
 }

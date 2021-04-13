@@ -89,4 +89,12 @@ sec:authorize="hasAuthority('权限标识')" // thymeleaf声明
     工作流
    ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/9.png "9.png")
    ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/10.png "10.png")
+   
+    日志管理
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/11.png "11.png")
+   
+    字典管理
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/12.png "12.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/13.png "13.png")
+            
  **革命尚未成功，同志仍须努力**
