@@ -51,7 +51,7 @@ public class SysUserService implements UserDetailsService {
     private BCryptPasswordEncoder passwordEncoder;
 
     @Override
-    public UserDetails loadUserByUsername(@NonNull String userName) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(@NonNull String userName) {
         // 通过用户名从数据库获取用户信息
         SysUser sysUser = sysUserRepository.findByUserName(userName);
         if (Objects.isNull(sysUser)) {

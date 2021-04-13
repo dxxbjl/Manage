@@ -11,7 +11,7 @@
  Target Server Version : 50733
  File Encoding         : 65001
 
- Date: 10/04/2021 20:47:16
+ Date: 13/04/2021 19:27:47
 */
 
 SET NAMES utf8mb4;
@@ -728,7 +728,7 @@ CREATE TABLE `QRTZ_SCHEDULER_STATE` (
 -- Records of QRTZ_SCHEDULER_STATE
 -- ----------------------------
 BEGIN;
-INSERT INTO `QRTZ_SCHEDULER_STATE` VALUES ('clusteredScheduler', 'yangyouwangdeMacBook-Pro.local1618058767096', 1618058828164, 10000);
+INSERT INTO `QRTZ_SCHEDULER_STATE` VALUES ('clusteredScheduler', 'yangyouwangdeMacBook-Pro.local1618313168257', 1618313268980, 10000);
 COMMIT;
 
 -- ----------------------------
@@ -807,6 +807,42 @@ CREATE TABLE `QRTZ_TRIGGERS` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
+-- Table structure for sys_dict_type
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_dict_type`;
+CREATE TABLE `sys_dict_type` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `dict_key` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT '类型key',
+  `dict_name` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT '类型名称',
+  `order_num` int(4) DEFAULT '0' COMMENT '显示顺序',
+  `enabled` varchar(1) COLLATE utf8_bin DEFAULT NULL COMMENT '是否启用 1 启用 0 禁用',
+  `create_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '创建者',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='数据字典类型';
+
+-- ----------------------------
+-- Table structure for sys_dict_value
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_dict_value`;
+CREATE TABLE `sys_dict_value` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `dict_type_id` bigint(20) DEFAULT NULL COMMENT '字典类型ID',
+  `dict_value_key` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT '字典值key',
+  `dict_value_name` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT '字典值名称',
+  `order_num` int(4) DEFAULT '0' COMMENT '显示顺序',
+  `create_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '创建者',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='数据字典值';
+
+-- ----------------------------
 -- Table structure for sys_log
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_log`;
@@ -851,7 +887,7 @@ CREATE TABLE `sys_menu` (
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) COLLATE utf8_bin DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3020 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='菜单权限表';
+) ENGINE=InnoDB AUTO_INCREMENT=3024 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='菜单权限表';
 
 -- ----------------------------
 -- Records of sys_menu
@@ -885,6 +921,10 @@ INSERT INTO `sys_menu` VALUES (3016, '编辑', 3014, 2, '#', 'F', 'Y', 'model:ed
 INSERT INTO `sys_menu` VALUES (3017, '删除', 3014, 3, '#', 'F', 'Y', 'model:del', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', '删除模型');
 INSERT INTO `sys_menu` VALUES (3018, '设计', 3014, 3, '#', 'F', 'Y', 'model:design', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', '设计模型');
 INSERT INTO `sys_menu` VALUES (3019, '部署', 3014, 3, '#', 'F', 'Y', 'model:deploy', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', '部署模型');
+INSERT INTO `sys_menu` VALUES (3020, '字典管理', 1, 5, '/sysDict/listPage', 'C', 'Y', 'dict:list', 'admin', '2021-04-13 13:35:48', 'admin', '2021-04-13 13:44:08', '字典管理');
+INSERT INTO `sys_menu` VALUES (3021, '添加', 3020, 1, '#', 'F', 'Y', 'dict:add', 'admin', '2021-03-31 16:55:04', 'admin', '2021-04-10 11:26:53', '添加字典');
+INSERT INTO `sys_menu` VALUES (3022, '编辑', 3020, 2, '#', 'F', 'Y', 'dict:edit', 'admin', '2021-03-31 17:01:35', 'admin', '2021-04-10 11:27:05', '编辑字典');
+INSERT INTO `sys_menu` VALUES (3023, '删除', 3020, 3, '#', 'F', 'Y', 'dict:del', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', '删除字典');
 COMMIT;
 
 -- ----------------------------
@@ -924,7 +964,7 @@ CREATE TABLE `sys_role_menu` (
   KEY `FKkeitxsgxwayackgqllio4ohn5` (`role_id`),
   CONSTRAINT `FKf3mud4qoc7ayew8nml4plkevo` FOREIGN KEY (`menu_id`) REFERENCES `sys_menu` (`id`),
   CONSTRAINT `FKkeitxsgxwayackgqllio4ohn5` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=274 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='角色和菜单关联表';
+) ENGINE=InnoDB AUTO_INCREMENT=337 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='角色和菜单关联表';
 
 -- ----------------------------
 -- Records of sys_role_menu
@@ -933,34 +973,38 @@ BEGIN;
 INSERT INTO `sys_role_menu` VALUES (179, 2, 1);
 INSERT INTO `sys_role_menu` VALUES (180, 2, 100);
 INSERT INTO `sys_role_menu` VALUES (181, 2, 1006);
-INSERT INTO `sys_role_menu` VALUES (246, 1, 1);
-INSERT INTO `sys_role_menu` VALUES (247, 1, 3);
-INSERT INTO `sys_role_menu` VALUES (248, 1, 100);
-INSERT INTO `sys_role_menu` VALUES (249, 1, 101);
-INSERT INTO `sys_role_menu` VALUES (250, 1, 102);
-INSERT INTO `sys_role_menu` VALUES (251, 1, 115);
-INSERT INTO `sys_role_menu` VALUES (252, 1, 116);
-INSERT INTO `sys_role_menu` VALUES (253, 1, 1005);
-INSERT INTO `sys_role_menu` VALUES (254, 1, 1006);
-INSERT INTO `sys_role_menu` VALUES (255, 1, 1007);
-INSERT INTO `sys_role_menu` VALUES (256, 1, 2005);
-INSERT INTO `sys_role_menu` VALUES (257, 1, 2006);
-INSERT INTO `sys_role_menu` VALUES (258, 1, 2007);
-INSERT INTO `sys_role_menu` VALUES (259, 1, 3005);
-INSERT INTO `sys_role_menu` VALUES (260, 1, 3006);
-INSERT INTO `sys_role_menu` VALUES (261, 1, 3007);
-INSERT INTO `sys_role_menu` VALUES (262, 1, 3008);
-INSERT INTO `sys_role_menu` VALUES (263, 1, 3009);
-INSERT INTO `sys_role_menu` VALUES (264, 1, 3010);
-INSERT INTO `sys_role_menu` VALUES (265, 1, 3011);
-INSERT INTO `sys_role_menu` VALUES (266, 1, 3012);
-INSERT INTO `sys_role_menu` VALUES (267, 1, 3013);
-INSERT INTO `sys_role_menu` VALUES (268, 1, 3014);
-INSERT INTO `sys_role_menu` VALUES (269, 1, 3015);
-INSERT INTO `sys_role_menu` VALUES (270, 1, 3016);
-INSERT INTO `sys_role_menu` VALUES (271, 1, 3017);
-INSERT INTO `sys_role_menu` VALUES (272, 1, 3019);
-INSERT INTO `sys_role_menu` VALUES (273, 1, 3018);
+INSERT INTO `sys_role_menu` VALUES (305, 1, 1);
+INSERT INTO `sys_role_menu` VALUES (306, 1, 3);
+INSERT INTO `sys_role_menu` VALUES (307, 1, 100);
+INSERT INTO `sys_role_menu` VALUES (308, 1, 101);
+INSERT INTO `sys_role_menu` VALUES (309, 1, 102);
+INSERT INTO `sys_role_menu` VALUES (310, 1, 115);
+INSERT INTO `sys_role_menu` VALUES (311, 1, 116);
+INSERT INTO `sys_role_menu` VALUES (312, 1, 1005);
+INSERT INTO `sys_role_menu` VALUES (313, 1, 1006);
+INSERT INTO `sys_role_menu` VALUES (314, 1, 1007);
+INSERT INTO `sys_role_menu` VALUES (315, 1, 2005);
+INSERT INTO `sys_role_menu` VALUES (316, 1, 2006);
+INSERT INTO `sys_role_menu` VALUES (317, 1, 2007);
+INSERT INTO `sys_role_menu` VALUES (318, 1, 3005);
+INSERT INTO `sys_role_menu` VALUES (319, 1, 3006);
+INSERT INTO `sys_role_menu` VALUES (320, 1, 3007);
+INSERT INTO `sys_role_menu` VALUES (321, 1, 3008);
+INSERT INTO `sys_role_menu` VALUES (322, 1, 3009);
+INSERT INTO `sys_role_menu` VALUES (323, 1, 3010);
+INSERT INTO `sys_role_menu` VALUES (324, 1, 3011);
+INSERT INTO `sys_role_menu` VALUES (325, 1, 3012);
+INSERT INTO `sys_role_menu` VALUES (326, 1, 3013);
+INSERT INTO `sys_role_menu` VALUES (327, 1, 3014);
+INSERT INTO `sys_role_menu` VALUES (328, 1, 3015);
+INSERT INTO `sys_role_menu` VALUES (329, 1, 3016);
+INSERT INTO `sys_role_menu` VALUES (330, 1, 3017);
+INSERT INTO `sys_role_menu` VALUES (331, 1, 3018);
+INSERT INTO `sys_role_menu` VALUES (332, 1, 3019);
+INSERT INTO `sys_role_menu` VALUES (333, 1, 3021);
+INSERT INTO `sys_role_menu` VALUES (334, 1, 3022);
+INSERT INTO `sys_role_menu` VALUES (335, 1, 3023);
+INSERT INTO `sys_role_menu` VALUES (336, 1, 3020);
 COMMIT;
 
 -- ----------------------------
