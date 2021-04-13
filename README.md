@@ -82,4 +82,11 @@ sec:authorize="hasAuthority('权限标识')" // thymeleaf声明
    
     druid监控
    ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/6.png "6.png")
+   
+    定时任务
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/8.png "8.png")
+   
+    工作流
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/9.png "9.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/10.png "10.png")
  **革命尚未成功，同志仍须努力**
