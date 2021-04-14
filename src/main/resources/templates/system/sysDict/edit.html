@@ -77,32 +77,30 @@
         , table = layui.table;
     // 赋值
     var sysDict = [[${sysDict}]];
-    if (sysDict.sysDictValues) {
-      dictValues = sysDict.sysDictValues;
-    }
+    dictValues = sysDict.sysDictValues;
     dictValues.push(defJson);
     form.val('sys-dict-form', sysDict);
     // 编辑
     form.on('submit(save-submit)', function(data) {
-          var values = table.cache['dictTable'];
-          data.field.sysDictValues = values;
-          $.ajax({
-              type: 'POST',
-              url:  ctx + '/sysDict/edit',
-              data: JSON.stringify(data.field),
-              contentType:'application/json;charset=UTF-8',
-              dataType: 'json',
-              success: function(result) {
-                  layer.msg(result.message);
-                  if (result.code == 200) {
-                      var index = parent.layer.getFrameIndex(window.name);
-                      // 关闭
-                      parent.layer.close(index);
-                      // 刷新
-                      parent.location.reload();
-                  }
-              }
-          });
+      let values = table.cache['dictTable'];
+      data.field.sysDictValues = values;
+      $.ajax({
+        type: 'POST',
+        url:  ctx + '/sysDict/edit',
+        data: JSON.stringify(data.field),
+        contentType:'application/json;charset=UTF-8',
+        dataType: 'json',
+        success: function(result) {
+          layer.msg(result.message);
+          if (result.code == 200) {
+            var index = parent.layer.getFrameIndex(window.name);
+            // 关闭
+            parent.layer.close(index);
+            // 刷新
+            parent.location.reload();
+          }
+        }
+      });
     });
     /**
      * 字典值列表
@@ -121,10 +119,6 @@
       ]
       ,data: dictValues
       ,even: true
-      ,done: function (res, curr, count) {
-        //数据渲染完的回调。
-        //由于layui 设置了超出隐藏，所以这里改变下，以兼容操作按钮的下拉菜单
-        $(".layui-table-body, .layui-table-box, .layui-table-cell").css('overflow', 'visible'); }
     });
 
     //监听单元格编辑
@@ -137,15 +131,20 @@
     //监听行工具事件
     table.on('tool(dictTable)', function(obj){
       var layEvent = obj.event;
-      if(layEvent === 'add'){
-        var json = table.cache['dictTable'];
-        json.push(defJson);
+      var dictData = table.cache['dictTable'];
+      if(layEvent === 'add') {
+        dictData.push(defJson);
         table.reload('dictTable',{
-          data: json
+          data: dictData
         });
       } else if(layEvent === 'del'){
-        layer.confirm('真的删除行么', function(index){
+        layer.confirm('真的删除行么', function(index) {
+          var rowIndex = $(obj.tr).attr("data-index");
           obj.del();
+          dictData.splice(rowIndex,1);
+          table.reload('dictTable',{
+            data: dictData
+          });
           layer.close(index);
         });
       }
