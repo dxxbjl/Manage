@@ -81,7 +81,6 @@
         });
         var select = xmSelect.render({
             el: '#menuName',
-            autoRow: true,
             filterable: true,
             tree: {
                 //是否显示树状结构
@@ -101,15 +100,17 @@
                 //点击节点是否展开
                 clickExpand: true,
                 //点击节点是否选中
-                clickCheck: true,
+                clickCheck: true
             },
             toolbar: {
-                show: true,
-                list: ['ALL', 'REVERSE', 'CLEAR']
+              show: false
             },
-            filterable: true,
             height: 'auto',
-            data: []
+            data: [],
+            //分页
+            paging: true,
+            //每页条数
+            pageSize: 10,
         });
 
         $.ajax({
@@ -117,8 +118,7 @@
             url: ctx + '/sysMenu/xmSelect?ids=' + sysRole.menuIds,
             success: function(res) {
                 select.update({
-                    data: res,
-                    autoRow: true,
+                    data: res
                 })
             }
         });
