@@ -3,10 +3,12 @@ package io.github.yangyouwang.crud.system.service;
 import io.github.yangyouwang.crud.system.dao.SysDictTypeRepository;
 import io.github.yangyouwang.crud.system.model.SysDictType;
 import io.github.yangyouwang.crud.system.model.SysDictValue;
+import io.github.yangyouwang.crud.system.model.dao.SysDictValueDto;
 import io.github.yangyouwang.crud.system.model.req.SysDictAddReq;
 import io.github.yangyouwang.crud.system.model.req.SysDictEditReq;
 import io.github.yangyouwang.crud.system.model.req.SysDictListReq;
 import io.github.yangyouwang.crud.system.model.resp.SysDictResp;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,8 +65,8 @@ public class SysDictService {
         SysDictType sysDict = sysDictTypeRepository.findById(id).get();
         SysDictResp sysDictResp = new SysDictResp();
         BeanUtils.copyProperties(sysDict,sysDictResp);
-        List<SysDictResp.SysDictValueDto> sysDictValues = sysDict.getSysDictValues().stream().map(sysDictValue -> {
-            SysDictResp.SysDictValueDto sysDictValueDto = new SysDictResp.SysDictValueDto();
+        List<SysDictValueDto> sysDictValues = sysDict.getSysDictValues().stream().map(sysDictValue -> {
+            SysDictValueDto sysDictValueDto = new SysDictValueDto();
             BeanUtils.copyProperties(sysDictValue, sysDictValueDto);
             return sysDictValueDto;
         }).collect(Collectors.toList());
@@ -78,13 +80,22 @@ public class SysDictService {
     public void add(SysDictAddReq sysDictAddReq) {
         SysDictType sysDict = new SysDictType();
         BeanUtils.copyProperties(sysDictAddReq,sysDict);
-        List<SysDictValue> sysDictValues = sysDictAddReq.getSysDictValues().stream().map(sysDictValueDto -> {
-            SysDictValue sysDictValue = new SysDictValue();
-            BeanUtils.copyProperties(sysDictValueDto, sysDictValue);
-            return sysDictValue;
-        }).collect(Collectors.toList());
+        List<SysDictValue> sysDictValues =  getSysDictValues(sysDictAddReq.getSysDictValues());
         sysDict.setSysDictValues(sysDictValues);
         sysDictTypeRepository.save(sysDict);
+    }
+
+    /**
+     * 字典dto转bean
+     * @param sysDictValueDto 字典dto
+     * @return bean
+     */
+    private List<SysDictValue> getSysDictValues(List<SysDictValueDto> sysDictValueDto) {
+        return sysDictValueDto.stream().filter(dictValue -> StringUtils.isNotBlank(dictValue.getDictValueKey())).map(dictValue -> {
+                SysDictValue sysDictValue = new SysDictValue();
+                BeanUtils.copyProperties(dictValue, sysDictValue);
+                return sysDictValue;
+            }).collect(Collectors.toList());
     }
 
     /**
@@ -94,11 +105,7 @@ public class SysDictService {
       // 删除字典值
       this.del(sysDictEditReq.getId());
       SysDictType sysDict = new SysDictType();
-      List<SysDictValue> sysDictValues = sysDictEditReq.getSysDictValues().stream().map(sysDictValueDto -> {
-            SysDictValue sysDictValue = new SysDictValue();
-            BeanUtils.copyProperties(sysDictValueDto, sysDictValue);
-            return sysDictValue;
-      }).collect(Collectors.toList());
+      List<SysDictValue> sysDictValues = getSysDictValues(sysDictEditReq.getSysDictValues());
       sysDict.setSysDictValues(sysDictValues);
       BeanUtils.copyProperties(sysDictEditReq,sysDict);
       sysDictTypeRepository.save(sysDict);
