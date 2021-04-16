@@ -6,6 +6,7 @@ import io.github.yangyouwang.common.domain.XmSelectNode;
 import io.github.yangyouwang.crud.system.model.req.SysMenuAddReq;
 import io.github.yangyouwang.crud.system.model.req.SysMenuEditReq;
 import io.github.yangyouwang.crud.system.model.req.SysMenuListReq;
+import io.github.yangyouwang.crud.system.model.req.SysMenuVisibleReq;
 import io.github.yangyouwang.crud.system.model.resp.SysMenuResp;
 import io.github.yangyouwang.crud.system.service.SysMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,6 +101,20 @@ public class SysMenuController {
             throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
         }
         sysMenuService.edit(sysMenuEditReq);
+        return Result.success();
+    }
+
+    /**
+     * 更新菜单状态
+     * @return 菜单状态
+     */
+    @PostMapping("/changeMenu")
+    @ResponseBody
+    public Result changeMenu(@RequestBody @Validated SysMenuVisibleReq sysMenuVisibleReq, BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+        }
+        sysMenuService.changeMenu(sysMenuVisibleReq);
         return Result.success();
     }
 

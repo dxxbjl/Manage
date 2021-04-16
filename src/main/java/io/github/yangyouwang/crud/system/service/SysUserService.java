@@ -19,8 +19,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -35,7 +37,6 @@ import java.util.stream.Collectors;
  * @date 2021/3/2112:37 AM
  */
 @Service
-@Transactional
 public class SysUserService implements UserDetailsService {
 
     @Autowired
@@ -62,6 +63,8 @@ public class SysUserService implements UserDetailsService {
      * @param id 用户id
      * @return 用户详情
      */
+
+    @Transactional(readOnly = true)
     public SysUserResp detail(Long id) {
         SysUser sysUser = sysUserRepository.findById(id).orElse(new SysUser());
         SysUserResp sysUserResp = new SysUserResp();
@@ -76,6 +79,7 @@ public class SysUserService implements UserDetailsService {
      * 列表请求
      * @return 列表
      */
+    @Transactional(readOnly = true)
     public Page<SysUserResp> list(SysUserListReq sysUserListReq) {
         Pageable pageable = PageRequest.of(sysUserListReq.getPageNum() - 1,sysUserListReq.getPageSize());
         return sysUserRepository.findPage(sysUserListReq, pageable);
@@ -84,6 +88,7 @@ public class SysUserService implements UserDetailsService {
     /**
      * 添加请求
      */
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
     public void add(SysUserAddReq sysUserAddReq) {
         SysUser sysUser = sysUserRepository.findByUserName(sysUserAddReq.getUserName());
         if (Objects.nonNull(sysUser)) {
@@ -105,6 +110,7 @@ public class SysUserService implements UserDetailsService {
     /**
      * 编辑请求
      */
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
     public void edit(SysUserEditReq sysUserEditReq) {
         sysUserRepository.findById(sysUserEditReq.getId()).ifPresent(sysUser -> {
             BeanUtil.copyProperties(sysUserEditReq,sysUser,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
@@ -122,6 +128,7 @@ public class SysUserService implements UserDetailsService {
     /**
      * 删除请求
      */
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
     public void del(Long id) {
         if(sysUserRepository.existsById(id)) {
             sysUserRepository.deleteById(id);
@@ -131,6 +138,7 @@ public class SysUserService implements UserDetailsService {
     /**
      * 修改密码
      */
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
     public void modifyPass(ModifyPassReq modifyPassReq) {
         SysUser sysUser = sysUserRepository.findById(modifyPassReq.getId()).orElse(new SysUser());
         boolean matches = passwordEncoder.matches(modifyPassReq.getOldPassword(),sysUser.getPassword());
@@ -146,9 +154,10 @@ public class SysUserService implements UserDetailsService {
      * 修改用户状态
      * @param sysUserEnabledReq 用户状态dto
      */
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
     public void changeUser(SysUserEnabledReq sysUserEnabledReq) {
         sysUserRepository.findById(sysUserEnabledReq.getId()).ifPresent(sysUser -> {
-            BeanUtil.copyProperties(sysUserEnabledReq,sysUser,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+            sysUser.setEnabled(sysUserEnabledReq.getEnabled());
             sysUserRepository.save(sysUser);
         });
 

@@ -15,9 +15,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.ArrayUtils;
 
-import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
@@ -33,7 +35,6 @@ import java.util.stream.Collectors;
  * @date 2021/3/269:44 PM
  */
 @Service
-@Transactional
 public class SysRoleService {
 
     @Autowired
@@ -46,6 +47,7 @@ public class SysRoleService {
      * 跳转编辑
      * @return 编辑页面
      */
+    @Transactional(readOnly = true)
     public SysRoleResp detail(Long id) {
         SysRole sysRole = sysRoleRepository.findById(id).orElse(new SysRole());
         SysRoleResp sysRoleResp = new SysRoleResp();
@@ -59,6 +61,7 @@ public class SysRoleService {
      * 列表请求
      * @return 请求列表
      */
+    @Transactional(readOnly = true)
     public Page<SysRoleResp> list(SysRoleListReq sysRoleListReq) {
         Pageable pageable = PageRequest.of(sysRoleListReq.getPageNum() - 1,sysRoleListReq.getPageSize());
         return sysRoleRepository.findPage(sysRoleListReq, pageable);
@@ -66,8 +69,8 @@ public class SysRoleService {
 
     /**
      * 添加请求
-     * @return 添加状态
      */
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
     public void add(@NotNull SysRoleAddReq sysRoleAddReq) {
         SysRole sysRole = sysRoleRepository.findByRoleKey(sysRoleAddReq.getRoleKey());
         if (Objects.nonNull(sysRole)) {
@@ -87,8 +90,8 @@ public class SysRoleService {
 
     /**
      * 编辑请求
-     * @return 编辑状态
      */
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
     public void edit(@NotNull SysRoleEditReq sysRoleEditReq) {
         sysRoleRepository.findById(sysRoleEditReq.getId()).ifPresent( sysRole -> {
             BeanUtils.copyProperties(sysRoleEditReq,sysRole);
@@ -104,8 +107,8 @@ public class SysRoleService {
 
     /**
      * 删除请求
-     * @return 删除状态
      */
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
     public void del(Long id) {
         if(sysRoleRepository.existsById(id)) {
             sysRoleRepository.deleteById(id);
@@ -117,6 +120,7 @@ public class SysRoleService {
      * @param ids ids
      * @return 角色列表
      */
+    @Transactional(readOnly = true)
     public List<XmSelectNode> xmSelect(Long[] ids) {
         List<SysRole> sysRoles = this.sysRoleRepository.findAll();
         return sysRoles.stream().map(sysMenu -> {

@@ -41,13 +41,13 @@
 </div>
 <script th:src="@{/static/layuiadmin/layui/layui.js}"></script>
 <script th:inline="javascript">
-    var ctx = [[${#request.getContextPath()}]];
+    let ctx = [[${#request.getContextPath()}]];
     layui.config({
         base: '/static/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
     }).use(['index', 'user'], function(){
-        var $ = layui.$
+        let $ = layui.$
             ,form = layui.form;
         form.render();
         //提交
@@ -59,7 +59,7 @@
                 data: obj.field,
                 dataType: 'json',
                 success: function(result) {
-                    if (result.code == 200) {
+                    if (result.code === 200) {
                         layer.msg('登入成功', {
                              icon: 1
                             ,time: 3000

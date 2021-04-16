@@ -55,13 +55,13 @@
 
   <script th:src="@{/static/layuiadmin/layui/layui.js}"></script>
   <script th:inline="javascript">
-  var ctx = [[${#request.getContextPath()}]];
+  let ctx = [[${#request.getContextPath()}]];
   layui.config({
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
      index: 'lib/index', //主入口模块
   }).use(['index', 'form'], function(){
-    var $ = layui.$
+    let $ = layui.$
         ,form = layui.form;
     form.on('submit(save-submit)', function(data){
           $.ajax({
@@ -72,8 +72,8 @@
               dataType: 'json',
               success: function(result) {
                   layer.msg(result.message);
-                  if (result.code == 200) {
-                      var index = parent.layer.getFrameIndex(window.name);
+                  if (result.code === 200) {
+                      let index = parent.layer.getFrameIndex(window.name);
                       // 关闭
                       parent.layer.close(index);
                       // 刷新

@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class SysLogService {
      * 列表请求
      * @return 请求列表
      */
+    @Transactional(readOnly = true)
     public Page<SysLog> list(SysLogListReq sysLogListReq) {
         Pageable pageable = PageRequest.of(sysLogListReq.getPageNum() - 1,sysLogListReq.getPageSize());
         Specification<SysLog> query = (root, criteriaQuery, criteriaBuilder) -> {

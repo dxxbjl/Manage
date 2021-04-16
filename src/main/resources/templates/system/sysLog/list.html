@@ -40,18 +40,18 @@
   </div>
   <script th:src="@{/static/layuiadmin/layui/layui.js}"></script>
   <script th:inline="javascript">
-  var ctx = [[${#request.getContextPath()}]];
+  let ctx = [[${#request.getContextPath()}]];
   layui.config({
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
       index: 'lib/index' //主入口模块
   }).use(['index', 'useradmin', 'table'], function() {
-      var $ = layui.$
+    let $ = layui.$
           ,form = layui.form
           , table = layui.table;
       //监听搜索
       form.on('submit(search)', function(data){
-          var field = data.field;
+        let field = data.field;
           //执行重载
           table.reload('logTable', {
               where: field

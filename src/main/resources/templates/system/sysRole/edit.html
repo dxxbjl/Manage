@@ -43,7 +43,7 @@
 
 <script th:src="@{/static/layuiadmin/layui/layui.js}"></script>
 <script th:inline="javascript">
-    var ctx = [[${#request.getContextPath()}]];
+    let ctx = [[${#request.getContextPath()}]];
     layui.config({
         base: '/static/layuiadmin/' //静态资源所在路径
     }).extend({
@@ -51,11 +51,11 @@
         xmSelect: 'xm-select',
         crud: 'crud'
     }).use(['index', 'form','xmSelect','crud'], function(){
-        var $ = layui.$
+        let $ = layui.$
             ,xmSelect = layui.xmSelect
             ,crud = layui.crud
             ,form = layui.form;
-        var sysRole = [[${sysRole}]];
+        let sysRole = [[${sysRole}]];
         form.val('sys-role-form', sysRole);
         form.on('submit(save-submit)', function(data){
             var menuIds = crud.getXmSelectTreeIds(select);
@@ -68,8 +68,8 @@
                 dataType: 'json',
                 success: function(result) {
                     layer.msg(result.message);
-                    if (result.code == 200) {
-                        var index = parent.layer.getFrameIndex(window.name);
+                    if (result.code === 200) {
+                        let index = parent.layer.getFrameIndex(window.name);
                         // 关闭
                         parent.layer.close(index);
                         // 刷新
@@ -79,7 +79,7 @@
             });
 
         });
-        var select = xmSelect.render({
+        let select = xmSelect.render({
             el: '#menuName',
             filterable: true,
             tree: {

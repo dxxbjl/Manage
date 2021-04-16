@@ -1,17 +1,17 @@
 layui.define(['jquery'], function(exports){
-    var $ = layui.jquery;
-    var crud = {
+    let $ = layui.jquery;
+    let crud = {
         /**
          * 获取XmSelectTree id列表
          * @param select XmSelect
          * @returns {*} id列表
          */
         getXmSelectTreeIds: function (select) {
-            var value = select.getValue();
-            var ids = value.map(x => {return x.id});
-            if (ids == 0) {
+            let value = select.getValue();
+            let ids = value.map(x => {return x.id});
+            if (ids === 0) {
                 layer.msg('请选择节点');
-                return;
+                return ids;
             }
             return ids;
         },

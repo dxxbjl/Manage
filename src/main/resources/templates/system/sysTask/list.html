@@ -42,18 +42,18 @@
   </div>
   <script th:src="@{/static/layuiadmin/layui/layui.js}"></script>
   <script th:inline="javascript">
-  var ctx = [[${#request.getContextPath()}]];
+  let ctx = [[${#request.getContextPath()}]];
   layui.config({
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
     index: 'lib/index' //主入口模块
   }).use(['index', 'useradmin', 'table'], function() {
-      var $ = layui.$
+      let $ = layui.$
           ,form = layui.form
           , table = layui.table;
       //监听搜索
       form.on('submit(search)', function(data){
-          var field = data.field;
+          let field = data.field;
           //执行重载
           table.reload('taskTable', {
               where: field
@@ -104,19 +104,19 @@
       });
 
       $('.layui-btn').on('click', function(){
-          var type = $(this).data('type');
+          let type = $(this).data('type');
           active[type] && active[type].call(this);
       });
 
       // 修改user状态
       form.on('switch(enabled)', function (obj) {
-        var id = obj.elem.value;
-        var checked = obj.elem.checked ? 1 : 0;
+        let id = obj.elem.value;
+        let checked = obj.elem.checked ? 1 : 0;
         active.changeTaskEnabled(id,checked);
       });
 
       /* 触发弹层 */
-      var active = {
+      let active = {
           /**
            * 添加
            * */
@@ -129,7 +129,7 @@
                   ,area: ['500px', '450px']
                   ,btn: ['确定', '取消']
                   ,yes: function(index, layero){
-                      var submit = layero.find('iframe').contents().find('#save-submit');
+                      let submit = layero.find('iframe').contents().find('#save-submit');
                       submit.trigger('click');
                   }
               });
@@ -147,7 +147,7 @@
                   ,area: ['500px', '450px']
                   ,btn: ['确定', '取消']
                   ,yes: function(index, layero){
-                      var submit = layero.find('iframe').contents().find('#save-submit');
+                      let submit = layero.find('iframe').contents().find('#save-submit');
                       submit.trigger('click');
                   }
               });
@@ -166,7 +166,7 @@
                       dataType: 'json',
                       success: function(result) {
                           layer.msg(result.message);
-                          if (result.code == 200) {
+                          if (result.code === 200) {
                               layer.close(index);
                               table.reload('taskTable');
                           }
@@ -191,7 +191,7 @@
             dataType: 'json',
             success: function(result) {
               layer.msg(result.message);
-              if (result.code == 200) {
+              if (result.code === 200) {
                 table.reload('taskTable');
               }
             }

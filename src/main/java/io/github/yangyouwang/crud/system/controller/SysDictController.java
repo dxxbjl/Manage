@@ -114,6 +114,20 @@ public class SysDictController {
     }
 
     /**
+     * 修改字典状态
+     * @return 修改状态
+     */
+    @PostMapping("/changeDict")
+    @ResponseBody
+    public Result changeDict(@RequestBody @Validated SysDictEnabledReq sysDictEnabledReq, BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+        }
+        sysDictService.changeDict(sysDictEnabledReq);
+        return Result.success();
+    }
+
+    /**
      * 删除请求
      * @return 删除状态
      */

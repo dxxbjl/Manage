@@ -76,17 +76,17 @@
   </div>
   <script th:src="@{/static/layuiadmin/layui/layui.js}"></script>
   <script th:inline="javascript">
-  var ctx = [[${#request.getContextPath()}]];
+  let ctx = [[${#request.getContextPath()}]];
   layui.config({
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
     index: 'lib/index' //主入口模块
   }).use(['index', 'set', 'upload','form'],function () {
-      var $ = layui.$
+      let $ = layui.$
           ,upload = layui.upload
           ,form = layui.form;
 
-      var sysUser = [[${sysUser}]];
+      let sysUser = [[${sysUser}]];
       $('#upload-img').attr('src', sysUser.avatar); //图片链接（base64）
       form.val('sys-user-form', sysUser);
 
@@ -104,7 +104,7 @@
       });
 
       //普通图片上传
-      var uploadInst = upload.render({
+      let uploadInst = upload.render({
           elem: '#upload-btn'
           ,url: ctx + '/sysCommon/upload'
           ,before: function(obj){
@@ -114,14 +114,14 @@
               });
           }
           ,done: function(res){
-              if (res.code == 200) {
+              if (res.code === 200) {
                   $("#avatar").val(res.data.url);
                   return layer.msg('上传成功');
               }
           }
           ,error: function(){
               //演示失败状态，并实现重传
-              var uploadText = $('#upload-text');
+              let uploadText = $('#upload-text');
               uploadText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
               uploadText.find('.demo-reload').on('click', function(){
                   uploadInst.upload();

@@ -36,6 +36,9 @@
         </div>
         <div class="layui-card-body">
             <table id="dictTable" lay-filter="dictTable"></table>
+            <script type="text/html" id="enabledTpl">
+                <input type="checkbox" lay-filter="enabled" value="{{d.id}}" lay-skin="switch" lay-text="激活|冻结" {{d.enabled==1?'checked':''}} />
+            </script>
             <script type="text/html" id="tableBar">
                 <a sec:authorize="hasAuthority('dict:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
                 <a sec:authorize="hasAuthority('dict:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
@@ -45,22 +48,28 @@
 </div>
 <script th:src="@{/static/layuiadmin/layui/layui.js}"></script>
 <script th:inline="javascript">
-    var ctx = [[${#request.getContextPath()}]];
+    let ctx = [[${#request.getContextPath()}]];
     layui.config({
         base: '/static/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
     }).use(['index', 'useradmin', 'table'], function() {
-        var $ = layui.$
+        let $ = layui.$
             ,form = layui.form
             , table = layui.table;
         //监听搜索
         form.on('submit(search)', function(data){
-            var field = data.field;
+            let field = data.field;
             //执行重载
             table.reload('dictTable', {
                 where: field
             });
+        });
+        // 监听字典状态
+        form.on('switch(enabled)', function (obj) {
+            let id = obj.elem.value;
+            let checked = obj.elem.checked ? 1 : 0;
+            active.changeDictEnabled(id,checked);
         });
         // 查询列表接口
         table.render({
@@ -87,14 +96,7 @@
                 {field: 'id', title: 'ID', sort: true, fixed: 'left'}
                 ,{field: 'dictName', title: '字典名称'}
                 ,{field: 'dictKey', title: '字典别名'}
-                ,{field: 'enabled', title: '状态',
-                    templet:function (d) {
-                        if (d.enabled == 0) {
-                            return "禁用";
-                        } else {
-                            return "启用";
-                        }
-                    }}
+                ,{field: 'enabled', align: "center", sort: true, templet: '#enabledTpl', title: '状态'}
                 ,{field: 'remark', title: '备注'}
                 ,{toolbar: '#tableBar', title: '操作', width: 165, align:'center',fixed: 'right'}
             ]]
@@ -102,7 +104,7 @@
 
         //监听行工具事件
         table.on('tool(dictTable)', function(obj){
-            var data = obj.data //获得当前行数据
+            let data = obj.data //获得当前行数据
                 ,layEvent = obj.event;
             if(layEvent === 'edit'){
                 active.editView(data.id);
@@ -112,12 +114,12 @@
         });
 
         $('.layui-btn').on('click', function(){
-            var type = $(this).data('type');
+            let type = $(this).data('type');
             active[type] && active[type].call(this);
         });
 
         /* 触发弹层 */
-        var active = {
+        let active = {
             /**
              * 添加
              * */
@@ -130,7 +132,7 @@
                     ,area: ['100%', '100%']
                     ,btn: ['确定', '取消']
                     ,yes: function(index, layero){
-                        var submit = layero.find('iframe').contents().find('#save-submit');
+                        let submit = layero.find('iframe').contents().find('#save-submit');
                         submit.trigger('click');
                     }
                 });
@@ -148,7 +150,7 @@
                     ,area: ['100%', '100%']
                     ,btn: ['确定', '取消']
                     ,yes: function(index, layero){
-                        var submit = layero.find('iframe').contents().find('#save-submit');
+                        let submit = layero.find('iframe').contents().find('#save-submit');
                         submit.trigger('click');
                     }
                 });
@@ -167,12 +169,35 @@
                         dataType: 'json',
                         success: function(result) {
                             layer.msg(result.message);
-                            if (result.code == 200) {
+                            if (result.code === 200) {
                                 layer.close(index);
                                 table.reload('dictTable');
                             }
                         }
                     });
+                });
+            },
+            /**
+             * 修改字典状态
+             * @param id 字典id
+             * @param checked 状态
+             */
+            changeDictEnabled: function (id,checked) {
+                $.ajax({
+                    type: 'POST',
+                    url:  ctx + '/sysDict/changeDict',
+                    data: JSON.stringify({
+                        id: id,
+                        enabled: checked
+                    }),
+                    contentType:'application/json;charset=UTF-8',
+                    dataType: 'json',
+                    success: function(result) {
+                        layer.msg(result.message);
+                        if (result.code === 200) {
+                            table.reload('dictTable');
+                        }
+                    }
                 });
             }
         }

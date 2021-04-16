@@ -137,13 +137,13 @@
 </div>
 <script th:src="@{/static/layuiadmin/layui/layui.js}"></script>
 <script th:inline="javascript">
-    var ctx = [[${#request.getContextPath()}]];
+    let ctx = [[${#request.getContextPath()}]];
     layui.config({
         base: '/static/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
     }).use(['index'],function () {
-        var $ = layui.$;
+        let $ = layui.$;
         $('#logout').on('click', function(){
             $.ajax({
                 type: 'get',

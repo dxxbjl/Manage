@@ -6,6 +6,7 @@ import io.github.yangyouwang.crud.system.model.SysDictValue;
 import io.github.yangyouwang.crud.system.model.dao.SysDictValueDto;
 import io.github.yangyouwang.crud.system.model.req.SysDictAddReq;
 import io.github.yangyouwang.crud.system.model.req.SysDictEditReq;
+import io.github.yangyouwang.crud.system.model.req.SysDictEnabledReq;
 import io.github.yangyouwang.crud.system.model.req.SysDictListReq;
 import io.github.yangyouwang.crud.system.model.resp.SysDictResp;
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +18,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.persistence.criteria.Predicate;
@@ -41,6 +45,7 @@ public class SysDictService {
      * 列表请求
      * @return 请求列表
      */
+    @Transactional(readOnly = true)
     public Page<SysDictType> list(SysDictListReq sysDictListReq) {
         Pageable pageable = PageRequest.of(sysDictListReq.getPageNum() - 1,sysDictListReq.getPageSize());
         Specification<SysDictType> query = (root, criteriaQuery, criteriaBuilder) -> {
@@ -62,6 +67,7 @@ public class SysDictService {
      * 跳转编辑
      * @return 编辑页面
      */
+    @Transactional(readOnly = true)
     public SysDictResp detail(Long id) {
         SysDictType sysDict = sysDictTypeRepository.findById(id).get();
         SysDictResp sysDictResp = new SysDictResp();
@@ -78,6 +84,7 @@ public class SysDictService {
     /**
      * 添加请求
      */
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
     public void add(SysDictAddReq sysDictAddReq) {
         SysDictType sysDictType = sysDictTypeRepository.findByDictKey(sysDictAddReq.getDictKey());
         Assert.isNull(sysDictType, "字典已存在");
@@ -104,6 +111,7 @@ public class SysDictService {
     /**
      * 编辑请求
      */
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
     public void edit(SysDictEditReq sysDictEditReq) {
       // 删除字典值
       this.del(sysDictEditReq.getId());
@@ -117,6 +125,7 @@ public class SysDictService {
     /**
      * 删除请求
      */
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
     public void del(Long id) {
         if(sysDictTypeRepository.existsById(id)) {
             sysDictTypeRepository.deleteById(id);
@@ -127,6 +136,7 @@ public class SysDictService {
      * 根据字典类型获取字典列表
      * @return 请求列表
      */
+    @Transactional(readOnly = true)
     public List<SysDictValueDto> getDictValues(String dictKey) {
         SysDictType sysDictType = sysDictTypeRepository.findByDictKey(dictKey);
         return sysDictType.getSysDictValues().stream().map(sysDictValue -> {
@@ -134,5 +144,16 @@ public class SysDictService {
             BeanUtils.copyProperties(sysDictValue,sysDictValueDto);
             return sysDictValueDto;
         }).collect(Collectors.toList());
+    }
+
+    /**
+     * 修改字典状态
+     */
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
+    public void changeDict(SysDictEnabledReq sysDictEnabledReq) {
+        sysDictTypeRepository.findById(sysDictEnabledReq.getId()).ifPresent(sysDictType -> {
+            sysDictType.setEnabled(sysDictEnabledReq.getEnabled());
+            sysDictTypeRepository.save(sysDictType);
+        });
     }
 }

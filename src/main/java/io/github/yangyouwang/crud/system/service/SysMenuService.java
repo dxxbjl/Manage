@@ -10,6 +10,7 @@ import io.github.yangyouwang.crud.system.model.SysMenu;
 import io.github.yangyouwang.crud.system.model.req.SysMenuAddReq;
 import io.github.yangyouwang.crud.system.model.req.SysMenuEditReq;
 import io.github.yangyouwang.crud.system.model.req.SysMenuListReq;
+import io.github.yangyouwang.crud.system.model.req.SysMenuVisibleReq;
 import io.github.yangyouwang.crud.system.model.resp.SysMenuResp;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.BeanUtils;
@@ -17,6 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.ArrayUtils;
 
 import javax.persistence.criteria.Predicate;
@@ -43,6 +47,7 @@ public class SysMenuService {
      * @param id 用户id
      * @return 菜单信息
      */
+    @Transactional(readOnly = true)
     public List<SysMenu> selectMenusByUser(Long id) {
         List<SysMenu> menus;
         if (Constants.ADMINISTRATOR_USER_ID.equals(id)) {
@@ -62,6 +67,7 @@ public class SysMenuService {
      * 跳转编辑
      * @return 编辑页面
      */
+    @Transactional(readOnly = true)
     public SysMenuResp detail(Long id) {
         SysMenu sysMenu = sysMenuRepository.findSysMenuById(id);
         SysMenuResp sysMenuResp = new SysMenuResp();
@@ -73,6 +79,7 @@ public class SysMenuService {
      * 列表请求
      * @return 请求列表
      */
+    @Transactional(readOnly = true)
     public List<SysMenuResp> list(SysMenuListReq sysMenuListReq) {
         Specification<SysMenu> query = (Specification<SysMenu>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -91,8 +98,8 @@ public class SysMenuService {
 
     /**
      * 添加请求
-     * @return 添加状态
      */
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
     public void add(SysMenuAddReq sysMenuAddReq) {
         SysMenu sysMenu = new SysMenu();
         BeanUtils.copyProperties(sysMenuAddReq,sysMenu);
@@ -101,8 +108,8 @@ public class SysMenuService {
 
     /**
      * 编辑请求
-     * @return 编辑状态
      */
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
     public void edit(SysMenuEditReq sysMenuEditReq) {
        sysMenuRepository.findById(sysMenuEditReq.getId()).ifPresent(sysMenu -> {
             BeanUtils.copyProperties(sysMenuEditReq,sysMenu);
@@ -112,8 +119,8 @@ public class SysMenuService {
 
     /**
      * 删除请求
-     * @return 删除状态
      */
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
     public void del(Long id) {
         if(sysMenuRepository.existsById(id)) {
             sysMenuRepository.deleteById(id);
@@ -122,8 +129,8 @@ public class SysMenuService {
 
     /**
      * 查询菜单列表
-     * @return 菜单列表
      */
+    @Transactional(readOnly = true)
     public List<TreeSelectNode> treeSelect() {
         List<SysMenu> menus = this.sysMenuRepository.findAll();
         List<TreeSelectNode> result = menus.stream().map(sysMenu -> {
@@ -143,6 +150,7 @@ public class SysMenuService {
      * @param ids ids
      * @return 菜单列表
      */
+    @Transactional(readOnly = true)
     public List<XmSelectNode> xmSelect(Long[] ids) {
         List<SysMenu> menus = this.sysMenuRepository.findAll();
         List<XmSelectNode> result = menus.stream().map(sysMenu -> {
@@ -156,5 +164,16 @@ public class SysMenuService {
         }).collect(Collectors.toList());
         ListToTree treeBuilder = new ListToTreeImpl();
         return treeBuilder.toTree(result);
+    }
+
+    /**
+     * 更新菜单状态
+     */
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
+    public void changeMenu(SysMenuVisibleReq sysMenuVisibleReq) {
+        sysMenuRepository.findById(sysMenuVisibleReq.getId()).ifPresent(sysMenu -> {
+            sysMenu.setVisible(sysMenuVisibleReq.getVisible());
+            sysMenuRepository.save(sysMenu);
+        });
     }
 }

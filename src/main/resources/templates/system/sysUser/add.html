@@ -87,13 +87,13 @@
      xmSelect: 'xm-select',
      crud: 'crud'
   }).use(['index', 'form','xmSelect','upload','crud'], function(){
-    var $ = layui.$
+    let $ = layui.$
         ,xmSelect = layui.xmSelect
         ,upload = layui.upload
         ,crud = layui.crud
       ,form = layui.form;
       form.on('submit(save-submit)', function(data) {
-          var roleIds = crud.getXmSelectTreeIds(select);
+          let roleIds = crud.getXmSelectTreeIds(select);
           data.field.roleIds = roleIds;
           $.ajax({
               type: 'POST',
@@ -103,8 +103,8 @@
               dataType: 'json',
               success: function(result) {
                   layer.msg(result.message);
-                  if (result.code == 200) {
-                      var index = parent.layer.getFrameIndex(window.name);
+                  if (result.code === 200) {
+                      let index = parent.layer.getFrameIndex(window.name);
                       // 关闭
                       parent.layer.close(index);
                       // 刷新
@@ -114,7 +114,7 @@
           });
       });
 
-      var select = xmSelect.render({
+      let select = xmSelect.render({
           el: '#roleName',
           tips:"选择角色",
           filterable: true,
@@ -160,7 +160,7 @@
       });
 
       //普通图片上传
-      var uploadInst = upload.render({
+      let uploadInst = upload.render({
           elem: '#upload-btn'
           ,url: ctx + '/sysCommon/upload'
           ,before: function(obj){
@@ -170,14 +170,14 @@
               });
           }
           ,done: function(res){
-              if (res.code == 200) {
+              if (res.code === 200) {
                   $("#avatar").val(res.data.url);
                   return layer.msg('上传成功');
               }
           }
           ,error: function(){
               //演示失败状态，并实现重传
-              var uploadText = $('#upload-text');
+            let uploadText = $('#upload-text');
               uploadText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
               uploadText.find('.demo-reload').on('click', function(){
                   uploadInst.upload();

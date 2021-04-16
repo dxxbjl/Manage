@@ -11,7 +11,7 @@
  Target Server Version : 50733
  File Encoding         : 65001
 
- Date: 16/04/2021 12:53:34
+ Date: 16/04/2021 20:46:15
 */
 
 SET NAMES utf8mb4;
@@ -736,7 +736,7 @@ CREATE TABLE `QRTZ_SCHEDULER_STATE` (
 -- Records of QRTZ_SCHEDULER_STATE
 -- ----------------------------
 BEGIN;
-INSERT INTO `QRTZ_SCHEDULER_STATE` VALUES ('clusteredScheduler', 'yangyouwangdeMacBook-Pro.local1618548719362', 1618548809862, 10000);
+INSERT INTO `QRTZ_SCHEDULER_STATE` VALUES ('clusteredScheduler', 'yangyouwangdeMacBook-Pro.local1618577052226', 1618577173068, 10000);
 COMMIT;
 
 -- ----------------------------
@@ -830,13 +830,14 @@ CREATE TABLE `sys_dict_type` (
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='数据字典类型';
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='数据字典类型';
 
 -- ----------------------------
 -- Records of sys_dict_type
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_dict_type` VALUES (17, 'sex', '性别', 1, '1', 'admin', '2021-04-16 12:27:04', 'admin', '2021-04-16 12:27:04', '性别字典');
+INSERT INTO `sys_dict_type` VALUES (17, 'sex', '性别', 1, '1', 'admin', '2021-04-16 12:27:04', 'admin', '2021-04-16 20:40:26', '性别字典');
+INSERT INTO `sys_dict_type` VALUES (18, 'menuType', '菜单类型', 2, '1', 'admin', '2021-04-16 20:42:06', 'admin', '2021-04-16 20:42:06', '菜单类型');
 COMMIT;
 
 -- ----------------------------
@@ -855,7 +856,7 @@ CREATE TABLE `sys_dict_value` (
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='数据字典值';
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='数据字典值';
 
 -- ----------------------------
 -- Records of sys_dict_value
@@ -864,6 +865,9 @@ BEGIN;
 INSERT INTO `sys_dict_value` VALUES (21, 17, '0', '男', 1, 'admin', '2021-04-16 12:27:04', 'admin', '2021-04-16 12:27:04', '男');
 INSERT INTO `sys_dict_value` VALUES (22, 17, '1', '女', 2, 'admin', '2021-04-16 12:27:04', 'admin', '2021-04-16 12:27:04', '女');
 INSERT INTO `sys_dict_value` VALUES (23, 17, '2', '未知', 3, 'admin', '2021-04-16 12:27:04', 'admin', '2021-04-16 12:27:04', '未知');
+INSERT INTO `sys_dict_value` VALUES (24, 18, 'M', '目录', 1, 'admin', '2021-04-16 20:42:06', 'admin', '2021-04-16 20:42:06', '目录');
+INSERT INTO `sys_dict_value` VALUES (25, 18, 'C', '菜单', 2, 'admin', '2021-04-16 20:42:06', 'admin', '2021-04-16 20:42:06', '菜单');
+INSERT INTO `sys_dict_value` VALUES (26, 18, 'F', '按钮', 3, 'admin', '2021-04-16 20:42:06', 'admin', '2021-04-16 20:42:06', '按钮');
 COMMIT;
 
 -- ----------------------------
@@ -917,8 +921,8 @@ CREATE TABLE `sys_menu` (
 -- Records of sys_menu
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, 1, '#', 'M', 'Y', '', '1', '2018-03-16 11:33:00', 'admin', '2021-03-28 20:25:29', '系统管理目录');
-INSERT INTO `sys_menu` VALUES (3, '系统工具', 0, 2, '#', 'M', 'Y', '', '1', '2018-03-16 11:33:00', 'admin', '2021-04-10 20:10:08', '系统工具目录');
+INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, 1, '#', 'M', 'Y', '', '1', '2018-03-16 11:33:00', 'admin', '2021-04-16 20:37:57', '系统管理目录');
+INSERT INTO `sys_menu` VALUES (3, '系统工具', 0, 2, '#', 'M', 'Y', '', '1', '2018-03-16 11:33:00', 'admin', '2021-04-16 20:37:59', '系统工具目录');
 INSERT INTO `sys_menu` VALUES (100, '用户管理', 1, 1, '/sysUser/listPage', 'C', 'Y', 'user:list', '1', '2018-03-16 11:33:00', 'admin', '2021-04-10 11:23:17', '用户管理菜单');
 INSERT INTO `sys_menu` VALUES (101, '角色管理', 1, 2, '/sysRole/listPage', 'C', 'Y', 'role:list', '1', '2018-03-16 11:33:00', 'admin', '2021-04-10 11:22:48', '角色管理菜单');
 INSERT INTO `sys_menu` VALUES (102, '菜单管理', 1, 3, '/sysMenu/listPage', 'C', 'Y', 'menu:list', '1', '2018-03-16 11:33:00', 'admin', '2021-04-10 11:23:01', '菜单管理菜单');
@@ -938,7 +942,7 @@ INSERT INTO `sys_menu` VALUES (3009, '任务管理', 1, 4, '/sysTask/listPage', 
 INSERT INTO `sys_menu` VALUES (3010, '添加', 3009, 1, '#', 'F', 'Y', 'task:add', 'admin', '2021-03-31 16:55:04', 'admin', '2021-04-10 11:26:53', '添加任务');
 INSERT INTO `sys_menu` VALUES (3011, '编辑', 3009, 2, '#', 'F', 'Y', 'task:edit', 'admin', '2021-03-31 17:01:35', 'admin', '2021-04-10 11:27:05', '编辑任务');
 INSERT INTO `sys_menu` VALUES (3012, '删除', 3009, 3, '#', 'F', 'Y', 'task:del', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', '删除任务');
-INSERT INTO `sys_menu` VALUES (3013, '流程管理', 0, 3, '#', 'M', 'Y', '', 'admin', '2021-04-10 20:06:40', 'admin', '2021-04-10 20:46:41', '工作流管理');
+INSERT INTO `sys_menu` VALUES (3013, '流程管理', 0, 3, '#', 'M', 'Y', '', 'admin', '2021-04-10 20:06:40', 'admin', '2021-04-16 20:38:01', '工作流管理');
 INSERT INTO `sys_menu` VALUES (3014, '模型管理', 3013, 1, '/actReModel/listPage', 'C', 'Y', 'model:list', 'admin', '2021-04-10 20:10:56', 'admin', '2021-04-10 20:11:07', '模型管理');
 INSERT INTO `sys_menu` VALUES (3015, '添加', 3014, 1, '#', 'F', 'Y', 'model:add', 'admin', '2021-03-31 16:55:04', 'admin', '2021-04-10 11:26:53', '添加模型');
 INSERT INTO `sys_menu` VALUES (3016, '编辑', 3014, 2, '#', 'F', 'Y', 'model:edit', 'admin', '2021-03-31 17:01:35', 'admin', '2021-04-10 11:27:05', '编辑模型');
@@ -1054,7 +1058,7 @@ CREATE TABLE `sys_task` (
 -- Records of sys_task
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_task` VALUES (1, '测试', '*/1 * * * * ?', 'testJob', 'test', '0', '1', '2021-04-09 21:29:48', 'admin', '2021-04-16 10:37:02', '啊');
+INSERT INTO `sys_task` VALUES (1, '测试', '*/1 * * * * ?', 'testJob', 'test', '0', '1', '2021-04-09 21:29:48', 'admin', '2021-04-16 18:05:48', '啊');
 COMMIT;
 
 -- ----------------------------
@@ -1082,8 +1086,8 @@ CREATE TABLE `sys_user` (
 -- Records of sys_user
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_user` VALUES (1, 'admin', '$2a$10$YajcgOCR3KE76BkuTVBTvuWOrmtzh0MyY87m7jAbA5idFYZ8XJQbO', '1', '616505453@qq.com', '17515087128', '0', 'https://platform-application.oss-cn-beijing.aliyuncs.com/img/def/1617164595541-821b4344-5d94-4b29.png', '', NULL, 'admin', '2021-04-16 12:53:13', '2222');
-INSERT INTO `sys_user` VALUES (24, 'test', '$2a$10$YajcgOCR3KE76BkuTVBTvuWOrmtzh0MyY87m7jAbA5idFYZ8XJQbO', '1', '123', '123', '0', 'https://platform-application.oss-cn-beijing.aliyuncs.com/img/def/1617194953511-4fa23d1f-e5f7-4bd2.png', 'admin', '2021-03-30 20:25:07', 'admin', '2021-04-16 12:27:12', '123');
+INSERT INTO `sys_user` VALUES (1, 'admin', '$2a$10$YajcgOCR3KE76BkuTVBTvuWOrmtzh0MyY87m7jAbA5idFYZ8XJQbO', '1', '616505453@qq.com', '17515087128', '0', 'https://platform-application.oss-cn-beijing.aliyuncs.com/img/def/1617164595541-821b4344-5d94-4b29.png', '', NULL, 'admin', '2021-04-16 20:38:58', '2222');
+INSERT INTO `sys_user` VALUES (24, 'test', '$2a$10$YajcgOCR3KE76BkuTVBTvuWOrmtzh0MyY87m7jAbA5idFYZ8XJQbO', '1', '123', '123', '0', 'https://platform-application.oss-cn-beijing.aliyuncs.com/img/def/1617194953511-4fa23d1f-e5f7-4bd2.png', 'admin', '2021-03-30 20:25:07', 'admin', '2021-04-16 20:39:00', '123');
 COMMIT;
 
 -- ----------------------------

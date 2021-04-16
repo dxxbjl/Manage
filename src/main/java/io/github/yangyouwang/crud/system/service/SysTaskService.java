@@ -19,6 +19,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
@@ -42,6 +45,7 @@ public class SysTaskService {
      * 跳转编辑
      * @return 编辑页面
      */
+    @Transactional(readOnly = true)
     public SysTaskResp detail(Long id) {
         SysTask sysTask = sysTaskRepository.findById(id).orElse(new SysTask());
         SysTaskResp sysTaskResp = new SysTaskResp();
@@ -53,6 +57,7 @@ public class SysTaskService {
      * 列表请求
      * @return 请求列表
      */
+    @Transactional(readOnly = true)
     public Page<SysTask> list(SysTaskListReq sysTaskListReq) {
         Pageable pageable = PageRequest.of(sysTaskListReq.getPageNum() - 1,sysTaskListReq.getPageSize());
         Specification<SysTask> query = (Specification<SysTask>) (root, criteriaQuery, criteriaBuilder) -> {
@@ -69,6 +74,7 @@ public class SysTaskService {
     /**
      * 添加请求
      */
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
     public void add(SysTaskAddReq sysTaskAddReq) {
         SysTask sysTask = new SysTask();
         BeanUtils.copyProperties(sysTaskAddReq,sysTask);
@@ -82,6 +88,7 @@ public class SysTaskService {
     /**
      * 编辑请求
      */
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
     public void edit(SysTaskEditReq sysTaskEditReq) {
         sysTaskRepository.findById(sysTaskEditReq.getId()).ifPresent(sysTask -> {
             BeanUtil.copyProperties(sysTaskEditReq,sysTask,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
@@ -100,6 +107,7 @@ public class SysTaskService {
     /**
      * 删除请求
      */
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
     public void del(Long id) {
        sysTaskRepository.findById(id).ifPresent(sysTask -> {
            // 删除任务
@@ -112,6 +120,7 @@ public class SysTaskService {
     /**
      * 修改任务请求
      */
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
     public void changeTask(SysTaskEnabledReq sysTaskEnabledReq) {
         sysTaskRepository.findById(sysTaskEnabledReq.getId()).ifPresent(sysTask -> {
             sysTask.setEnabled(sysTaskEnabledReq.getEnabled());

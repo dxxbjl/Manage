@@ -66,17 +66,17 @@
       ,"remark": ""
    };
    let dictValues = [];
-  var ctx = [[${#request.getContextPath()}]];
+   let ctx = [[${#request.getContextPath()}]];
   layui.config({
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
      index: 'lib/index', //主入口模块
   }).use(['index', 'form','table'], function(){
-    var $ = layui.$
+    let $ = layui.$
         ,form = layui.form
         , table = layui.table;
     // 赋值
-    var sysDict = [[${sysDict}]];
+    let sysDict = [[${sysDict}]];
     dictValues = sysDict.sysDictValues;
     dictValues.push(defJson);
     form.val('sys-dict-form', sysDict);
@@ -92,8 +92,8 @@
         dataType: 'json',
         success: function(result) {
           layer.msg(result.message);
-          if (result.code == 200) {
-            var index = parent.layer.getFrameIndex(window.name);
+          if (result.code === 200) {
+            let index = parent.layer.getFrameIndex(window.name);
             // 关闭
             parent.layer.close(index);
             // 刷新
@@ -123,15 +123,15 @@
 
     //监听单元格编辑
     table.on('edit(dictTable)', function(obj){
-      var value = obj.value //得到修改后的值
+      let value = obj.value //得到修改后的值
               ,field = obj.field; //得到字段
       layer.msg(field + ' 字段更改为：'+ value);
     });
 
     //监听行工具事件
     table.on('tool(dictTable)', function(obj){
-      var layEvent = obj.event;
-      var dictData = table.cache['dictTable'];
+      let layEvent = obj.event;
+      let dictData = table.cache['dictTable'];
       if(layEvent === 'add') {
         dictData.push(defJson);
         table.reload('dictTable',{
@@ -139,7 +139,7 @@
         });
       } else if(layEvent === 'del'){
         layer.confirm('真的删除行么', function(index) {
-          var rowIndex = $(obj.tr).attr("data-index");
+          let rowIndex = $(obj.tr).attr("data-index");
           obj.del();
           dictData.splice(rowIndex,1);
           table.reload('dictTable',{

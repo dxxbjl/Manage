@@ -32,6 +32,9 @@
       </div>
       <div class="layui-card-body">
         <table id="menuTable" lay-filter="menuTable"></table>
+        <script type="text/html" id="visibleTpl">
+          <input type="checkbox" lay-filter="visible" value="{{d.id}}" lay-skin="switch" lay-text="显示|隐藏" {{d.visible==='Y'?'checked':''}} />
+        </script>
         <script type="text/html" id="tableBar">
           <a sec:authorize="hasAuthority('menu:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
           <a sec:authorize="hasAuthority('menu:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
@@ -41,24 +44,31 @@
   </div>
   <script th:src="@{/static/layuiadmin/layui/layui.js}"></script>
   <script th:inline="javascript">
-  var ctx = [[${#request.getContextPath()}]];
+  let ctx = [[${#request.getContextPath()}]];
   layui.config({
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
-    index: 'lib/index' //主入口模块
-  }).use(['index', 'useradmin','treetable','table'], function() {
-      var $ = layui.$
+    index: 'lib/index', //主入口模块
+    crud: 'crud'
+  }).use(['index', 'useradmin','treetable','table','crud'], function() {
+      let $ = layui.$
           ,form = layui.form
           ,table = layui.table
+          ,crud = layui.crud
           , treetable = layui.treetable;
       //监听搜索
       form.on('submit(search)', function(data){
-          var field = data.field;
+          let field = data.field;
           //执行重载
           initTable(field);
       });
-
-      var initTable = function (data){
+      // 监听菜单状态
+      form.on('switch(visible)', function (obj) {
+        let id = obj.elem.value;
+        let checked = obj.elem.checked ? 'Y' : 'N';
+        active.changeMenuVisible(id,checked);
+      });
+      let initTable = function (data){
           return treetable.render({
               treeColIndex: 1,          // 树形图标显示在第几列
               treeSpid: 0,            // 最上级的父级id
@@ -82,26 +92,11 @@
               cols: [[ //表头
                   {field: 'id', title: 'ID', sort: true, fixed: 'left'},
                   {field: 'menuName', title: '菜单名称'},
-                  {field: 'menuType', title: '菜单类型', templet:function (d) {
-                          if (d.menuType == 'M') {
-                              return "目录";
-                          }else if (d.menuType == 'C') {
-                              return "菜单";
-                          } else {
-                              return "按钮"
-                          }
-                   }},
-                  {field: 'visible', title: '菜单状态',
-                      templet:function (d) {
-                          if (d.visible == 'Y') {
-                              return "显示";
-                          } else {
-                              return "隐藏";
-                          }
-                  }},
+                  {field: 'menuType', title: "菜单类型",templet: function (d) { return crud.getDictValue('menuType',d.menuType);}},
                   {field: 'url', title: '请求地址'},
                   {field: 'perms', title: '权限标识'},
                   {field: 'remark', title: '备注'},
+                  {field: 'visible', align: "center", sort: true, templet: '#visibleTpl', title: '状态'},
                   {toolbar: '#tableBar', title: '操作', width: 165, align:'center',fixed: 'right'}
               ]]
           });
@@ -111,7 +106,7 @@
 
       //监听行工具事件
       table.on('tool(menuTable)', function(obj){
-          var data = obj.data //获得当前行数据
+          let data = obj.data //获得当前行数据
               ,layEvent = obj.event;
           if(layEvent === 'edit'){
               active.editView(data.id);
@@ -121,12 +116,12 @@
       });
 
       $('.layui-btn').on('click', function(){
-          var type = $(this).data('type');
+          let type = $(this).data('type');
           active[type] && active[type].call(this);
       });
 
       /* 触发弹层 */
-      var active = {
+      let active = {
           /**
            * 展开所有
            */
@@ -151,7 +146,7 @@
                   ,area: ['500px', '450px']
                   ,btn: ['确定', '取消']
                   ,yes: function(index, layero){
-                      var submit = layero.find('iframe').contents().find('#save-submit');
+                      let submit = layero.find('iframe').contents().find('#save-submit');
                       submit.trigger('click');
                   }
               });
@@ -169,7 +164,7 @@
                   ,area: ['500px', '450px']
                   ,btn: ['确定', '取消']
                   ,yes: function(index, layero){
-                      var submit = layero.find('iframe').contents().find('#save-submit');
+                      let submit = layero.find('iframe').contents().find('#save-submit');
                       submit.trigger('click');
                   }
               });
@@ -188,13 +183,36 @@
                       dataType: 'json',
                       success: function(result) {
                           layer.msg(result.message);
-                          if (result.code == 200) {
+                          if (result.code === 200) {
                               layer.close(index);
                               initTable();
                           }
                       }
                   });
               });
+          },
+          /**
+           * 修改菜单状态
+           * @param id 菜单id
+           * @param checked 状态
+           */
+          changeMenuVisible: function (id,checked) {
+            $.ajax({
+              type: 'POST',
+              url:  ctx + '/sysMenu/changeMenu',
+              data: JSON.stringify({
+                id: id,
+                visible: checked
+              }),
+              contentType:'application/json;charset=UTF-8',
+              dataType: 'json',
+              success: function(result) {
+                layer.msg(result.message);
+                if (result.code === 200) {
+                  initTable();
+                }
+              }
+            });
           }
       }
   });

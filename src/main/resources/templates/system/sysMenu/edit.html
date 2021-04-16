@@ -73,16 +73,16 @@
 
 <script th:src="@{/static/layuiadmin/layui/layui.js}"></script>
 <script th:inline="javascript">
-    var ctx = [[${#request.getContextPath()}]];
+    let ctx = [[${#request.getContextPath()}]];
     layui.config({
         base: '/static/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
     }).use(['index', 'form','treeSelect'], function(){
-        var $ = layui.$
+        let $ = layui.$
             , treeSelect= layui.treeSelect
             ,form = layui.form;
-        var sysMenu = [[${sysMenu}]];
+        let sysMenu = [[${sysMenu}]];
         form.val('sys-menu-form', sysMenu);
         form.on('submit(save-submit)', function(data){
             $.ajax({
@@ -93,8 +93,8 @@
                 dataType: 'json',
                 success: function(result) {
                     layer.msg(result.message);
-                    if (result.code == 200) {
-                        var index = parent.layer.getFrameIndex(window.name);
+                    if (result.code === 200) {
+                        let index = parent.layer.getFrameIndex(window.name);
                         // 关闭
                         parent.layer.close(index);
                         // 刷新
@@ -122,7 +122,7 @@
             // 加载完成后的回调函数
             success: function (d) {
                 console.log(d);
-                if (sysMenu.parentId != 0) {
+                if (sysMenu.parentId !== 0) {
                     treeSelect.checkNode('parentName', sysMenu.parentId);
                     treeSelect.refresh('parentName');
                 }
