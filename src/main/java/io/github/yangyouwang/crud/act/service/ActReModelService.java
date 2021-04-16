@@ -1,5 +1,7 @@
 package io.github.yangyouwang.crud.act.service;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.yangyouwang.crud.act.dao.ActReModelRepository;
@@ -32,8 +34,6 @@ import javax.persistence.criteria.Predicate;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
 /**
  * @author yangyouwang
  * @title: ActReModelService
@@ -148,11 +148,10 @@ public class ActReModelService {
      * @return 编辑状态
      */
     public void edit(ActReModelEditReq actReModelEditReq) {
-        ActReModel actReModel = actReModelRepository.findById(actReModelEditReq.getId()).get();
-        if (Objects.nonNull(actReModel)) {
-            BeanUtils.copyProperties(actReModelEditReq,actReModel);
+        actReModelRepository.findById(actReModelEditReq.getId()).ifPresent(actReModel -> {
+            BeanUtil.copyProperties(actReModelEditReq,actReModel,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
             actReModelRepository.save(actReModel);
-        }
+        });
     }
 
     /**
@@ -160,7 +159,9 @@ public class ActReModelService {
      * @return 删除状态
      */
     public void del(String id) {
-        // 删除模型
-        repositoryService.deleteModel(id);
+        if (actReModelRepository.existsById(id)) {
+            // 删除模型
+            repositoryService.deleteModel(id);
+        }
     }
 }
