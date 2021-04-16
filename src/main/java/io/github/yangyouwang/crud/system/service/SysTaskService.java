@@ -8,6 +8,7 @@ import io.github.yangyouwang.crud.system.dao.SysTaskRepository;
 import io.github.yangyouwang.crud.system.model.SysTask;
 import io.github.yangyouwang.crud.system.model.req.SysTaskAddReq;
 import io.github.yangyouwang.crud.system.model.req.SysTaskEditReq;
+import io.github.yangyouwang.crud.system.model.req.SysTaskEnabledReq;
 import io.github.yangyouwang.crud.system.model.req.SysTaskListReq;
 import io.github.yangyouwang.crud.system.model.resp.SysTaskResp;
 import org.apache.logging.log4j.util.Strings;
@@ -22,8 +23,6 @@ import org.springframework.stereotype.Service;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
 /**
  * @author yangyouwang
  * @title: SysTaskService
@@ -69,7 +68,6 @@ public class SysTaskService {
 
     /**
      * 添加请求
-     * @return 添加状态
      */
     public void add(SysTaskAddReq sysTaskAddReq) {
         SysTask sysTask = new SysTask();
@@ -83,11 +81,9 @@ public class SysTaskService {
 
     /**
      * 编辑请求
-     * @return 编辑状态
      */
     public void edit(SysTaskEditReq sysTaskEditReq) {
-        SysTask sysTask = sysTaskRepository.findById(sysTaskEditReq.getId()).get();
-        if (Objects.nonNull(sysTask)) {
+        sysTaskRepository.findById(sysTaskEditReq.getId()).ifPresent(sysTask -> {
             BeanUtil.copyProperties(sysTaskEditReq,sysTask,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
             sysTaskRepository.save(sysTask);
             if (Constants.ENABLED_YES.equals(sysTask.getEnabled())) {
@@ -98,12 +94,11 @@ public class SysTaskService {
                 // 取消任务
                 quartzConfig.cancelTriggerTask(sysTask.getName());
             }
-        }
+        });
     }
 
     /**
      * 删除请求
-     * @return 删除状态
      */
     public void del(Long id) {
        sysTaskRepository.findById(id).ifPresent(sysTask -> {
@@ -112,5 +107,23 @@ public class SysTaskService {
            // 取消任务
            quartzConfig.cancelTriggerTask(sysTask.getName());
        });
+    }
+
+    /**
+     * 修改任务请求
+     */
+    public void changeTask(SysTaskEnabledReq sysTaskEnabledReq) {
+        sysTaskRepository.findById(sysTaskEnabledReq.getId()).ifPresent(sysTask -> {
+            sysTask.setEnabled(sysTaskEnabledReq.getEnabled());
+            sysTaskRepository.save(sysTask);
+            if (Constants.ENABLED_YES.equals(sysTask.getEnabled())) {
+                // 添加任务
+                quartzConfig.addTriggerTask(sysTask.getName(),sysTask.getClassName(),sysTask.getMethodName(),sysTask.getCron());
+            }
+            if (Constants.ENABLED_NO.equals(sysTask.getEnabled())) {
+                // 取消任务
+                quartzConfig.cancelTriggerTask(sysTask.getName());
+            }
+        });
     }
 }

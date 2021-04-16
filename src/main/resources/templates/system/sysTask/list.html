@@ -182,7 +182,7 @@
         changeTaskEnabled: function (id,checked) {
           $.ajax({
             type: 'POST',
-            url:  ctx + '/sysTask/edit',
+            url:  ctx + '/sysTask/changeTask',
             data: JSON.stringify({
               id: id,
               enabled: checked

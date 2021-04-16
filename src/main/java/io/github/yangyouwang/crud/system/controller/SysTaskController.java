@@ -3,6 +3,7 @@ package io.github.yangyouwang.crud.system.controller;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.crud.system.model.req.SysTaskAddReq;
 import io.github.yangyouwang.crud.system.model.req.SysTaskEditReq;
+import io.github.yangyouwang.crud.system.model.req.SysTaskEnabledReq;
 import io.github.yangyouwang.crud.system.model.req.SysTaskListReq;
 import io.github.yangyouwang.crud.system.model.resp.SysTaskResp;
 import io.github.yangyouwang.crud.system.service.SysTaskService;
@@ -101,6 +102,20 @@ public class SysTaskController {
             throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
         }
         sysTaskService.edit(sysTaskEditReq);
+        return Result.success();
+    }
+
+    /**
+     * 修改任务请求
+     * @return 修改状态
+     */
+    @PostMapping("/changeTask")
+    @ResponseBody
+    public Result changeTask(@RequestBody @Validated SysTaskEnabledReq sysTaskEnabledReq, BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+        }
+        sysTaskService.changeTask(sysTaskEnabledReq);
         return Result.success();
     }
 

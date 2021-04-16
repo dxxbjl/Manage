@@ -20,21 +20,26 @@ public class SysTaskEditReq implements Serializable {
      */
     @NotNull(message = "id不能为空")
     private Long id;
+
     /**
      * 名称
      */
+    @NotBlank(message = "名称不能为空")
     private String name;
     /**
      * cron表达式
      */
+    @NotBlank(message = "cron表达式不能为空")
     private String cron;
     /**
      * 类名称
      */
+    @NotBlank(message = "类名称不能为空")
     private String className;
     /**
      * 方法名
      */
+    @NotBlank(message = "方法名不能为空")
     private String methodName;
     /**
      * 是否启用

@@ -2,10 +2,7 @@ package io.github.yangyouwang.crud.system.controller;
 
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.core.util.SecurityUtils;
-import io.github.yangyouwang.crud.system.model.req.ModifyPassReq;
-import io.github.yangyouwang.crud.system.model.req.SysUserAddReq;
-import io.github.yangyouwang.crud.system.model.req.SysUserEditReq;
-import io.github.yangyouwang.crud.system.model.req.SysUserListReq;
+import io.github.yangyouwang.crud.system.model.req.*;
 import io.github.yangyouwang.crud.system.model.resp.SysUserResp;
 import io.github.yangyouwang.crud.system.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,6 +122,20 @@ public class SysUserController {
             throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
         }
         sysUserService.edit(sysUserEditReq);
+        return Result.success();
+    }
+
+    /**
+     * 修改用户状态
+     * @return 修改状态
+     */
+    @PostMapping("/changeUser")
+    @ResponseBody
+    public Result changeUser(@RequestBody @Validated SysUserEnabledReq sysUserEnabledReq, BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+        }
+        sysUserService.changeUser(sysUserEnabledReq);
         return Result.success();
     }
 

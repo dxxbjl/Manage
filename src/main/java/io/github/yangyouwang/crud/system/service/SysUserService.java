@@ -6,10 +6,7 @@ import io.github.yangyouwang.crud.system.dao.SysRoleRepository;
 import io.github.yangyouwang.crud.system.dao.SysUserRepository;
 import io.github.yangyouwang.crud.system.model.SysRole;
 import io.github.yangyouwang.crud.system.model.SysUser;
-import io.github.yangyouwang.crud.system.model.req.ModifyPassReq;
-import io.github.yangyouwang.crud.system.model.req.SysUserAddReq;
-import io.github.yangyouwang.crud.system.model.req.SysUserEditReq;
-import io.github.yangyouwang.crud.system.model.req.SysUserListReq;
+import io.github.yangyouwang.crud.system.model.req.*;
 import io.github.yangyouwang.crud.system.model.resp.SysUserResp;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,7 +83,6 @@ public class SysUserService implements UserDetailsService {
 
     /**
      * 添加请求
-     * @return 添加状态
      */
     public void add(SysUserAddReq sysUserAddReq) {
         SysUser sysUser = sysUserRepository.findByUserName(sysUserAddReq.getUserName());
@@ -108,27 +104,23 @@ public class SysUserService implements UserDetailsService {
 
     /**
      * 编辑请求
-     * @return 编辑状态
      */
     public void edit(SysUserEditReq sysUserEditReq) {
-        SysUser sysUser = sysUserRepository.findById(sysUserEditReq.getId()).get();
-        if (Objects.nonNull(sysUser)) {
+        sysUserRepository.findById(sysUserEditReq.getId()).ifPresent(sysUser -> {
             BeanUtil.copyProperties(sysUserEditReq,sysUser,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
             // 查询角色
             Optional.ofNullable(sysUserEditReq.getRoleIds()).ifPresent(ids -> {
                 List<SysRole> sysRoles = Arrays.stream(ids).map(s -> {
-                    SysRole sysRole = sysRoleRepository.findById(s).orElse(new SysRole());
-                    return sysRole;
+                    return sysRoleRepository.findById(s).orElse(new SysRole());
                 }).collect(Collectors.toList());
                 sysUser.setRoles(sysRoles);
             });
             sysUserRepository.save(sysUser);
-        }
+        });
     }
 
     /**
      * 删除请求
-     * @return 删除状态
      */
     public void del(Long id) {
         if(sysUserRepository.existsById(id)) {
@@ -138,7 +130,6 @@ public class SysUserService implements UserDetailsService {
 
     /**
      * 修改密码
-     * @return 修改密码状态
      */
     public void modifyPass(ModifyPassReq modifyPassReq) {
         SysUser sysUser = sysUserRepository.findById(modifyPassReq.getId()).orElse(new SysUser());
@@ -149,5 +140,17 @@ public class SysUserService implements UserDetailsService {
         String password = passwordEncoder.encode(modifyPassReq.getPassword());
         sysUser.setPassWord(password);
         sysUserRepository.save(sysUser);
+    }
+
+    /**
+     * 修改用户状态
+     * @param sysUserEnabledReq 用户状态dto
+     */
+    public void changeUser(SysUserEnabledReq sysUserEnabledReq) {
+        sysUserRepository.findById(sysUserEnabledReq.getId()).ifPresent(sysUser -> {
+            BeanUtil.copyProperties(sysUserEnabledReq,sysUser,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+            sysUserRepository.save(sysUser);
+        });
+
     }
 }

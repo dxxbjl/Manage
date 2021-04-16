@@ -3,13 +3,14 @@ package io.github.yangyouwang.crud.system.model.req;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 
 /**
  * @author yangyouwang
- * @title: SysUserAddReq
+ * @title: SysUserEditReq
  * @projectName crud
  * @description: 用户编辑
  * @date 2021/3/269:56 AM
@@ -30,14 +31,17 @@ public class SysUserEditReq implements Serializable {
     /**
      * 邮箱
      */
+    @NotBlank(message = "邮箱不能为空")
     private String email;
     /**
      * 手机号码
      */
+    @NotBlank(message = "手机号码不能为空")
     private String phonenumber;
     /**
      * 用户性别（0男 1女 2未知）
      */
+    @NotBlank(message = "用户性别不能为空")
     private String sex;
     /**
      * 头像
@@ -49,5 +53,6 @@ public class SysUserEditReq implements Serializable {
     /**
      * 角色id
      */
+    @NotEmpty(message = "角色id不能为空")
     private Long[] roleIds;
 }
