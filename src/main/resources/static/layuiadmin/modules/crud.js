@@ -14,6 +14,31 @@ layui.define(['jquery'], function(exports){
                 return;
             }
             return ids;
+        },
+        /**
+         * 获取字典
+         */
+        getDictValue: function(dictTypeKey,dictValueKey) {
+            let data = [];
+            // 获取字典
+            $.ajax({
+                type: 'get',
+                url:  '/sysDict/getDictValues/' + dictTypeKey,
+                contentType:'application/json;charset=UTF-8',
+                dataType: 'json',
+                async : false,
+                success: function(result) {
+                    if (result.code === 200) {
+                        data = result.data;
+                    }
+                }
+            });
+            for(let i = 0; i < data.length; i++) {
+                if (data[i].dictValueKey === dictValueKey) {
+                    return data[i].dictValueName;
+                }
+            }
+            return "未知";
         }
     };
     exports('crud', crud);

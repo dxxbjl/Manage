@@ -3,6 +3,7 @@ package io.github.yangyouwang.crud.system.model.req;
 import io.github.yangyouwang.crud.system.model.dao.SysDictValueDto;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.List;
 
@@ -18,10 +19,12 @@ public class SysDictAddReq implements Serializable {
     /**
      * 类型key
      */
+    @NotBlank(message = "类型别名不能为空")
     private String dictKey;
     /**
      * 类型名称
      */
+    @NotBlank(message = "类型名称不能为空")
     private String dictName;
     /**
      * 显示顺序
@@ -30,6 +33,7 @@ public class SysDictAddReq implements Serializable {
     /**
      * 启用
      */
+    @NotBlank(message = "是否启用不能为空")
     private String enabled;
 
     /**

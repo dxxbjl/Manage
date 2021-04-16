@@ -1,6 +1,7 @@
 package io.github.yangyouwang.crud.system.controller;
 
 import io.github.yangyouwang.common.domain.Result;
+import io.github.yangyouwang.crud.system.model.dao.SysDictValueDto;
 import io.github.yangyouwang.crud.system.model.req.*;
 import io.github.yangyouwang.crud.system.model.resp.SysDictResp;
 import io.github.yangyouwang.crud.system.service.SysDictService;
@@ -12,7 +13,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * @author zhixin.yao
@@ -69,6 +72,17 @@ public class SysDictController {
             throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
         }
         return Result.success(sysDictService.list(sysDictListReq));
+    }
+
+    /**
+     * 根据字典类型获取字典值列表
+     * @return 请求列表
+     */
+    @GetMapping("/getDictValues/{dictKey}")
+    @ResponseBody
+    public Result getDictValues(@Valid @NotBlank(message = "字典类型不能为空") @PathVariable String dictKey) {
+        List<SysDictValueDto> sysDictValueDtos = sysDictService.getDictValues(dictKey);
+        return Result.success(sysDictValueDtos);
     }
 
     /**

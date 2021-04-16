@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
@@ -78,6 +79,8 @@ public class SysDictService {
      * 添加请求
      */
     public void add(SysDictAddReq sysDictAddReq) {
+        SysDictType sysDictType = sysDictTypeRepository.findByDictKey(sysDictAddReq.getDictKey());
+        Assert.isNull(sysDictType, "字典已存在");
         SysDictType sysDict = new SysDictType();
         BeanUtils.copyProperties(sysDictAddReq,sysDict);
         List<SysDictValue> sysDictValues =  getSysDictValues(sysDictAddReq.getSysDictValues());
@@ -118,5 +121,18 @@ public class SysDictService {
         if(sysDictTypeRepository.existsById(id)) {
             sysDictTypeRepository.deleteById(id);
         }
+    }
+
+    /**
+     * 根据字典类型获取字典列表
+     * @return 请求列表
+     */
+    public List<SysDictValueDto> getDictValues(String dictKey) {
+        SysDictType sysDictType = sysDictTypeRepository.findByDictKey(dictKey);
+        return sysDictType.getSysDictValues().stream().map(sysDictValue -> {
+            SysDictValueDto sysDictValueDto = new SysDictValueDto();
+            BeanUtils.copyProperties(sysDictValue,sysDictValueDto);
+            return sysDictValueDto;
+        }).collect(Collectors.toList());
     }
 }

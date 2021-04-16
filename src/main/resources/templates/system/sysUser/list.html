@@ -58,10 +58,12 @@
   layui.config({
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
-    index: 'lib/index' //主入口模块
-  }).use(['index', 'useradmin', 'table'], function() {
+    index: 'lib/index', //主入口模块
+    crud: 'crud'
+  }).use(['index', 'useradmin', 'table','crud'], function() {
       var $ = layui.$
           ,form = layui.form
+          ,crud = layui.crud
           , table = layui.table;
       //监听搜索
       form.on('submit(search)', function(data){
@@ -106,23 +108,12 @@
               ,{field: 'userName', title: '账户'}
               ,{field: 'email', title: '邮箱'}
               ,{field: 'phonenumber', title: '手机号码'}
-              ,{field: 'sex', title: "性别",
-                  templet:function (d) { 
-                    if (d.sex == 0) {
-                        return "男";
-                    } else if (d.sex == 1) {
-                        return "女";
-                    } else {
-                        return "未知";
-                    }
-                  }
-               }
-               ,{field: 'enabled', align: "center", sort: true, templet: '#enabledTpl', title: '状态'}
+              ,{field: 'sex', title: "性别",templet: function (d) { return crud.getDictValue('sex',d.sex);}}
+              ,{field: 'enabled', align: "center", sort: true, templet: '#enabledTpl', title: '状态'}
               ,{field: 'remark', title: '备注'}
               ,{toolbar: '#tableBar', title: '操作', width: 165, align:'center',fixed: 'right'}
           ]]
       });
-
       //监听行工具事件
       table.on('tool(userTable)', function(obj){
           var data = obj.data //获得当前行数据
