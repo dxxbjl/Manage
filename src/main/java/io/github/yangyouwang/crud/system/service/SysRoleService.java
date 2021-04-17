@@ -18,12 +18,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import org.thymeleaf.util.ArrayUtils;
 
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -73,18 +73,14 @@ public class SysRoleService {
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
     public void add(@NotNull SysRoleAddReq sysRoleAddReq) {
         SysRole sysRole = sysRoleRepository.findByRoleKey(sysRoleAddReq.getRoleKey());
-        if (Objects.nonNull(sysRole)) {
-            throw new RuntimeException("角色已存在");
-        }
+        Assert.isNull(sysRole, "角色已存在");
+        // 查询菜单
+        List<SysMenu> sysMenus = Arrays.stream(sysRoleAddReq.getMenuIds()).map(s ->
+                sysMenuRepository.findById(s).orElse(new SysMenu())).collect(Collectors.toList());
+        // 添加角色
         sysRole = new SysRole();
         BeanUtils.copyProperties(sysRoleAddReq,sysRole);
-        // 查询菜单
-        List<SysMenu> sysMenus = Arrays.stream(sysRoleAddReq.getMenuIds()).map(s -> {
-            SysMenu sysMenu = sysMenuRepository.findById(s).orElse(new SysMenu());
-            return sysMenu;
-        }).collect(Collectors.toList());
         sysRole.setMenus(sysMenus);
-        // 添加角色
         sysRoleRepository.save(sysRole);
     }
 
@@ -92,14 +88,12 @@ public class SysRoleService {
      * 编辑请求
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
-    public void edit(@NotNull SysRoleEditReq sysRoleEditReq) {
-        sysRoleRepository.findById(sysRoleEditReq.getId()).ifPresent( sysRole -> {
+    public void edit(SysRoleEditReq sysRoleEditReq) {
+        sysRoleRepository.findById(sysRoleEditReq.getId()).ifPresent(sysRole -> {
             BeanUtils.copyProperties(sysRoleEditReq,sysRole);
             // 查询菜单
-            List<SysMenu> sysMenus = Arrays.stream(sysRoleEditReq.getMenuIds()).map(s -> {
-                SysMenu sysMenu = sysMenuRepository.findById(s).orElse(new SysMenu());
-                return sysMenu;
-            }).collect(Collectors.toList());
+            List<SysMenu> sysMenus = Arrays.stream(sysRoleEditReq.getMenuIds()).map(s ->
+                    sysMenuRepository.findById(s).orElse(new SysMenu())).collect(Collectors.toList());
             sysRole.setMenus(sysMenus);
             sysRoleRepository.save(sysRole);
         });
