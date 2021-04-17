@@ -23,8 +23,8 @@ public class Result<T> {
     private T data;
 
     private Result(ResultStatus resultStatus, T data) {
-        this.code = resultStatus.CODE;
-        this.message = resultStatus.MESSAGE;
+        this.code = resultStatus.code;
+        this.message = resultStatus.message;
         this.data = data;
     }
 
@@ -39,7 +39,7 @@ public class Result<T> {
      * @return 成功消息
      */
     public static <T> Result<T> success() {
-        return Result.success(ResultStatus.SUCCESS.MESSAGE);
+        return Result.success(ResultStatus.SUCCESS.message);
     }
 
     /**
@@ -57,7 +57,7 @@ public class Result<T> {
      * @return 成功消息
      */
     public static <T> Result<T> success(T data) {
-        return Result.success(ResultStatus.SUCCESS.MESSAGE,data);
+        return Result.success(ResultStatus.SUCCESS.message,data);
     }
 
     /**
@@ -67,7 +67,7 @@ public class Result<T> {
      * @return 成功消息
      */
     public static <T> Result<T> success(String message,T data) {
-        return new Result<>(ResultStatus.SUCCESS.CODE, message ,data);
+        return new Result<>(ResultStatus.SUCCESS.code, message ,data);
     }
 
     /**
@@ -75,7 +75,7 @@ public class Result<T> {
      * @return 错误消息
      */
     public static <T> Result<T> failure() {
-        return Result.failure(ResultStatus.ERROR.MESSAGE);
+        return Result.failure(ResultStatus.ERROR.message);
     }
 
     /**
@@ -93,7 +93,7 @@ public class Result<T> {
      * @return 错误消息
      */
     public static <T> Result<T> failure(T data) {
-        return Result.failure(ResultStatus.ERROR.MESSAGE, data);
+        return Result.failure(ResultStatus.ERROR.message, data);
     }
 
 
@@ -104,7 +104,7 @@ public class Result<T> {
      * @return 错误消息
      */
     public static <T> Result<T> failure(String message,T data) {
-        return new Result<>(ResultStatus.ERROR.CODE, message,data);
+        return new Result<>(ResultStatus.ERROR.code, message,data);
     }
 
     /***

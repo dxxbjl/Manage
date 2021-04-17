@@ -14,6 +14,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 public interface SysDictTypeRepository extends JpaRepository<SysDictType,Long>, JpaSpecificationExecutor {
     /**
      * 根据字典别名获取字典
+     * @param dictKey 字典key
      * @return 字典
      */
     SysDictType findByDictKey(String dictKey);

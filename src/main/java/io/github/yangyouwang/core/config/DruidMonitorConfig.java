@@ -35,13 +35,12 @@ public class DruidMonitorConfig {
     /**
      * 注册DruidFilter拦截
      *
-     * @return
      */
     @Bean
     public FilterRegistrationBean duridFilterRegistrationBean() {
         FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
         filterRegistrationBean.setFilter(new WebStatFilter());
-        Map<String, String> initParams = new HashMap<>();
+        Map<String, String> initParams = new HashMap<>(16);
         //设置忽略请求
         initParams.put("exclusions", "*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*");
         filterRegistrationBean.setInitParameters(initParams);

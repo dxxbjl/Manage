@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * 节点类继承接口，节点类必须继承此类
+ * @author yangyouwang
  */
 public interface Treeable<T> {
 

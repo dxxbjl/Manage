@@ -15,6 +15,7 @@ import java.io.PrintWriter;
 
 /**
  * 登录失败处理器
+ * @author yangyouwang
  */
 @Component
 public class DefaultAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {

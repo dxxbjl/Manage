@@ -88,7 +88,7 @@ public class SysDictService {
     /**
      * 添加请求
      */
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void add(SysDictAddReq sysDictAddReq) {
         SysDictType sysDictType = sysDictTypeRepository.findByDictKey(sysDictAddReq.getDictKey());
         Assert.isNull(sysDictType, "字典已存在");
@@ -115,7 +115,7 @@ public class SysDictService {
     /**
      * 编辑请求
      */
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void edit(SysDictEditReq sysDictEditReq) {
        sysDictTypeRepository.findById(sysDictEditReq.getId()).ifPresent(sysDictType -> {
            List<SysDictValue> sysDictValues = getSysDictValues(sysDictEditReq.getSysDictValues());
@@ -128,7 +128,7 @@ public class SysDictService {
     /**
      * 删除请求
      */
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void delKey(Long id) {
         if(sysDictTypeRepository.existsById(id)) {
             sysDictTypeRepository.deleteById(id);
@@ -152,7 +152,7 @@ public class SysDictService {
     /**
      * 修改字典状态
      */
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void changeDict(SysDictEnabledReq sysDictEnabledReq) {
         sysDictTypeRepository.findById(sysDictEnabledReq.getId()).ifPresent(sysDictType -> {
             sysDictType.setEnabled(sysDictEnabledReq.getEnabled());
@@ -163,7 +163,7 @@ public class SysDictService {
     /**
      * 删除字典值请求
      */
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void delValue(Long id) {
         if (sysDictValueRepository.existsById(id)) {
             sysDictValueRepository.deleteById(id);

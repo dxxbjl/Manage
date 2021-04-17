@@ -27,6 +27,7 @@ public interface SysUserRepository extends JpaRepository<SysUser,Long> {
     /**
      * 查询分页数据
      * @param sysUserListReq 查询条件
+     * @param pageable pageable
      * @return 用户列表
      */
     @Query(value = "select new io.github.yangyouwang.crud.system.model.resp.SysUserResp(id,userName,enabled,email,phonenumber,sex,avatar,remark) from SysUser where 1=1 " +

@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 
 /**
  * 防重复提交
+ * @author yangyouwang
  */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

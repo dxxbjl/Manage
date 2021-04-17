@@ -32,7 +32,7 @@ public class ApiDemoController {
     @GetMapping("/hello")
     public Map<String,Object> hello() {
         Long userId = ApiContext.getUserId();
-        Map<String,Object> result = new HashMap<>();
+        Map<String,Object> result = new HashMap<>(16);
         result.put("userId",userId);
         return result;
     }
@@ -44,7 +44,7 @@ public class ApiDemoController {
     @PassToken
     @ApiIdempotent
     public Map<String,Object> getToken() {
-        Map<String,Object> result = new HashMap<>();
+        Map<String,Object> result = new HashMap<>(16);
         result.put("token",JwtTokenUtil.buildJWT("123"));
         return result;
     }
@@ -55,7 +55,8 @@ public class ApiDemoController {
     @CrudLog
     @PassToken
     public void log() {
-        int result = 10 / 0; // 会出现错误
+        // 会出现错误
+        int result = 10 / 0;
     }
 
 }

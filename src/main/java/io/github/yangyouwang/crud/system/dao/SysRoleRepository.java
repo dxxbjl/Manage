@@ -20,6 +20,7 @@ public interface SysRoleRepository extends JpaRepository<SysRole,Long> {
 
     /**
      * 列表请求
+     * @param sysRoleListReq 参数
      * @return 请求列表
      */
     @Query(value = "select new io.github.yangyouwang.crud.system.model.resp.SysRoleResp(id,roleName,roleKey,remark) from SysRole where 1=1 " +

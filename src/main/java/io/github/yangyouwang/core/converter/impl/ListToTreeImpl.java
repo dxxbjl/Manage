@@ -9,13 +9,14 @@ import java.util.Map;
 
 /**
  * list转tree的实现（有两处判断是否为空的，TODO 根据自己的业务自行实现）
+ * @author yangyouwang
  */
 public class ListToTreeImpl implements ListToTree {
 
     @Override
     public List toTree(List list) {
         // TODO list 空判断，做处理
-        Map<Object, List> map = new HashMap<>();
+        Map<Object, List> map = new HashMap<>(16);
         Object rootKye = null;
         for(Object o : list) {
             Treeable t = (Treeable) o;

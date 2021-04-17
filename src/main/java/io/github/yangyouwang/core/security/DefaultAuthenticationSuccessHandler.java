@@ -16,6 +16,7 @@ import java.io.PrintWriter;
 /**
  * 1.自定义的登陆成功处理  implements  AuthenticationSuccessHandler  Override  onAuthenticationSuccess()
  * 2. 或者继承框架默认实现的成功处理器类 SavedRequestAwareAuthenticationSuccessHandler 重写父类方法onAuthenticationSuccess
+ * @author yangyouwang
  */
 @Component
 public class DefaultAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {

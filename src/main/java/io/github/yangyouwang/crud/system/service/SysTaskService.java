@@ -74,7 +74,7 @@ public class SysTaskService {
     /**
      * 添加请求
      */
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void add(SysTaskAddReq sysTaskAddReq) {
         SysTask sysTask = new SysTask();
         BeanUtils.copyProperties(sysTaskAddReq,sysTask);
@@ -88,7 +88,7 @@ public class SysTaskService {
     /**
      * 编辑请求
      */
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void edit(SysTaskEditReq sysTaskEditReq) {
         sysTaskRepository.findById(sysTaskEditReq.getId()).ifPresent(sysTask -> {
             BeanUtil.copyProperties(sysTaskEditReq,sysTask,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
@@ -107,7 +107,7 @@ public class SysTaskService {
     /**
      * 删除请求
      */
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void del(Long id) {
        sysTaskRepository.findById(id).ifPresent(sysTask -> {
            // 删除任务
@@ -120,7 +120,7 @@ public class SysTaskService {
     /**
      * 修改任务请求
      */
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void changeTask(SysTaskEnabledReq sysTaskEnabledReq) {
         sysTaskRepository.findById(sysTaskEnabledReq.getId()).ifPresent(sysTask -> {
             sysTask.setEnabled(sysTaskEnabledReq.getEnabled());

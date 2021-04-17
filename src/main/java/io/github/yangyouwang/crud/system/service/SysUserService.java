@@ -88,7 +88,7 @@ public class SysUserService implements UserDetailsService {
     /**
      * 添加请求
      */
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void add(SysUserAddReq sysUserAddReq) {
         SysUser sysUser = sysUserRepository.findByUserName(sysUserAddReq.getUserName());
         if (Objects.nonNull(sysUser)) {
@@ -110,7 +110,7 @@ public class SysUserService implements UserDetailsService {
     /**
      * 编辑请求
      */
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void edit(SysUserEditReq sysUserEditReq) {
         sysUserRepository.findById(sysUserEditReq.getId()).ifPresent(sysUser -> {
             BeanUtil.copyProperties(sysUserEditReq,sysUser,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
@@ -128,7 +128,7 @@ public class SysUserService implements UserDetailsService {
     /**
      * 删除请求
      */
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void del(Long id) {
         if(sysUserRepository.existsById(id)) {
             sysUserRepository.deleteById(id);
@@ -138,7 +138,7 @@ public class SysUserService implements UserDetailsService {
     /**
      * 修改密码
      */
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void modifyPass(ModifyPassReq modifyPassReq) {
         SysUser sysUser = sysUserRepository.findById(modifyPassReq.getId()).orElse(new SysUser());
         boolean matches = passwordEncoder.matches(modifyPassReq.getOldPassword(),sysUser.getPassword());
@@ -154,7 +154,7 @@ public class SysUserService implements UserDetailsService {
      * 修改用户状态
      * @param sysUserEnabledReq 用户状态dto
      */
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void changeUser(SysUserEnabledReq sysUserEnabledReq) {
         sysUserRepository.findById(sysUserEnabledReq.getId()).ifPresent(sysUser -> {
             sysUser.setEnabled(sysUserEnabledReq.getEnabled());

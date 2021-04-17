@@ -27,6 +27,8 @@ public interface SysMenuRepository extends JpaRepository<SysMenu,Long>,JpaSpecif
 
     /**
      * 根据用户id查询菜单
+     * @param id 主键
+     * @return 菜单列表
      */
     @Query(nativeQuery = true,
             value = "select distinct m.id, m.parent_id, m.menu_name, m.url, m.visible, ifnull(m.perms,'') as perms, m.menu_type, m.order_num, m.create_by, m.create_time, m.update_by, m.update_time, m.remark" +
@@ -40,6 +42,8 @@ public interface SysMenuRepository extends JpaRepository<SysMenu,Long>,JpaSpecif
 
     /**
      * 根据id查询菜单
+     * @param id 主键
+     * @return 菜单详情
      */
     @Query(nativeQuery = true,
             value = "select m.id, m.menu_name, m.parent_id, m.order_num, m.url, m.menu_type, m.visible, m.perms, m.create_by, m.create_time, m.update_by, m.update_time, m.remark ,p.menu_name  as parentName" +

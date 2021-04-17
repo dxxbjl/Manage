@@ -99,7 +99,7 @@ public class SysMenuService {
     /**
      * 添加请求
      */
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void add(SysMenuAddReq sysMenuAddReq) {
         SysMenu sysMenu = new SysMenu();
         BeanUtils.copyProperties(sysMenuAddReq,sysMenu);
@@ -109,7 +109,7 @@ public class SysMenuService {
     /**
      * 编辑请求
      */
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void edit(SysMenuEditReq sysMenuEditReq) {
        sysMenuRepository.findById(sysMenuEditReq.getId()).ifPresent(sysMenu -> {
             BeanUtils.copyProperties(sysMenuEditReq,sysMenu);
@@ -120,7 +120,7 @@ public class SysMenuService {
     /**
      * 删除请求
      */
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void del(Long id) {
         if(sysMenuRepository.existsById(id)) {
             sysMenuRepository.deleteById(id);
@@ -169,7 +169,7 @@ public class SysMenuService {
     /**
      * 更新菜单状态
      */
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void changeMenu(SysMenuVisibleReq sysMenuVisibleReq) {
         sysMenuRepository.findById(sysMenuVisibleReq.getId()).ifPresent(sysMenu -> {
             sysMenu.setVisible(sysMenuVisibleReq.getVisible());

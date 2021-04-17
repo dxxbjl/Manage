@@ -75,15 +75,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // 设置哪些页面可以直接访问，哪些需要验证
         http.authorizeRequests()
-                .antMatchers("/loginPage").permitAll() // 放过
-                .anyRequest().authenticated() // 剩下的所有的地址都是需要在认证状态下才可以访问
+                // 放过
+                .antMatchers("/loginPage").permitAll()
+                // 剩下的所有的地址都是需要在认证状态下才可以访问
+                .anyRequest().authenticated()
         .and()
         // 配置登录功能
         .formLogin().
                 usernameParameter("userName")
                 .passwordParameter("passWord")
-                .loginPage("/loginPage")  // 指定指定要的登录页面
-                .loginProcessingUrl("/login") // 处理认证路径的请求
+                // 指定指定要的登录页面
+                .loginPage("/loginPage")
+                // 处理认证路径的请求
+                .loginProcessingUrl("/login")
                 .successHandler(defaultAuthenticationSuccessHandler)
                 .failureHandler(defaultAuthenticationFailureHandler)
                 .and()
@@ -95,8 +99,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/loginPage")
                  .and()
                 .rememberMe()
-                .tokenValiditySeconds(3600 * 24 * 7)// 有效期7天
-                .rememberMeParameter("remember") // 开启记住我功能
+                // 有效期7天
+                .tokenValiditySeconds(3600 * 24 * 7)
+                // 开启记住我功能
+                .rememberMeParameter("remember")
                 .and()
                 //禁用csrf
                 .csrf().disable()
@@ -105,7 +111,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // 配置session管理
                 .sessionManagement()
-                .invalidSessionUrl("/loginPage") //session失效默认的跳转地址
-                .maximumSessions(1); // 同一用户 只允许一个在线 自动踢出在线用户
+                //session失效默认的跳转地址
+                .invalidSessionUrl("/loginPage")
+                // 同一用户 只允许一个在线 自动踢出在线用户
+                .maximumSessions(1);
     }
 }

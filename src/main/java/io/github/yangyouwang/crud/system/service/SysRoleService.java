@@ -70,7 +70,7 @@ public class SysRoleService {
     /**
      * 添加请求
      */
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void add(@NotNull SysRoleAddReq sysRoleAddReq) {
         SysRole sysRole = sysRoleRepository.findByRoleKey(sysRoleAddReq.getRoleKey());
         Assert.isNull(sysRole, "角色已存在");
@@ -87,7 +87,7 @@ public class SysRoleService {
     /**
      * 编辑请求
      */
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void edit(SysRoleEditReq sysRoleEditReq) {
         sysRoleRepository.findById(sysRoleEditReq.getId()).ifPresent(sysRole -> {
             BeanUtils.copyProperties(sysRoleEditReq,sysRole);
@@ -102,7 +102,7 @@ public class SysRoleService {
     /**
      * 删除请求
      */
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void del(Long id) {
         if(sysRoleRepository.existsById(id)) {
             sysRoleRepository.deleteById(id);

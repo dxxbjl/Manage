@@ -33,7 +33,7 @@ public class SysCommonController {
                              @RequestParam(value = "fileDir",required = false,defaultValue = "img/def") String fileDir) {
         // 上传文件路径
         String url = sampleOSS.upload( file, fileDir);
-        Map<String,Object> ajax = new HashMap<>();
+        Map<String,Object> ajax = new HashMap<>(16);
         ajax.put("fileName", file.getOriginalFilename());
         ajax.put("url", url);
         return Result.success(ajax);

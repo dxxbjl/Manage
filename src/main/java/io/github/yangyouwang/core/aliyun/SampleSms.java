@@ -27,16 +27,16 @@ public class SampleSms {
     /**
      * 产品名称:云通信短信API产品,开发者无需替换
      */
-    static final String product = "Dysmsapi";
+    static final String PRODUCT = "Dysmsapi";
     /**
      * 产品域名,开发者无需替换
      */
-    static final String domain = "dysmsapi.aliyuncs.com";
+    static final String DOMAIN = "dysmsapi.aliyuncs.com";
 
-    private static SmsProperties smsConfig;
+    private static SmsProperties smsProperties;
 
     static {
-        smsConfig = SpringUtils.getBean(SmsProperties.class);
+        smsProperties = SpringUtils.getBean(SmsProperties.class);
     }
 
     /**
@@ -48,14 +48,14 @@ public class SampleSms {
      */
     public static SendSmsResponse sendSms(String mobile, String templateCode, String signName, String param) {
         try {
-            String accessKeyId = smsConfig.getAccessKeyId();
-            String accessKeySecret = smsConfig.getAccessKeySecret();
+            String accessKeyId = smsProperties.getAccessKeyId();
+            String accessKeySecret = smsProperties.getAccessKeySecret();
             //可自助调整超时时间
             System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
             System.setProperty("sun.net.client.defaultReadTimeout", "10000");
             //初始化acsClient,暂不支持region化
             IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId, accessKeySecret);
-            DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", product, domain);
+            DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", PRODUCT, DOMAIN);
             IAcsClient acsClient = new DefaultAcsClient(profile);
             //组装请求对象-具体描述见控制台-文档部分内容
             SendSmsRequest request = new SendSmsRequest();
@@ -80,14 +80,14 @@ public class SampleSms {
 
     public static QuerySendDetailsResponse querySendDetails(String mobile, String bizId) {
         try {
-            String accessKeyId = smsConfig.getAccessKeyId();
-            String accessKeySecret = smsConfig.getAccessKeySecret();
+            String accessKeyId = smsProperties.getAccessKeyId();
+            String accessKeySecret = smsProperties.getAccessKeySecret();
             //可自助调整超时时间
             System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
             System.setProperty("sun.net.client.defaultReadTimeout", "10000");
             //初始化acsClient,暂不支持region化
             IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId, accessKeySecret);
-            DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", product, domain);
+            DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", PRODUCT, DOMAIN);
             IAcsClient acsClient = new DefaultAcsClient(profile);
             //组装请求对象
             QuerySendDetailsRequest request = new QuerySendDetailsRequest();

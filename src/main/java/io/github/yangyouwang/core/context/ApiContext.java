@@ -9,15 +9,17 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ApiContext {
 
+    private static final String API_CONTEXT_KEY = "userId";
+
     private static final Map<String, Object> CONTEXT = new ConcurrentHashMap<>(16);
 
     public static void setUserId(Long userId) {
-        CONTEXT.put("userId", userId);
+        CONTEXT.put(API_CONTEXT_KEY, userId);
     }
 
     public static Long getUserId() {
-        if (CONTEXT.containsKey("userId")) {
-            return Long.parseLong(CONTEXT.get("userId").toString());
+        if (CONTEXT.containsKey(API_CONTEXT_KEY)) {
+            return Long.parseLong(CONTEXT.get(API_CONTEXT_KEY).toString());
         }
         return null;
     }

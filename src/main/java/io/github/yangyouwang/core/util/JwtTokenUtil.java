@@ -76,8 +76,9 @@ public class JwtTokenUtil {
         DateTime iat = DateTime.now();
         // jwt的过期时间，这个过期时间必须要大于签发时间
         DateTime exp = null;
-        if (duration != null)
+        if (duration != null) {
             exp = (nbf == null ? iat.plusSeconds(duration) : new DateTime(nbf).plusSeconds(duration));
+        }
 
         // 获取JWT字符串
         String compact = Jwts.builder()

@@ -19,11 +19,12 @@ import java.util.UUID;
 @Component
 public class SampleOSS {
 
+    private static final String FILE_DIR = "/";
     /**
      * oss 工具客户端
      */
     private OSSClient ossClient;
-    private OSSProperties ossProperties;
+    private final OSSProperties ossProperties;
 
     public SampleOSS(ObjectProvider<OSSProperties> ossPropertiesObjectProvider) {
         this.ossProperties=ossPropertiesObjectProvider.getIfAvailable(OSSProperties::new);
@@ -43,10 +44,10 @@ public class SampleOSS {
         try {
             String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf('.'));
             String fileName = System.currentTimeMillis() + "-" + UUID.randomUUID().toString().substring(0, 18) + suffix;
-            if (! fileDir.endsWith("/")) {
-                fileDir = fileDir.concat("/");
+            if (!fileDir.endsWith(FILE_DIR)) {
+                fileDir = fileDir.concat(FILE_DIR);
             }
-            fileUrl = fileUrl.append(fileDir + fileName);
+            fileUrl.append(fileDir).append(fileName);
 
             ossClient.putObject(ossProperties.getBucketName(), fileUrl.toString(), file.getInputStream());
         } catch (IOException e) {

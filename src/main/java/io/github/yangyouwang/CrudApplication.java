@@ -3,6 +3,10 @@ package io.github.yangyouwang;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * 启动类
+ * @author yangyouwang
+ */
 @SpringBootApplication(exclude = {org.activiti.spring.boot.SecurityAutoConfiguration.class,
 		org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class})
 public class CrudApplication {

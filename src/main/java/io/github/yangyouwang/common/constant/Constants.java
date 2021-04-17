@@ -2,6 +2,7 @@ package io.github.yangyouwang.common.constant;
 
 /**
  * 通用常量
+ * @author yangyouwang
  */
 public interface Constants {
     /**

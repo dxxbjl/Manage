@@ -4,6 +4,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.crud.system.dao.SysTaskRepository;
 import io.github.yangyouwang.crud.system.model.SysTask;
+import org.apache.http.util.Asserts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
@@ -43,7 +44,7 @@ public class QuartzConfig implements SchedulingConfigurer {
 
     private ScheduledTaskRegistrar scheduledTaskRegistrar;
 
-    private static final int corePoolSize = 5;
+    private static final int CORE_POOL_SIZE = 5;
 
     @Override
     public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {
@@ -69,7 +70,7 @@ public class QuartzConfig implements SchedulingConfigurer {
         //设置线程名称
         ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("quartz-pool-%d").build();
         //创建线程池
-        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(corePoolSize, namedThreadFactory);
+        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(CORE_POOL_SIZE, namedThreadFactory);
         // 设置线程池
         scheduledTaskRegistrar.setScheduler(scheduledExecutorService);
         // 引用赋值
@@ -88,17 +89,14 @@ public class QuartzConfig implements SchedulingConfigurer {
         // 取消任务
         this.cancelTriggerTask(name);
         TaskScheduler scheduler = scheduledTaskRegistrar.getScheduler();
+        assert scheduler != null;
         ScheduledFuture<?> future = scheduler.schedule( () -> {
                     // 任务
                     try {
                         Object obj = applicationContext.getBean(className);
                         Method method = obj.getClass().getMethod(methodName);
                         method.invoke(obj);
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
-                    } catch (NoSuchMethodException e) {
+                    } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                         e.printStackTrace();
                     }
                 },
