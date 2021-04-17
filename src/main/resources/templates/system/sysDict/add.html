@@ -59,13 +59,13 @@
 </div>
   <script th:src="@{/static/layuiadmin/layui/layui.js}"></script>
   <script th:inline="javascript">
-    let defJson = {
-      "dictValueName": ""
-      ,"dictValueKey": ""
-      ,"orderNum": ""
-      ,"remark": ""
-   };
    let dictValues = [];
+   let defJson = {
+     "dictValueName": ""
+     ,"dictValueKey": ""
+     ,"orderNum": ""
+     ,"remark": ""
+   };
    dictValues.push(defJson);
 
    let ctx = [[${#request.getContextPath()}]];
@@ -129,6 +129,12 @@
       let layEvent = obj.event;
       let dictData = table.cache['dictTable'];
       if(layEvent === 'add'){
+        let defJson = {
+          "dictValueName": ""
+          ,"dictValueKey": ""
+          ,"orderNum": ""
+          ,"remark": ""
+        };
         dictData.push(defJson);
         table.reload('dictTable',{
           data: dictData

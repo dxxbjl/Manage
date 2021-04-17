@@ -59,12 +59,6 @@
 </div>
   <script th:src="@{/static/layuiadmin/layui/layui.js}"></script>
   <script th:inline="javascript">
-    let defJson = {
-      "dictValueName": ""
-      ,"dictValueKey": ""
-      ,"orderNum": ""
-      ,"remark": ""
-   };
    let dictValues = [];
    let ctx = [[${#request.getContextPath()}]];
   layui.config({
@@ -78,6 +72,12 @@
     // 赋值
     let sysDict = [[${sysDict}]];
     dictValues = sysDict.sysDictValues;
+    let defJson = {
+      "dictValueName": ""
+      ,"dictValueKey": ""
+      ,"orderNum": ""
+      ,"remark": ""
+    };
     dictValues.push(defJson);
     form.val('sys-dict-form', sysDict);
     // 编辑
@@ -130,22 +130,41 @@
 
     //监听行工具事件
     table.on('tool(dictTable)', function(obj){
-      let layEvent = obj.event;
-      let dictData = table.cache['dictTable'];
+      let layEvent = obj.event,
+              data = obj.data,
+              dictData = table.cache['dictTable'];
       if(layEvent === 'add') {
+        let defJson = {
+          "dictValueName": ""
+          ,"dictValueKey": ""
+          ,"orderNum": ""
+          ,"remark": ""
+        };
         dictData.push(defJson);
         table.reload('dictTable',{
           data: dictData
         });
       } else if(layEvent === 'del'){
         layer.confirm('真的删除行么', function(index) {
-          let rowIndex = $(obj.tr).attr("data-index");
-          obj.del();
-          dictData.splice(rowIndex,1);
-          table.reload('dictTable',{
-            data: dictData
+          //向服务端发送删除指令
+          $.ajax({
+            type: 'DELETE',
+            url:  ctx + '/sysDict/delValue/' + data.id,
+            contentType:'application/json;charset=UTF-8',
+            dataType: 'json',
+            success: function(result) {
+              layer.msg(result.message);
+              if (result.code === 200) {
+                let rowIndex = $(obj.tr).attr("data-index");
+                obj.del();
+                dictData.splice(rowIndex,1);
+                table.reload('dictTable',{
+                  data: dictData
+                });
+                layer.close(index);
+              }
+            }
           });
-          layer.close(index);
         });
       }
     });

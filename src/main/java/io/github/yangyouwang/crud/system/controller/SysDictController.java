@@ -131,10 +131,21 @@ public class SysDictController {
      * 删除请求
      * @return 删除状态
      */
-    @DeleteMapping("/del/{id}")
+    @DeleteMapping("/delKey/{id}")
     @ResponseBody
-    public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
-        sysDictService.del(id);
+    public Result delKey(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
+        sysDictService.delKey(id);
+        return Result.success();
+    }
+
+    /**
+     * 删除字典值请求
+     * @return 删除状态
+     */
+    @DeleteMapping("/delValue/{id}")
+    @ResponseBody
+    public Result delValue(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
+        sysDictService.delValue(id);
         return Result.success();
     }
 }

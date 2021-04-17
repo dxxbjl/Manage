@@ -164,7 +164,7 @@
                     //向服务端发送删除指令
                     $.ajax({
                         type: 'DELETE',
-                        url:  ctx + '/sysDict/del/' + id,
+                        url:  ctx + '/sysDict/delKey/' + id,
                         contentType:'application/json;charset=UTF-8',
                         dataType: 'json',
                         success: function(result) {

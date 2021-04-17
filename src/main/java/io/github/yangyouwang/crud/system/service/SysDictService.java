@@ -1,6 +1,7 @@
 package io.github.yangyouwang.crud.system.service;
 
 import io.github.yangyouwang.crud.system.dao.SysDictTypeRepository;
+import io.github.yangyouwang.crud.system.dao.SysDictValueRepository;
 import io.github.yangyouwang.crud.system.model.SysDictType;
 import io.github.yangyouwang.crud.system.model.SysDictValue;
 import io.github.yangyouwang.crud.system.model.dao.SysDictValueDto;
@@ -40,6 +41,9 @@ public class SysDictService {
 
     @Autowired
     private SysDictTypeRepository sysDictTypeRepository;
+
+    @Autowired
+    private SysDictValueRepository sysDictValueRepository;
 
     /**
      * 列表请求
@@ -113,20 +117,19 @@ public class SysDictService {
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
     public void edit(SysDictEditReq sysDictEditReq) {
-      // 删除字典值
-      this.del(sysDictEditReq.getId());
-      SysDictType sysDict = new SysDictType();
-      List<SysDictValue> sysDictValues = getSysDictValues(sysDictEditReq.getSysDictValues());
-      sysDict.setSysDictValues(sysDictValues);
-      BeanUtils.copyProperties(sysDictEditReq,sysDict);
-      sysDictTypeRepository.save(sysDict);
+       sysDictTypeRepository.findById(sysDictEditReq.getId()).ifPresent(sysDictType -> {
+           List<SysDictValue> sysDictValues = getSysDictValues(sysDictEditReq.getSysDictValues());
+           sysDictType.setSysDictValues(sysDictValues);
+           BeanUtils.copyProperties(sysDictEditReq,sysDictType);
+           sysDictTypeRepository.save(sysDictType);
+       });
     }
 
     /**
      * 删除请求
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
-    public void del(Long id) {
+    public void delKey(Long id) {
         if(sysDictTypeRepository.existsById(id)) {
             sysDictTypeRepository.deleteById(id);
         }
@@ -155,5 +158,15 @@ public class SysDictService {
             sysDictType.setEnabled(sysDictEnabledReq.getEnabled());
             sysDictTypeRepository.save(sysDictType);
         });
+    }
+
+    /**
+     * 删除字典值请求
+     */
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
+    public void delValue(Long id) {
+        if (sysDictValueRepository.existsById(id)) {
+            sysDictValueRepository.deleteById(id);
+        }
     }
 }

@@ -13,7 +13,10 @@ import java.io.Serializable;
  */
 @Data
 public class SysDictValueDto implements Serializable {
-
+    /**
+     * 主键
+     */
+    private Long id;
     /**
      * 字典值key
      */
