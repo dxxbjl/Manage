@@ -37,7 +37,7 @@
         <div class="layui-card-body">
             <table id="dictTable" lay-filter="dictTable"></table>
             <script type="text/html" id="enabledTpl">
-                <input type="checkbox" lay-filter="enabled" value="{{d.id}}" lay-skin="switch" lay-text="激活|冻结" {{d.enabled==1?'checked':''}} />
+                <input type="checkbox" lay-filter="enabled" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" {{d.enabled==1?'checked':''}} />
             </script>
             <script type="text/html" id="tableBar">
                 <a sec:authorize="hasAuthority('dict:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>

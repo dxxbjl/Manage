@@ -1,5 +1,6 @@
 package io.github.yangyouwang.crud.system.service;
 
+import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.crud.system.dao.SysDictTypeRepository;
 import io.github.yangyouwang.crud.system.dao.SysDictValueRepository;
 import io.github.yangyouwang.crud.system.model.SysDictType;
@@ -26,6 +27,7 @@ import org.springframework.util.Assert;
 
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -142,11 +144,14 @@ public class SysDictService {
     @Transactional(readOnly = true)
     public List<SysDictValueDto> getDictValues(String dictKey) {
         SysDictType sysDictType = sysDictTypeRepository.findByDictKey(dictKey);
-        return sysDictType.getSysDictValues().stream().map(sysDictValue -> {
-            SysDictValueDto sysDictValueDto = new SysDictValueDto();
-            BeanUtils.copyProperties(sysDictValue,sysDictValueDto);
-            return sysDictValueDto;
-        }).collect(Collectors.toList());
+        if (Constants.ENABLED_YES.equals(sysDictType.getEnabled())) {
+            return sysDictType.getSysDictValues().stream().map(sysDictValue -> {
+                SysDictValueDto sysDictValueDto = new SysDictValueDto();
+                BeanUtils.copyProperties(sysDictValue,sysDictValueDto);
+                return sysDictValueDto;
+            }).collect(Collectors.toList());
+        }
+       return Collections.emptyList();
     }
 
     /**

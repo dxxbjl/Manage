@@ -33,7 +33,7 @@
       <div class="layui-card-body">
         <table id="menuTable" lay-filter="menuTable"></table>
         <script type="text/html" id="visibleTpl">
-          <input type="checkbox" lay-filter="visible" value="{{d.id}}" lay-skin="switch" lay-text="显示|隐藏" {{d.visible==='Y'?'checked':''}} />
+          <input type="checkbox" lay-filter="visible" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" {{d.visible==='Y'?'checked':''}} />
         </script>
         <script type="text/html" id="tableBar">
           <a sec:authorize="hasAuthority('menu:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
