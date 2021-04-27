@@ -1,20 +1,16 @@
 package io.github.yangyouwang.crud.system.service;
 
-import io.github.yangyouwang.crud.system.dao.SysLogRepository;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.github.yangyouwang.crud.system.mapper.SysLogMapper;
 import io.github.yangyouwang.crud.system.model.SysLog;
 import io.github.yangyouwang.crud.system.model.req.SysLogListReq;
-import org.apache.logging.log4j.util.Strings;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.Predicate;
-import java.util.ArrayList;
-import java.util.List;
+import javax.annotation.Resource;
 
 /**
  * @author yangyouwang
@@ -26,28 +22,18 @@ import java.util.List;
 @Service
 public class SysLogService {
 
-    @Autowired
-    private SysLogRepository sysLogRepository;
+    @Resource
+    private SysLogMapper sysLogMapper;
 
     /**
      * 列表请求
      * @return 请求列表
      */
     @Transactional(readOnly = true)
-    public Page<SysLog> list(SysLogListReq sysLogListReq) {
-        Pageable pageable = PageRequest.of(sysLogListReq.getPageNum() - 1,sysLogListReq.getPageSize());
-        Specification<SysLog> query = (root, criteriaQuery, criteriaBuilder) -> {
-            List<Predicate> predicates = new ArrayList<>();
-            String className = sysLogListReq.getClassName();
-            if(Strings.isNotBlank(className)){
-                predicates.add(criteriaBuilder.like(root.get("className"),"%" + className + "%"));
-            }
-            String methodName = sysLogListReq.getMethodName();
-            if(Strings.isNotBlank(methodName)){
-                predicates.add(criteriaBuilder.like(root.get("methodName"),"%" +methodName + "%"));
-            }
-            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-        };
-       return sysLogRepository.findAll(query,pageable);
+    public IPage<SysLog> list(SysLogListReq sysLogListReq) {
+        return sysLogMapper.selectPage(new Page<>(sysLogListReq.getPageNum() - 1, sysLogListReq.getPageSize()),
+                new LambdaQueryWrapper<SysLog>()
+                        .like(StringUtils.isNotBlank(sysLogListReq.getClassName()), SysLog::getClassName , sysLogListReq.getClassName())
+                        .like(StringUtils.isNotBlank(sysLogListReq.getMethodName()), SysLog::getMethodName , sysLogListReq.getMethodName()));
     }
 }

@@ -1,6 +1,8 @@
 package io.github.yangyouwang.crud.system.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.yangyouwang.common.domain.Result;
+import io.github.yangyouwang.crud.system.model.SysDictType;
 import io.github.yangyouwang.crud.system.model.dao.SysDictValueDto;
 import io.github.yangyouwang.crud.system.model.req.*;
 import io.github.yangyouwang.crud.system.model.resp.SysDictResp;
@@ -16,6 +18,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author zhixin.yao
@@ -29,8 +32,12 @@ public class SysDictController {
 
     private static final String SUFFIX = "/system/sysDict";
 
+    private final SysDictService sysDictService;
+
     @Autowired
-    private SysDictService sysDictService;
+    public SysDictController(SysDictService sysDictService) {
+        this.sysDictService = sysDictService;
+    }
 
     /**
      * 跳转列表
@@ -69,9 +76,10 @@ public class SysDictController {
     @ResponseBody
     public Result list(@Validated SysDictListReq sysDictListReq, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
-            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        return Result.success(sysDictService.list(sysDictListReq));
+        IPage<SysDictType> list = sysDictService.list(sysDictListReq);
+        return Result.success(list);
     }
 
     /**
@@ -93,10 +101,10 @@ public class SysDictController {
     @ResponseBody
     public Result add(@RequestBody @Validated SysDictAddReq sysDictAddReq, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
-            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        sysDictService.add(sysDictAddReq);
-        return Result.success();
+        int flag = sysDictService.add(sysDictAddReq);
+        return Result.success(flag);
     }
 
     /**
@@ -107,10 +115,10 @@ public class SysDictController {
     @ResponseBody
     public Result edit(@RequestBody @Validated SysDictEditReq sysDictEditReq, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
-            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        sysDictService.edit(sysDictEditReq);
-        return Result.success();
+        int flag = sysDictService.edit(sysDictEditReq);
+        return Result.success(flag);
     }
 
     /**
@@ -121,10 +129,10 @@ public class SysDictController {
     @ResponseBody
     public Result changeDict(@RequestBody @Validated SysDictEnabledReq sysDictEnabledReq, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
-            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        sysDictService.changeDict(sysDictEnabledReq);
-        return Result.success();
+        int flag = sysDictService.changeDict(sysDictEnabledReq);
+        return Result.success(flag);
     }
 
     /**
@@ -134,8 +142,8 @@ public class SysDictController {
     @DeleteMapping("/delKey/{id}")
     @ResponseBody
     public Result delKey(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
-        sysDictService.delKey(id);
-        return Result.success();
+        int flag = sysDictService.delKey(id);
+        return Result.success(flag);
     }
 
     /**
@@ -145,7 +153,7 @@ public class SysDictController {
     @DeleteMapping("/delValue/{id}")
     @ResponseBody
     public Result delValue(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
-        sysDictService.delValue(id);
-        return Result.success();
+        int flag = sysDictService.delValue(id);
+        return Result.success(flag);
     }
 }

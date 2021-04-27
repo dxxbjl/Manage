@@ -1,9 +1,11 @@
 package io.github.yangyouwang.crud.system.model;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import io.github.yangyouwang.common.domain.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-import javax.persistence.*;
 
 /**
  * @author yangyouwang
@@ -13,39 +15,31 @@ import javax.persistence.*;
  * @date 2021/4/9下午8:11
  */
 @Data
-@Entity
-@Table(name="sys_task")
+@EqualsAndHashCode(callSuper = true)
 public class SysTask extends BaseEntity {
     /**
      * 主键id
      */
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name="id")
+    @TableId(type = IdType.AUTO)
     private Long id;
     /**
      * 名称
      */
-    @Column(name="name")
     private String name;
     /**
      * cron表达式
      */
-    @Column(name="cron")
     private String cron;
     /**
      * 类名称
      */
-    @Column(name="class_name")
     private String className;
     /**
      * 方法名
      */
-    @Column(name="method_name")
     private String methodName;
     /**
      * 是否启用
      */
-    @Column(name="enabled")
     private String enabled;
 }

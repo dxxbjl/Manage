@@ -1,18 +1,9 @@
 package io.github.yangyouwang.common.domain;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.SelectBeforeUpdate;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import javax.persistence.Column;
-import javax.persistence.EntityListeners;
-import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -22,37 +13,28 @@ import java.util.Date;
  * @author crud
  */
 @Data
-@MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
-@DynamicUpdate
-@SelectBeforeUpdate
 public abstract class BaseEntity implements Serializable {
 
     private static final Long serialVersionUID = 1L;
 
     /** 创建者 */
-    @CreatedBy
-    @Column(name = "create_by",updatable = false)
+    @TableField(value = "create_by",fill = FieldFill.INSERT)
     private String createBy;
 
     /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @CreatedDate
-    @Column(name = "create_time",updatable = false)
+    @TableField(value = "create_time",fill = FieldFill.INSERT)
     private Date createTime;
 
     /** 更新者 */
-    @LastModifiedBy
-    @Column(name = "update_by")
+    @TableField(value = "update_by",fill = FieldFill.UPDATE)
     private String updateBy;
 
     /** 更新时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @LastModifiedDate
-    @Column(name = "update_time")
+    @TableField(value = "update_time",fill = FieldFill.UPDATE)
     private Date updateTime;
 
     /** 备注 */
-    @Column(name = "remark")
     private String remark;
 }

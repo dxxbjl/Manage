@@ -1,31 +1,23 @@
 package io.github.yangyouwang.crud.system.service;
-
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.github.yangyouwang.common.constant.Constants;
-import io.github.yangyouwang.core.config.QuartzConfig;
-import io.github.yangyouwang.crud.system.dao.SysTaskRepository;
+import io.github.yangyouwang.core.config.SchedulingConfig;
+import io.github.yangyouwang.crud.system.mapper.SysTaskMapper;
 import io.github.yangyouwang.crud.system.model.SysTask;
 import io.github.yangyouwang.crud.system.model.req.SysTaskAddReq;
-import io.github.yangyouwang.crud.system.model.req.SysTaskEditReq;
-import io.github.yangyouwang.crud.system.model.req.SysTaskEnabledReq;
 import io.github.yangyouwang.crud.system.model.req.SysTaskListReq;
 import io.github.yangyouwang.crud.system.model.resp.SysTaskResp;
-import org.apache.logging.log4j.util.Strings;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.Predicate;
-import java.util.ArrayList;
-import java.util.List;
+import javax.annotation.Resource;
+
 /**
  * @author yangyouwang
  * @title: SysTaskService
@@ -36,18 +28,18 @@ import java.util.List;
 @Service
 public class SysTaskService {
 
-    @Autowired
-    private SysTaskRepository sysTaskRepository;
+    @Resource
+    private SysTaskMapper sysTaskMapper;
 
-    @Autowired
-    private QuartzConfig quartzConfig;
+    @Resource
+    private SchedulingConfig schedulingConfig;
     /**
      * 跳转编辑
      * @return 编辑页面
      */
     @Transactional(readOnly = true)
     public SysTaskResp detail(Long id) {
-        SysTask sysTask = sysTaskRepository.findById(id).orElse(new SysTask());
+        SysTask sysTask = this.findTaskById(id);
         SysTaskResp sysTaskResp = new SysTaskResp();
         BeanUtils.copyProperties(sysTask,sysTaskResp);
         return sysTaskResp;
@@ -58,81 +50,74 @@ public class SysTaskService {
      * @return 请求列表
      */
     @Transactional(readOnly = true)
-    public Page<SysTask> list(SysTaskListReq sysTaskListReq) {
-        Pageable pageable = PageRequest.of(sysTaskListReq.getPageNum() - 1,sysTaskListReq.getPageSize());
-        Specification<SysTask> query = (Specification<SysTask>) (root, criteriaQuery, criteriaBuilder) -> {
-            List<Predicate> predicates = new ArrayList<>();
-            String name = sysTaskListReq.getName();
-            if(Strings.isNotBlank(name)){
-                predicates.add(criteriaBuilder.like(root.get("name"),"%" + name + "%"));
-            }
-            return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
-        };
-        return sysTaskRepository.findAll(query,pageable);
+    public IPage<SysTask> list(SysTaskListReq sysTaskListReq) {
+        return sysTaskMapper.selectPage(new Page<>(sysTaskListReq.getPageNum() - 1, sysTaskListReq.getPageSize()),
+                new LambdaQueryWrapper<SysTask>()
+                        .like(StringUtils.isNotBlank(sysTaskListReq.getName()), SysTask::getName , sysTaskListReq.getName()));
     }
 
     /**
      * 添加请求
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public void add(SysTaskAddReq sysTaskAddReq) {
+    public int add(SysTaskAddReq sysTaskAddReq) {
         SysTask sysTask = new SysTask();
         BeanUtils.copyProperties(sysTaskAddReq,sysTask);
-        sysTaskRepository.save(sysTask);
-        if (Constants.ENABLED_YES.equals(sysTask.getEnabled())) {
-            // 添加任务
-            quartzConfig.addTriggerTask(sysTask.getName(),sysTask.getClassName(),sysTask.getMethodName(),sysTask.getCron());
+        int flag = sysTaskMapper.insert(sysTask);
+        if (flag > 0) {
+            if (Constants.ENABLED_YES.equals(sysTask.getEnabled())) {
+                // 添加任务
+                schedulingConfig.addTriggerTask(sysTask.getName(),sysTask.getClassName(),sysTask.getMethodName(),sysTask.getCron());
+            }
+            return flag;
         }
+        throw new RuntimeException("添加定时任务失败");
     }
 
     /**
      * 编辑请求
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public void edit(SysTaskEditReq sysTaskEditReq) {
-        sysTaskRepository.findById(sysTaskEditReq.getId()).ifPresent(sysTask -> {
-            BeanUtil.copyProperties(sysTaskEditReq,sysTask,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
-            sysTaskRepository.save(sysTask);
+    public int edit(SysTask sysTask) {
+        int flag = sysTaskMapper.updateById(sysTask);
+        if (flag > 0) {
             if (Constants.ENABLED_YES.equals(sysTask.getEnabled())) {
                 // 添加任务
-                quartzConfig.addTriggerTask(sysTask.getName(),sysTask.getClassName(),sysTask.getMethodName(),sysTask.getCron());
+                schedulingConfig.addTriggerTask(sysTask.getName(),sysTask.getClassName(),sysTask.getMethodName(),sysTask.getCron());
             }
             if (Constants.ENABLED_NO.equals(sysTask.getEnabled())) {
                 // 取消任务
-                quartzConfig.cancelTriggerTask(sysTask.getName());
+                schedulingConfig.cancelTriggerTask(sysTask.getName());
             }
-        });
+            return flag;
+        }
+        throw new RuntimeException("修改定时任务失败");
     }
 
     /**
      * 删除请求
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public void del(Long id) {
-       sysTaskRepository.findById(id).ifPresent(sysTask -> {
-           // 删除任务
-           sysTaskRepository.deleteById(id);
-           // 取消任务
-           quartzConfig.cancelTriggerTask(sysTask.getName());
-       });
+    public int del(Long id) {
+        // 查询任务
+        SysTask sysTask = this.findTaskById(id);
+        // 删除任务
+        int flag = sysTaskMapper.deleteById(id);
+        if (flag > 0) {
+            // 取消任务
+            schedulingConfig.cancelTriggerTask(sysTask.getName());
+            return flag;
+        }
+        throw new RuntimeException("删除定时任务失败");
     }
 
     /**
-     * 修改任务请求
+     * 查询任务
+     * @param id 任务id
+     * @return 任务详情
      */
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public void changeTask(SysTaskEnabledReq sysTaskEnabledReq) {
-        sysTaskRepository.findById(sysTaskEnabledReq.getId()).ifPresent(sysTask -> {
-            sysTask.setEnabled(sysTaskEnabledReq.getEnabled());
-            sysTaskRepository.save(sysTask);
-            if (Constants.ENABLED_YES.equals(sysTask.getEnabled())) {
-                // 添加任务
-                quartzConfig.addTriggerTask(sysTask.getName(),sysTask.getClassName(),sysTask.getMethodName(),sysTask.getCron());
-            }
-            if (Constants.ENABLED_NO.equals(sysTask.getEnabled())) {
-                // 取消任务
-                quartzConfig.cancelTriggerTask(sysTask.getName());
-            }
-        });
+    @Transactional(readOnly = true)
+    public SysTask findTaskById(Long id) {
+        return sysTaskMapper.selectById(id);
     }
 }

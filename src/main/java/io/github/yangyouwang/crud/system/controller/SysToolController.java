@@ -24,7 +24,6 @@ public class SysToolController {
         return "redirect:/swagger-ui.html";
     }
 
-
     /**
      * 跳转到druid页面
      * @return druid页面
@@ -33,6 +32,4 @@ public class SysToolController {
     public String druid(){
         return "redirect:/druid/index.html";
     }
-
-
 }

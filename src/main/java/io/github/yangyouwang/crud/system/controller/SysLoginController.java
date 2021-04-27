@@ -2,9 +2,11 @@ package io.github.yangyouwang.crud.system.controller;
 
 import io.github.yangyouwang.core.util.SecurityUtils;
 import io.github.yangyouwang.crud.system.model.SysMenu;
-import io.github.yangyouwang.crud.system.model.SysUser;
+import io.github.yangyouwang.crud.system.model.resp.SysUserResp;
 import io.github.yangyouwang.crud.system.service.SysMenuService;
+import io.github.yangyouwang.crud.system.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,8 +23,15 @@ import java.util.List;
 @Controller
 public class SysLoginController {
 
+    private final SysMenuService sysMenuService;
+
+    private final SysUserService sysUserService;
+
     @Autowired
-    private SysMenuService sysMenuService;
+    public SysLoginController(SysMenuService sysMenuService, SysUserService sysUserService) {
+        this.sysMenuService = sysMenuService;
+        this.sysUserService = sysUserService;
+    }
 
     /**
      * 跳转到首页页面
@@ -30,8 +39,9 @@ public class SysLoginController {
      */
     @GetMapping("/")
     public String indexPage(ModelMap map) {
-        SysUser sysUser = SecurityUtils.getSysUser();
-        List<SysMenu> sysMenus = sysMenuService.selectMenusByUser(sysUser.getId());
+        User user = SecurityUtils.getSysUser();
+        SysUserResp sysUser = sysUserService.findUserByName(user.getUsername());
+        List<SysMenu> sysMenus = sysMenuService.selectMenusByUser(sysUser.getUserName());
         map.put("sysMenus",sysMenus);
         map.put("sysUser",sysUser);
         return "/index";

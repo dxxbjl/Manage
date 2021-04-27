@@ -2,31 +2,36 @@ package io.github.yangyouwang.crud.system.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import io.github.yangyouwang.crud.system.dao.SysRoleRepository;
-import io.github.yangyouwang.crud.system.dao.SysUserRepository;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.github.yangyouwang.common.constant.Constants;
+import io.github.yangyouwang.crud.system.mapper.SysMenuMapper;
+import io.github.yangyouwang.crud.system.mapper.SysRoleMapper;
+import io.github.yangyouwang.crud.system.mapper.SysUserMapper;
+import io.github.yangyouwang.crud.system.model.SysMenu;
 import io.github.yangyouwang.crud.system.model.SysRole;
 import io.github.yangyouwang.crud.system.model.SysUser;
 import io.github.yangyouwang.crud.system.model.req.*;
 import io.github.yangyouwang.crud.system.model.resp.SysUserResp;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import javax.annotation.Resource;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -39,23 +44,34 @@ import java.util.stream.Collectors;
 @Service
 public class SysUserService implements UserDetailsService {
 
-    @Autowired
-    private SysUserRepository sysUserRepository;
+    @Resource
+    private SysUserMapper sysUserMapper;
 
-    @Autowired
-    private SysRoleRepository sysRoleRepository;
+    @Resource
+    private SysRoleMapper sysRoleMapper;
 
-    @Autowired
+    @Resource
+    private SysMenuMapper sysMenuMapper;
+
+    @Resource
     private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(@NonNull String userName) {
         // 通过用户名从数据库获取用户信息
-        SysUser sysUser = sysUserRepository.findByUserName(userName);
-        if (Objects.isNull(sysUser)) {
-            throw new UsernameNotFoundException("账号不存在");
+        SysUser user  = sysUserMapper.findUserByName(userName);
+        Set<GrantedAuthority> authorities = new LinkedHashSet<>();
+        if (CollectionUtils.isNotEmpty(user.getRoles())) {
+            for (SysRole role : user.getRoles()) {
+                List<SysMenu> menus = sysMenuMapper.findMenuByRoleId(role.getId());
+                for (SysMenu menu : menus) {
+                    authorities.add(new SimpleGrantedAuthority(menu.getPerms()));
+                }
+                authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRoleKey()));
+            }
         }
-        return sysUser;
+        return new User(user.getUserName(), user.getPassWord(), Constants.ENABLED_YES.equals(user.getEnabled()),
+                true, true, true, authorities);
     }
 
     /**
@@ -63,15 +79,13 @@ public class SysUserService implements UserDetailsService {
      * @param id 用户id
      * @return 用户详情
      */
-
     @Transactional(readOnly = true)
     public SysUserResp detail(Long id) {
-        SysUser sysUser = sysUserRepository.findById(id).orElse(new SysUser());
+        SysUser sysUser = sysUserMapper.findUserByUserId(id);
         SysUserResp sysUserResp = new SysUserResp();
         BeanUtils.copyProperties(sysUser,sysUserResp);
-        Long[] roleIds = sysUser.getRoles().stream().map(s -> s.getId()).toArray(Long[]::new);
+        Long[] roleIds = sysUser.getRoles().stream().map(SysRole::getId).toArray(Long[]::new);
         sysUserResp.setRoleIds(roleIds);
-        sysUserResp.setEnabled(sysUser.getEnabled());
         return sysUserResp;
     }
 
@@ -80,86 +94,95 @@ public class SysUserService implements UserDetailsService {
      * @return 列表
      */
     @Transactional(readOnly = true)
-    public Page<SysUserResp> list(SysUserListReq sysUserListReq) {
-        Pageable pageable = PageRequest.of(sysUserListReq.getPageNum() - 1,sysUserListReq.getPageSize());
-        return sysUserRepository.findPage(sysUserListReq, pageable);
+    public IPage<SysUser> list(SysUserListReq sysUserListReq) {
+        return sysUserMapper.selectPage(new Page<>(sysUserListReq.getPageNum() - 1, sysUserListReq.getPageSize()),
+                new LambdaQueryWrapper<SysUser>()
+                        .like(StringUtils.isNotBlank(sysUserListReq.getUserName()), SysUser::getUserName , sysUserListReq.getUserName())
+                        .like(StringUtils.isNotBlank(sysUserListReq.getEmail()), SysUser::getEmail , sysUserListReq.getEmail())
+                        .like(StringUtils.isNotBlank(sysUserListReq.getPhonenumber()), SysUser::getPhonenumber , sysUserListReq.getPhonenumber()));
     }
 
     /**
      * 添加请求
+     * @return 添加状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public void add(SysUserAddReq sysUserAddReq) {
-        SysUser sysUser = sysUserRepository.findByUserName(sysUserAddReq.getUserName());
-        if (Objects.nonNull(sysUser)) {
-            throw new RuntimeException("用户已存在");
-        }
+    public int add(SysUserAddReq sysUserAddReq) {
+        SysUser sysUser = sysUserMapper.selectOne(new LambdaQueryWrapper<SysUser>()
+                .eq(SysUser::getUserName,sysUserAddReq.getUserName()));
+        Assert.isNull(sysUser,"用户已存在");
         sysUser = new SysUser();
         BeanUtils.copyProperties(sysUserAddReq,sysUser);
         String passWord = passwordEncoder.encode(sysUserAddReq.getPassWord());
         sysUser.setPassWord(passWord);
         // 查询角色
-        List<SysRole> sysRoles = Arrays.stream(sysUserAddReq.getRoleIds()).map(s -> {
-            SysRole sysRole = sysRoleRepository.findById(s).orElse(new SysRole());
-            return sysRole;
-        }).collect(Collectors.toList());
+        List<SysRole> sysRoles = Arrays.stream(sysUserAddReq.getRoleIds()).map(s -> sysRoleMapper.selectById(s)).collect(Collectors.toList());
         sysUser.setRoles(sysRoles);
-        sysUserRepository.save(sysUser);
+        return sysUserMapper.insert(sysUser);
     }
 
     /**
      * 编辑请求
+     * @return 编辑状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public void edit(SysUserEditReq sysUserEditReq) {
-        sysUserRepository.findById(sysUserEditReq.getId()).ifPresent(sysUser -> {
-            BeanUtil.copyProperties(sysUserEditReq,sysUser,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
-            // 查询角色
-            Optional.ofNullable(sysUserEditReq.getRoleIds()).ifPresent(ids -> {
-                List<SysRole> sysRoles = Arrays.stream(ids).map(s -> {
-                    return sysRoleRepository.findById(s).orElse(new SysRole());
-                }).collect(Collectors.toList());
-                sysUser.setRoles(sysRoles);
-            });
-            sysUserRepository.save(sysUser);
+    public int edit(SysUserEditReq sysUserEditReq) {
+        SysUser sysUser = new SysUser();
+        BeanUtil.copyProperties(sysUserEditReq,sysUser,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+        // 查询角色
+        Optional.ofNullable(sysUserEditReq.getRoleIds()).ifPresent(ids -> {
+            List<SysRole> sysRoles = Arrays.stream(ids).map(s -> sysRoleMapper.selectById(s)).collect(Collectors.toList());
+            sysUser.setRoles(sysRoles);
         });
+        return sysUserMapper.updateById(sysUser);
     }
 
     /**
      * 删除请求
+     * @return 删除状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public void del(Long id) {
-        if(sysUserRepository.existsById(id)) {
-            sysUserRepository.deleteById(id);
-        }
+    public int del(Long id) {
+        return sysUserMapper.deleteById(id);
     }
 
     /**
      * 修改密码
+     * @return 修改状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public void modifyPass(ModifyPassReq modifyPassReq) {
-        SysUser sysUser = sysUserRepository.findById(modifyPassReq.getId()).orElse(new SysUser());
-        boolean matches = passwordEncoder.matches(modifyPassReq.getOldPassword(),sysUser.getPassword());
-        if (!matches) {
-            throw new RuntimeException("旧密码输入错误");
-        }
+    public int modifyPass(ModifyPassReq modifyPassReq) {
+        SysUser sysUser = sysUserMapper.selectById(modifyPassReq.getId());
+        boolean matches = passwordEncoder.matches(modifyPassReq.getOldPassword(),sysUser.getPassWord());
+        Assert.isTrue(matches,"旧密码输入错误");
         String password = passwordEncoder.encode(modifyPassReq.getPassword());
         sysUser.setPassWord(password);
-        sysUserRepository.save(sysUser);
+        return sysUserMapper.updateById(sysUser);
     }
 
     /**
      * 修改用户状态
      * @param sysUserEnabledReq 用户状态dto
+     * @return 修改状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public void changeUser(SysUserEnabledReq sysUserEnabledReq) {
-        sysUserRepository.findById(sysUserEnabledReq.getId()).ifPresent(sysUser -> {
-            sysUser.setEnabled(sysUserEnabledReq.getEnabled());
-            sysUserRepository.save(sysUser);
-        });
+    public int changeUser(SysUserEnabledReq sysUserEnabledReq) {
+        SysUser sysUser = new SysUser();
+        sysUser.setId(sysUserEnabledReq.getId());
+        sysUser.setEnabled(sysUserEnabledReq.getEnabled());
+        return sysUserMapper.updateById(sysUser);
+    }
 
+    /**
+     * 根据用户名查询用户信息
+     * @param username 用户名
+     * @return 用户信息
+     */
+    @Transactional(readOnly = true)
+    public SysUserResp findUserByName(String username) {
+        SysUser sysUser = sysUserMapper.selectOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUserName, username));
+        SysUserResp sysUserResp = new SysUserResp();
+        BeanUtils.copyProperties(sysUser,sysUserResp);
+        return sysUserResp;
     }
 }

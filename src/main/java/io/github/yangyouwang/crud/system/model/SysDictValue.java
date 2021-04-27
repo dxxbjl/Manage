@@ -1,9 +1,10 @@
 package io.github.yangyouwang.crud.system.model;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import io.github.yangyouwang.common.domain.BaseEntity;
 import lombok.Data;
-
-import javax.persistence.*;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author zhixin.yao
@@ -12,32 +13,29 @@ import javax.persistence.*;
  * @date 2021/4/12 11:27
  */
 @Data
-@Entity
-@Table(name="sys_dict_value")
+@EqualsAndHashCode(callSuper = true)
 public class SysDictValue extends BaseEntity {
 
     /**
      * 主键id
      */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @TableId(type = IdType.AUTO)
     private Long id;
-
+    /**
+     * 字典类型id
+     */
+    private String dictTypeId;
     /**
      * 字典值key
      */
-    @Column(name="dict_value_key")
     private String dictValueKey;
 
     /**
      * 字典值名称
      */
-    @Column(name="dict_value_name")
     private String dictValueName;
     /**
      * 显示顺序
      */
-    @Column(name="order_num")
     private Integer orderNum;
 }

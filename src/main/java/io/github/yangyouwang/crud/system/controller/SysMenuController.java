@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author yangyouwang
@@ -33,8 +34,12 @@ public class SysMenuController {
 
     private static final String SUFFIX = "/system/sysMenu";
 
+    private final SysMenuService sysMenuService;
+
     @Autowired
-    private SysMenuService sysMenuService;
+    public SysMenuController(SysMenuService sysMenuService) {
+        this.sysMenuService = sysMenuService;
+    }
 
     /**
      * 跳转列表
@@ -72,8 +77,9 @@ public class SysMenuController {
      */
     @GetMapping("/list")
     @ResponseBody
-    public Result list(SysMenuListReq sysMenuListReq){
-        return Result.success(sysMenuService.list(sysMenuListReq));
+    public Result list(SysMenuListReq sysMenuListReq) {
+        List<SysMenuResp> list = sysMenuService.list(sysMenuListReq);
+        return Result.success(list);
     }
 
     /**
@@ -84,10 +90,10 @@ public class SysMenuController {
     @ResponseBody
     public Result add(@RequestBody @Validated SysMenuAddReq sysMenuAddReq, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
-            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        sysMenuService.add(sysMenuAddReq);
-        return Result.success();
+        int flag = sysMenuService.add(sysMenuAddReq);
+        return Result.success(flag);
     }
 
     /**
@@ -98,10 +104,10 @@ public class SysMenuController {
     @ResponseBody
     public Result edit(@RequestBody @Validated SysMenuEditReq sysMenuEditReq, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
-            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        sysMenuService.edit(sysMenuEditReq);
-        return Result.success();
+        int flag = sysMenuService.edit(sysMenuEditReq);
+        return Result.success(flag);
     }
 
     /**
@@ -112,10 +118,10 @@ public class SysMenuController {
     @ResponseBody
     public Result changeMenu(@RequestBody @Validated SysMenuVisibleReq sysMenuVisibleReq, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
-            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        sysMenuService.changeMenu(sysMenuVisibleReq);
-        return Result.success();
+        int flag = sysMenuService.changeMenu(sysMenuVisibleReq);
+        return Result.success(flag);
     }
 
     /**
@@ -125,8 +131,8 @@ public class SysMenuController {
     @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
-        sysMenuService.del(id);
-        return Result.success();
+        int flag = sysMenuService.del(id);
+        return Result.success(flag);
     }
 
     /**
@@ -136,8 +142,7 @@ public class SysMenuController {
     @GetMapping("/treeSelect")
     @ResponseBody
     public List<TreeSelectNode> treeSelect() {
-        List<TreeSelectNode> sysMenus = sysMenuService.treeSelect();
-        return sysMenus;
+        return sysMenuService.treeSelect();
     }
 
 
@@ -149,7 +154,6 @@ public class SysMenuController {
     @GetMapping("/xmSelect")
     @ResponseBody
     public List<XmSelectNode> xmSelect(@RequestParam(value = "ids",required = false) Long[] ids) {
-        List<XmSelectNode> sysMenus = sysMenuService.xmSelect(ids);
-        return sysMenus;
+        return sysMenuService.xmSelect(ids);
     }
 }

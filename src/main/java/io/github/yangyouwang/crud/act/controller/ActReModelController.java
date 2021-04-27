@@ -117,8 +117,8 @@ public class ActReModelController {
         if (bindingResult.hasErrors()){
             throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        actReModelService.edit(actReModelEditReq);
-        return Result.success();
+        int flag = actReModelService.edit(actReModelEditReq);
+        return Result.success(flag);
     }
 
     /**
@@ -128,7 +128,7 @@ public class ActReModelController {
     @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable String id){
-        actReModelService.del(id);
-        return Result.success();
+        int flag = actReModelService.del(id);
+        return Result.success(flag);
     }
 }

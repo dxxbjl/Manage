@@ -37,7 +37,7 @@
         <div class="layui-card-body">
             <table id="dictTable" lay-filter="dictTable"></table>
             <script type="text/html" id="enabledTpl">
-                <input type="checkbox" lay-filter="enabled" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" {{d.enabled==1?'checked':''}} />
+                <input type="checkbox" lay-filter="enabled" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" {{d.enabled==='Y'?'checked':''}} />
             </script>
             <script type="text/html" id="tableBar">
                 <a sec:authorize="hasAuthority('dict:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
@@ -68,7 +68,7 @@
         // 监听字典状态
         form.on('switch(enabled)', function (obj) {
             let id = obj.elem.value;
-            let checked = obj.elem.checked ? 1 : 0;
+            let checked = obj.elem.checked ? 'Y' : 'N';
             active.changeDictEnabled(id,checked);
         });
         // 查询列表接口
@@ -84,9 +84,9 @@
             }
             ,parseData: function (result) {
                 return {
-                    "code":result.code,
-                    "count": result.data.totalElements,
-                    "data": result.data.content
+                    "code": result.code,
+                    "count": result.data.total,
+                    "data": result.data.records
                 }
             }
             ,response: {

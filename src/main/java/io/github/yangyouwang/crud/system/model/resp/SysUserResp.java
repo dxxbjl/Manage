@@ -50,18 +50,4 @@ public class SysUserResp implements Serializable {
      * 角色id
      */
     private Long[] roleIds;
-
-    public SysUserResp() {
-    }
-
-    public SysUserResp(Long id, String userName, String enabled, String email, String phonenumber, String sex, String avatar, String remark) {
-        this.id = id;
-        this.userName = userName;
-        this.enabled = enabled;
-        this.email = email;
-        this.phonenumber = phonenumber;
-        this.sex = sex;
-        this.avatar = avatar;
-        this.remark = remark;
-    }
 }

@@ -32,14 +32,4 @@ public class SysRoleResp implements Serializable {
      * 菜单id
      */
     private Long[] menuIds;
-
-    public SysRoleResp() {
-    }
-
-    public SysRoleResp(Long id, String roleName, String roleKey, String remark) {
-        this.id = id;
-        this.roleName = roleName;
-        this.roleKey = roleKey;
-        this.remark = remark;
-    }
 }

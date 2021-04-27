@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.yangyouwang.crud.system.mapper.SysMenuMapper">
+  <resultMap id="BaseResultMap" type="io.github.yangyouwang.crud.system.model.SysMenu">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="menu_name" jdbcType="VARCHAR" property="menuName" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="menu_type" jdbcType="CHAR" property="menuType" />
+    <result column="visible" jdbcType="CHAR" property="visible" />
+    <result column="perms" jdbcType="VARCHAR" property="perms" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, menu_name, parent_id, order_num, url, menu_type, visible, perms, create_by, create_time, 
+    update_by, update_time, remark
+  </sql>
+
+  <select id="findSysMenu" resultMap="BaseResultMap">
+    select distinct m.id, m.parent_id, m.menu_name, m.url, m.visible, ifnull(m.perms,'') as perms, m.menu_type, m.order_num, m.create_by, m.create_time, m.update_by, m.update_time, m.remark
+    from sys_menu m
+    where m.menu_type in ('M', 'C') and m.visible = 0
+    order by m.parent_id, m.order_num
+  </select>
+
+  <select id="findSysMenuByName" parameterType="string" resultMap="BaseResultMap">
+    select distinct m.id, m.parent_id, m.menu_name, m.url, m.visible, ifnull(m.perms,'') as perms, m.menu_type, m.order_num, m.create_by, m.create_time, m.update_by, m.update_time, m.remark
+    from sys_menu m
+    left join sys_role_menu rm on m.id = rm.menu_id
+    left join sys_user_role ur on rm.role_id = ur.role_id
+    left join sys_role ro on ur.role_id = ro.id
+    where ur.user_name = #{name} and m.menu_type in ('M', 'C') and m.visible = 0
+    order by m.parent_id, m.order_num
+  </select>
+
+  <select id="findSysMenuById" parameterType="long" resultMap="BaseResultMap">
+    select m.id, m.menu_name, m.parent_id, m.order_num, m.url, m.menu_type, m.visible, m.perms, m.create_by, m.create_time, m.update_by, m.update_time, m.remark ,p.menu_name  as parentName
+    from sys_menu m
+    left join sys_menu p on m.parent_id = p.id
+    where m.id = #{id}
+  </select>
+
+  <select id="findMenuByRoleId" resultMap="BaseResultMap">
+    select m.id as menu_id,m.menu_name,m.perms
+    from sys_menu m
+    left join sys_role_menu rm on m.id = rm.menu_id
+    where m.visible = 'Y' and m.perms &lt;&gt; '' and rm.role_id = #{roleId}
+  </select>
+</mapper>

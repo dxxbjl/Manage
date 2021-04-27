@@ -70,9 +70,9 @@
           }
           ,parseData: function (result) {
               return {
-                  "code":result.code,
-                  "count": result.data.totalElements,
-                  "data": result.data.content
+                  "code": result.code,
+                  "count": result.data.total,
+                  "data": result.data.records
               }
           }
           ,response: {

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.yangyouwang.crud.act.mapper.ActReModelMapper">
+  <resultMap id="BaseResultMap" type="io.github.yangyouwang.crud.act.model.ActReModel">
+    <id column="ID_" jdbcType="VARCHAR" property="id" />
+    <result column="REV_" jdbcType="INTEGER" property="rev" />
+    <result column="NAME_" jdbcType="VARCHAR" property="name" />
+    <result column="KEY_" jdbcType="VARCHAR" property="key" />
+    <result column="CATEGORY_" jdbcType="VARCHAR" property="category" />
+    <result column="CREATE_TIME_" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="LAST_UPDATE_TIME_" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+    <result column="VERSION_" jdbcType="INTEGER" property="version" />
+    <result column="META_INFO_" jdbcType="VARCHAR" property="metaInfo" />
+    <result column="DEPLOYMENT_ID_" jdbcType="VARCHAR" property="deploymentId" />
+    <result column="EDITOR_SOURCE_VALUE_ID_" jdbcType="VARCHAR" property="editorSourceValueId" />
+    <result column="EDITOR_SOURCE_EXTRA_VALUE_ID_" jdbcType="VARCHAR" property="editorSourceExtraValueId" />
+    <result column="TENANT_ID_" jdbcType="VARCHAR" property="tenantId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID_, REV_, NAME_, KEY_, CATEGORY_, CREATE_TIME_, LAST_UPDATE_TIME_, VERSION_, META_INFO_, 
+    DEPLOYMENT_ID_, EDITOR_SOURCE_VALUE_ID_, EDITOR_SOURCE_EXTRA_VALUE_ID_, TENANT_ID_
+  </sql>
+</mapper>

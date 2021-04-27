@@ -82,8 +82,8 @@
               parseData: function (result) {
                   return {
                       "code": result.code,
-                      "count": result.data.totalElements,
-                      "data": result.data.content
+                      "count": result.data.length,
+                      "data": result.data
                   }
               },
               response: {

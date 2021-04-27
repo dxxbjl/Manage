@@ -1,6 +1,5 @@
 package io.github.yangyouwang.core.util;
-
-import io.github.yangyouwang.crud.system.model.SysUser;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.Assert;
 
@@ -17,12 +16,9 @@ public class SecurityUtils {
      * 获取用户信息
      * @return 用户信息
      */
-    public static final SysUser getSysUser() {
+    public static User getSysUser() {
         Object object = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Assert.notNull(object,"该用户未登陆");
-        if (object instanceof SysUser) {
-            return (SysUser) object;
-        }
-        return null;
+        return (User) object;
     }
 }

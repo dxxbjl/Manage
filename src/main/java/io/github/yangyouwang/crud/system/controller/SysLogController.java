@@ -1,6 +1,8 @@
 package io.github.yangyouwang.crud.system.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.yangyouwang.common.domain.Result;
+import io.github.yangyouwang.crud.system.model.SysLog;
 import io.github.yangyouwang.crud.system.model.req.SysLogListReq;
 import io.github.yangyouwang.crud.system.service.SysLogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.Objects;
 
 /**
  * @author yangyouwang
@@ -25,8 +29,12 @@ public class SysLogController {
 
     private static final String SUFFIX = "/system/sysLog";
 
+    private final SysLogService sysLogService;
+
     @Autowired
-    private SysLogService sysLogService;
+    public SysLogController(SysLogService sysLogService) {
+        this.sysLogService = sysLogService;
+    }
 
     /**
      * 跳转列表
@@ -45,9 +53,10 @@ public class SysLogController {
     @ResponseBody
     public Result list(@Validated SysLogListReq sysLogListReq, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
-            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        return Result.success(sysLogService.list(sysLogListReq));
+        IPage<SysLog> list = sysLogService.list(sysLogListReq);
+        return Result.success(list);
     }
 
 }

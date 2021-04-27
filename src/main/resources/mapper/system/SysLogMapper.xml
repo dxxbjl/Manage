@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.yangyouwang.crud.system.mapper.SysLogMapper">
+  <resultMap id="BaseResultMap" type="io.github.yangyouwang.crud.system.model.SysLog">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="package_name" jdbcType="VARCHAR" property="packageName" />
+    <result column="class_name" jdbcType="VARCHAR" property="className" />
+    <result column="method_name" jdbcType="VARCHAR" property="methodName" />
+    <result column="args_name" jdbcType="VARCHAR" property="argsName" />
+    <result column="args_value" jdbcType="VARCHAR" property="argsValue" />
+    <result column="exception_name" jdbcType="VARCHAR" property="exceptionName" />
+    <result column="err_msg" jdbcType="VARCHAR" property="errMsg" />
+    <result column="stack_trace" jdbcType="VARCHAR" property="stackTrace" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, package_name, class_name, method_name, args_name, args_value, exception_name, 
+    err_msg, stack_trace, create_time
+  </sql>
+</mapper>

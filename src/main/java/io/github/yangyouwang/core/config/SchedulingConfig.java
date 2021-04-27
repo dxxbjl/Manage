@@ -1,43 +1,40 @@
 package io.github.yangyouwang.core.config;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.github.yangyouwang.common.constant.Constants;
-import io.github.yangyouwang.crud.system.dao.SysTaskRepository;
+import io.github.yangyouwang.crud.system.mapper.SysTaskMapper;
 import io.github.yangyouwang.crud.system.model.SysTask;
-import org.apache.http.util.Asserts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.scheduling.support.CronTrigger;
 
-import javax.persistence.criteria.Predicate;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
 
 /**
  * @author yangyouwang
- * @title: QuartzConfig
+ * @title: SchedulingConfig
  * @projectName crud
- * @description: Quartz配置
+ * @description: scheduling 配置
  * @date 2021/4/12:32 PM
  */
 @Configuration
 @EnableScheduling
-public class QuartzConfig implements SchedulingConfigurer {
+public class SchedulingConfig implements SchedulingConfigurer {
 
     private Map<String, ScheduledFuture<?>> taskFutures = new ConcurrentHashMap<>();
 
     @Autowired
-    private SysTaskRepository sysTaskRepository;
+    private SysTaskMapper sysTaskMapper;
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -50,14 +47,9 @@ public class QuartzConfig implements SchedulingConfigurer {
     public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {
         // 初始化
         this.init(scheduledTaskRegistrar);
-        // 设置查询条件
-        Specification<SysTask> query = (Specification<SysTask>) (root, criteriaQuery, criteriaBuilder) -> {
-            List<Predicate> predicates = new ArrayList<>();
-            predicates.add(criteriaBuilder.equal(root.get("enabled"), Constants.ENABLED_YES));
-            return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
-        };
         // 查询所有启用的任务
-        List<SysTask> sysTasks = sysTaskRepository.findAll(query);
+        List<SysTask> sysTasks = sysTaskMapper.selectList(new LambdaQueryWrapper<SysTask>()
+                .eq(SysTask::getEnabled, Constants.ENABLED_YES));
         sysTasks.forEach(sysTask -> {
             this.addTriggerTask(sysTask.getName(),sysTask.getClassName(),sysTask.getMethodName(),sysTask.getCron());
         });

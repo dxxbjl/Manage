@@ -1,12 +1,15 @@
 package io.github.yangyouwang.core.config;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +23,18 @@ import java.util.Map;
 @Configuration
 public class DruidMonitorConfig {
 
+    /**
+     * 数据源配置
+     */
+    @Bean(destroyMethod = "close", initMethod = "init")
+    @ConfigurationProperties(prefix = "spring.datasource")
+    public DataSource druidDataSource() {
+        return new DruidDataSource();
+    }
+
+    /**
+     * 注册一个StatViewServlet
+     */
     @Bean
     public ServletRegistrationBean druidServletRegistrationBean() {
         ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean();
@@ -34,7 +49,6 @@ public class DruidMonitorConfig {
 
     /**
      * 注册DruidFilter拦截
-     *
      */
     @Bean
     public FilterRegistrationBean duridFilterRegistrationBean() {

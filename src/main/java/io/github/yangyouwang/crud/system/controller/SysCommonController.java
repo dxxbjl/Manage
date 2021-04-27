@@ -15,14 +15,19 @@ import java.util.Map;
 
 /**
  * 通用请求处理
- * 
+ *
  * @author crud
  */
 @Controller
 @RequestMapping("/sysCommon")
 public class SysCommonController {
+
+    private final SampleOSS sampleOSS;
+
     @Autowired
-    private SampleOSS sampleOSS;
+    public SysCommonController(SampleOSS sampleOSS) {
+        this.sampleOSS = sampleOSS;
+    }
 
     /**
      * 通用上传请求

@@ -1,7 +1,9 @@
 package io.github.yangyouwang.crud.system.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.XmSelectNode;
+import io.github.yangyouwang.crud.system.model.SysRole;
 import io.github.yangyouwang.crud.system.model.req.*;
 import io.github.yangyouwang.crud.system.model.resp.SysRoleResp;
 import io.github.yangyouwang.crud.system.service.SysRoleService;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author yangyouwang
@@ -29,8 +32,12 @@ public class SysRoleController {
 
     private static final String SUFFIX = "/system/sysRole";
 
+    private final SysRoleService sysRoleService;
+
     @Autowired
-    private SysRoleService sysRoleService;
+    public SysRoleController(SysRoleService sysRoleService) {
+        this.sysRoleService = sysRoleService;
+    }
 
     /**
      * 跳转列表
@@ -70,9 +77,10 @@ public class SysRoleController {
     @ResponseBody
     public Result list(@Validated SysRoleListReq sysRoleListReq, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
-            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        return Result.success(sysRoleService.list(sysRoleListReq));
+        IPage<SysRole> list = sysRoleService.list(sysRoleListReq);
+        return Result.success(list);
     }
 
     /**
@@ -83,10 +91,10 @@ public class SysRoleController {
     @ResponseBody
     public Result add(@RequestBody @Validated SysRoleAddReq sysRoleAddReq, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
-            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        sysRoleService.add(sysRoleAddReq);
-        return Result.success();
+        int flag = sysRoleService.add(sysRoleAddReq);
+        return Result.success(flag);
     }
 
     /**
@@ -97,10 +105,10 @@ public class SysRoleController {
     @ResponseBody
     public Result edit(@RequestBody @Validated SysRoleEditReq sysRoleEditReq, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
-            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        sysRoleService.edit(sysRoleEditReq);
-        return Result.success();
+        int flag = sysRoleService.edit(sysRoleEditReq);
+        return Result.success(flag);
     }
 
     /**
@@ -110,8 +118,8 @@ public class SysRoleController {
     @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
-        sysRoleService.del(id);
-        return Result.success();
+        int flag = sysRoleService.del(id);
+        return Result.success(flag);
     }
 
     /**
@@ -122,7 +130,6 @@ public class SysRoleController {
     @GetMapping("/xmSelect")
     @ResponseBody
     public List<XmSelectNode> xmSelect(@RequestParam(value = "ids",required = false) Long[] ids) {
-        List<XmSelectNode> sysMenus = sysRoleService.xmSelect(ids);
-        return sysMenus;
+        return sysRoleService.xmSelect(ids);
     }
 }

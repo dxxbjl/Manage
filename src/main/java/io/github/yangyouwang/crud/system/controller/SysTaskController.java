@@ -1,6 +1,10 @@
 package io.github.yangyouwang.crud.system.controller;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.yangyouwang.common.domain.Result;
+import io.github.yangyouwang.crud.system.model.SysTask;
 import io.github.yangyouwang.crud.system.model.req.SysTaskAddReq;
 import io.github.yangyouwang.crud.system.model.req.SysTaskEditReq;
 import io.github.yangyouwang.crud.system.model.req.SysTaskEnabledReq;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 
 /**
@@ -31,8 +36,12 @@ public class SysTaskController {
 
     private static final String SUFFIX = "/system/sysTask";
 
+    private final SysTaskService sysTaskService;
+
     @Autowired
-    private SysTaskService sysTaskService;
+    public SysTaskController(SysTaskService sysTaskService) {
+        this.sysTaskService = sysTaskService;
+    }
 
     /**
      * 跳转列表
@@ -71,10 +80,11 @@ public class SysTaskController {
     @GetMapping("/list")
     @ResponseBody
     public Result list(@Validated SysTaskListReq sysRoleListReq, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()){
-            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+        if (bindingResult.hasErrors()) {
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        return Result.success(sysTaskService.list(sysRoleListReq));
+        IPage<SysTask> list = sysTaskService.list(sysRoleListReq);
+        return Result.success(list);
     }
 
     /**
@@ -85,10 +95,10 @@ public class SysTaskController {
     @ResponseBody
     public Result add(@RequestBody @Validated SysTaskAddReq sysTaskAddReq, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
-            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        sysTaskService.add(sysTaskAddReq);
-        return Result.success();
+        int flag = sysTaskService.add(sysTaskAddReq);
+        return Result.success(flag);
     }
 
     /**
@@ -99,10 +109,12 @@ public class SysTaskController {
     @ResponseBody
     public Result edit(@RequestBody @Validated SysTaskEditReq sysTaskEditReq, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
-            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        sysTaskService.edit(sysTaskEditReq);
-        return Result.success();
+        SysTask sysTask = new SysTask();
+        BeanUtil.copyProperties(sysTaskEditReq,sysTask,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+        int flag = sysTaskService.edit(sysTask);
+        return Result.success(flag);
     }
 
     /**
@@ -113,10 +125,12 @@ public class SysTaskController {
     @ResponseBody
     public Result changeTask(@RequestBody @Validated SysTaskEnabledReq sysTaskEnabledReq, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
-            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        sysTaskService.changeTask(sysTaskEnabledReq);
-        return Result.success();
+        SysTask sysTask = sysTaskService.findTaskById(sysTaskEnabledReq.getId());
+        sysTask.setEnabled(sysTaskEnabledReq.getEnabled());
+        int flag = sysTaskService.edit(sysTask);
+        return Result.success(flag);
     }
 
     /**
@@ -126,7 +140,7 @@ public class SysTaskController {
     @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
-        sysTaskService.del(id);
-        return Result.success();
+        int flag = sysTaskService.del(id);
+        return Result.success(flag);
     }
 }

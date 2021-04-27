@@ -1,11 +1,14 @@
 package io.github.yangyouwang.crud.system.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.core.util.SecurityUtils;
+import io.github.yangyouwang.crud.system.model.SysUser;
 import io.github.yangyouwang.crud.system.model.req.*;
 import io.github.yangyouwang.crud.system.model.resp.SysUserResp;
 import io.github.yangyouwang.crud.system.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 
 /**
@@ -29,8 +33,12 @@ public class SysUserController {
 
     private static final String SUFFIX = "/system/sysUser";
 
+    private final SysUserService sysUserService;
+
     @Autowired
-    private SysUserService sysUserService;
+    public SysUserController(SysUserService sysUserService) {
+        this.sysUserService = sysUserService;
+    }
 
     /**
      * 跳转到用户信息
@@ -38,7 +46,8 @@ public class SysUserController {
      */
     @GetMapping("/userInfoPage")
     public String userInfoPage(ModelMap map){
-        SysUserResp sysUser = sysUserService.detail(SecurityUtils.getSysUser().getId());
+        User user = SecurityUtils.getSysUser();
+        SysUserResp sysUser = sysUserService.findUserByName(user.getUsername());
         map.put("sysUser",sysUser);
         return SUFFIX + "/userInfo";
     }
@@ -49,7 +58,8 @@ public class SysUserController {
      */
     @GetMapping("/modifyPassPage")
     public String modifyPassPage(ModelMap map) {
-        SysUserResp sysUser = sysUserService.detail(SecurityUtils.getSysUser().getId());
+        User user = SecurityUtils.getSysUser();
+        SysUserResp sysUser = sysUserService.findUserByName(user.getUsername());
         map.put("sysUser",sysUser);
         return SUFFIX + "/password";
     }
@@ -92,9 +102,10 @@ public class SysUserController {
     @ResponseBody
     public Result list(@Validated SysUserListReq sysUserListReq,BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
-            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        return Result.success(sysUserService.list(sysUserListReq));
+        IPage<SysUser> list = sysUserService.list(sysUserListReq);
+        return Result.success(list);
     }
 
     /**
@@ -105,10 +116,10 @@ public class SysUserController {
     @ResponseBody
     public Result add(@RequestBody @Validated SysUserAddReq sysUserAddReq,BindingResult bindingResult){
         if (bindingResult.hasErrors()){
-            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        sysUserService.add(sysUserAddReq);
-        return Result.success();
+        int flag = sysUserService.add(sysUserAddReq);
+        return Result.success(flag);
     }
 
     /**
@@ -119,10 +130,10 @@ public class SysUserController {
     @ResponseBody
     public Result edit(@RequestBody @Validated SysUserEditReq sysUserEditReq, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
-            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        sysUserService.edit(sysUserEditReq);
-        return Result.success();
+        int flag = sysUserService.edit(sysUserEditReq);
+        return Result.success(flag);
     }
 
     /**
@@ -133,10 +144,10 @@ public class SysUserController {
     @ResponseBody
     public Result changeUser(@RequestBody @Validated SysUserEnabledReq sysUserEnabledReq, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
-            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        sysUserService.changeUser(sysUserEnabledReq);
-        return Result.success();
+        int flag = sysUserService.changeUser(sysUserEnabledReq);
+        return Result.success(flag);
     }
 
     /**
@@ -146,8 +157,8 @@ public class SysUserController {
     @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
-        sysUserService.del(id);
-        return Result.success();
+        int flag = sysUserService.del(id);
+        return Result.success(flag);
     }
 
     /**
@@ -158,9 +169,9 @@ public class SysUserController {
     @ResponseBody
     public Result modifyPass(@RequestBody @Validated ModifyPassReq modifyPassReq, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
-            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        sysUserService.modifyPass(modifyPassReq);
-        return Result.success();
+        int flag = sysUserService.modifyPass(modifyPassReq);
+        return Result.success(flag);
     }
 }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.yangyouwang.crud.system.mapper.SysDictTypeMapper">
+  <resultMap id="BaseResultMap" type="io.github.yangyouwang.crud.system.model.SysDictType">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="dict_key" jdbcType="VARCHAR" property="dictKey" />
+    <result column="dict_name" jdbcType="VARCHAR" property="dictName" />
+    <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+    <result column="enabled" jdbcType="VARCHAR" property="enabled" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <resultMap id="DictResultMap" type="io.github.yangyouwang.crud.system.model.SysDictType">
+    <id column="dict_type_id" jdbcType="BIGINT" property="id" />
+    <result column="dict_key" jdbcType="VARCHAR" property="dictKey" />
+    <result column="dict_name" jdbcType="VARCHAR" property="dictName" />
+    <result column="enabled" jdbcType="VARCHAR" property="enabled" />
+    <collection property="dictValues" javaType="java.util.ArrayList" ofType="io.github.yangyouwang.crud.system.model.SysDictValue">
+      <id column="dict_value_id" jdbcType="BIGINT" property="id" />
+      <result column="dict_value_key" jdbcType="VARCHAR" property="dictValueKey"/>
+      <result column="dict_value_name" jdbcType="VARCHAR" property="dictValueName"/>
+    </collection>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, dict_key, dict_name, order_num, enabled, create_by, create_time, update_by, update_time, 
+    remark
+  </sql>
+  <select id="findByDictKey" parameterType="string" resultMap="DictResultMap">
+    select dt.id as dict_type_id,dt.dict_key,dt.dict_name,dt.enabled,dv.id as dict_value_id,dv.dict_value_key,dv.dict_value_name
+    from sys_dict_type dt
+    left join sys_dict_value dv on dt.id = dv.dict_type_id
+    where dt.enabled = 'Y' and dt.dict_key = #{dictKey}
+  </select>
+</mapper>

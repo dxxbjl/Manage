@@ -1,21 +1,20 @@
 package io.github.yangyouwang.crud.system.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.common.domain.TreeSelectNode;
 import io.github.yangyouwang.common.domain.XmSelectNode;
 import io.github.yangyouwang.core.converter.ListToTree;
 import io.github.yangyouwang.core.converter.impl.ListToTreeImpl;
-import io.github.yangyouwang.crud.system.dao.SysMenuRepository;
+import io.github.yangyouwang.crud.system.mapper.SysMenuMapper;
 import io.github.yangyouwang.crud.system.model.SysMenu;
 import io.github.yangyouwang.crud.system.model.req.SysMenuAddReq;
 import io.github.yangyouwang.crud.system.model.req.SysMenuEditReq;
 import io.github.yangyouwang.crud.system.model.req.SysMenuListReq;
 import io.github.yangyouwang.crud.system.model.req.SysMenuVisibleReq;
 import io.github.yangyouwang.crud.system.model.resp.SysMenuResp;
-import org.apache.logging.log4j.util.Strings;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -23,8 +22,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.ArrayUtils;
 
-import javax.persistence.criteria.Predicate;
-import java.util.ArrayList;
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,21 +37,21 @@ import java.util.stream.Collectors;
 @Service
 public class SysMenuService {
 
-    @Autowired
-    private SysMenuRepository sysMenuRepository;
+    @Resource
+    private SysMenuMapper sysMenuMapper;
 
     /**
      * 根据用户查询菜单
-     * @param id 用户id
+     * @param name 用户名称
      * @return 菜单信息
      */
     @Transactional(readOnly = true)
-    public List<SysMenu> selectMenusByUser(Long id) {
+    public List<SysMenu> selectMenusByUser(String name) {
         List<SysMenu> menus;
-        if (Constants.ADMINISTRATOR_USER_ID.equals(id)) {
-            menus = this.sysMenuRepository.findSysMenu();
+        if (Constants.ADMINISTRATOR_USER_NAME.equals(name)) {
+            menus = this.sysMenuMapper.findSysMenu();
         } else {
-            menus = this.sysMenuRepository.findSysMenuByUserId(id);
+            menus = this.sysMenuMapper.findSysMenuByName(name);
         }
         if (menus.size() == 0) {
             throw new AccessDeniedException("暂未分配菜单");
@@ -62,14 +60,13 @@ public class SysMenuService {
         return treeBuilder.toTree(menus);
     }
 
-
     /**
      * 跳转编辑
      * @return 编辑页面
      */
     @Transactional(readOnly = true)
     public SysMenuResp detail(Long id) {
-        SysMenu sysMenu = sysMenuRepository.findSysMenuById(id);
+        SysMenu sysMenu = sysMenuMapper.findSysMenuById(id);
         SysMenuResp sysMenuResp = new SysMenuResp();
         BeanUtils.copyProperties(sysMenu,sysMenuResp);
         return sysMenuResp;
@@ -81,14 +78,8 @@ public class SysMenuService {
      */
     @Transactional(readOnly = true)
     public List<SysMenuResp> list(SysMenuListReq sysMenuListReq) {
-        Specification<SysMenu> query = (Specification<SysMenu>) (root, criteriaQuery, criteriaBuilder) -> {
-            List<Predicate> predicates = new ArrayList<>();
-            if(Strings.isNotBlank(sysMenuListReq.getMenuName())){
-                predicates.add(criteriaBuilder.like(root.get("menuName"),"%" +sysMenuListReq.getMenuName() + "%"));
-            }
-            return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
-        };
-        List<SysMenu> sysMenus = sysMenuRepository.findAll(query);
+        List<SysMenu> sysMenus = sysMenuMapper.selectList(new LambdaQueryWrapper<SysMenu>()
+                .like(StringUtils.isNotBlank(sysMenuListReq.getMenuName()), SysMenu::getMenuName , sysMenuListReq.getMenuName()));
         return sysMenus.stream().map(s -> {
             SysMenuResp sysMenuResp = new SysMenuResp();
             BeanUtils.copyProperties(s,sysMenuResp);
@@ -98,41 +89,43 @@ public class SysMenuService {
 
     /**
      * 添加请求
+     * @return 添加状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public void add(SysMenuAddReq sysMenuAddReq) {
+    public int add(SysMenuAddReq sysMenuAddReq) {
         SysMenu sysMenu = new SysMenu();
         BeanUtils.copyProperties(sysMenuAddReq,sysMenu);
-        sysMenuRepository.save(sysMenu);
+        return sysMenuMapper.insert(sysMenu);
     }
 
     /**
      * 编辑请求
+     * @return 修改状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public void edit(SysMenuEditReq sysMenuEditReq) {
-       sysMenuRepository.findById(sysMenuEditReq.getId()).ifPresent(sysMenu -> {
-            BeanUtils.copyProperties(sysMenuEditReq,sysMenu);
-            sysMenuRepository.save(sysMenu);
-        });
+    public int edit(SysMenuEditReq sysMenuEditReq) {
+        SysMenu sysMenu = new SysMenu();
+        BeanUtils.copyProperties(sysMenuEditReq,sysMenu);
+        return sysMenuMapper.updateById(sysMenu);
     }
 
     /**
      * 删除请求
+     * @return 删除状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public void del(Long id) {
-        if(sysMenuRepository.existsById(id)) {
-            sysMenuRepository.deleteById(id);
-        }
+    public int del(Long id) {
+        return sysMenuMapper.deleteById(id);
     }
 
     /**
      * 查询菜单列表
+     * @return 菜单列表
      */
     @Transactional(readOnly = true)
     public List<TreeSelectNode> treeSelect() {
-        List<SysMenu> menus = this.sysMenuRepository.findAll();
+        List<SysMenu> menus = sysMenuMapper.selectList(new LambdaQueryWrapper<SysMenu>()
+                .eq(SysMenu::getVisible,Constants.ENABLED_YES));
         List<TreeSelectNode> result = menus.stream().map(sysMenu -> {
             TreeSelectNode treeNode = new TreeSelectNode();
             treeNode.setId(sysMenu.getId());
@@ -152,7 +145,8 @@ public class SysMenuService {
      */
     @Transactional(readOnly = true)
     public List<XmSelectNode> xmSelect(Long[] ids) {
-        List<SysMenu> menus = this.sysMenuRepository.findAll();
+        List<SysMenu> menus = sysMenuMapper.selectList(new LambdaQueryWrapper<SysMenu>()
+                .eq(SysMenu::getVisible,Constants.ENABLED_YES));
         List<XmSelectNode> result = menus.stream().map(sysMenu -> {
             XmSelectNode treeNode = new XmSelectNode();
             treeNode.setName(sysMenu.getMenuName());
@@ -168,12 +162,13 @@ public class SysMenuService {
 
     /**
      * 更新菜单状态
+     * @return 更新状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public void changeMenu(SysMenuVisibleReq sysMenuVisibleReq) {
-        sysMenuRepository.findById(sysMenuVisibleReq.getId()).ifPresent(sysMenu -> {
-            sysMenu.setVisible(sysMenuVisibleReq.getVisible());
-            sysMenuRepository.save(sysMenu);
-        });
+    public int changeMenu(SysMenuVisibleReq sysMenuVisibleReq) {
+        SysMenu sysMenu = new SysMenu();
+        sysMenu.setId(sysMenuVisibleReq.getId());
+        sysMenu.setVisible(sysMenuVisibleReq.getVisible());
+        return sysMenuMapper.updateById(sysMenu);
     }
 }

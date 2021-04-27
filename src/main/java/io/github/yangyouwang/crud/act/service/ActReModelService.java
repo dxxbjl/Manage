@@ -2,9 +2,12 @@ package io.github.yangyouwang.crud.act.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.github.yangyouwang.crud.act.dao.ActReModelRepository;
+import io.github.yangyouwang.crud.act.mapper.ActReModelMapper;
 import io.github.yangyouwang.crud.act.model.ActReModel;
 import io.github.yangyouwang.crud.act.model.req.ActReModelAddReq;
 import io.github.yangyouwang.crud.act.model.req.ActReModelEditReq;
@@ -21,19 +24,11 @@ import org.activiti.engine.repository.DeploymentBuilder;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.criteria.Predicate;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
 /**
  * @author yangyouwang
  * @title: ActReModelService
@@ -46,7 +41,7 @@ import java.util.List;
 public class ActReModelService {
 
     @Autowired
-    private ActReModelRepository actReModelRepository;
+    private ActReModelMapper actReModelMapper;
 
     @Autowired
     private RepositoryService repositoryService;
@@ -55,17 +50,10 @@ public class ActReModelService {
      * 获取列表
      * @return 列表数据
      */
-    public Page<ActReModel> list(ActReModelListReq actReModelListReq) {
-        Pageable pageable = PageRequest.of(actReModelListReq.getPageNum() - 1,actReModelListReq.getPageSize());
-        Specification<ActReModel> query = (Specification<ActReModel>) (root, criteriaQuery, criteriaBuilder) -> {
-            List<Predicate> predicates = new ArrayList<>();
-            String name = actReModelListReq.getName();
-            if(Strings.isNotBlank(name)){
-                predicates.add(criteriaBuilder.like(root.get("name"),"%" + name + "%"));
-            }
-            return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
-        };
-        return actReModelRepository.findAll(query,pageable);
+    public IPage<ActReModel> list(ActReModelListReq actReModelListReq) {
+        return actReModelMapper.selectPage(new Page<>(actReModelListReq.getPageNum() - 1, actReModelListReq.getPageSize()),
+                new LambdaQueryWrapper<ActReModel>()
+                        .like(ActReModel::getName , actReModelListReq.getName()));
     }
 
     /**
@@ -74,7 +62,7 @@ public class ActReModelService {
      * @return 详情
      */
     public ActReModelResp detail(String id) {
-        ActReModel actReModel = actReModelRepository.findById(id).orElse(new ActReModel());
+        ActReModel actReModel = actReModelMapper.selectById(id);
         ActReModelResp actReModelResp = new ActReModelResp();
         BeanUtils.copyProperties(actReModel,actReModelResp);
         return actReModelResp;
@@ -147,21 +135,18 @@ public class ActReModelService {
      * 编辑模型
      * @return 编辑状态
      */
-    public void edit(ActReModelEditReq actReModelEditReq) {
-        actReModelRepository.findById(actReModelEditReq.getId()).ifPresent(actReModel -> {
-            BeanUtil.copyProperties(actReModelEditReq,actReModel,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
-            actReModelRepository.save(actReModel);
-        });
+    public int edit(ActReModelEditReq actReModelEditReq) {
+        ActReModel actReModel = new ActReModel();
+        BeanUtil.copyProperties(actReModelEditReq,actReModel,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+        return actReModelMapper.updateById(actReModel);
     }
 
     /**
      * 删除模型
      * @return 删除状态
      */
-    public void del(String id) {
-        if (actReModelRepository.existsById(id)) {
-            // 删除模型
-            repositoryService.deleteModel(id);
-        }
+    public int del(String id) {
+        // 删除模型
+        return actReModelMapper.deleteById(id);
     }
 }
