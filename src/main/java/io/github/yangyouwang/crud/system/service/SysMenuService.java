@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static java.util.Optional.*;
+
 /**
  * @author yangyouwang
  * @title: SysMenuService
@@ -153,7 +155,7 @@ public class SysMenuService {
             treeNode.setValue(sysMenu.getId());
             treeNode.setId(sysMenu.getId());
             treeNode.setParentId(sysMenu.getParentId());
-            Optional.ofNullable(ids).ifPresent(optIds -> treeNode.setSelected(ArrayUtils.contains(optIds,sysMenu.getId())));
+            ofNullable(ids).ifPresent(optIds -> treeNode.setSelected(ArrayUtils.contains(optIds,sysMenu.getId())));
             return treeNode;
         }).collect(Collectors.toList());
         ListToTree treeBuilder = new ListToTreeImpl();

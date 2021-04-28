@@ -87,8 +87,10 @@ public class SysUserService implements UserDetailsService {
         SysUser sysUser = sysUserMapper.findUserByUserId(id);
         SysUserResp sysUserResp = new SysUserResp();
         BeanUtils.copyProperties(sysUser,sysUserResp);
-        Optional.ofNullable(sysUser.getRoles()).map(sysRoles ->
-                sysRoles.stream().map(SysRole::getId).toArray(Long[]::new)).ifPresent(sysUserResp::setRoleIds);
+        ofNullable(sysUser.getRoles()).ifPresent(sysRoles -> {
+            Long[] roleIds = sysRoles.stream().map(SysRole::getId).toArray(Long[]::new);
+            sysUserResp.setRoleIds(roleIds);
+        });
         return sysUserResp;
     }
 

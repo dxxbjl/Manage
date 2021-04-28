@@ -7,8 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * 启动类
  * @author yangyouwang
  */
-@SpringBootApplication(exclude = {org.activiti.spring.boot.SecurityAutoConfiguration.class,
-		org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class})
+@SpringBootApplication
 public class CrudApplication {
 
 	public static void main(String[] args) {

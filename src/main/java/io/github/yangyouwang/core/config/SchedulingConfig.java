@@ -15,7 +15,6 @@ import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.scheduling.support.CronTrigger;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
@@ -83,8 +82,8 @@ public class SchedulingConfig implements SchedulingConfigurer, ApplicationContex
                         Object obj = applicationContext.getBean(className);
                         Method method = obj.getClass().getMethod(methodName);
                         method.invoke(obj);
-                    } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                        e.printStackTrace();
+                    } catch (Exception e) {
+                       throw new RuntimeException("任务配置有误 => "+ e.toString());
                     }
                 },
                 triggerContext -> {

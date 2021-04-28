@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static java.util.Optional.*;
+
 /**
  * @author yangyouwang
  * @title: SysRoleService
@@ -146,7 +148,7 @@ public class SysRoleService {
             treeNode.setName(sysMenu.getRoleName());
             treeNode.setValue(sysMenu.getId());
             treeNode.setId(sysMenu.getId());
-            Optional.ofNullable(ids).ifPresent(optIds -> treeNode.setSelected(ArrayUtils.contains(optIds,sysMenu.getId())));
+            ofNullable(ids).ifPresent(optIds -> treeNode.setSelected(ArrayUtils.contains(optIds,sysMenu.getId())));
             return treeNode;
         }).collect(Collectors.toList());
     }

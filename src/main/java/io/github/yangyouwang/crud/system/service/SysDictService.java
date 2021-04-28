@@ -67,11 +67,14 @@ public class SysDictService {
         SysDictType sysDict = sysDictTypeMapper.findDictById(id);
         SysDictResp sysDictResp = new SysDictResp();
         BeanUtils.copyProperties(sysDict,sysDictResp);
-        ofNullable(sysDict.getDictValues()).map(result -> result.stream().map(sysDictValue -> {
-            SysDictValueDto sysDictValueDto = new SysDictValueDto();
-            BeanUtils.copyProperties(sysDictValue, sysDictValueDto);
-            return sysDictValueDto;
-        }).collect(Collectors.toList())).ifPresent(sysDictResp::setSysDictValues);
+        ofNullable(sysDict.getDictValues()).ifPresent(result -> {
+            List<SysDictValueDto> sysDictValueDtos = result.stream().map(sysDictValue -> {
+                SysDictValueDto sysDictValueDto = new SysDictValueDto();
+                BeanUtils.copyProperties(sysDictValue, sysDictValueDto);
+                return sysDictValueDto;
+            }).collect(Collectors.toList());
+            sysDictResp.setSysDictValues(sysDictValueDtos);
+        });
         return sysDictResp;
     }
 
@@ -88,7 +91,7 @@ public class SysDictService {
         BeanUtils.copyProperties(sysDictAddReq,sysDict);
         int flag = sysDictTypeMapper.insert(sysDict);
         if (flag > 0) {
-            Optional.ofNullable(sysDictAddReq.getSysDictValues()).ifPresent(sysDictValueDtos -> {
+            ofNullable(sysDictAddReq.getSysDictValues()).ifPresent(sysDictValueDtos -> {
                 insertDictValueBatch(sysDictValueDtos, sysDict.getId());
             });
             return flag;
@@ -107,7 +110,7 @@ public class SysDictService {
         BeanUtils.copyProperties(sysDictEditReq,sysDictType);
         int flag = sysDictTypeMapper.updateById(sysDictType);
         if (flag > 0) {
-            Optional.ofNullable(sysDictEditReq.getSysDictValues()).ifPresent(sysDictValueDtos -> {
+            ofNullable(sysDictEditReq.getSysDictValues()).ifPresent(sysDictValueDtos -> {
                 insertDictValueBatch(sysDictValueDtos, sysDictType.getId());
             });
             return flag;
