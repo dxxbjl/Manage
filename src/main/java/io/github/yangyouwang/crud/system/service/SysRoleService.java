@@ -126,9 +126,8 @@ public class SysRoleService {
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public int del(Long id) {
-        int flag = sysRoleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>()
-                .eq(SysRoleMenu::getRoleId,id));
-        if (flag > 0) {
+        if (sysRoleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>()
+                .eq(SysRoleMenu::getRoleId,id)) > 0) {
             return sysRoleMapper.deleteById(id);
         }
         throw new RuntimeException("删除角色失败");

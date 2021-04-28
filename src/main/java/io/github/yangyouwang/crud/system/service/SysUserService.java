@@ -134,7 +134,6 @@ public class SysUserService implements UserDetailsService {
             if (sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUserId,user.getId())) > 0) {
                 return insertUserRoleBatch(user.getId(), sysUserEditReq.getRoleIds());
             }
-
         }
         throw new RuntimeException("修改用户失败");
     }

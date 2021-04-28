@@ -103,7 +103,12 @@
           ,cols: [[ //表头
               {field: 'id', title: 'ID', sort: true, fixed: 'left'}
               ,{field: 'avatar', title: "头像",
-                  templet:function (d) { return '<div><img alt="" width="50%" height="50%" src='+d.avatar+'></div>' }
+                  templet: function (d) {
+                    if (d.avatar) {
+                      return '<div><img alt="" width="50%" height="50%" src='+d.avatar+'></div>'
+                    }
+                    return '<div><img alt="" width="50%" height="50%" src="/static/style/img/def_profile.jpg"></div>'
+                  }
               }
               ,{field: 'userName', title: '账户'}
               ,{field: 'email', title: '邮箱'}

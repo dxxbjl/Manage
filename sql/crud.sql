@@ -11,7 +11,7 @@
  Target Server Version : 80023
  File Encoding         : 65001
 
- Date: 27/04/2021 17:38:00
+ Date: 28/04/2021 14:24:06
 */
 
 SET NAMES utf8mb4;
@@ -827,7 +827,7 @@ CREATE TABLE `QRTZ_SCHEDULER_STATE`  (
 -- ----------------------------
 -- Records of QRTZ_SCHEDULER_STATE
 -- ----------------------------
-INSERT INTO `QRTZ_SCHEDULER_STATE` VALUES ('clusteredScheduler', 'LAPTOP-6CSRUMI11619515947965', 1619516278420, 10000);
+INSERT INTO `QRTZ_SCHEDULER_STATE` VALUES ('clusteredScheduler', 'LAPTOP-6CSRUMI11619590988385', 1619591038689, 10000);
 
 -- ----------------------------
 -- Table structure for QRTZ_SIMPLE_TRIGGERS
@@ -937,8 +937,8 @@ CREATE TABLE `sys_dict_type`  (
 -- ----------------------------
 -- Records of sys_dict_type
 -- ----------------------------
-INSERT INTO `sys_dict_type` VALUES (17, 'sex', '性别', 1, 'Y', 'admin', '2021-04-16 12:27:04', 'admin', '2021-04-27 17:27:18', '性别字典');
-INSERT INTO `sys_dict_type` VALUES (18, 'menuType', '菜单类型', 2, 'Y', 'admin', '2021-04-16 20:42:06', 'admin', '2021-04-25 16:36:20', '菜单类型');
+INSERT INTO `sys_dict_type` VALUES (17, 'sex', '性别', 1, 'Y', 'admin', '2021-04-16 12:27:04', 'admin', '2021-04-28 09:44:22', '性别字典');
+INSERT INTO `sys_dict_type` VALUES (18, 'menuType', '菜单类型', 2, 'Y', 'admin', '2021-04-16 20:42:06', 'admin', '2021-04-28 11:40:05', '菜单类型');
 
 -- ----------------------------
 -- Table structure for sys_dict_value
@@ -961,7 +961,6 @@ CREATE TABLE `sys_dict_value`  (
 -- ----------------------------
 -- Records of sys_dict_value
 -- ----------------------------
-INSERT INTO `sys_dict_value` VALUES (21, 17, '0', '男', 1, 'admin', '2021-04-16 12:27:04', 'admin', '2021-04-25 16:41:48', '男');
 INSERT INTO `sys_dict_value` VALUES (22, 17, '1', '女', 2, 'admin', '2021-04-16 12:27:04', 'admin', '2021-04-25 16:41:48', '女');
 INSERT INTO `sys_dict_value` VALUES (23, 17, '2', '未知', 3, 'admin', '2021-04-16 12:27:04', 'admin', '2021-04-25 16:41:48', '未知');
 INSERT INTO `sys_dict_value` VALUES (24, 18, 'M', '目录', 1, 'admin', '2021-04-16 20:42:06', 'admin', '2021-04-16 20:42:06', '目录');
@@ -1017,7 +1016,7 @@ CREATE TABLE `sys_menu`  (
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
-INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, 1, '#', 'M', 'Y', '', '1', '2018-03-16 11:33:00', 'admin', '2021-04-25 10:57:25', '系统管理目录');
+INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, 1, '#', 'M', 'Y', '', '1', '2018-03-16 11:33:00', 'admin', '2021-04-28 09:45:11', '系统管理目录');
 INSERT INTO `sys_menu` VALUES (3, '系统工具', 0, 2, '#', 'M', 'Y', '', '1', '2018-03-16 11:33:00', 'admin', '2021-04-25 10:57:27', '系统工具目录');
 INSERT INTO `sys_menu` VALUES (100, '用户管理', 1, 1, '/sysUser/listPage', 'C', 'Y', 'user:list', '1', '2018-03-16 11:33:00', 'admin', '2021-04-10 11:23:17', '用户管理菜单');
 INSERT INTO `sys_menu` VALUES (101, '角色管理', 1, 2, '/sysRole/listPage', 'C', 'Y', 'role:list', '1', '2018-03-16 11:33:00', 'admin', '2021-04-10 11:22:48', '角色管理菜单');
@@ -1077,10 +1076,9 @@ INSERT INTO `sys_role` VALUES (2, '基本角色', 'USER', '基本角色', '', NU
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_role_menu`;
 CREATE TABLE `sys_role_menu`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
   `role_id` bigint NOT NULL COMMENT '角色ID',
   `menu_id` bigint NOT NULL COMMENT '菜单ID',
-  PRIMARY KEY (`id`) USING BTREE,
+  PRIMARY KEY (`role_id`, `menu_id`) USING BTREE,
   INDEX `FKf3mud4qoc7ayew8nml4plkevo`(`menu_id`) USING BTREE,
   INDEX `FKkeitxsgxwayackgqllio4ohn5`(`role_id`) USING BTREE,
   CONSTRAINT `FKf3mud4qoc7ayew8nml4plkevo` FOREIGN KEY (`menu_id`) REFERENCES `sys_menu` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
@@ -1090,41 +1088,41 @@ CREATE TABLE `sys_role_menu`  (
 -- ----------------------------
 -- Records of sys_role_menu
 -- ----------------------------
-INSERT INTO `sys_role_menu` VALUES (179, 2, 1);
-INSERT INTO `sys_role_menu` VALUES (180, 2, 100);
-INSERT INTO `sys_role_menu` VALUES (181, 2, 1006);
-INSERT INTO `sys_role_menu` VALUES (305, 1, 1);
-INSERT INTO `sys_role_menu` VALUES (306, 1, 3);
-INSERT INTO `sys_role_menu` VALUES (307, 1, 100);
-INSERT INTO `sys_role_menu` VALUES (308, 1, 101);
-INSERT INTO `sys_role_menu` VALUES (309, 1, 102);
-INSERT INTO `sys_role_menu` VALUES (310, 1, 115);
-INSERT INTO `sys_role_menu` VALUES (311, 1, 116);
-INSERT INTO `sys_role_menu` VALUES (312, 1, 1005);
-INSERT INTO `sys_role_menu` VALUES (313, 1, 1006);
-INSERT INTO `sys_role_menu` VALUES (314, 1, 1007);
-INSERT INTO `sys_role_menu` VALUES (315, 1, 2005);
-INSERT INTO `sys_role_menu` VALUES (316, 1, 2006);
-INSERT INTO `sys_role_menu` VALUES (317, 1, 2007);
-INSERT INTO `sys_role_menu` VALUES (318, 1, 3005);
-INSERT INTO `sys_role_menu` VALUES (319, 1, 3006);
-INSERT INTO `sys_role_menu` VALUES (320, 1, 3007);
-INSERT INTO `sys_role_menu` VALUES (321, 1, 3008);
-INSERT INTO `sys_role_menu` VALUES (322, 1, 3009);
-INSERT INTO `sys_role_menu` VALUES (323, 1, 3010);
-INSERT INTO `sys_role_menu` VALUES (324, 1, 3011);
-INSERT INTO `sys_role_menu` VALUES (325, 1, 3012);
-INSERT INTO `sys_role_menu` VALUES (326, 1, 3013);
-INSERT INTO `sys_role_menu` VALUES (327, 1, 3014);
-INSERT INTO `sys_role_menu` VALUES (328, 1, 3015);
-INSERT INTO `sys_role_menu` VALUES (329, 1, 3016);
-INSERT INTO `sys_role_menu` VALUES (330, 1, 3017);
-INSERT INTO `sys_role_menu` VALUES (331, 1, 3018);
-INSERT INTO `sys_role_menu` VALUES (332, 1, 3019);
-INSERT INTO `sys_role_menu` VALUES (333, 1, 3021);
-INSERT INTO `sys_role_menu` VALUES (334, 1, 3022);
-INSERT INTO `sys_role_menu` VALUES (335, 1, 3023);
-INSERT INTO `sys_role_menu` VALUES (336, 1, 3020);
+INSERT INTO `sys_role_menu` VALUES (1, 1);
+INSERT INTO `sys_role_menu` VALUES (2, 1);
+INSERT INTO `sys_role_menu` VALUES (1, 3);
+INSERT INTO `sys_role_menu` VALUES (1, 100);
+INSERT INTO `sys_role_menu` VALUES (2, 100);
+INSERT INTO `sys_role_menu` VALUES (1, 101);
+INSERT INTO `sys_role_menu` VALUES (1, 102);
+INSERT INTO `sys_role_menu` VALUES (1, 115);
+INSERT INTO `sys_role_menu` VALUES (1, 116);
+INSERT INTO `sys_role_menu` VALUES (1, 1005);
+INSERT INTO `sys_role_menu` VALUES (1, 1006);
+INSERT INTO `sys_role_menu` VALUES (2, 1006);
+INSERT INTO `sys_role_menu` VALUES (1, 1007);
+INSERT INTO `sys_role_menu` VALUES (1, 2005);
+INSERT INTO `sys_role_menu` VALUES (1, 2006);
+INSERT INTO `sys_role_menu` VALUES (1, 2007);
+INSERT INTO `sys_role_menu` VALUES (1, 3005);
+INSERT INTO `sys_role_menu` VALUES (1, 3006);
+INSERT INTO `sys_role_menu` VALUES (1, 3007);
+INSERT INTO `sys_role_menu` VALUES (1, 3008);
+INSERT INTO `sys_role_menu` VALUES (1, 3009);
+INSERT INTO `sys_role_menu` VALUES (1, 3010);
+INSERT INTO `sys_role_menu` VALUES (1, 3011);
+INSERT INTO `sys_role_menu` VALUES (1, 3012);
+INSERT INTO `sys_role_menu` VALUES (1, 3013);
+INSERT INTO `sys_role_menu` VALUES (1, 3014);
+INSERT INTO `sys_role_menu` VALUES (1, 3015);
+INSERT INTO `sys_role_menu` VALUES (1, 3016);
+INSERT INTO `sys_role_menu` VALUES (1, 3017);
+INSERT INTO `sys_role_menu` VALUES (1, 3018);
+INSERT INTO `sys_role_menu` VALUES (1, 3019);
+INSERT INTO `sys_role_menu` VALUES (1, 3020);
+INSERT INTO `sys_role_menu` VALUES (1, 3021);
+INSERT INTO `sys_role_menu` VALUES (1, 3022);
+INSERT INTO `sys_role_menu` VALUES (1, 3023);
 
 -- ----------------------------
 -- Table structure for sys_task
@@ -1148,7 +1146,7 @@ CREATE TABLE `sys_task`  (
 -- ----------------------------
 -- Records of sys_task
 -- ----------------------------
-INSERT INTO `sys_task` VALUES (1, '测试', '*/1 * * * * ?', 'testJob', 'test', 'N', '1', '2021-04-09 21:29:48', 'admin', '2021-04-27 17:26:19', '');
+INSERT INTO `sys_task` VALUES (1, '测试', '*/1 * * * * ?', 'testJob', 'test', 'N', '1', '2021-04-09 21:29:48', 'admin', '2021-04-28 14:15:37', '');
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -1174,18 +1172,17 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 'admin', '$2a$10$YajcgOCR3KE76BkuTVBTvuWOrmtzh0MyY87m7jAbA5idFYZ8XJQbO', 'Y', '616505453@qq.com', '17515087128', '0', 'https://platform-application.oss-cn-beijing.aliyuncs.com/img/def/1617164595541-821b4344-5d94-4b29.png', '', NULL, 'admin', '2021-04-27 17:30:18', '222211');
-INSERT INTO `sys_user` VALUES (24, 'test', '$2a$10$YajcgOCR3KE76BkuTVBTvuWOrmtzh0MyY87m7jAbA5idFYZ8XJQbO', 'Y', '123', '123', '0', 'https://platform-application.oss-cn-beijing.aliyuncs.com/img/def/1617194953511-4fa23d1f-e5f7-4bd2.png', 'admin', '2021-03-30 20:25:07', 'admin', '2021-04-27 15:12:51', '123');
+INSERT INTO `sys_user` VALUES (1, 'admin', '$2a$10$YajcgOCR3KE76BkuTVBTvuWOrmtzh0MyY87m7jAbA5idFYZ8XJQbO', 'Y', '616505453@qq.com', '17515087128', '0', 'https://platform-application.oss-cn-beijing.aliyuncs.com/img/def/1617164595541-821b4344-5d94-4b29.png', '', NULL, 'admin', '2021-04-28 14:15:18', '222211');
+INSERT INTO `sys_user` VALUES (24, 'test', '$2a$10$YajcgOCR3KE76BkuTVBTvuWOrmtzh0MyY87m7jAbA5idFYZ8XJQbO', 'Y', '123', '123', '0', 'https://platform-application.oss-cn-beijing.aliyuncs.com/img/def/1617194953511-4fa23d1f-e5f7-4bd2.png', 'admin', '2021-03-30 20:25:07', 'admin', '2021-04-28 11:23:31', '123');
 
 -- ----------------------------
 -- Table structure for sys_user_role
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user_role`;
 CREATE TABLE `sys_user_role`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
   `user_id` bigint NOT NULL COMMENT '用户id',
   `role_id` bigint NOT NULL COMMENT '角色id',
-  PRIMARY KEY (`id`) USING BTREE,
+  PRIMARY KEY (`user_id`, `role_id`) USING BTREE,
   INDEX `FKhh52n8vd4ny9ff4x9fb8v65qx`(`role_id`) USING BTREE,
   INDEX `FKb40xxfch70f5qnyfw8yme1n1s`(`user_id`) USING BTREE,
   CONSTRAINT `FKb40xxfch70f5qnyfw8yme1n1s` FOREIGN KEY (`user_id`) REFERENCES `sys_user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
@@ -1195,7 +1192,7 @@ CREATE TABLE `sys_user_role`  (
 -- ----------------------------
 -- Records of sys_user_role
 -- ----------------------------
-INSERT INTO `sys_user_role` VALUES (15, 24, 1);
-INSERT INTO `sys_user_role` VALUES (21, 1, 1);
+INSERT INTO `sys_user_role` VALUES (1, 1);
+INSERT INTO `sys_user_role` VALUES (24, 2);
 
 SET FOREIGN_KEY_CHECKS = 1;

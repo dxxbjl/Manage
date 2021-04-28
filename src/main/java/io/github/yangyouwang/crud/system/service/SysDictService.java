@@ -25,6 +25,7 @@ import org.springframework.util.Assert;
 import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -64,12 +65,11 @@ public class SysDictService {
         SysDictType sysDict = sysDictTypeMapper.findDictById(id);
         SysDictResp sysDictResp = new SysDictResp();
         BeanUtils.copyProperties(sysDict,sysDictResp);
-        List<SysDictValueDto> sysDictValues = sysDict.getDictValues().stream().map(sysDictValue -> {
+        Optional.ofNullable(sysDict.getDictValues()).map(result -> result.stream().map(sysDictValue -> {
             SysDictValueDto sysDictValueDto = new SysDictValueDto();
             BeanUtils.copyProperties(sysDictValue, sysDictValueDto);
             return sysDictValueDto;
-        }).collect(Collectors.toList());
-        sysDictResp.setSysDictValues(sysDictValues);
+        }).collect(Collectors.toList())).ifPresent(sysDictResp::setSysDictValues);
         return sysDictResp;
     }
 
@@ -84,8 +84,7 @@ public class SysDictService {
         SysDictType sysDict = new SysDictType();
         // vo -> po
         BeanUtils.copyProperties(sysDictAddReq,sysDict);
-        if (sysDictTypeMapper.insert(sysDict) > 0)
-        {
+        if (sysDictTypeMapper.insert(sysDict) > 0) {
             return insertDictValueBatch(sysDictAddReq.getSysDictValues(), sysDict.getId());
         }
         throw new RuntimeException("新增字典失败");
@@ -100,8 +99,7 @@ public class SysDictService {
         SysDictType sysDictType = new SysDictType();
         // vo -> po
         BeanUtils.copyProperties(sysDictEditReq,sysDictType);
-        if (sysDictTypeMapper.updateById(sysDictType) > 0)
-        {
+        if (sysDictTypeMapper.updateById(sysDictType) > 0) {
             return insertDictValueBatch(sysDictEditReq.getSysDictValues(), sysDictEditReq.getId());
         }
         throw new RuntimeException("修改字典失败");

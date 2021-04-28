@@ -14,6 +14,7 @@ import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.scheduling.support.CronTrigger;
 
+import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -33,7 +34,7 @@ public class SchedulingConfig implements SchedulingConfigurer {
 
     private Map<String, ScheduledFuture<?>> taskFutures = new ConcurrentHashMap<>();
 
-    @Autowired
+    @Resource
     private SysTaskMapper sysTaskMapper;
 
     @Autowired
@@ -78,8 +79,6 @@ public class SchedulingConfig implements SchedulingConfigurer {
      * @param cron 表达式
      */
     public void addTriggerTask(String name, String className,String methodName,String cron) {
-        // 取消任务
-        this.cancelTriggerTask(name);
         TaskScheduler scheduler = scheduledTaskRegistrar.getScheduler();
         assert scheduler != null;
         ScheduledFuture<?> future = scheduler.schedule( () -> {

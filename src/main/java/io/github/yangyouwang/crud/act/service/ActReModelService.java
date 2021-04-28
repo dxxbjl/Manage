@@ -113,11 +113,11 @@ public class ActReModelService {
             ObjectNode objectNode = (ObjectNode) new ObjectMapper().readTree(repositoryService.getModelEditorSource(modelData.getId()));
 
             BpmnModel model = new BpmnJsonConverter().convertToBpmnModel(objectNode);
-            byte[] bpmnXmlBytes = new BpmnXMLConverter().convertToXML(model);
+            byte[] banXmlBytes = new BpmnXMLConverter().convertToXML(model);
             // 部署
             String processName = modelData.getName() + ".bpmn20.xml";
             DeploymentBuilder db = repositoryService.createDeployment().name(modelData.getName());
-            Deployment deployment = db.addString(processName, new String(bpmnXmlBytes, "utf-8")).deploy();
+            Deployment deployment = db.addString(processName, new String(banXmlBytes, "utf-8")).deploy();
             // 保存模型
             ProcessDefinition processDefinition =  repositoryService.createProcessDefinitionQuery()
                     .deploymentId(deployment.getId()).singleResult();

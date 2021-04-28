@@ -18,7 +18,7 @@
     <div class="layui-input-inline layui-upload">
       <button type="button" class="layui-btn" id="upload-btn">上传图片</button>
       <div class="layui-upload-list">
-        <img class="layui-upload-img" id="upload-img" width="100px" height="100px">
+        <img class="layui-upload-img" id="upload-img" width="100px" height="100px" src="/static/style/img/def_profile.jpg">
         <p id="upload-text"></p>
       </div>
     </div>
@@ -89,7 +89,9 @@
             ,form = layui.form;
 
         let sysUser = [[${sysUser}]];
-        $('#upload-img').attr('src', sysUser.avatar); //图片链接（base64）
+        if (sysUser.avatar) {
+          $('#upload-img').attr('src', sysUser.avatar); //图片链接（base64）
+        }
         form.val('sys-user-form', sysUser);
 
         form.on('submit(save-submit)', function(data) {

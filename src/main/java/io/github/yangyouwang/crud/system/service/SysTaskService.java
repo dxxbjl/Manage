@@ -63,15 +63,11 @@ public class SysTaskService {
     public int add(SysTaskAddReq sysTaskAddReq) {
         SysTask sysTask = new SysTask();
         BeanUtils.copyProperties(sysTaskAddReq,sysTask);
-        int flag = sysTaskMapper.insert(sysTask);
-        if (flag > 0) {
-            if (Constants.ENABLED_YES.equals(sysTask.getEnabled())) {
-                // 添加任务
-                schedulingConfig.addTriggerTask(sysTask.getName(),sysTask.getClassName(),sysTask.getMethodName(),sysTask.getCron());
-            }
-            return flag;
+        if (Constants.ENABLED_YES.equals(sysTask.getEnabled())) {
+            // 添加任务
+            schedulingConfig.addTriggerTask(sysTask.getName(),sysTask.getClassName(),sysTask.getMethodName(),sysTask.getCron());
         }
-        throw new RuntimeException("添加定时任务失败");
+        return sysTaskMapper.insert(sysTask);
     }
 
     /**
@@ -79,18 +75,14 @@ public class SysTaskService {
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public int edit(SysTask sysTask) {
-        int flag = sysTaskMapper.updateById(sysTask);
-        if (flag > 0) {
-            if (Constants.ENABLED_YES.equals(sysTask.getEnabled())) {
-                // 添加任务
-                schedulingConfig.addTriggerTask(sysTask.getName(),sysTask.getClassName(),sysTask.getMethodName(),sysTask.getCron());
-            } else {
-                // 取消任务
-                schedulingConfig.cancelTriggerTask(sysTask.getName());
-            }
-            return flag;
+        // 取消任务
+        schedulingConfig.cancelTriggerTask(sysTask.getName());
+        if (Constants.ENABLED_YES.equals(sysTask.getEnabled())) {
+            // 添加任务
+            schedulingConfig.addTriggerTask(sysTask.getName(),sysTask.getClassName(),sysTask.getMethodName(),sysTask.getCron());
+            return sysTaskMapper.updateById(sysTask);
         }
-        throw new RuntimeException("修改定时任务失败");
+        return sysTaskMapper.updateById(sysTask);
     }
 
     /**
@@ -100,14 +92,10 @@ public class SysTaskService {
     public int del(Long id) {
         // 查询任务
         SysTask sysTask = this.findTaskById(id);
+        // 取消任务
+        schedulingConfig.cancelTriggerTask(sysTask.getName());
         // 删除任务
-        int flag = sysTaskMapper.deleteById(id);
-        if (flag > 0) {
-            // 取消任务
-            schedulingConfig.cancelTriggerTask(sysTask.getName());
-            return flag;
-        }
-        throw new RuntimeException("删除定时任务失败");
+        return sysTaskMapper.deleteById(id);
     }
 
     /**
