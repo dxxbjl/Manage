@@ -65,7 +65,7 @@ public class SysRoleService {
      */
     @Transactional(readOnly = true)
     public IPage<SysRole> list(SysRoleListReq sysRoleListReq) {
-        return sysRoleMapper.selectPage(new Page<>(sysRoleListReq.getPageNum() - 1, sysRoleListReq.getPageSize()),
+        return sysRoleMapper.selectPage(new Page<>(sysRoleListReq.getPageNum(), sysRoleListReq.getPageSize()),
                 new LambdaQueryWrapper<SysRole>()
                         .like(StringUtils.isNotBlank(sysRoleListReq.getRoleName()), SysRole::getRoleName , sysRoleListReq.getRoleName())
                         .like(StringUtils.isNotBlank(sysRoleListReq.getRoleKey()), SysRole::getRoleKey , sysRoleListReq.getRoleKey()));

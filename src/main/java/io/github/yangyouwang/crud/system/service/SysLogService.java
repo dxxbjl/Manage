@@ -31,7 +31,7 @@ public class SysLogService {
      */
     @Transactional(readOnly = true)
     public IPage<SysLog> list(SysLogListReq sysLogListReq) {
-        return sysLogMapper.selectPage(new Page<>(sysLogListReq.getPageNum() - 1, sysLogListReq.getPageSize()),
+        return sysLogMapper.selectPage(new Page<>(sysLogListReq.getPageNum(), sysLogListReq.getPageSize()),
                 new LambdaQueryWrapper<SysLog>()
                         .like(StringUtils.isNotBlank(sysLogListReq.getClassName()), SysLog::getClassName , sysLogListReq.getClassName())
                         .like(StringUtils.isNotBlank(sysLogListReq.getMethodName()), SysLog::getMethodName , sysLogListReq.getMethodName()));

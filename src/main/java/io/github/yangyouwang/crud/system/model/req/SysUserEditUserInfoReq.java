@@ -3,7 +3,6 @@ package io.github.yangyouwang.crud.system.model.req;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
@@ -16,7 +15,7 @@ import java.io.Serializable;
  * @date 2021/3/269:56 AM
  */
 @Data
-public class SysUserEditReq implements Serializable {
+public class SysUserEditUserInfoReq implements Serializable {
 
     /**
      * 主键id
@@ -49,9 +48,4 @@ public class SysUserEditReq implements Serializable {
 
     /** 备注 */
     private String remark;
-    /**
-     * 角色id
-     */
-    @NotEmpty(message = "角色id不能为空")
-    private Long[] roleIds;
 }

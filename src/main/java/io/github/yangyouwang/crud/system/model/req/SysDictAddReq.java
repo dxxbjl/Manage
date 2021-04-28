@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,7 +40,7 @@ public class SysDictAddReq implements Serializable {
     /**
      * 字典类型与字典项 一对多
      */
-    private List<SysDictValueDto> sysDictValues;
+    private List<SysDictValueDto> sysDictValues = new ArrayList<>();
 
     /** 备注 */
     private String remark;

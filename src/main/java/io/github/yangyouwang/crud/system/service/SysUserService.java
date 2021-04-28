@@ -35,6 +35,8 @@ import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.Optional.*;
+
 /**
  * @author yangyouwang
  * @title: SysUserService
@@ -85,8 +87,8 @@ public class SysUserService implements UserDetailsService {
         SysUser sysUser = sysUserMapper.findUserByUserId(id);
         SysUserResp sysUserResp = new SysUserResp();
         BeanUtils.copyProperties(sysUser,sysUserResp);
-        Long[] roleIds = sysUser.getRoles().stream().map(SysRole::getId).toArray(Long[]::new);
-        sysUserResp.setRoleIds(roleIds);
+        Optional.ofNullable(sysUser.getRoles()).map(sysRoles ->
+                sysRoles.stream().map(SysRole::getId).toArray(Long[]::new)).ifPresent(sysUserResp::setRoleIds);
         return sysUserResp;
     }
 
@@ -96,7 +98,7 @@ public class SysUserService implements UserDetailsService {
      */
     @Transactional(readOnly = true)
     public IPage<SysUser> list(SysUserListReq sysUserListReq) {
-        return sysUserMapper.selectPage(new Page<>(sysUserListReq.getPageNum() - 1, sysUserListReq.getPageSize()),
+        return sysUserMapper.selectPage(new Page<>(sysUserListReq.getPageNum(), sysUserListReq.getPageSize()),
                 new LambdaQueryWrapper<SysUser>()
                         .like(StringUtils.isNotBlank(sysUserListReq.getUserName()), SysUser::getUserName , sysUserListReq.getUserName())
                         .like(StringUtils.isNotBlank(sysUserListReq.getEmail()), SysUser::getEmail , sysUserListReq.getEmail())
@@ -116,8 +118,10 @@ public class SysUserService implements UserDetailsService {
         BeanUtils.copyProperties(sysUserAddReq,user);
         String passWord = passwordEncoder.encode(sysUserAddReq.getPassWord());
         user.setPassWord(passWord);
-        if (sysUserMapper.insert(user) > 0) {
-            return insertUserRoleBatch(user.getId(), sysUserAddReq.getRoleIds());
+        int flag = sysUserMapper.insert(user);
+        if (flag > 0) {
+            insertUserRoleBatch(user.getId(), sysUserAddReq.getRoleIds());
+            return flag;
         }
         throw new RuntimeException("新增用户失败");
     }
@@ -130,28 +134,44 @@ public class SysUserService implements UserDetailsService {
     public int edit(SysUserEditReq sysUserEditReq) {
         SysUser user = new SysUser();
         BeanUtil.copyProperties(sysUserEditReq,user,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
-        if (sysUserMapper.updateById(user) > 0) {
-            if (sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUserId,user.getId())) > 0) {
-                return insertUserRoleBatch(user.getId(), sysUserEditReq.getRoleIds());
+        int flag = sysUserMapper.updateById(user);
+        if (flag > 0) {
+            if (sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>()
+                    .eq(SysUserRole::getUserId, user.getId())) > 0) {
+                insertUserRoleBatch(user.getId(), sysUserEditReq.getRoleIds());
             }
+            return flag;
         }
         throw new RuntimeException("修改用户失败");
+    }
+
+    /**
+     * 编辑请求
+     * @return 编辑状态
+     */
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
+    public int editUserInfo(SysUserEditUserInfoReq sysUserEditUserInfoReq) {
+        SysUser user = new SysUser();
+        BeanUtil.copyProperties(sysUserEditUserInfoReq,user,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+        return sysUserMapper.updateById(user);
     }
 
     /**
      * 批量新增修改用户关联角色
      * @param userId 用户id
      * @param roleIds 角色id
-     * @return 新增状态
      */
-    public int insertUserRoleBatch(Long userId, Long[] roleIds) {
+    public void insertUserRoleBatch(Long userId, Long[] roleIds) {
         List<SysUserRole> userRoles = Arrays.stream(roleIds).map(s -> {
             SysUserRole userRole = new SysUserRole();
             userRole.setUserId(userId);
             userRole.setRoleId(s);
             return userRole;
         }).collect(Collectors.toList());
-        return sysUserRoleMapper.insertBatch(userRoles);
+        int flag = sysUserRoleMapper.insertBatch(userRoles);
+        if (flag == 0) {
+            throw new RuntimeException("批量新增修改用户关联角色失败");
+        }
     }
 
     /**
@@ -160,7 +180,8 @@ public class SysUserService implements UserDetailsService {
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public int del(Long id) {
-        if (sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUserId,id)) > 0) {
+        if (sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>()
+                .eq(SysUserRole::getUserId,id)) > 0) {
             return sysUserMapper.deleteById(id);
         }
         throw new RuntimeException("删除用户失败");

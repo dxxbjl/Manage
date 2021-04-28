@@ -51,7 +51,7 @@ public class SysTaskService {
      */
     @Transactional(readOnly = true)
     public IPage<SysTask> list(SysTaskListReq sysTaskListReq) {
-        return sysTaskMapper.selectPage(new Page<>(sysTaskListReq.getPageNum() - 1, sysTaskListReq.getPageSize()),
+        return sysTaskMapper.selectPage(new Page<>(sysTaskListReq.getPageNum(), sysTaskListReq.getPageSize()),
                 new LambdaQueryWrapper<SysTask>()
                         .like(StringUtils.isNotBlank(sysTaskListReq.getName()), SysTask::getName , sysTaskListReq.getName()));
     }

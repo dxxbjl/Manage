@@ -137,6 +137,20 @@ public class SysUserController {
     }
 
     /**
+     * 编辑用户信息请求
+     * @return 编辑状态
+     */
+    @PostMapping("/editUserInfo")
+    @ResponseBody
+    public Result editUserInfo(@RequestBody @Validated SysUserEditUserInfoReq sysUserEditUserInfoReq, BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
+        }
+        int flag = sysUserService.editUserInfo(sysUserEditUserInfoReq);
+        return Result.success(flag);
+    }
+
+    /**
      * 修改用户状态
      * @return 修改状态
      */

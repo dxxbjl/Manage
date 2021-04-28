@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static java.util.Optional.*;
+
 /**
  * @author yangyouwang
  * @title: SysDictService
@@ -50,7 +52,7 @@ public class SysDictService {
      */
     @Transactional(readOnly = true)
     public IPage<SysDictType> list(SysDictListReq sysDictListReq) {
-        return sysDictTypeMapper.selectPage(new Page<>(sysDictListReq.getPageNum() - 1, sysDictListReq.getPageSize()),
+        return sysDictTypeMapper.selectPage(new Page<>(sysDictListReq.getPageNum(), sysDictListReq.getPageSize()),
                 new LambdaQueryWrapper<SysDictType>()
                         .like(StringUtils.isNotBlank(sysDictListReq.getDictName()), SysDictType::getDictName , sysDictListReq.getDictName())
                         .like(StringUtils.isNotBlank(sysDictListReq.getDictKey()), SysDictType::getDictKey , sysDictListReq.getDictKey()));
@@ -65,7 +67,7 @@ public class SysDictService {
         SysDictType sysDict = sysDictTypeMapper.findDictById(id);
         SysDictResp sysDictResp = new SysDictResp();
         BeanUtils.copyProperties(sysDict,sysDictResp);
-        Optional.ofNullable(sysDict.getDictValues()).map(result -> result.stream().map(sysDictValue -> {
+        ofNullable(sysDict.getDictValues()).map(result -> result.stream().map(sysDictValue -> {
             SysDictValueDto sysDictValueDto = new SysDictValueDto();
             BeanUtils.copyProperties(sysDictValue, sysDictValueDto);
             return sysDictValueDto;
@@ -84,10 +86,14 @@ public class SysDictService {
         SysDictType sysDict = new SysDictType();
         // vo -> po
         BeanUtils.copyProperties(sysDictAddReq,sysDict);
-        if (sysDictTypeMapper.insert(sysDict) > 0) {
-            return insertDictValueBatch(sysDictAddReq.getSysDictValues(), sysDict.getId());
+        int flag = sysDictTypeMapper.insert(sysDict);
+        if (flag > 0) {
+            Optional.ofNullable(sysDictAddReq.getSysDictValues()).ifPresent(sysDictValueDtos -> {
+                insertDictValueBatch(sysDictValueDtos, sysDict.getId());
+            });
+            return flag;
         }
-        throw new RuntimeException("新增字典失败");
+        throw new RuntimeException("添加字典出错");
     }
 
     /**
@@ -99,19 +105,22 @@ public class SysDictService {
         SysDictType sysDictType = new SysDictType();
         // vo -> po
         BeanUtils.copyProperties(sysDictEditReq,sysDictType);
-        if (sysDictTypeMapper.updateById(sysDictType) > 0) {
-            return insertDictValueBatch(sysDictEditReq.getSysDictValues(), sysDictEditReq.getId());
+        int flag = sysDictTypeMapper.updateById(sysDictType);
+        if (flag > 0) {
+            Optional.ofNullable(sysDictEditReq.getSysDictValues()).ifPresent(sysDictValueDtos -> {
+                insertDictValueBatch(sysDictValueDtos, sysDictType.getId());
+            });
+            return flag;
         }
-        throw new RuntimeException("修改字典失败");
+        throw new RuntimeException("编辑字典出错");
     }
 
     /**
      * 批量新增或者修改字典项
      * @param sysDictValueDtos 字典列表
      * @param id 字典类型id
-     * @return 新增或修改状态
      */
-    public int insertDictValueBatch(List<SysDictValueDto> sysDictValueDtos, Long id) {
+    public void insertDictValueBatch(List<SysDictValueDto> sysDictValueDtos, Long id) {
         // 字典项
         List<SysDictValue> sysDictValues = sysDictValueDtos.stream().filter(dictValue -> StringUtils.isNotBlank(dictValue.getDictValueKey())).map(dictValue -> {
             SysDictValue sysDictValue = new SysDictValue();
@@ -119,7 +128,10 @@ public class SysDictService {
             sysDictValue.setDictTypeId(id);
             return sysDictValue;
         }).collect(Collectors.toList());
-        return sysDictValueMapper.insertBatch(sysDictValues);
+        int flag = sysDictValueMapper.insertBatch(sysDictValues);
+        if (flag == 0) {
+            throw new RuntimeException("批量新增或者修改字典项失败");
+        }
     }
 
     /**

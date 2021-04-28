@@ -52,7 +52,7 @@ public class ActReModelService {
      * @return 列表数据
      */
     public IPage<ActReModel> list(ActReModelListReq actReModelListReq) {
-        return actReModelMapper.selectPage(new Page<>(actReModelListReq.getPageNum() - 1, actReModelListReq.getPageSize()),
+        return actReModelMapper.selectPage(new Page<>(actReModelListReq.getPageNum(), actReModelListReq.getPageSize()),
                 new LambdaQueryWrapper<ActReModel>()
                         .like(StringUtils.isNotBlank(actReModelListReq.getName()),ActReModel::getName , actReModelListReq.getName()));
     }
