@@ -5,8 +5,9 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.crud.system.mapper.SysTaskMapper;
 import io.github.yangyouwang.crud.system.model.SysTask;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -14,7 +15,6 @@ import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.scheduling.support.CronTrigger;
 
-import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -30,14 +30,10 @@ import java.util.concurrent.*;
  */
 @Configuration
 @EnableScheduling
-public class SchedulingConfig implements SchedulingConfigurer {
+public class SchedulingConfig implements SchedulingConfigurer, ApplicationContextAware {
 
     private Map<String, ScheduledFuture<?>> taskFutures = new ConcurrentHashMap<>();
 
-    @Resource
-    private SysTaskMapper sysTaskMapper;
-
-    @Autowired
     private ApplicationContext applicationContext;
 
     private ScheduledTaskRegistrar scheduledTaskRegistrar;
@@ -49,7 +45,7 @@ public class SchedulingConfig implements SchedulingConfigurer {
         // 初始化
         this.init(scheduledTaskRegistrar);
         // 查询所有启用的任务
-        List<SysTask> sysTasks = sysTaskMapper.selectList(new LambdaQueryWrapper<SysTask>()
+        List<SysTask> sysTasks = applicationContext.getBean(SysTaskMapper.class).selectList(new LambdaQueryWrapper<SysTask>()
                 .eq(SysTask::getEnabled, Constants.ENABLED_YES));
         sysTasks.forEach(sysTask -> {
             this.addTriggerTask(sysTask.getName(),sysTask.getClassName(),sysTask.getMethodName(),sysTask.getCron());
@@ -110,5 +106,10 @@ public class SchedulingConfig implements SchedulingConfigurer {
             future.cancel(true);
             taskFutures.remove(name);
         }
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }
