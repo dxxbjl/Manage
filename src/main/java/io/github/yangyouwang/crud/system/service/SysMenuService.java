@@ -49,9 +49,9 @@ public class SysMenuService {
     public List<SysMenu> selectMenusByUser(Long userId) {
         List<SysMenu> menus;
         if (Constants.ADMIN_USER.equals(userId)) {
-            menus = this.sysMenuMapper.findSysMenu();
+            menus = this.sysMenuMapper.findMenu();
         } else {
-            menus = this.sysMenuMapper.findSysMenuByUserId(userId);
+            menus = this.sysMenuMapper.findMenuByUserId(userId);
         }
         if (menus.size() == 0) {
             throw new AccessDeniedException("暂未分配菜单");
@@ -66,7 +66,7 @@ public class SysMenuService {
      */
     @Transactional(readOnly = true)
     public SysMenuResp detail(Long id) {
-        SysMenu sysMenu = sysMenuMapper.findSysMenuById(id);
+        SysMenu sysMenu = sysMenuMapper.findMenuById(id);
         SysMenuResp sysMenuResp = new SysMenuResp();
         BeanUtils.copyProperties(sysMenu,sysMenuResp);
         return sysMenuResp;

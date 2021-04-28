@@ -18,21 +18,21 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
      * 根据菜单类型和状态查询菜单
      * @return 菜单列表
      */
-    List<SysMenu> findSysMenu();
+    List<SysMenu> findMenu();
 
     /**
      * 根据用户id查询菜单
      * @param userId 用户id
      * @return 菜单列表
      */
-    List<SysMenu> findSysMenuByUserId(Long userId);
+    List<SysMenu> findMenuByUserId(Long userId);
 
     /**
      * 根据id查询菜单
      * @param id 主键
      * @return 菜单详情
      */
-    SysMenu findSysMenuById(Long id);
+    SysMenu findMenuById(Long id);
 
     /**
      * 根据角色查询菜单

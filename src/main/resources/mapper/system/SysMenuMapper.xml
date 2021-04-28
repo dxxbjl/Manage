@@ -21,14 +21,14 @@
     update_by, update_time, remark
   </sql>
   <!-- 根据菜单类型和状态查询菜单 -->
-  <select id="findSysMenu" resultMap="BaseResultMap">
+  <select id="findMenu" resultMap="BaseResultMap">
     select distinct m.id, m.parent_id, m.menu_name, m.url, m.visible, ifnull(m.perms,'') as perms, m.menu_type, m.order_num, m.create_by, m.create_time, m.update_by, m.update_time, m.remark
     from sys_menu m
     where m.menu_type in ('M', 'C') and m.visible = 0
     order by m.parent_id, m.order_num
   </select>
   <!-- 根据用户id查询菜单 -->
-  <select id="findSysMenuByUserId" parameterType="long" resultMap="BaseResultMap">
+  <select id="findMenuByUserId" parameterType="long" resultMap="BaseResultMap">
     select distinct m.id, m.parent_id, m.menu_name, m.url, m.visible, ifnull(m.perms,'') as perms, m.menu_type, m.order_num, m.create_by, m.create_time, m.update_by, m.update_time, m.remark
     from sys_menu m
     left join sys_role_menu rm on m.id = rm.menu_id
@@ -38,7 +38,7 @@
     order by m.parent_id, m.order_num
   </select>
   <!-- 根据id查询菜单 -->
-  <select id="findSysMenuById" parameterType="long" resultMap="BaseResultMap">
+  <select id="findMenuById" parameterType="long" resultMap="BaseResultMap">
     select m.id, m.menu_name, m.parent_id, m.order_num, m.url, m.menu_type, m.visible, m.perms, m.create_by, m.create_time, m.update_by, m.update_time, m.remark ,p.menu_name  as parentName
     from sys_menu m
     left join sys_menu p on m.parent_id = p.id
