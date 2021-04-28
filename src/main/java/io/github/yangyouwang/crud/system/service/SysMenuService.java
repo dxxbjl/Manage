@@ -42,16 +42,16 @@ public class SysMenuService {
 
     /**
      * 根据用户查询菜单
-     * @param name 用户名称
+     * @param userId 用户id
      * @return 菜单信息
      */
     @Transactional(readOnly = true)
-    public List<SysMenu> selectMenusByUser(String name) {
+    public List<SysMenu> selectMenusByUser(Long userId) {
         List<SysMenu> menus;
-        if (Constants.ADMINISTRATOR_USER_NAME.equals(name)) {
+        if (Constants.ADMIN_USER.equals(userId)) {
             menus = this.sysMenuMapper.findSysMenu();
         } else {
-            menus = this.sysMenuMapper.findSysMenuByName(name);
+            menus = this.sysMenuMapper.findSysMenuByUserId(userId);
         }
         if (menus.size() == 0) {
             throw new AccessDeniedException("暂未分配菜单");

@@ -8,7 +8,7 @@ public interface Constants {
     /**
      * 超级管理员
      */
-    String ADMINISTRATOR_USER_NAME = "admin";
+    Long ADMIN_USER = 1L;
     /**
      * 是否启用 是
      */

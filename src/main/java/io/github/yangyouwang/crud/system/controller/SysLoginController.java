@@ -41,7 +41,7 @@ public class SysLoginController {
     public String indexPage(ModelMap map) {
         User user = SecurityUtils.getSysUser();
         SysUserResp sysUser = sysUserService.findUserByName(user.getUsername());
-        List<SysMenu> sysMenus = sysMenuService.selectMenusByUser(sysUser.getUserName());
+        List<SysMenu> sysMenus = sysMenuService.selectMenusByUser(sysUser.getId());
         map.put("sysMenus",sysMenus);
         map.put("sysUser",sysUser);
         return "/index";
