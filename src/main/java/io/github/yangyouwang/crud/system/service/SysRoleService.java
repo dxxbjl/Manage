@@ -4,10 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.github.yangyouwang.common.domain.XmSelectNode;
-import io.github.yangyouwang.crud.system.mapper.SysMenuMapper;
 import io.github.yangyouwang.crud.system.mapper.SysRoleMapper;
+import io.github.yangyouwang.crud.system.mapper.SysRoleMenuMapper;
 import io.github.yangyouwang.crud.system.model.SysMenu;
 import io.github.yangyouwang.crud.system.model.SysRole;
+import io.github.yangyouwang.crud.system.model.SysRoleMenu;
 import io.github.yangyouwang.crud.system.model.req.SysRoleAddReq;
 import io.github.yangyouwang.crud.system.model.req.SysRoleEditReq;
 import io.github.yangyouwang.crud.system.model.req.SysRoleListReq;
@@ -42,7 +43,7 @@ public class SysRoleService {
     private SysRoleMapper sysRoleMapper;
 
     @Resource
-    private SysMenuMapper sysMenuMapper;
+    private SysRoleMenuMapper sysRoleMenuMapper;
 
     /**
      * 跳转编辑
@@ -50,10 +51,10 @@ public class SysRoleService {
      */
     @Transactional(readOnly = true)
     public SysRoleResp detail(Long id) {
-        SysRole sysRole = sysRoleMapper.selectById(id);
+        SysRole sysRole = sysRoleMapper.findRoleById(id);
         SysRoleResp sysRoleResp = new SysRoleResp();
         BeanUtils.copyProperties(sysRole,sysRoleResp);
-        Long[] menuIds = sysRole.getMenus().stream().map(s -> s.getId()).toArray(Long[]::new);
+        Long[] menuIds = sysRole.getMenus().stream().map(SysMenu::getId).toArray(Long[]::new);
         sysRoleResp.setMenuIds(menuIds);
         return sysRoleResp;
     }
@@ -77,14 +78,14 @@ public class SysRoleService {
     public int add(@NotNull SysRoleAddReq sysRoleAddReq) {
         SysRole sysRole = sysRoleMapper.selectOne(new LambdaQueryWrapper<SysRole>().eq(SysRole::getRoleKey,sysRoleAddReq.getRoleKey()));
         Assert.isNull(sysRole, "角色已存在");
-        // 查询菜单
-        List<SysMenu> sysMenus = Arrays.stream(sysRoleAddReq.getMenuIds()).map(s ->
-                sysMenuMapper.selectById(s)).collect(Collectors.toList());
         // 添加角色
-        sysRole = new SysRole();
-        BeanUtils.copyProperties(sysRoleAddReq,sysRole);
-        sysRole.setMenus(sysMenus);
-        return sysRoleMapper.insert(sysRole);
+        SysRole role = new SysRole();
+        BeanUtils.copyProperties(sysRoleAddReq,role);
+        // 关联菜单
+        if (sysRoleMapper.insert(role) > 0) {
+            return insertRoleMenuBatch(role.getId(), sysRoleAddReq.getMenuIds());
+        }
+        throw new RuntimeException("添加角色失败");
     }
 
     /**
@@ -92,13 +93,32 @@ public class SysRoleService {
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public int edit(SysRoleEditReq sysRoleEditReq) {
-        SysRole sysRole = new SysRole();
-        BeanUtils.copyProperties(sysRoleEditReq,sysRole);
-        // 查询菜单
-        List<SysMenu> sysMenus = Arrays.stream(sysRoleEditReq.getMenuIds()).map(s ->
-                sysMenuMapper.selectById(s)).collect(Collectors.toList());
-        sysRole.setMenus(sysMenus);
-        return sysRoleMapper.updateById(sysRole);
+        SysRole role = new SysRole();
+        BeanUtils.copyProperties(sysRoleEditReq,role);
+        // 关联菜单
+        if (sysRoleMapper.updateById(role) > 0) {
+            if (sysRoleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>()
+                    .eq(SysRoleMenu::getRoleId, role.getId())) > 0) {
+                return insertRoleMenuBatch(role.getId(), sysRoleEditReq.getMenuIds());
+            }
+        }
+        throw new RuntimeException("修改角色失败");
+    }
+
+    /**
+     * 批量新增角色关联菜单
+     * @param roleId 角色id
+     * @param menuIds 菜单id
+     * @return 操作状态
+     */
+    private int insertRoleMenuBatch(Long roleId, Long[] menuIds) {
+        List<SysRoleMenu> roleMenus = Arrays.stream(menuIds).map(s -> {
+            SysRoleMenu roleMenu = new SysRoleMenu();
+            roleMenu.setRoleId(roleId);
+            roleMenu.setMenuId(s);
+            return roleMenu;
+        }).collect(Collectors.toList());
+        return sysRoleMenuMapper.insertBatch(roleMenus);
     }
 
     /**
@@ -106,7 +126,12 @@ public class SysRoleService {
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public int del(Long id) {
-        return sysRoleMapper.deleteById(id);
+        int flag = sysRoleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>()
+                .eq(SysRoleMenu::getRoleId,id));
+        if (flag > 0) {
+            return sysRoleMapper.deleteById(id);
+        }
+        throw new RuntimeException("删除角色失败");
     }
 
     /**

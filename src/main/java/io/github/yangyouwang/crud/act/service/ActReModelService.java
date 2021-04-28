@@ -25,8 +25,9 @@ import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 import java.io.IOException;
 
 /**
@@ -40,10 +41,10 @@ import java.io.IOException;
 @Slf4j
 public class ActReModelService {
 
-    @Autowired
+    @Resource
     private ActReModelMapper actReModelMapper;
 
-    @Autowired
+    @Resource
     private RepositoryService repositoryService;
 
     /**
@@ -53,7 +54,7 @@ public class ActReModelService {
     public IPage<ActReModel> list(ActReModelListReq actReModelListReq) {
         return actReModelMapper.selectPage(new Page<>(actReModelListReq.getPageNum() - 1, actReModelListReq.getPageSize()),
                 new LambdaQueryWrapper<ActReModel>()
-                        .like(ActReModel::getName , actReModelListReq.getName()));
+                        .like(StringUtils.isNotBlank(actReModelListReq.getName()),ActReModel::getName , actReModelListReq.getName()));
     }
 
     /**

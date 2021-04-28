@@ -7,11 +7,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.crud.system.mapper.SysMenuMapper;
-import io.github.yangyouwang.crud.system.mapper.SysRoleMapper;
 import io.github.yangyouwang.crud.system.mapper.SysUserMapper;
+import io.github.yangyouwang.crud.system.mapper.SysUserRoleMapper;
 import io.github.yangyouwang.crud.system.model.SysMenu;
 import io.github.yangyouwang.crud.system.model.SysRole;
 import io.github.yangyouwang.crud.system.model.SysUser;
+import io.github.yangyouwang.crud.system.model.SysUserRole;
 import io.github.yangyouwang.crud.system.model.req.*;
 import io.github.yangyouwang.crud.system.model.resp.SysUserResp;
 import org.apache.commons.collections4.CollectionUtils;
@@ -48,10 +49,10 @@ public class SysUserService implements UserDetailsService {
     private SysUserMapper sysUserMapper;
 
     @Resource
-    private SysRoleMapper sysRoleMapper;
+    private SysMenuMapper sysMenuMapper;
 
     @Resource
-    private SysMenuMapper sysMenuMapper;
+    private SysUserRoleMapper sysUserRoleMapper;
 
     @Resource
     private BCryptPasswordEncoder passwordEncoder;
@@ -111,14 +112,14 @@ public class SysUserService implements UserDetailsService {
         SysUser sysUser = sysUserMapper.selectOne(new LambdaQueryWrapper<SysUser>()
                 .eq(SysUser::getUserName,sysUserAddReq.getUserName()));
         Assert.isNull(sysUser,"用户已存在");
-        sysUser = new SysUser();
-        BeanUtils.copyProperties(sysUserAddReq,sysUser);
+        SysUser user = new SysUser();
+        BeanUtils.copyProperties(sysUserAddReq,user);
         String passWord = passwordEncoder.encode(sysUserAddReq.getPassWord());
-        sysUser.setPassWord(passWord);
-        // 查询角色
-        List<SysRole> sysRoles = Arrays.stream(sysUserAddReq.getRoleIds()).map(s -> sysRoleMapper.selectById(s)).collect(Collectors.toList());
-        sysUser.setRoles(sysRoles);
-        return sysUserMapper.insert(sysUser);
+        user.setPassWord(passWord);
+        if (sysUserMapper.insert(user) > 0) {
+            return insertUserRoleBatch(user.getId(), sysUserAddReq.getRoleIds());
+        }
+        throw new RuntimeException("新增用户失败");
     }
 
     /**
@@ -127,14 +128,31 @@ public class SysUserService implements UserDetailsService {
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public int edit(SysUserEditReq sysUserEditReq) {
-        SysUser sysUser = new SysUser();
-        BeanUtil.copyProperties(sysUserEditReq,sysUser,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
-        // 查询角色
-        Optional.ofNullable(sysUserEditReq.getRoleIds()).ifPresent(ids -> {
-            List<SysRole> sysRoles = Arrays.stream(ids).map(s -> sysRoleMapper.selectById(s)).collect(Collectors.toList());
-            sysUser.setRoles(sysRoles);
-        });
-        return sysUserMapper.updateById(sysUser);
+        SysUser user = new SysUser();
+        BeanUtil.copyProperties(sysUserEditReq,user,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+        if (sysUserMapper.updateById(user) > 0) {
+            if (sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUserId,user.getId())) > 0) {
+                return insertUserRoleBatch(user.getId(), sysUserEditReq.getRoleIds());
+            }
+
+        }
+        throw new RuntimeException("修改用户失败");
+    }
+
+    /**
+     * 批量新增修改用户关联角色
+     * @param userId 用户id
+     * @param roleIds 角色id
+     * @return 新增状态
+     */
+    public int insertUserRoleBatch(Long userId, Long[] roleIds) {
+        List<SysUserRole> userRoles = Arrays.stream(roleIds).map(s -> {
+            SysUserRole userRole = new SysUserRole();
+            userRole.setUserId(userId);
+            userRole.setRoleId(s);
+            return userRole;
+        }).collect(Collectors.toList());
+        return sysUserRoleMapper.insertBatch(userRoles);
     }
 
     /**
@@ -143,7 +161,10 @@ public class SysUserService implements UserDetailsService {
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public int del(Long id) {
-        return sysUserMapper.deleteById(id);
+        if (sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUserId,id)) > 0) {
+            return sysUserMapper.deleteById(id);
+        }
+        throw new RuntimeException("删除用户失败");
     }
 
     /**

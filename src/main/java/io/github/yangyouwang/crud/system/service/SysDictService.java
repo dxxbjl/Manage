@@ -84,8 +84,7 @@ public class SysDictService {
         SysDictType sysDict = new SysDictType();
         // vo -> po
         BeanUtils.copyProperties(sysDictAddReq,sysDict);
-        int flag = sysDictTypeMapper.insert(sysDict);
-        if (flag > 0)
+        if (sysDictTypeMapper.insert(sysDict) > 0)
         {
             return insertDictValueBatch(sysDictAddReq.getSysDictValues(), sysDict.getId());
         }
@@ -101,8 +100,7 @@ public class SysDictService {
         SysDictType sysDictType = new SysDictType();
         // vo -> po
         BeanUtils.copyProperties(sysDictEditReq,sysDictType);
-        int flag = sysDictTypeMapper.updateById(sysDictType);
-        if (flag > 0)
+        if (sysDictTypeMapper.updateById(sysDictType) > 0)
         {
             return insertDictValueBatch(sysDictEditReq.getSysDictValues(), sysDictEditReq.getId());
         }
@@ -132,12 +130,11 @@ public class SysDictService {
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public int delKey(Long id) {
-        int delKeyFlag = sysDictTypeMapper.deleteById(id);
-        if (delKeyFlag > 0) {
+        if (sysDictTypeMapper.deleteById(id) > 0) {
             return sysDictValueMapper.delete(new LambdaQueryWrapper<SysDictValue>()
                     .eq(SysDictValue::getDictTypeId,id));
         }
-        return delKeyFlag;
+        throw new RuntimeException("删除字典失败");
     }
 
     /**

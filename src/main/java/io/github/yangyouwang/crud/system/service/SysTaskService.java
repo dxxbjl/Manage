@@ -84,8 +84,7 @@ public class SysTaskService {
             if (Constants.ENABLED_YES.equals(sysTask.getEnabled())) {
                 // 添加任务
                 schedulingConfig.addTriggerTask(sysTask.getName(),sysTask.getClassName(),sysTask.getMethodName(),sysTask.getCron());
-            }
-            if (Constants.ENABLED_NO.equals(sysTask.getEnabled())) {
+            } else {
                 // 取消任务
                 schedulingConfig.cancelTriggerTask(sysTask.getName());
             }

@@ -1,6 +1,8 @@
 package io.github.yangyouwang.crud.act.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.yangyouwang.common.domain.Result;
+import io.github.yangyouwang.crud.act.model.ActReModel;
 import io.github.yangyouwang.crud.act.model.req.ActReModelAddReq;
 import io.github.yangyouwang.crud.act.model.req.ActReModelEditReq;
 import io.github.yangyouwang.crud.act.model.req.ActReModelListReq;
@@ -29,8 +31,12 @@ public class ActReModelController {
 
     private String SUFFIX = "act/model";
 
+    private final ActReModelService actReModelService;
+
     @Autowired
-    private ActReModelService actReModelService;
+    public ActReModelController(ActReModelService actReModelService) {
+        this.actReModelService = actReModelService;
+    }
 
     /**
      * 跳转列表
@@ -69,9 +75,10 @@ public class ActReModelController {
     @ResponseBody
     public Result list(@Valid ActReModelListReq actReModelListReq, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
-            throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        return Result.success(actReModelService.list(actReModelListReq));
+        IPage<ActReModel> list = actReModelService.list(actReModelListReq);
+        return Result.success(list);
     }
 
     /**
@@ -82,7 +89,7 @@ public class ActReModelController {
     @ResponseBody
     public Result add(@RequestBody @Valid ActReModelAddReq actReModelAddReq, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
-            throw new RuntimeException(bindingResult.getFieldError().getDefaultMessage());
+            return Result.failure(bindingResult.getFieldError().getDefaultMessage());
         }
         String flag = actReModelService.add(actReModelAddReq);
         return Result.success(flag);
@@ -115,7 +122,7 @@ public class ActReModelController {
     @ResponseBody
     public Result edit(@RequestBody @Valid ActReModelEditReq actReModelEditReq, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
-            throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
         int flag = actReModelService.edit(actReModelEditReq);
         return Result.success(flag);

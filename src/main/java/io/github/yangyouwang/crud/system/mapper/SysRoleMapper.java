@@ -11,4 +11,11 @@ import io.github.yangyouwang.crud.system.model.SysRole;
  * @date 2021/3/2112:25 AM
  */
 public interface SysRoleMapper extends BaseMapper<SysRole> {
+
+    /**
+     * 查询角色
+     * @param id 主键
+     * @return 角色
+     */
+    SysRole findRoleById(Long id);
 }

@@ -70,11 +70,11 @@
             limitName: 'pageSize' //每页数据量的参数名，默认：limit
           }
           ,parseData: function (result) {
-              return {
-                   "code":result.code,
-                   "count": result.data.totalElements,
-                   "data": result.data.content
-              }
+            return {
+              "code": result.code,
+              "count": result.data.total,
+              "data": result.data.records
+            }
           }
           ,response: {
                statusCode: 200 //成功的状态码，默认：0
