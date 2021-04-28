@@ -24,7 +24,6 @@ import org.thymeleaf.util.ArrayUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.Optional.*;
