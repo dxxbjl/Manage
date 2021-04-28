@@ -18,6 +18,10 @@ public class SysDictValueDto implements Serializable {
      */
     private Long id;
     /**
+     * 字典类型id
+     */
+    private Long dictTypeId;
+    /**
      * 字典值key
      */
     private String dictValueKey;

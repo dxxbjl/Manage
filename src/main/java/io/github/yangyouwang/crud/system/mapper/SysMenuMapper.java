@@ -22,7 +22,7 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
 
     /**
      * 根据用户id查询菜单
-     * @param id 主键
+     * @param name 名称
      * @return 菜单列表
      */
     List<SysMenu> findSysMenuByName(String name);

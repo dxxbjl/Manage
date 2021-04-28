@@ -16,5 +16,12 @@ public interface SysDictTypeMapper extends BaseMapper<SysDictType> {
      * @param dictKey 字典key
      * @return 字典
      */
-    SysDictType findByDictKey(String dictKey);
+    SysDictType findDictByKey(String dictKey);
+
+    /**
+     * 查询字典
+     * @param id 主键
+     * @return 字典
+     */
+    SysDictType findDictById(Long id);
 }

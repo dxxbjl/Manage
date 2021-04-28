@@ -61,7 +61,7 @@ public class SysDictService {
      */
     @Transactional(readOnly = true)
     public SysDictResp detail(Long id) {
-        SysDictType sysDict = sysDictTypeMapper.selectById(id);
+        SysDictType sysDict = sysDictTypeMapper.findDictById(id);
         SysDictResp sysDictResp = new SysDictResp();
         BeanUtils.copyProperties(sysDict,sysDictResp);
         List<SysDictValueDto> sysDictValues = sysDict.getDictValues().stream().map(sysDictValue -> {
@@ -79,26 +79,17 @@ public class SysDictService {
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public int add(SysDictAddReq sysDictAddReq) {
-        SysDictType sysDictType = sysDictTypeMapper.findByDictKey(sysDictAddReq.getDictKey());
+        SysDictType sysDictType = sysDictTypeMapper.findDictByKey(sysDictAddReq.getDictKey());
         Assert.isNull(sysDictType, "字典已存在");
         SysDictType sysDict = new SysDictType();
+        // vo -> po
         BeanUtils.copyProperties(sysDictAddReq,sysDict);
-        List<SysDictValue> sysDictValues =  getSysDictValues(sysDictAddReq.getSysDictValues());
-        sysDict.setDictValues(sysDictValues);
-        return sysDictTypeMapper.insert(sysDict);
-    }
-
-    /**
-     * 字典dto转bean
-     * @param sysDictValueDto 字典dto
-     * @return bean
-     */
-    private List<SysDictValue> getSysDictValues(List<SysDictValueDto> sysDictValueDto) {
-        return sysDictValueDto.stream().filter(dictValue -> StringUtils.isNotBlank(dictValue.getDictValueKey())).map(dictValue -> {
-                SysDictValue sysDictValue = new SysDictValue();
-                BeanUtils.copyProperties(dictValue, sysDictValue);
-                return sysDictValue;
-            }).collect(Collectors.toList());
+        int flag = sysDictTypeMapper.insert(sysDict);
+        if (flag > 0)
+        {
+            return insertDictValueBatch(sysDictAddReq.getSysDictValues(), sysDict.getId());
+        }
+        throw new RuntimeException("新增字典失败");
     }
 
     /**
@@ -108,10 +99,31 @@ public class SysDictService {
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public int edit(SysDictEditReq sysDictEditReq) {
         SysDictType sysDictType = new SysDictType();
-        List<SysDictValue> sysDictValues = getSysDictValues(sysDictEditReq.getSysDictValues());
-        sysDictType.setDictValues(sysDictValues);
+        // vo -> po
         BeanUtils.copyProperties(sysDictEditReq,sysDictType);
-        return sysDictTypeMapper.updateById(sysDictType);
+        int flag = sysDictTypeMapper.updateById(sysDictType);
+        if (flag > 0)
+        {
+            return insertDictValueBatch(sysDictEditReq.getSysDictValues(), sysDictEditReq.getId());
+        }
+        throw new RuntimeException("修改字典失败");
+    }
+
+    /**
+     * 批量新增或者修改字典项
+     * @param sysDictValueDtos 字典列表
+     * @param id 字典类型id
+     * @return 新增或修改状态
+     */
+    public int insertDictValueBatch(List<SysDictValueDto> sysDictValueDtos, Long id) {
+        // 字典项
+        List<SysDictValue> sysDictValues = sysDictValueDtos.stream().filter(dictValue -> StringUtils.isNotBlank(dictValue.getDictValueKey())).map(dictValue -> {
+            SysDictValue sysDictValue = new SysDictValue();
+            BeanUtils.copyProperties(dictValue, sysDictValue);
+            sysDictValue.setDictTypeId(id);
+            return sysDictValue;
+        }).collect(Collectors.toList());
+        return sysDictValueMapper.insertBatch(sysDictValues);
     }
 
     /**
@@ -120,7 +132,12 @@ public class SysDictService {
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public int delKey(Long id) {
-       return sysDictTypeMapper.deleteById(id);
+        int delKeyFlag = sysDictTypeMapper.deleteById(id);
+        if (delKeyFlag > 0) {
+            return sysDictValueMapper.delete(new LambdaQueryWrapper<SysDictValue>()
+                    .eq(SysDictValue::getDictTypeId,id));
+        }
+        return delKeyFlag;
     }
 
     /**
@@ -129,7 +146,7 @@ public class SysDictService {
      */
     @Transactional(readOnly = true)
     public List<SysDictValueDto> getDictValues(String dictKey) {
-        SysDictType sysDictType = sysDictTypeMapper.findByDictKey(dictKey);
+        SysDictType sysDictType = sysDictTypeMapper.findDictByKey(dictKey);
         if (Constants.ENABLED_YES.equals(sysDictType.getEnabled())) {
             return sysDictType.getDictValues().stream().map(sysDictValue -> {
                 SysDictValueDto sysDictValueDto = new SysDictValueDto();

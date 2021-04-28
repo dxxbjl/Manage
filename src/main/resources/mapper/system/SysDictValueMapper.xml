@@ -17,4 +17,21 @@
     id, dict_type_id, dict_value_key, dict_value_name, order_num, create_by, create_time, 
     update_by, update_time, remark
   </sql>
+  <insert id="insertBatch" parameterType="java.util.List">
+    insert into sys_dict_value (
+        id,dict_type_id,dict_value_key,dict_value_name,order_num,remark
+    )
+    values
+    <foreach collection="list" item="item" separator=",">
+      (
+        #{item.id},#{item.dictTypeId},#{item.dictValueKey},#{item.dictValueName},#{item.orderNum},#{item.remark}
+      )
+    </foreach>
+    ON DUPLICATE KEY UPDATE
+    dict_type_id=values(dict_type_id),
+    dict_value_key=values(dict_value_key),
+    dict_value_name=values(dict_value_name),
+    order_num=values(order_num),
+    remark=values(remark)
+  </insert>
 </mapper>
