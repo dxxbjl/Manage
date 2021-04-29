@@ -8,11 +8,11 @@
 - 核心框架：Spring Boot
 - 权限框架：SpringSecurity
 - 模板引擎：Thymeleaf
-- 持久层框架：JPA
+- 持久层框架：Mybatis-Plus
 - 日志管理：LogBack
 - 工具类：Apache Commons、Hutool
 - 视图框架：Spring MVC
-- 工作流：activiti6
+- 工作流：Activiti6
 - 定时器：Quartz
 - 数据库连接池：Druid
 - 日志管理：logback
