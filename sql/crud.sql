@@ -11,7 +11,7 @@
  Target Server Version : 50733
  File Encoding         : 65001
 
- Date: 29/04/2021 21:31:36
+ Date: 29/04/2021 21:50:12
 */
 
 SET NAMES utf8mb4;
@@ -736,7 +736,7 @@ CREATE TABLE `QRTZ_SCHEDULER_STATE` (
 -- Records of QRTZ_SCHEDULER_STATE
 -- ----------------------------
 BEGIN;
-INSERT INTO `QRTZ_SCHEDULER_STATE` VALUES ('clusteredScheduler', 'yangyouwangdeMacBook-Pro.local1619702964142', 1619703094744, 10000);
+INSERT INTO `QRTZ_SCHEDULER_STATE` VALUES ('clusteredScheduler', 'yangyouwangdeMacBook-Pro.local1619703926869', 1619704207529, 10000);
 COMMIT;
 
 -- ----------------------------
@@ -836,7 +836,7 @@ CREATE TABLE `sys_dict_type` (
 -- Records of sys_dict_type
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_dict_type` VALUES (17, 'sex', '性别', 1, 'Y', 'admin', '2021-04-16 12:27:04', 'admin', '2021-04-29 19:55:02', '性别字典');
+INSERT INTO `sys_dict_type` VALUES (17, 'sex', '性别', 1, 'Y', 'admin', '2021-04-16 12:27:04', 'admin', '2021-04-29 21:43:14', '性别字典');
 INSERT INTO `sys_dict_type` VALUES (18, 'menuType', '菜单类型', 2, 'Y', 'admin', '2021-04-16 20:42:06', 'admin', '2021-04-29 21:15:17', '菜单类型');
 INSERT INTO `sys_dict_type` VALUES (19, 'enabled', '是否启用', 3, 'Y', 'admin', '2021-04-29 21:00:41', '', NULL, '是否启用');
 COMMIT;
@@ -925,7 +925,7 @@ CREATE TABLE `sys_menu` (
 -- Records of sys_menu
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, 1, '#', 'M', 'Y', '', '1', '2018-03-16 11:33:00', 'admin', '2021-04-28 20:05:35', '系统管理目录');
+INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, 1, '#', 'M', 'Y', '', '1', '2018-03-16 11:33:00', 'admin', '2021-04-29 21:49:53', '系统管理目录');
 INSERT INTO `sys_menu` VALUES (3, '系统工具', 0, 2, '#', 'M', 'Y', '', '1', '2018-03-16 11:33:00', 'admin', '2021-04-28 20:05:40', '系统工具目录');
 INSERT INTO `sys_menu` VALUES (100, '用户管理', 1, 1, '/sysUser/listPage', 'C', 'Y', 'user:list', '1', '2018-03-16 11:33:00', 'admin', '2021-04-10 11:23:17', '用户管理菜单');
 INSERT INTO `sys_menu` VALUES (101, '角色管理', 1, 2, '/sysRole/listPage', 'C', 'Y', 'role:list', '1', '2018-03-16 11:33:00', 'admin', '2021-04-10 11:22:48', '角色管理菜单');
@@ -973,7 +973,7 @@ CREATE TABLE `sys_role` (
   `update_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=DYNAMIC COMMENT='角色表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=DYNAMIC COMMENT='角色表';
 
 -- ----------------------------
 -- Records of sys_role
@@ -992,9 +992,7 @@ CREATE TABLE `sys_role_menu` (
   `menu_id` bigint(20) NOT NULL COMMENT '菜单ID',
   PRIMARY KEY (`role_id`,`menu_id`) USING BTREE,
   KEY `FKf3mud4qoc7ayew8nml4plkevo` (`menu_id`) USING BTREE,
-  KEY `FKkeitxsgxwayackgqllio4ohn5` (`role_id`) USING BTREE,
-  CONSTRAINT `FKf3mud4qoc7ayew8nml4plkevo` FOREIGN KEY (`menu_id`) REFERENCES `sys_menu` (`id`),
-  CONSTRAINT `FKkeitxsgxwayackgqllio4ohn5` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`id`)
+  KEY `FKkeitxsgxwayackgqllio4ohn5` (`role_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=DYNAMIC COMMENT='角色和菜单关联表';
 
 -- ----------------------------
@@ -1085,7 +1083,7 @@ CREATE TABLE `sys_user` (
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=DYNAMIC COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=DYNAMIC COMMENT='用户表';
 
 -- ----------------------------
 -- Records of sys_user
@@ -1104,9 +1102,7 @@ CREATE TABLE `sys_user_role` (
   `role_id` bigint(20) NOT NULL COMMENT '角色id',
   PRIMARY KEY (`user_id`,`role_id`) USING BTREE,
   KEY `FKhh52n8vd4ny9ff4x9fb8v65qx` (`role_id`) USING BTREE,
-  KEY `FKb40xxfch70f5qnyfw8yme1n1s` (`user_id`) USING BTREE,
-  CONSTRAINT `FKb40xxfch70f5qnyfw8yme1n1s` FOREIGN KEY (`user_id`) REFERENCES `sys_user` (`id`),
-  CONSTRAINT `FKhh52n8vd4ny9ff4x9fb8v65qx` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`id`)
+  KEY `FKb40xxfch70f5qnyfw8yme1n1s` (`user_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=DYNAMIC COMMENT='用户角色关联表';
 
 -- ----------------------------
