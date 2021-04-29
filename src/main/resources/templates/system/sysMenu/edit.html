@@ -34,19 +34,12 @@
   <div class="layui-form-item">
     <label class="layui-form-label">菜单类型</label>
     <div class="layui-input-inline">
-      <select lay-filter="menuType" name="menuType">
-        <option value="M">目录</option>
-        <option value="C">菜单</option>
-        <option value="F">按钮</option>
-      </select>
+      <select lay-filter="menuType" name="menuType" id="menuType"></select>
     </div>
   </div>
   <div class="layui-form-item">
     <label class="layui-form-label">菜单状态</label>
-    <div class="layui-input-block">
-      <input type="radio" name="visible" value="Y" title="启用">
-      <input type="radio" name="visible" value="N" title="禁用">
-    </div>
+    <div class="layui-input-block" id="visible"></div>
   </div>
   <div class="layui-form-item">
     <label class="layui-form-label">权限标识</label>
@@ -78,9 +71,10 @@
         base: '/static/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'form','treeSelect'], function(){
+    }).use(['index', 'form','treeSelect','crud'], function(){
         let $ = layui.$
             , treeSelect= layui.treeSelect
+            , crud = layui.crud
             ,form = layui.form;
         let sysMenu = [[${sysMenu}]];
         form.val('sys-menu-form', sysMenu);
@@ -128,6 +122,8 @@
                 }
             }
         });
+        crud.setSelect("menuType","menuType",sysMenu.menuType);
+        crud.setRadio("visible","enabled",sysMenu.visible);
     })
 </script>
 </body>

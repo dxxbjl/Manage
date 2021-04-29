@@ -59,7 +59,6 @@
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
     index: 'lib/index', //主入口模块
-    crud: 'crud'
   }).use(['index', 'useradmin', 'table','crud'], function() {
       let $ = layui.$
           ,form = layui.form

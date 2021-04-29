@@ -37,10 +37,7 @@
     </div>
     <div class="layui-form-item">
       <label class="layui-form-label">状态</label>
-      <div class="layui-input-block">
-        <input type="radio" name="enabled" value="Y" title="启用" checked>
-        <input type="radio" name="enabled" value="N" title="禁用">
-      </div>
+      <div class="layui-input-block" id="enabled"></div>
     </div>
     <div class="layui-form-item">
       <label class="layui-form-label">备注</label>
@@ -60,8 +57,9 @@
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
      index: 'lib/index', //主入口模块
-  }).use(['index', 'form'], function(){
+  }).use(['index', 'form','crud'], function(){
     let $ = layui.$
+        ,crud = layui.crud
         ,form = layui.form;
     form.on('submit(save-submit)', function(data){
           $.ajax({
@@ -82,6 +80,7 @@
               }
           });
     });
+    crud.setRadio("enabled","enabled","Y");
   });
   </script>
 </body>

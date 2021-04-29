@@ -32,10 +32,7 @@
   </div>
   <div class="layui-form-item" lay-filter="sex">
     <label class="layui-form-label">状态</label>
-    <div class="layui-input-block">
-      <input type="radio" name="enabled" value="Y" title="启用" checked>
-      <input type="radio" name="enabled" value="N" title="禁用">
-    </div>
+    <div class="layui-input-block" id="enabled"></div>
   </div>
   <div class="layui-form-item">
     <label class="layui-form-label">备注</label>
@@ -59,25 +56,24 @@
 </div>
   <script th:src="@{/static/layuiadmin/layui/layui.js}"></script>
   <script th:inline="javascript">
-   let dictValues = [];
-   let ctx = [[${#request.getContextPath()}]];
+  let ctx = [[${#request.getContextPath()}]];
   layui.config({
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
      index: 'lib/index', //主入口模块
-  }).use(['index', 'form','table'], function(){
+  }).use(['index', 'form','table','crud'], function(){
     let $ = layui.$
-        ,form = layui.form
-        , table = layui.table;
-    // 赋值
-    let sysDict = [[${sysDict}]];
-    dictValues = sysDict.sysDictValues;
-    let defJson = {
-      "dictValueName": ""
-      ,"dictValueKey": ""
-      ,"orderNum": ""
-      ,"remark": ""
-    };
+          , form = layui.form
+          , crud = layui.crud
+          , table = layui.table
+          , sysDict = [[${sysDict}]]
+          , dictValues = sysDict.sysDictValues
+          , defJson = {
+            "dictValueName": ""
+            ,"dictValueKey": ""
+            ,"orderNum": ""
+            ,"remark": ""
+          };
     dictValues.push(defJson);
     form.val('sys-dict-form', sysDict);
     // 编辑
@@ -168,6 +164,7 @@
         });
       }
     });
+    crud.setRadio("enabled","enabled",sysDict.enabled);
   });
   </script>
 </body>

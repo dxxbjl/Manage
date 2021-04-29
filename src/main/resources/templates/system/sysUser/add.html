@@ -48,17 +48,11 @@
     </div>
     <div class="layui-form-item" lay-filter="sex">
       <label class="layui-form-label">状态</label>
-      <div class="layui-input-block">
-        <input type="radio" name="enabled" value="Y" title="启用" checked>
-        <input type="radio" name="enabled" value="N" title="禁用">
-      </div>
+      <div class="layui-input-block" id="enabled"></div>
     </div>
     <div class="layui-form-item" lay-filter="sex">
       <label class="layui-form-label">选择性别</label>
-      <div class="layui-input-block">
-        <input type="radio" name="sex" value="0" title="男" checked>
-        <input type="radio" name="sex" value="1" title="女">
-      </div>
+      <div class="layui-input-block" id="sex"></div>
     </div>
     <div class="layui-form-item">
       <label class="layui-form-label">备注</label>
@@ -84,8 +78,7 @@
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
      index: 'lib/index', //主入口模块
-     xmSelect: 'xm-select',
-     crud: 'crud'
+     xmSelect: 'xm-select'
   }).use(['index', 'form','xmSelect','upload','crud'], function(){
     let $ = layui.$
         ,xmSelect = layui.xmSelect
@@ -184,6 +177,8 @@
               });
           }
       });
+      crud.setRadio("enabled","enabled","Y");
+      crud.setRadio("sex","sex","0");
   });
   </script>
 </body>

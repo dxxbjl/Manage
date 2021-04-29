@@ -59,6 +59,22 @@ sec:authorize="hasAuthority('权限标识')" // thymeleaf声明
 ```
  SampleSms.sendSms(手机号,模版号,签名); 
 ```   
+    11.字典渲染layui
+```
+   layui.config({
+        base: '/static/layuiadmin/' //静态资源所在路径
+    }).extend({
+      index: 'lib/index' //主入口模块
+   }).use(["crud"],function(){
+    let crud = layui.crud; 
+     // 获取枚举
+     crud.getDictValue('字典类型',枚举值);
+     // radio赋值
+     crud.setRadio("id节点","字典类型","默认值");
+     // select赋值
+     crud.setSelect("id节点","字典类型",'默认值');
+  })
+```   
     
 ## 项目运行截图
     

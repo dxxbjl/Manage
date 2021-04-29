@@ -121,11 +121,14 @@ public class SysMenuService {
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public int del(Long id) {
-        if (sysRoleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>()
-                .eq(SysRoleMenu::getMenuId,id)) > 0){
-            return sysMenuMapper.deleteById(id);
+        int flag = sysMenuMapper.deleteById(id);
+        if (flag > 0) {
+            // 删除角色关联菜单
+            sysRoleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>()
+                    .eq(SysRoleMenu::getMenuId, id));
+            return flag;
         }
-        throw new AccessDeniedException("删除菜单失败");
+        throw new RuntimeException("删除菜单失败");
     }
 
     /**

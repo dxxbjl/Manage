@@ -31,10 +31,7 @@
   </div>
   <div class="layui-form-item" lay-filter="sex">
     <label class="layui-form-label">状态</label>
-    <div class="layui-input-block">
-      <input type="radio" name="enabled" value="Y" title="启用" checked>
-      <input type="radio" name="enabled" value="N" title="禁用">
-    </div>
+    <div class="layui-input-block" id="enabled"></div>
   </div>
   <div class="layui-form-item">
     <label class="layui-form-label">备注</label>
@@ -46,7 +43,6 @@
     <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
   </div>
 </div>
-
 <div class="layui-card">
   <div class="layui-card-header">字典项</div>
   <div class="layui-card-body">
@@ -59,26 +55,27 @@
 </div>
   <script th:src="@{/static/layuiadmin/layui/layui.js}"></script>
   <script th:inline="javascript">
-   let dictValues = [];
-   let defJson = {
-     "dictValueName": ""
-     ,"dictValueKey": ""
-     ,"orderNum": ""
-     ,"remark": ""
-   };
-   dictValues.push(defJson);
-
-   let ctx = [[${#request.getContextPath()}]];
+  let ctx = [[${#request.getContextPath()}]];
   layui.config({
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
      index: 'lib/index', //主入口模块
-  }).use(['index', 'form','table'], function(){
+  }).use(['index', 'form','table','crud'], function(){
     let $ = layui.$
         , form = layui.form
-        , table = layui.table;
+        , crud = layui.crud
+        , table = layui.table
+        , dictValues = []
+        ,values = table.cache['dictTable']
+        ,defJson = {
+          "dictValueName": ""
+          ,"dictValueKey": ""
+          ,"orderNum": ""
+          ,"remark": ""
+        };
+      dictValues.push(defJson);
+
     form.on('submit(save-submit)', function(data) {
-      let values = table.cache['dictTable'];
       data.field.sysDictValues = values;
       $.ajax({
         type: 'POST',
@@ -151,6 +148,7 @@
         });
       }
     });
+    crud.setRadio("enabled","enabled","Y");
   });
   </script>
 </body>

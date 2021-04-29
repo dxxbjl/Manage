@@ -182,9 +182,11 @@ public class SysUserService implements UserDetailsService {
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public int del(Long id) {
-        if (sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>()
-                .eq(SysUserRole::getUserId,id)) > 0) {
-            return sysUserMapper.deleteById(id);
+        int flag = sysUserMapper.deleteById(id);
+        if (flag > 0) {
+            sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>()
+                    .eq(SysUserRole::getUserId,id));
+            return flag;
         }
         throw new RuntimeException("删除用户失败");
     }

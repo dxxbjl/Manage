@@ -43,17 +43,11 @@
   </div>
   <div class="layui-form-item" lay-filter="enabled">
     <label class="layui-form-label">状态</label>
-    <div class="layui-input-block">
-      <input type="radio" name="enabled" value="Y" title="启用">
-      <input type="radio" name="enabled" value="N" title="禁用">
-    </div>
+    <div class="layui-input-block" id="enabled"></div>
   </div>
   <div class="layui-form-item" lay-filter="sex">
     <label class="layui-form-label">选择性别</label>
-    <div class="layui-input-block">
-      <input name="sex" title="男" type="radio" value="0">
-      <input name="sex" title="女" type="radio" value="1">
-    </div>
+    <div class="layui-input-block" id="sex"></div>
   </div>
   <div class="layui-form-item">
     <label class="layui-form-label">备注</label>
@@ -79,16 +73,15 @@
         base: '/static/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index', //主入口模块
-        xmSelect: 'xm-select',
-        crud: 'crud'
+        xmSelect: 'xm-select'
     }).use(['index', 'form','xmSelect','upload','crud'], function(){
         let $ = layui.$
             ,xmSelect = layui.xmSelect
             ,upload = layui.upload
             ,crud = layui.crud
-            ,form = layui.form;
+            ,form = layui.form
+            ,sysUser = [[${sysUser}]];
 
-        let sysUser = [[${sysUser}]];
         if (sysUser.avatar) {
           $('#upload-img').attr('src', sysUser.avatar); //图片链接（base64）
         }
@@ -186,6 +179,8 @@
                 });
             }
         });
+        crud.setRadio("enabled","enabled",sysUser.enabled);
+        crud.setRadio("sex","sex",sysUser.sex);
     })
 </script>
 </body>

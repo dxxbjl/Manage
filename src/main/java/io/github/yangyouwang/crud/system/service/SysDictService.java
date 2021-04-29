@@ -143,9 +143,11 @@ public class SysDictService {
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public int delKey(Long id) {
-        if (sysDictValueMapper.delete(new LambdaQueryWrapper<SysDictValue>()
-                .eq(SysDictValue::getDictTypeId,id)) > 0) {
-            return sysDictTypeMapper.deleteById(id);
+        int flag = sysDictTypeMapper.deleteById(id);
+        if (flag > 0) {
+            sysDictValueMapper.delete(new LambdaQueryWrapper<SysDictValue>()
+                    .eq(SysDictValue::getDictTypeId,id));
+            return flag;
         }
         throw new RuntimeException("删除字典失败");
     }
