@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.Collections;
@@ -158,8 +159,7 @@ public class SysDictService {
     @Transactional(readOnly = true)
     public List<SysDictValueDto> getDictValues(String dictKey) {
         SysDictType sysDictType = sysDictTypeMapper.findDictByKey(dictKey);
-        if (Objects.nonNull(sysDictType) &&
-                Constants.ENABLED_YES.equals(sysDictType.getEnabled())) {
+        if (CollectionUtils.isEmpty(sysDictType.getDictValues())) {
             return sysDictType.getDictValues().stream().map(sysDictValue -> {
                 SysDictValueDto sysDictValueDto = new SysDictValueDto();
                 BeanUtils.copyProperties(sysDictValue,sysDictValueDto);
