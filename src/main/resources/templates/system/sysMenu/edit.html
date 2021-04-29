@@ -73,10 +73,11 @@
         index: 'lib/index' //主入口模块
     }).use(['index', 'form','treeSelect','crud'], function(){
         let $ = layui.$
-            , treeSelect= layui.treeSelect
-            , crud = layui.crud
-            ,form = layui.form;
-        let sysMenu = [[${sysMenu}]];
+            ,treeSelect= layui.treeSelect
+            ,crud = layui.crud
+            ,form = layui.form
+            ,sysMenu = [[${sysMenu}]];
+
         form.val('sys-menu-form', sysMenu);
         form.on('submit(save-submit)', function(data){
             $.ajax({

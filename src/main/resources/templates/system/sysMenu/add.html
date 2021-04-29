@@ -72,8 +72,9 @@
   }).use(['index', 'form','treeSelect','crud'], function(){
     let $ = layui.$,
      treeSelect= layui.treeSelect,
-     crud = layui.crud
-    ,form = layui.form;
+     crud = layui.crud,
+     form = layui.form;
+
     form.on('submit(save-submit)', function(data){
         $.ajax({
             type: 'POST',

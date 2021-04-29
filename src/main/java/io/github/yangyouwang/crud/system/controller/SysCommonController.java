@@ -1,5 +1,6 @@
 package io.github.yangyouwang.crud.system.controller;
 
+import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.core.aliyun.SampleOSS;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,7 @@ public class SysCommonController {
      */
     @PostMapping("/upload")
     @ResponseBody
+    @CrudLog
     public Result uploadFile(MultipartFile file,
                              @RequestParam(value = "fileDir",required = false,defaultValue = "img/def") String fileDir) {
         // 上传文件路径
