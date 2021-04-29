@@ -3,7 +3,6 @@ package io.github.yangyouwang.crud.system.service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.crud.system.mapper.SysDictTypeMapper;
 import io.github.yangyouwang.crud.system.mapper.SysDictValueMapper;
 import io.github.yangyouwang.crud.system.model.SysDictType;
@@ -159,7 +158,7 @@ public class SysDictService {
     @Transactional(readOnly = true)
     public List<SysDictValueDto> getDictValues(String dictKey) {
         SysDictType sysDictType = sysDictTypeMapper.findDictByKey(dictKey);
-        if (CollectionUtils.isEmpty(sysDictType.getDictValues())) {
+        if (Objects.nonNull(sysDictType)) {
             return sysDictType.getDictValues().stream().map(sysDictValue -> {
                 SysDictValueDto sysDictValueDto = new SysDictValueDto();
                 BeanUtils.copyProperties(sysDictValue,sysDictValueDto);
