@@ -7,7 +7,9 @@ import io.github.yangyouwang.common.domain.XmSelectNode;
 import io.github.yangyouwang.core.converter.ListToTree;
 import io.github.yangyouwang.core.converter.impl.ListToTreeImpl;
 import io.github.yangyouwang.crud.system.mapper.SysMenuMapper;
+import io.github.yangyouwang.crud.system.mapper.SysRoleMenuMapper;
 import io.github.yangyouwang.crud.system.model.SysMenu;
+import io.github.yangyouwang.crud.system.model.SysRoleMenu;
 import io.github.yangyouwang.crud.system.model.req.SysMenuAddReq;
 import io.github.yangyouwang.crud.system.model.req.SysMenuEditReq;
 import io.github.yangyouwang.crud.system.model.req.SysMenuListReq;
@@ -40,6 +42,9 @@ public class SysMenuService {
 
     @Resource
     private SysMenuMapper sysMenuMapper;
+
+    @Resource
+    private SysRoleMenuMapper sysRoleMenuMapper;
 
     /**
      * 根据用户查询菜单
@@ -116,7 +121,11 @@ public class SysMenuService {
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public int del(Long id) {
-        return sysMenuMapper.deleteById(id);
+        if (sysRoleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>()
+                .eq(SysRoleMenu::getMenuId,id)) > 0){
+            return sysMenuMapper.deleteById(id);
+        }
+        throw new AccessDeniedException("删除菜单失败");
     }
 
     /**
