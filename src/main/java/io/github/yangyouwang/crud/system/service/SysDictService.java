@@ -25,6 +25,8 @@ import org.springframework.util.Assert;
 import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.Optional.*;
@@ -156,7 +158,8 @@ public class SysDictService {
     @Transactional(readOnly = true)
     public List<SysDictValueDto> getDictValues(String dictKey) {
         SysDictType sysDictType = sysDictTypeMapper.findDictByKey(dictKey);
-        if (Constants.ENABLED_YES.equals(sysDictType.getEnabled())) {
+        if (Objects.nonNull(sysDictType) &&
+                Constants.ENABLED_YES.equals(sysDictType.getEnabled())) {
             return sysDictType.getDictValues().stream().map(sysDictValue -> {
                 SysDictValueDto sysDictValueDto = new SysDictValueDto();
                 BeanUtils.copyProperties(sysDictValue,sysDictValueDto);
