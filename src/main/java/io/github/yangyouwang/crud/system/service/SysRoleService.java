@@ -55,8 +55,10 @@ public class SysRoleService {
         SysRole sysRole = sysRoleMapper.findRoleById(id);
         SysRoleResp sysRoleResp = new SysRoleResp();
         BeanUtils.copyProperties(sysRole,sysRoleResp);
-        Long[] menuIds = sysRole.getMenus().stream().map(SysMenu::getId).toArray(Long[]::new);
-        sysRoleResp.setMenuIds(menuIds);
+        ofNullable(sysRole.getMenus()).ifPresent(menus -> {
+            Long[] menuIds = menus.stream().map(SysMenu::getId).toArray(Long[]::new);
+            sysRoleResp.setMenuIds(menuIds);
+        });
         return sysRoleResp;
     }
 

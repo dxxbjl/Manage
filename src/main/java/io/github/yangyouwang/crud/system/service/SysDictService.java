@@ -20,13 +20,11 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.Optional.*;
@@ -126,7 +124,8 @@ public class SysDictService {
      */
     public void insertDictValueBatch(List<SysDictValueDto> sysDictValueDtos, Long id) {
         // 字典项
-        List<SysDictValue> sysDictValues = sysDictValueDtos.stream().filter(dictValue -> StringUtils.isNotBlank(dictValue.getDictValueKey())).map(dictValue -> {
+        List<SysDictValue> sysDictValues = sysDictValueDtos.stream().filter(dictValue ->
+                StringUtils.isNotBlank(dictValue.getDictValueKey())).map(dictValue -> {
             SysDictValue sysDictValue = new SysDictValue();
             BeanUtils.copyProperties(dictValue, sysDictValue);
             sysDictValue.setDictTypeId(id);
@@ -144,9 +143,9 @@ public class SysDictService {
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public int delKey(Long id) {
-        if (sysDictTypeMapper.deleteById(id) > 0) {
-            return sysDictValueMapper.delete(new LambdaQueryWrapper<SysDictValue>()
-                    .eq(SysDictValue::getDictTypeId,id));
+        if (sysDictValueMapper.delete(new LambdaQueryWrapper<SysDictValue>()
+                .eq(SysDictValue::getDictTypeId,id)) > 0) {
+            return sysDictTypeMapper.deleteById(id);
         }
         throw new RuntimeException("删除字典失败");
     }
