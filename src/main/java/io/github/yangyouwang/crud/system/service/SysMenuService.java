@@ -1,6 +1,7 @@
 package io.github.yangyouwang.crud.system.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.common.domain.TreeSelectNode;
 import io.github.yangyouwang.common.domain.XmSelectNode;
@@ -38,7 +39,7 @@ import static java.util.Optional.*;
  * @date 2021/3/2312:32 PM
  */
 @Service
-public class SysMenuService {
+public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
 
     @Resource
     private SysMenuMapper sysMenuMapper;

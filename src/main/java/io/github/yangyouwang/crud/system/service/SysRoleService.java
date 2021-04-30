@@ -3,6 +3,7 @@ package io.github.yangyouwang.crud.system.service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.domain.XmSelectNode;
 import io.github.yangyouwang.crud.system.mapper.SysRoleMapper;
 import io.github.yangyouwang.crud.system.mapper.SysRoleMenuMapper;
@@ -38,7 +39,7 @@ import static java.util.Optional.*;
  * @date 2021/3/269:44 PM
  */
 @Service
-public class SysRoleService {
+public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
 
     @Resource
     private SysRoleMapper sysRoleMapper;
@@ -121,7 +122,7 @@ public class SysRoleService {
             roleMenu.setMenuId(s);
             return roleMenu;
         }).collect(Collectors.toList());
-        return sysRoleMenuMapper.insertBatch(roleMenus);
+        return sysRoleMenuMapper.insertBatchSomeColumn(roleMenus);
     }
 
     /**

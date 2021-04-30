@@ -8,19 +8,4 @@
   <sql id="Base_Column_List">
     user_id, role_id
   </sql>
-  <insert id="insertBatch" parameterType="java.util.List">
-    insert into sys_user_role (
-        user_id,role_id
-    )
-    values
-    <foreach collection="list" item="item" separator=",">
-      (
-        #{item.userId},#{item.roleId}
-      )
-    </foreach>
-    ON DUPLICATE KEY UPDATE
-    user_id=values(user_id),
-    role_id=values(role_id)
-  </insert>
-
 </mapper>

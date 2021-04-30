@@ -2,6 +2,7 @@ package io.github.yangyouwang.crud.system.service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.core.config.SchedulingConfig;
 import io.github.yangyouwang.crud.system.mapper.SysTaskMapper;
@@ -26,7 +27,7 @@ import javax.annotation.Resource;
  * @date 2021/4/10上午10:26
  */
 @Service
-public class SysTaskService {
+public class SysTaskService extends ServiceImpl<SysTaskMapper, SysTask> {
 
     @Resource
     private SysTaskMapper sysTaskMapper;

@@ -1,6 +1,6 @@
 package io.github.yangyouwang.crud.system.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.github.yangyouwang.common.base.CrudBaseMapper;
 import io.github.yangyouwang.crud.system.model.SysLog;
 
 /**
@@ -10,5 +10,5 @@ import io.github.yangyouwang.crud.system.model.SysLog;
  * @description: 系统日志Mapper
  * @date 2021/4/19:59 AM
  */
-public interface SysLogMapper extends BaseMapper<SysLog> {
+public interface SysLogMapper extends CrudBaseMapper<SysLog> {
 }

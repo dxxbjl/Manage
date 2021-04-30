@@ -1,6 +1,6 @@
 package io.github.yangyouwang.crud.system.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.github.yangyouwang.common.base.CrudBaseMapper;
 import io.github.yangyouwang.crud.system.model.SysRole;
 
 /**
@@ -10,7 +10,7 @@ import io.github.yangyouwang.crud.system.model.SysRole;
  * @description: 角色Dao接口
  * @date 2021/3/2112:25 AM
  */
-public interface SysRoleMapper extends BaseMapper<SysRole> {
+public interface SysRoleMapper extends CrudBaseMapper<SysRole> {
 
     /**
      * 查询角色

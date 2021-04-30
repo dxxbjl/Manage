@@ -3,6 +3,7 @@ package io.github.yangyouwang.crud.system.service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.crud.system.mapper.SysLogMapper;
 import io.github.yangyouwang.crud.system.model.SysLog;
 import io.github.yangyouwang.crud.system.model.req.SysLogListReq;
@@ -20,7 +21,7 @@ import javax.annotation.Resource;
  * @date 2021/4/111:08 AM
  */
 @Service
-public class SysLogService {
+public class SysLogService extends ServiceImpl<SysLogMapper,SysLog> {
 
     @Resource
     private SysLogMapper sysLogMapper;

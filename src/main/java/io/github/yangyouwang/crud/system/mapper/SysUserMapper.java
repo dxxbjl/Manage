@@ -1,6 +1,6 @@
 package io.github.yangyouwang.crud.system.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.github.yangyouwang.common.base.CrudBaseMapper;
 import io.github.yangyouwang.crud.system.model.SysUser;
 
 /**
@@ -10,7 +10,7 @@ import io.github.yangyouwang.crud.system.model.SysUser;
  * @description: 用户Mapper
  * @date 2021/3/2112:25 AM
  */
-public interface SysUserMapper extends BaseMapper<SysUser> {
+public interface SysUserMapper extends CrudBaseMapper<SysUser> {
 
     /**
      * 根据用户名称查询用户信息

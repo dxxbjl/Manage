@@ -5,14 +5,12 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.crud.system.mapper.SysMenuMapper;
 import io.github.yangyouwang.crud.system.mapper.SysUserMapper;
 import io.github.yangyouwang.crud.system.mapper.SysUserRoleMapper;
-import io.github.yangyouwang.crud.system.model.SysMenu;
-import io.github.yangyouwang.crud.system.model.SysRole;
-import io.github.yangyouwang.crud.system.model.SysUser;
-import io.github.yangyouwang.crud.system.model.SysUserRole;
+import io.github.yangyouwang.crud.system.model.*;
 import io.github.yangyouwang.crud.system.model.req.*;
 import io.github.yangyouwang.crud.system.model.resp.SysUserResp;
 import org.apache.commons.collections4.CollectionUtils;
@@ -45,7 +43,7 @@ import static java.util.Optional.*;
  * @date 2021/3/2112:37 AM
  */
 @Service
-public class SysUserService implements UserDetailsService {
+public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implements UserDetailsService {
 
     @Resource
     private SysUserMapper sysUserMapper;
@@ -170,7 +168,7 @@ public class SysUserService implements UserDetailsService {
             userRole.setRoleId(s);
             return userRole;
         }).collect(Collectors.toList());
-        int flag = sysUserRoleMapper.insertBatch(userRoles);
+        int flag = sysUserRoleMapper.insertBatchSomeColumn(userRoles);
         if (flag == 0) {
             throw new RuntimeException("批量新增修改用户关联角色失败");
         }

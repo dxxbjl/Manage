@@ -3,6 +3,7 @@ package io.github.yangyouwang.crud.system.service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.crud.system.mapper.SysDictTypeMapper;
 import io.github.yangyouwang.crud.system.mapper.SysDictValueMapper;
 import io.github.yangyouwang.crud.system.model.SysDictType;
@@ -37,7 +38,7 @@ import static java.util.Optional.*;
  * @date 2021/4/13下午1:11
  */
 @Service
-public class SysDictService {
+public class SysDictService extends ServiceImpl<SysDictTypeMapper, SysDictType> {
 
     @Resource
     private SysDictTypeMapper sysDictTypeMapper;

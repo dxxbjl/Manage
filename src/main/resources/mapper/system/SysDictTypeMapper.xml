@@ -40,6 +40,7 @@
     from sys_dict_type dt
     left join sys_dict_value dv on dt.id = dv.dict_type_id
     where dt.enabled = 'Y' and dt.dict_key = #{dictKey}
+    order by dv.order_num asc
   </select>
   <!-- 根据字典类型id查询字典 -->
   <select id="findDictById" parameterType="long" resultMap="DictResultMap">
