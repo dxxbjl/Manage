@@ -124,6 +124,9 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
     public int del(Long id) {
         int flag = sysMenuMapper.deleteById(id);
         if (flag > 0) {
+            // 删除子菜单
+            sysMenuMapper.delete(new LambdaQueryWrapper<SysMenu>()
+                    .eq(SysMenu::getParentId, id));
             // 删除角色关联菜单
             sysRoleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>()
                     .eq(SysRoleMenu::getMenuId, id));
