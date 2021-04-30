@@ -85,9 +85,11 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
         // 添加角色
         SysRole role = new SysRole();
         BeanUtils.copyProperties(sysRoleAddReq,role);
-        // 关联菜单
-        if (sysRoleMapper.insert(role) > 0) {
-            return insertRoleMenuBatch(role.getId(), sysRoleAddReq.getMenuIds());
+        int flag = sysRoleMapper.insert(role);
+        if (flag > 0) {
+            // 关联菜单
+            insertRoleMenuBatch(role.getId(), sysRoleAddReq.getMenuIds());
+            return flag;
         }
         throw new RuntimeException("添加角色失败");
     }
@@ -99,11 +101,13 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
     public int edit(SysRoleEditReq sysRoleEditReq) {
         SysRole role = new SysRole();
         BeanUtils.copyProperties(sysRoleEditReq,role);
+        int flag = sysRoleMapper.updateById(role);
         // 关联菜单
-        if (sysRoleMapper.updateById(role) > 0) {
+        if (flag > 0) {
             if (sysRoleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>()
                     .eq(SysRoleMenu::getRoleId, role.getId())) > 0) {
-                return insertRoleMenuBatch(role.getId(), sysRoleEditReq.getMenuIds());
+                insertRoleMenuBatch(role.getId(), sysRoleEditReq.getMenuIds());
+                return flag;
             }
         }
         throw new RuntimeException("修改角色失败");
@@ -113,17 +117,19 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
      * 批量新增角色关联菜单
      * @param roleId 角色id
      * @param menuIds 菜单id
-     * @return 操作状态
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Throwable.class)
-    public int insertRoleMenuBatch(Long roleId, Long[] menuIds) {
+    public void insertRoleMenuBatch(Long roleId, Long[] menuIds) {
         List<SysRoleMenu> roleMenus = Arrays.stream(menuIds).map(s -> {
             SysRoleMenu roleMenu = new SysRoleMenu();
             roleMenu.setRoleId(roleId);
             roleMenu.setMenuId(s);
             return roleMenu;
         }).collect(Collectors.toList());
-        return sysRoleMenuMapper.insertBatchSomeColumn(roleMenus);
+        int flag = sysRoleMenuMapper.insertBatchSomeColumn(roleMenus);
+        if (flag == 0) {
+            throw new RuntimeException("角色关联菜单失败");
+        }
     }
 
     /**
