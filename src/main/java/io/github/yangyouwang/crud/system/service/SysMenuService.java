@@ -200,18 +200,17 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
      * @param id id
      * @param visible 状态
      */
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Throwable.class)
     public void updateMenuVisible(Long id,String visible) {
         List<SysMenu> sysMenus = sysMenuMapper.selectList(new LambdaQueryWrapper<SysMenu>()
                 .select(SysMenu::getId, SysMenu::getVisible)
                 .eq(SysMenu::getParentId, id));
-        for (SysMenu sysMenu : sysMenus) {
-            if (!visible.equals(sysMenu.getVisible())) {
-                sysMenu.setVisible(visible);
-                int flag = sysMenuMapper.updateById(sysMenu);
-                if (flag == 0) {
-                    throw new RuntimeException("更新子菜单状态失败");
-                }
+        sysMenus.stream().filter(sysMenu -> !visible.equals(sysMenu.getVisible())).forEach(sysMenu -> {
+            sysMenu.setVisible(visible);
+            int flag = sysMenuMapper.updateById(sysMenu);
+            if (flag == 0) {
+                throw new RuntimeException("更新子菜单状态失败");
             }
-        }
+        });
     }
 }

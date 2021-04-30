@@ -161,6 +161,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
      * @param userId 用户id
      * @param roleIds 角色id
      */
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Throwable.class)
     public void insertUserRoleBatch(Long userId, Long[] roleIds) {
         List<SysUserRole> userRoles = Arrays.stream(roleIds).map(s -> {
             SysUserRole userRole = new SysUserRole();

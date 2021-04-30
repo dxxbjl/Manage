@@ -123,6 +123,7 @@ public class SysDictService extends ServiceImpl<SysDictTypeMapper, SysDictType> 
      * @param sysDictValueDtos 字典列表
      * @param id 字典类型id
      */
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Throwable.class)
     public void insertDictValueBatch(List<SysDictValueDto> sysDictValueDtos, Long id) {
         // 字典项
         List<SysDictValue> sysDictValues = sysDictValueDtos.stream().filter(dictValue ->

@@ -115,7 +115,8 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
      * @param menuIds 菜单id
      * @return 操作状态
      */
-    private int insertRoleMenuBatch(Long roleId, Long[] menuIds) {
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Throwable.class)
+    public int insertRoleMenuBatch(Long roleId, Long[] menuIds) {
         List<SysRoleMenu> roleMenus = Arrays.stream(menuIds).map(s -> {
             SysRoleMenu roleMenu = new SysRoleMenu();
             roleMenu.setRoleId(roleId);
