@@ -111,8 +111,6 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public int edit(SysMenuEditReq sysMenuEditReq) {
-        // 更新子菜单状态
-        updateMenuVisible(sysMenuEditReq.getId(),sysMenuEditReq.getVisible());
         SysMenu sysMenu = new SysMenu();
         BeanUtils.copyProperties(sysMenuEditReq,sysMenu);
         return sysMenuMapper.updateById(sysMenu);
@@ -124,17 +122,20 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public int del(Long id) {
-        int flag = sysMenuMapper.deleteById(id);
-        if (flag > 0) {
-            // 删除子菜单
-            sysMenuMapper.delete(new LambdaQueryWrapper<SysMenu>()
-                    .eq(SysMenu::getParentId, id));
-            // 删除角色关联菜单
-            sysRoleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>()
-                    .eq(SysRoleMenu::getMenuId, id));
-            return flag;
+        // 删除子菜单
+        Integer count = sysMenuMapper.selectCount(new LambdaQueryWrapper<SysMenu>()
+                .eq(SysMenu::getParentId, id));
+        if (count == 0) {
+            int flag = sysMenuMapper.deleteById(id);
+            if (flag  > 0) {
+                // 删除角色关联菜单
+                sysRoleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>()
+                        .eq(SysRoleMenu::getMenuId, id));
+                return flag;
+            }
+            throw new RuntimeException("删除菜单失败");
         }
-        throw new RuntimeException("删除菜单失败");
+        throw new RuntimeException("菜单存在子节点");
     }
 
     /**
@@ -187,30 +188,9 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
     public int changeMenu(SysMenuVisibleReq sysMenuVisibleReq) {
         Long id = sysMenuVisibleReq.getId();
         String visible = sysMenuVisibleReq.getVisible();
-        // 更新子菜单状态
-        updateMenuVisible(id,visible);
         SysMenu sysMenu = new SysMenu();
         sysMenu.setId(id);
         sysMenu.setVisible(visible);
         return sysMenuMapper.updateById(sysMenu);
-    }
-
-    /**
-     * 更新子菜单状态
-     * @param id id
-     * @param visible 状态
-     */
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Throwable.class)
-    public void updateMenuVisible(Long id,String visible) {
-        List<SysMenu> sysMenus = sysMenuMapper.selectList(new LambdaQueryWrapper<SysMenu>()
-                .select(SysMenu::getId, SysMenu::getVisible)
-                .eq(SysMenu::getParentId, id));
-        sysMenus.stream().filter(sysMenu -> !visible.equals(sysMenu.getVisible())).forEach(sysMenu -> {
-            sysMenu.setVisible(visible);
-            int flag = sysMenuMapper.updateById(sysMenu);
-            if (flag == 0) {
-                throw new RuntimeException("更新子菜单状态失败");
-            }
-        });
     }
 }
