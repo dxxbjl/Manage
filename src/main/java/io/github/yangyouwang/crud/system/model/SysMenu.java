@@ -39,6 +39,10 @@ public class SysMenu extends BaseEntity implements Treeable {
      */
     private Integer orderNum;
     /**
+     * 图标
+     */
+    private String icon;
+    /**
      * 请求地址
      */
     private String url;

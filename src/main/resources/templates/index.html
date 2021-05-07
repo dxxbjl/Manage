@@ -78,7 +78,7 @@
         <th:block th:fragment="row(menus)">
             <li th:each="menu,menuStat:${menus}" class="layui-nav-item">
                 <a href="javascript:;" th:lay-tips="${menu.menuName}" th:lay-direction="${menu.orderNum}" th:if="${menu.parentId eq 0}">
-                    <i class="layui-icon layui-icon-home"></i>
+                    <i class="layui-icon"  th:classappend="${(menu.icon !=null ? menu.icon : 'layui-icon-home')}" ></i>
                     <cite>[[${menu.menuName}]]</cite>
                 </a>
                 <dl class="layui-nav-child">

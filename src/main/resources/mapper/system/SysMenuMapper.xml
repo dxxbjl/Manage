@@ -6,6 +6,7 @@
     <result column="menu_name" jdbcType="VARCHAR" property="menuName" />
     <result column="parent_id" jdbcType="BIGINT" property="parentId" />
     <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
     <result column="url" jdbcType="VARCHAR" property="url" />
     <result column="menu_type" jdbcType="CHAR" property="menuType" />
     <result column="visible" jdbcType="CHAR" property="visible" />
@@ -17,19 +18,19 @@
     <result column="remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, menu_name, parent_id, order_num, url, menu_type, visible, perms, create_by, create_time, 
+    id, menu_name, parent_id, order_num, icon, url, menu_type, visible, perms, create_by, create_time,
     update_by, update_time, remark
   </sql>
   <!-- 根据菜单类型和状态查询菜单 -->
   <select id="findMenu" resultMap="BaseResultMap">
-    select distinct m.id, m.parent_id, m.menu_name, m.url, m.visible, ifnull(m.perms,'') as perms, m.menu_type, m.order_num, m.create_by, m.create_time, m.update_by, m.update_time, m.remark
+    select distinct m.id, m.parent_id, m.menu_name, m.url, m.visible, ifnull(m.perms,'') as perms, m.menu_type, m.order_num, m.icon,m.create_by, m.create_time, m.update_by, m.update_time, m.remark
     from sys_menu m
     where m.menu_type in ('M', 'C') and m.visible = 'Y'
     order by m.parent_id, m.order_num
   </select>
   <!-- 根据用户id查询菜单 -->
   <select id="findMenuByUserId" parameterType="long" resultMap="BaseResultMap">
-    select distinct m.id, m.parent_id, m.menu_name, m.url, m.visible, ifnull(m.perms,'') as perms, m.menu_type, m.order_num, m.create_by, m.create_time, m.update_by, m.update_time, m.remark
+    select distinct m.id, m.parent_id, m.menu_name, m.url, m.visible, ifnull(m.perms,'') as perms, m.menu_type, m.order_num, m.icon, m.create_by, m.create_time, m.update_by, m.update_time, m.remark
     from sys_menu m
     left join sys_role_menu rm on m.id = rm.menu_id
     left join sys_user_role ur on rm.role_id = ur.role_id
@@ -39,14 +40,14 @@
   </select>
   <!-- 根据id查询菜单 -->
   <select id="findMenuById" parameterType="long" resultMap="BaseResultMap">
-    select m.id, m.menu_name, m.parent_id, m.order_num, m.url, m.menu_type, m.visible, m.perms, m.create_by, m.create_time, m.update_by, m.update_time, m.remark ,p.menu_name  as parentName
+    select m.id, m.menu_name, m.parent_id, m.order_num, m.icon, m.url, m.menu_type, m.visible, m.perms, m.create_by, m.create_time, m.update_by, m.update_time, m.remark ,p.menu_name  as parentName
     from sys_menu m
     left join sys_menu p on m.parent_id = p.id
     where m.id = #{id}
   </select>
   <!-- 根据角色id查询菜单 -->
   <select id="findMenuByRoleId" resultMap="BaseResultMap">
-    select m.id as menu_id,m.menu_name,m.perms
+    select m.id as menu_id,m.menu_name, m.icon, m.perms
     from sys_menu m
     left join sys_role_menu rm on m.id = rm.menu_id
     where m.visible = 'Y' and m.perms &lt;&gt; '' and rm.role_id = #{roleId}

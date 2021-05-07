@@ -54,6 +54,12 @@
     </div>
   </div>
   <div class="layui-form-item">
+    <label class="layui-form-label">选择图标</label>
+    <div class="layui-input-inline">
+      <input type="text" id="iconPicker" name="icon" lay-filter="iconPicker" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
     <label class="layui-form-label">备注</label>
     <div class="layui-input-inline">
       <input type="text" name="remark" placeholder="请输入备注" class="layui-input">
@@ -71,10 +77,11 @@
         base: '/static/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'form','treeSelect','crud'], function(){
+    }).use(['index', 'form','treeSelect','crud','iconPicker'], function(){
         let $ = layui.$
             ,treeSelect= layui.treeSelect
             ,crud = layui.crud
+            ,iconPicker = layui.iconPicker
             ,form = layui.form
             ,sysMenu = [[${sysMenu}]];
 
@@ -125,6 +132,23 @@
         });
         crud.setSelect("menuType","menuType",sysMenu.menuType);
         crud.setRadio("visible","enabled",sysMenu.visible);
+
+        iconPicker.render({
+          // 选择器，推荐使用input
+          elem: '#iconPicker',
+          // 数据类型：fontClass/unicode，推荐使用fontClass
+          type: 'fontClass',
+          // 是否开启搜索：true/false
+          search: true,
+          // 是否开启分页
+          page: true,
+          // 每页显示数量，默认12
+          limit: 12,
+          // 点击回调
+          click: function (data) {
+            $("#iconPicker").val(data.icon);
+          }
+        });
     })
 </script>
 </body>

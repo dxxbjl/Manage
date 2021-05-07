@@ -32,6 +32,10 @@ public class SysMenuResp implements Serializable {
      */
     private Integer orderNum;
     /**
+     * 图标
+     */
+    private String icon;
+    /**
      * 请求地址
      */
     private String url;

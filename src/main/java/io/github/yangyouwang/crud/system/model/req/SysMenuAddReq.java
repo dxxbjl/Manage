@@ -32,6 +32,10 @@ public class SysMenuAddReq implements Serializable {
     @NotNull(message = "显示顺序不能为空")
     private Integer orderNum;
     /**
+     * 图标
+     */
+    private String icon;
+    /**
      * 请求地址
      */
     private String url;
