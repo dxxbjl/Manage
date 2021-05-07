@@ -142,25 +142,27 @@
         });
       } else if(layEvent === 'del'){
         layer.confirm('真的删除行么', function(index) {
-          //向服务端发送删除指令
-          $.ajax({
-            type: 'DELETE',
-            url:  ctx + '/sysDict/delValue/' + data.id,
-            contentType:'application/json;charset=UTF-8',
-            dataType: 'json',
-            success: function(result) {
-              layer.msg(result.message);
-              if (result.code === 200) {
-                let rowIndex = $(obj.tr).attr("data-index");
-                obj.del();
-                dictData.splice(rowIndex,1);
-                table.reload('dictTable',{
-                  data: dictData
-                });
-                layer.close(index);
+          if (data.id) {
+            //向服务端发送删除指令
+            $.ajax({
+              type: 'DELETE',
+              url:  ctx + '/sysDict/delValue/' + data.id,
+              contentType:'application/json;charset=UTF-8',
+              dataType: 'json',
+              success: function(result) {
+                if (result.code === 200) {
+                  layer.msg(result.message);
+                }
               }
-            }
+            });
+          }
+          let rowIndex = $(obj.tr).attr("data-index");
+          obj.del();
+          dictData.splice(rowIndex,1);
+          table.reload('dictTable',{
+            data: dictData
           });
+          layer.close(index);
         });
       }
     });

@@ -69,7 +69,8 @@ public class SysDictService extends ServiceImpl<SysDictTypeMapper, SysDictType> 
         SysDictResp sysDictResp = new SysDictResp();
         BeanUtils.copyProperties(sysDict,sysDictResp);
         ofNullable(sysDict.getDictValues()).ifPresent(result -> {
-            List<SysDictValueDto> sysDictValueDtos = result.stream().map(sysDictValue -> {
+            List<SysDictValueDto> sysDictValueDtos = result.stream().filter(dictValue ->
+                    StringUtils.isNotBlank(dictValue.getDictValueKey())).map(sysDictValue -> {
                 SysDictValueDto sysDictValueDto = new SysDictValueDto();
                 BeanUtils.copyProperties(sysDictValue, sysDictValueDto);
                 return sysDictValueDto;
@@ -134,6 +135,9 @@ public class SysDictService extends ServiceImpl<SysDictTypeMapper, SysDictType> 
             sysDictValue.setDictTypeId(id);
             return sysDictValue;
         }).collect(Collectors.toList());
+        if(sysDictValues.size() == 0) {
+            throw new CrudException("字典项不允许为空");
+        }
         int flag = sysDictValueMapper.insertBatch(sysDictValues);
         if (flag == 0) {
             throw new CrudException("批量新增或者修改字典项失败");
