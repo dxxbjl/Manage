@@ -2,14 +2,15 @@ package io.github.yangyouwang.core.interceptor;
 
 import io.github.yangyouwang.common.annotation.ApiIdempotent;
 import io.github.yangyouwang.common.constant.JwtConstants;
+import io.github.yangyouwang.core.exception.CrudException;
 import org.apache.logging.log4j.util.Strings;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
@@ -24,8 +25,8 @@ import java.lang.reflect.Method;
 @Component
 public class ApiIdempotentInterceptor extends HandlerInterceptorAdapter {
 
-    @Autowired
-    private RedisTemplate redisTemplate;
+    @Resource
+    private RedisTemplate<String,Object> redisTemplate;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -42,13 +43,13 @@ public class ApiIdempotentInterceptor extends HandlerInterceptorAdapter {
             //  幂等性校验, 校验通过则放行, 校验失败则抛出异常, 并通过统一异常处理返回友好提示
             String token = request.getParameter(JwtConstants.TOKEN);
             if (Strings.isBlank(token)) {
-                throw new RuntimeException("请求幂等参数不存在");
+                throw new CrudException("请求幂等参数不存在");
             }
             Boolean flag = redisTemplate.hasKey(token);
             if (flag) {
               return redisTemplate.delete(token);
             }
-            throw new RuntimeException("请求非幂等");
+            throw new CrudException("请求非幂等");
         }
         return true;
     }

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.domain.XmSelectNode;
+import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.crud.system.mapper.SysRoleMapper;
 import io.github.yangyouwang.crud.system.mapper.SysRoleMenuMapper;
 import io.github.yangyouwang.crud.system.model.SysMenu;
@@ -91,7 +92,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
             insertRoleMenuBatch(role.getId(), sysRoleAddReq.getMenuIds());
             return flag;
         }
-        throw new RuntimeException("添加角色失败");
+        throw new CrudException("添加角色失败");
     }
 
     /**
@@ -110,7 +111,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
                 return flag;
             }
         }
-        throw new RuntimeException("修改角色失败");
+        throw new CrudException("修改角色失败");
     }
 
     /**
@@ -128,7 +129,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
         }).collect(Collectors.toList());
         int flag = sysRoleMenuMapper.insertBatchSomeColumn(roleMenus);
         if (flag == 0) {
-            throw new RuntimeException("角色关联菜单失败");
+            throw new CrudException("角色关联菜单失败");
         }
     }
 
@@ -144,7 +145,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
                     .eq(SysRoleMenu::getRoleId,id));
             return flag;
         }
-        throw new RuntimeException("删除角色失败");
+        throw new CrudException("删除角色失败");
     }
 
     /**

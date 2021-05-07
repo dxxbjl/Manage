@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.constant.Constants;
+import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.crud.system.mapper.SysMenuMapper;
 import io.github.yangyouwang.crud.system.mapper.SysUserMapper;
 import io.github.yangyouwang.crud.system.mapper.SysUserRoleMapper;
@@ -123,7 +124,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
             insertUserRoleBatch(user.getId(), sysUserAddReq.getRoleIds());
             return flag;
         }
-        throw new RuntimeException("新增用户失败");
+        throw new CrudException("新增用户失败");
     }
 
     /**
@@ -142,7 +143,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
             }
             return flag;
         }
-        throw new RuntimeException("修改用户失败");
+        throw new CrudException("修改用户失败");
     }
 
     /**
@@ -171,7 +172,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
         }).collect(Collectors.toList());
         int flag = sysUserRoleMapper.insertBatchSomeColumn(userRoles);
         if (flag == 0) {
-            throw new RuntimeException("批量新增修改用户关联角色失败");
+            throw new CrudException("批量新增修改用户关联角色失败");
         }
     }
 
@@ -187,7 +188,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
                     .eq(SysUserRole::getUserId,id));
             return flag;
         }
-        throw new RuntimeException("删除用户失败");
+        throw new CrudException("删除用户失败");
     }
 
     /**

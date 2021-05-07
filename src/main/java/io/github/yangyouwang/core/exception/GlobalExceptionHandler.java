@@ -72,9 +72,6 @@ public class GlobalExceptionHandler {
 
     /**
      * 参数校验错误
-     *
-     * @param e
-     * @return
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
@@ -90,9 +87,6 @@ public class GlobalExceptionHandler {
 
     /**
      * 参数校验错误
-     *
-     * @param e
-     * @return
      */
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseBody
@@ -101,5 +95,15 @@ public class GlobalExceptionHandler {
         String message = e.getConstraintViolations().stream().map(ConstraintViolation::getMessage)
                 .collect(Collectors.joining(","));
         return Result.failure(message);
+    }
+
+    /**
+     * 抛出框架异常
+     */
+    @ExceptionHandler(value = CrudException.class)
+    @ResponseBody
+    public Result exceptionHandler(CrudException e){
+        log.error("发生框架异常！原因是:",e);
+        return Result.failure(e.getLocalizedMessage());
     }
 }

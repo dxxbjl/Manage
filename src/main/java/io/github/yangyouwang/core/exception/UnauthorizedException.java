@@ -9,10 +9,9 @@ package io.github.yangyouwang.core.exception;
  */
 public class UnauthorizedException extends RuntimeException {
 
-    private static final long serialVersionUID = 3885400551304383736L;
+    private static final long serialVersionUID = 4756203137471822212L;
 
-    public UnauthorizedException(String msg)
-    {
+    public UnauthorizedException(String msg) {
         super(msg);
     }
 

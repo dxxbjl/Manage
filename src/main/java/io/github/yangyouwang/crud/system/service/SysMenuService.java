@@ -7,6 +7,7 @@ import io.github.yangyouwang.common.domain.TreeSelectNode;
 import io.github.yangyouwang.common.domain.XmSelectNode;
 import io.github.yangyouwang.core.converter.ListToTree;
 import io.github.yangyouwang.core.converter.impl.ListToTreeImpl;
+import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.crud.system.mapper.SysMenuMapper;
 import io.github.yangyouwang.crud.system.mapper.SysRoleMenuMapper;
 import io.github.yangyouwang.crud.system.model.SysMenu;
@@ -133,9 +134,9 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
                         .eq(SysRoleMenu::getMenuId, id));
                 return flag;
             }
-            throw new RuntimeException("删除菜单失败");
+            throw new CrudException("删除菜单失败");
         }
-        throw new RuntimeException("菜单存在子节点");
+        throw new CrudException("菜单存在子节点");
     }
 
     /**

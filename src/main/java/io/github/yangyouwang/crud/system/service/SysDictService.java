@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.crud.system.mapper.SysDictTypeMapper;
 import io.github.yangyouwang.crud.system.mapper.SysDictValueMapper;
 import io.github.yangyouwang.crud.system.model.SysDictType;
@@ -96,7 +97,7 @@ public class SysDictService extends ServiceImpl<SysDictTypeMapper, SysDictType> 
             });
             return flag;
         }
-        throw new RuntimeException("添加字典出错");
+        throw new CrudException("添加字典出错");
     }
 
     /**
@@ -115,7 +116,7 @@ public class SysDictService extends ServiceImpl<SysDictTypeMapper, SysDictType> 
             });
             return flag;
         }
-        throw new RuntimeException("编辑字典出错");
+        throw new CrudException("编辑字典出错");
     }
 
     /**
@@ -135,7 +136,7 @@ public class SysDictService extends ServiceImpl<SysDictTypeMapper, SysDictType> 
         }).collect(Collectors.toList());
         int flag = sysDictValueMapper.insertBatch(sysDictValues);
         if (flag == 0) {
-            throw new RuntimeException("批量新增或者修改字典项失败");
+            throw new CrudException("批量新增或者修改字典项失败");
         }
     }
 
@@ -151,7 +152,7 @@ public class SysDictService extends ServiceImpl<SysDictTypeMapper, SysDictType> 
                     .eq(SysDictValue::getDictTypeId,id));
             return flag;
         }
-        throw new RuntimeException("删除字典失败");
+        throw new CrudException("删除字典失败");
     }
 
     /**

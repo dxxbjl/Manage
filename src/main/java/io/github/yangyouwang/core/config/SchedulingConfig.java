@@ -3,6 +3,7 @@ package io.github.yangyouwang.core.config;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.github.yangyouwang.common.constant.Constants;
+import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.crud.system.mapper.SysTaskMapper;
 import io.github.yangyouwang.crud.system.model.SysTask;
 import org.springframework.beans.BeansException;
@@ -31,7 +32,7 @@ import java.util.concurrent.*;
 @EnableScheduling
 public class SchedulingConfig implements SchedulingConfigurer, ApplicationContextAware {
 
-    private Map<String, ScheduledFuture<?>> taskFutures = new ConcurrentHashMap<>();
+    private final Map<String, ScheduledFuture<?>> taskFutures = new ConcurrentHashMap<>();
 
     private ApplicationContext applicationContext;
 
@@ -83,7 +84,7 @@ public class SchedulingConfig implements SchedulingConfigurer, ApplicationContex
                         Method method = obj.getClass().getMethod(methodName);
                         method.invoke(obj);
                     } catch (Exception e) {
-                       throw new RuntimeException("任务配置有误 => "+ e.toString());
+                       throw new CrudException("任务配置有误 => "+ e.toString());
                     }
                 },
                 triggerContext -> {
