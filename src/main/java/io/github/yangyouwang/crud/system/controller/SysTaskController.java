@@ -53,6 +53,15 @@ public class SysTaskController {
     }
 
     /**
+     * 跳转Cron
+     * @return Cron页面
+     */
+    @GetMapping("/cronPage")
+    public String cronPage(){
+        return SUFFIX + "/cron";
+    }
+
+    /**
      * 跳转添加
      * @return 添加页面
      */
