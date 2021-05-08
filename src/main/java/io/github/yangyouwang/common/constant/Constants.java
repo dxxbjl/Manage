@@ -6,6 +6,10 @@ package io.github.yangyouwang.common.constant;
  */
 public interface Constants {
     /**
+     * 登陆接口
+     */
+    String DEFAULT_LOGIN_URL = "/login";
+    /**
      * 验证码存session
      */
     String IMAGE_CODE_SESSION = "IMAGE_CODE";

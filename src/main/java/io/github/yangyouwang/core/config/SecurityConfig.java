@@ -58,7 +58,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(passwordEncoder());
     }
 
-
     /**
      * 配置放行的资源
      **/
@@ -74,6 +73,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/images/**",
                         "/webjars/**", "/v2/handler-docs","/configuration/ui", "/configuration/security");
     }
+
     /**
      * 权限配置
      */

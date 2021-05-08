@@ -2,6 +2,7 @@ package io.github.yangyouwang.crud.system.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -14,7 +15,6 @@ import io.github.yangyouwang.crud.system.mapper.SysUserRoleMapper;
 import io.github.yangyouwang.crud.system.model.*;
 import io.github.yangyouwang.crud.system.model.req.*;
 import io.github.yangyouwang.crud.system.model.resp.SysUserResp;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.lang.NonNull;
@@ -23,6 +23,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -62,15 +63,16 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
     public UserDetails loadUserByUsername(@NonNull String userName) {
         // 通过用户名从数据库获取用户信息
         SysUser user  = sysUserMapper.findUserByName(userName);
+        if (ObjectUtil.isNull(user)) {
+            throw new UsernameNotFoundException("用户名或密码错误");
+        }
         Set<GrantedAuthority> authorities = new LinkedHashSet<>();
-        if (CollectionUtils.isNotEmpty(user.getRoles())) {
-            for (SysRole role : user.getRoles()) {
-                List<SysMenu> menus = sysMenuMapper.findMenuByRoleId(role.getId());
-                for (SysMenu menu : menus) {
-                    authorities.add(new SimpleGrantedAuthority(menu.getPerms()));
-                }
-                authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRoleKey()));
+        for (SysRole role : user.getRoles()) {
+            List<SysMenu> menus = sysMenuMapper.findMenuByRoleId(role.getId());
+            for (SysMenu menu : menus) {
+                authorities.add(new SimpleGrantedAuthority(menu.getPerms()));
             }
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRoleKey()));
         }
         return new User(user.getUserName(), user.getPassWord(), Constants.ENABLED_YES.equals(user.getEnabled()),
                 true, true, true, authorities);
