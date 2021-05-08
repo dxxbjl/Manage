@@ -26,10 +26,10 @@ public class ApiRestInteceptor extends HandlerInterceptorAdapter {
         if (handler instanceof org.springframework.web.servlet.resource.ResourceHttpRequestHandler) {
             return true;
         }
-        return check(request, response, handler);
+        return check(request, handler);
     }
 
-    private boolean check(HttpServletRequest request, HttpServletResponse response, Object handler) {
+    private boolean check(HttpServletRequest request, Object handler) {
         HandlerMethod handlerMethod = (HandlerMethod)handler ;
         Method method = handlerMethod.getMethod() ;
         //检查是否有passtoken注释，有则跳过认证

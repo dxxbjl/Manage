@@ -6,6 +6,10 @@ package io.github.yangyouwang.common.constant;
  */
 public interface Constants {
     /**
+     * 验证码存session
+     */
+    String IMAGE_CODE_SESSION = "IMAGE_CODE";
+    /**
      * 超级管理员
      */
     Long ADMIN_USER = 1L;

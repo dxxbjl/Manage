@@ -1,4 +1,5 @@
 package io.github.yangyouwang.core.config;
+import io.github.yangyouwang.core.filter.ValidateCodeFilter;
 import io.github.yangyouwang.core.security.DefaultAuthenticationFailureHandler;
 import io.github.yangyouwang.core.security.DefaultAuthenticationSuccessHandler;
 import io.github.yangyouwang.crud.system.service.SysUserService;
@@ -11,6 +12,8 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 import javax.annotation.Resource;
 
 /**
@@ -33,6 +36,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Resource
     private DefaultAuthenticationFailureHandler defaultAuthenticationFailureHandler;
+
+    @Resource
+    private ValidateCodeFilter validateCodeFilter;
 
     /**
      * 密码加密
@@ -76,10 +82,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 设置哪些页面可以直接访问，哪些需要验证
         http.authorizeRequests()
                 // 放过
-                .antMatchers("/loginPage").permitAll()
+                .antMatchers("/loginPage","/getImgCode").permitAll()
                 // 剩下的所有的地址都是需要在认证状态下才可以访问
                 .anyRequest().authenticated()
         .and()
+                // 过滤登录验证码
+                .addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
         // 配置登录功能
         .formLogin().
                 usernameParameter("userName")

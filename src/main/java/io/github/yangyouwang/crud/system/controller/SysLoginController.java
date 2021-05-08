@@ -1,6 +1,8 @@
 package io.github.yangyouwang.crud.system.controller;
 
+import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.core.util.SecurityUtils;
+import io.github.yangyouwang.core.util.StringUtil;
 import io.github.yangyouwang.crud.system.model.SysMenu;
 import io.github.yangyouwang.crud.system.model.resp.SysUserResp;
 import io.github.yangyouwang.crud.system.service.SysMenuService;
@@ -10,7 +12,15 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -63,5 +73,40 @@ public class SysLoginController {
     @GetMapping("/mainPage")
     public String mainPage(){
         return "/main";
+    }
+
+    /**
+     * 验证码
+     */
+    @RequestMapping("/getImgCode")
+    public void getImgCode(HttpServletRequest request, HttpServletResponse response) {
+        int width = 80;
+        int height = 30;
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        //获取画笔
+        Graphics graphics = image.getGraphics();
+        //设置画笔颜色为灰色
+        graphics.setColor(Color.GRAY);
+        //填充图片
+        graphics.fillRect(0, 0, width, height);
+        //设置画笔颜色为黄色
+        graphics.setColor(Color.YELLOW);
+        //设置字体的小大
+        graphics.setFont(new Font("黑体", Font.BOLD, 24));
+        //产生4个随机验证码
+        String checkCode = StringUtil.getCheckCode();
+        //将验证码放入HttpSession中
+        HttpSession session = request.getSession();
+        session.setAttribute(Constants.IMAGE_CODE_SESSION, checkCode);
+        session.setMaxInactiveInterval(60);
+        //向图片上写入验证码
+        graphics.drawString(checkCode, 15, 25);
+        //将内存中的图片输出到浏览器
+        try {
+            response.setContentType("image/png");
+            ImageIO.write(image, "PNG", response.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
