@@ -1,11 +1,11 @@
 # crud
 
-#### 介绍
-    1.需求定义：囯内外包项目如雨后春笋，使得开发工期被迫压缩，为了开发人员专注项目业务，下班能陪老婆、孩子。
+## 项目介绍
+    1.需求定义：外包项目如雨后春笋，开发工期被迫压缩，为了开发人员专注项目业务，下班能陪老婆、孩子。
     2.产品定位: 简约后台管理系统
     3.项目特点：此项目代码清晰、界面简洁、springboot + layuiadmin 构建的单体后台管理系统。
 
-#### 软件架构
+## 软件架构
 - 核心框架：Spring Boot
 - 权限框架：SpringSecurity
 - 模板引擎：Thymeleaf
@@ -21,9 +21,12 @@
 - 验证框架：hibernate-Validation
 - 接口文档：Swagger
 
-## 使用说明
+## 环境需求
+    JDK >= 1.8
+    MySQL >= 5.7
+    Maven >= 3.0
 
-   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/7.png "7.png")
+## 使用说明
     
     1.控制层接口版本管理、包装响应Result返回值进行全局处理，使用@ResponseResultBody注解
     
