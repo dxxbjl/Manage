@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.domain.XmSelectNode;
+import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.crud.system.mapper.SysRoleMapper;
 import io.github.yangyouwang.crud.system.mapper.SysRoleMenuMapper;
@@ -82,7 +83,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public int add(@NotNull SysRoleAddReq sysRoleAddReq) {
         SysRole sysRole = sysRoleMapper.selectOne(new LambdaQueryWrapper<SysRole>().eq(SysRole::getRoleKey,sysRoleAddReq.getRoleKey()));
-        Assert.isNull(sysRole, "角色已存在");
+        Assert.isNull(sysRole, ResultStatus.ROLE_EXIST_ERROR.message);
         // 添加角色
         SysRole role = new SysRole();
         BeanUtils.copyProperties(sysRoleAddReq,role);
@@ -92,7 +93,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
             insertRoleMenuBatch(role.getId(), sysRoleAddReq.getMenuIds());
             return flag;
         }
-        throw new CrudException("添加角色失败");
+        throw new CrudException(ResultStatus.SAVE_DATA_ERROR);
     }
 
     /**
@@ -111,7 +112,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
                 return flag;
             }
         }
-        throw new CrudException("修改角色失败");
+        throw new CrudException(ResultStatus.UPDATE_DATA_ERROR);
     }
 
     /**
@@ -129,7 +130,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
         }).collect(Collectors.toList());
         int flag = sysRoleMenuMapper.insertBatchSomeColumn(roleMenus);
         if (flag == 0) {
-            throw new CrudException("角色关联菜单失败");
+            throw new CrudException(ResultStatus.BATCH_INSTALL_ROLE_ERROR);
         }
     }
 
@@ -145,7 +146,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
                     .eq(SysRoleMenu::getRoleId,id));
             return flag;
         }
-        throw new CrudException("删除角色失败");
+        throw new CrudException(ResultStatus.DELETE_DATA_ERROR);
     }
 
     /**

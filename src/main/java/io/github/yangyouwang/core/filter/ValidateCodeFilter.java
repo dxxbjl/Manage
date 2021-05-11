@@ -3,6 +3,7 @@ package io.github.yangyouwang.core.filter;
 import com.alibaba.fastjson.JSON;
 import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.common.domain.Result;
+import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.core.exception.CrudException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -36,7 +37,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
                 response.setCharacterEncoding("utf-8");
                 response.setContentType("application/json;charset=UTF-8");
                 PrintWriter writer = response.getWriter();
-                writer.write(JSON.toJSONString(Result.failure(e.getMessage())));
+                writer.write(JSON.toJSONString(Result.ok(e.getResultStatus())));
                 writer.flush();
                 return;
             }
@@ -51,14 +52,14 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
     private void validate(HttpServletRequest request) {
         String code = request.getParameter("code");
         if (StringUtils.isBlank(code)) {
-            throw new CrudException("验证码不能为空");
+            throw new CrudException(ResultStatus.VALIDATE_CODE_NULL_ERROR);
         }
         Object checkCode = request.getSession(false).getAttribute(Constants.IMAGE_CODE_SESSION);
         if (null == checkCode) {
-            throw new CrudException("验证码不存在");
+            throw new CrudException(ResultStatus.VALIDATE_CODE_NOT_EXIST_ERROR);
         }
         if (!StringUtils.equalsIgnoreCase(code,checkCode.toString())) {
-            throw new CrudException("验证码不匹配");
+            throw new CrudException(ResultStatus.VALIDATE_CODE_NO_MATCH_ERROR);
         }
         request.getSession(false).removeAttribute(Constants.IMAGE_CODE_SESSION);
     }

@@ -3,7 +3,6 @@ package io.github.yangyouwang.core.config;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.github.yangyouwang.common.constant.Constants;
-import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.crud.system.mapper.SysTaskMapper;
 import io.github.yangyouwang.crud.system.model.SysTask;
 import org.springframework.beans.BeansException;
@@ -84,7 +83,7 @@ public class SchedulingConfig implements SchedulingConfigurer, ApplicationContex
                         Method method = obj.getClass().getMethod(methodName);
                         method.invoke(obj);
                     } catch (Exception e) {
-                       throw new CrudException("任务配置有误 => "+ e.toString());
+                        throw new RuntimeException(e.getLocalizedMessage());
                     }
                 },
                 triggerContext -> {

@@ -20,10 +20,90 @@ public enum ResultStatus {
      * 失败响应
      */
     ERROR(500, "Server Error"),
+
+    /**
+     * 请求幂等参数不存在
+     */
+    IDEMPOTENT_NOT_EXIST(301,"请求幂等参数不存在"),
+    /**
+     * 请求非幂等
+     */
+    NON_IDEMPOTENT(302,"请求非幂等"),
+
     /**
      * 无权限响应
      */
-    NO_PERMISSION(401,"No Permission");
+    NO_PERMISSION(401,"无权限"),
+    /**
+     * 用户名或密码错误
+     */
+    LOGIN_ERROR(402,"用户名或密码错误"),
+
+    /**
+     * 新增数据出错
+     */
+    SAVE_DATA_ERROR(501,"新增数据出错"),
+    /**
+     * 修改数据出错
+     */
+    UPDATE_DATA_ERROR(502,"修改数据出错"),
+    /**
+     * 删除数据出错
+     */
+    DELETE_DATA_ERROR(503,"删除数据出错"),
+
+    /**
+     * 验证码不能为空
+     */
+    VALIDATE_CODE_NULL_ERROR(601,"验证码不能为空"),
+    /**
+     * 验证码不存在
+     */
+    VALIDATE_CODE_NOT_EXIST_ERROR(602,"验证码不存在"),
+    /**
+     * 验证码不匹配
+     */
+    VALIDATE_CODE_NO_MATCH_ERROR(603,"验证码不匹配"),
+
+    /**
+     * 字典项不允许为空
+     */
+    DICT_ITEM_NULL_ERROR(701,"字典项不允许为空"),
+    /**
+     * 批量新增或者修改字典项出错
+     */
+    BATCH_INSTALL_DICT_ERROR(702,"批量新增或者修改字典项出错"),
+
+    /**
+     * 菜单存在子节点
+     */
+    MENU_EXIST_ERROR(801,"菜单存在子节点"),
+    /**
+     * 暂未分配菜单
+     */
+    MENU_NULL_ERROR(802,"暂未分配菜单"),
+
+    /**
+     * 角色已存在
+     */
+    ROLE_EXIST_ERROR(901,"角色已存在"),
+    /**
+     * 批量新增角色关联菜单出错
+     */
+    BATCH_INSTALL_ROLE_ERROR(902,"批量新增角色关联菜单出错"),
+
+    /**
+     * 用户已存在
+     */
+    USER_EXIST_ERROR(1001,"用户已存在"),
+    /**
+     * 批量新增修改用户关联角色出错
+     */
+    BATCH_INSTALL_USER_ERROR(1002,"批量新增修改用户关联角色出错"),
+    /**
+     * 旧密码输入错误
+     */
+    OLD_PASSWORD_ERROR(1003,"旧密码输入错误");
 
     /**
      * 业务异常码

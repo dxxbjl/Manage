@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.constant.Constants;
+import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.crud.system.mapper.SysMenuMapper;
 import io.github.yangyouwang.crud.system.mapper.SysUserMapper;
@@ -64,7 +65,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
         // 通过用户名从数据库获取用户信息
         SysUser user  = sysUserMapper.findUserByName(userName);
         if (ObjectUtil.isNull(user)) {
-            throw new UsernameNotFoundException("用户名或密码错误");
+            throw new UsernameNotFoundException(ResultStatus.LOGIN_ERROR.message);
         }
         Set<GrantedAuthority> authorities = new LinkedHashSet<>();
         for (SysRole role : user.getRoles()) {
@@ -116,7 +117,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
     public int add(SysUserAddReq sysUserAddReq) {
         SysUser sysUser = sysUserMapper.selectOne(new LambdaQueryWrapper<SysUser>()
                 .eq(SysUser::getUserName,sysUserAddReq.getUserName()));
-        Assert.isNull(sysUser,"用户已存在");
+        Assert.isNull(sysUser,ResultStatus.USER_EXIST_ERROR.message);
         SysUser user = new SysUser();
         BeanUtils.copyProperties(sysUserAddReq,user);
         String passWord = passwordEncoder.encode(sysUserAddReq.getPassWord());
@@ -126,7 +127,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
             insertUserRoleBatch(user.getId(), sysUserAddReq.getRoleIds());
             return flag;
         }
-        throw new CrudException("新增用户失败");
+        throw new CrudException(ResultStatus.SAVE_DATA_ERROR);
     }
 
     /**
@@ -145,7 +146,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
             }
             return flag;
         }
-        throw new CrudException("修改用户失败");
+        throw new CrudException(ResultStatus.UPDATE_DATA_ERROR);
     }
 
     /**
@@ -174,7 +175,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
         }).collect(Collectors.toList());
         int flag = sysUserRoleMapper.insertBatchSomeColumn(userRoles);
         if (flag == 0) {
-            throw new CrudException("批量新增修改用户关联角色失败");
+            throw new CrudException(ResultStatus.BATCH_INSTALL_USER_ERROR);
         }
     }
 
@@ -190,7 +191,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
                     .eq(SysUserRole::getUserId,id));
             return flag;
         }
-        throw new CrudException("删除用户失败");
+        throw new CrudException(ResultStatus.DELETE_DATA_ERROR);
     }
 
     /**
@@ -201,7 +202,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
     public int modifyPass(ModifyPassReq modifyPassReq) {
         SysUser sysUser = sysUserMapper.selectById(modifyPassReq.getId());
         boolean matches = passwordEncoder.matches(modifyPassReq.getOldPassword(),sysUser.getPassWord());
-        Assert.isTrue(matches,"旧密码输入错误");
+        Assert.isTrue(matches,ResultStatus.OLD_PASSWORD_ERROR.message);
         String password = passwordEncoder.encode(modifyPassReq.getPassword());
         sysUser.setPassWord(password);
         return sysUserMapper.updateById(sysUser);

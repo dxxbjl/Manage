@@ -3,7 +3,6 @@ package io.github.yangyouwang.crud.api;
 import io.github.yangyouwang.common.annotation.PassToken;
 import io.github.yangyouwang.common.constant.JwtConstants;
 import io.github.yangyouwang.common.domain.Result;
-import io.github.yangyouwang.common.enums.ResultStatus;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +35,6 @@ public class ApiTokenController {
         String uuid = UUID.randomUUID().toString();
         String token = JwtConstants.REDIS_TOKEN_PREFIX + uuid;
         redisTemplate.opsForValue().set(token, token, 10,TimeUnit.SECONDS);
-        return Result.ok(ResultStatus.SUCCESS,token);
+        return Result.success(token);
     }
 }

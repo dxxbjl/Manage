@@ -1,5 +1,7 @@
 package io.github.yangyouwang.core.exception;
 
+import io.github.yangyouwang.common.enums.ResultStatus;
+
 /**
  * @author yangyouwang
  * @title: CrudException
@@ -11,12 +13,18 @@ public class CrudException extends RuntimeException {
 
     private static final long serialVersionUID = -3587103377836762876L;
 
-    public CrudException(String msg) {
-        super(msg);
+    private ResultStatus resultStatus;
+
+    public CrudException(ResultStatus resultStatus) {
+        super(resultStatus.getMessage());
+        this.resultStatus = resultStatus;
     }
 
-    public CrudException()
-    {
-        super();
+    public ResultStatus getResultStatus() {
+        return resultStatus;
+    }
+
+    public void setResultStatus(ResultStatus resultStatus) {
+        this.resultStatus = resultStatus;
     }
 }

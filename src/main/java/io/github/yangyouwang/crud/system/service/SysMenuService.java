@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.common.domain.TreeSelectNode;
 import io.github.yangyouwang.common.domain.XmSelectNode;
+import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.core.converter.ListToTree;
 import io.github.yangyouwang.core.converter.impl.ListToTreeImpl;
 import io.github.yangyouwang.core.exception.CrudException;
@@ -62,7 +63,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
             menus = this.sysMenuMapper.findMenuByUserId(userId);
         }
         if (menus.size() == 0) {
-            throw new AccessDeniedException("暂未分配菜单");
+            throw new AccessDeniedException(ResultStatus.MENU_NULL_ERROR.message);
         }
         ListToTree treeBuilder = new ListToTreeImpl();
         return treeBuilder.toTree(menus);
@@ -134,9 +135,9 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
                         .eq(SysRoleMenu::getMenuId, id));
                 return flag;
             }
-            throw new CrudException("删除菜单失败");
+            throw new CrudException(ResultStatus.DELETE_DATA_ERROR);
         }
-        throw new CrudException("菜单存在子节点");
+        throw new CrudException(ResultStatus.MENU_EXIST_ERROR);
     }
 
     /**

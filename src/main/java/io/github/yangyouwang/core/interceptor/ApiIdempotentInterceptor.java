@@ -2,6 +2,7 @@ package io.github.yangyouwang.core.interceptor;
 
 import io.github.yangyouwang.common.annotation.ApiIdempotent;
 import io.github.yangyouwang.common.constant.JwtConstants;
+import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.core.exception.CrudException;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -43,13 +44,13 @@ public class ApiIdempotentInterceptor extends HandlerInterceptorAdapter {
             //  幂等性校验, 校验通过则放行, 校验失败则抛出异常, 并通过统一异常处理返回友好提示
             String token = request.getParameter(JwtConstants.TOKEN);
             if (Strings.isBlank(token)) {
-                throw new CrudException("请求幂等参数不存在");
+                throw new CrudException(ResultStatus.IDEMPOTENT_NOT_EXIST);
             }
             Boolean flag = redisTemplate.hasKey(token);
             if (flag) {
               return redisTemplate.delete(token);
             }
-            throw new CrudException("请求非幂等");
+            throw new CrudException(ResultStatus.NON_IDEMPOTENT);
         }
         return true;
     }

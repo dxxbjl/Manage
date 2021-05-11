@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.crud.system.mapper.SysDictTypeMapper;
 import io.github.yangyouwang.crud.system.mapper.SysDictValueMapper;
@@ -98,7 +99,7 @@ public class SysDictService extends ServiceImpl<SysDictTypeMapper, SysDictType> 
             });
             return flag;
         }
-        throw new CrudException("添加字典出错");
+        throw new CrudException(ResultStatus.SAVE_DATA_ERROR);
     }
 
     /**
@@ -117,7 +118,7 @@ public class SysDictService extends ServiceImpl<SysDictTypeMapper, SysDictType> 
             });
             return flag;
         }
-        throw new CrudException("编辑字典出错");
+        throw new CrudException(ResultStatus.UPDATE_DATA_ERROR);
     }
 
     /**
@@ -136,11 +137,11 @@ public class SysDictService extends ServiceImpl<SysDictTypeMapper, SysDictType> 
             return sysDictValue;
         }).collect(Collectors.toList());
         if(sysDictValues.size() == 0) {
-            throw new CrudException("字典项不允许为空");
+            throw new CrudException(ResultStatus.DICT_ITEM_NULL_ERROR);
         }
         int flag = sysDictValueMapper.insertBatch(sysDictValues);
         if (flag == 0) {
-            throw new CrudException("批量新增或者修改字典项失败");
+            throw new CrudException(ResultStatus.BATCH_INSTALL_DICT_ERROR);
         }
     }
 
@@ -156,7 +157,7 @@ public class SysDictService extends ServiceImpl<SysDictTypeMapper, SysDictType> 
                     .eq(SysDictValue::getDictTypeId,id));
             return flag;
         }
-        throw new CrudException("删除字典失败");
+        throw new CrudException(ResultStatus.DELETE_DATA_ERROR);
     }
 
     /**

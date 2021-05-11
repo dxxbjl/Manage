@@ -5,7 +5,6 @@ import com.aliyuncs.dm.model.v20151123.SingleSendMailRequest;
 import com.aliyuncs.dm.model.v20151123.SingleSendMailResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.http.MethodType;
-import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.core.properties.MailProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +48,7 @@ public class SampleEmail {
             //捕获错误异常码
             log.error("ErrCode :{}", e.getErrCode());
             log.error("StackTrace: ", e);
-            throw new CrudException(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
