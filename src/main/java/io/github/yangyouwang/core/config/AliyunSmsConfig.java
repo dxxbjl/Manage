@@ -24,7 +24,6 @@ public class AliyunSmsConfig {
     public IAcsClient iAcsClient(){
         IClientProfile profile = DefaultProfile.getProfile(mailProperties.getRegionId(),
                 mailProperties.getAccessKeyId(), mailProperties.getAccessKeySecret());
-        IAcsClient client = new DefaultAcsClient(profile);
-        return client;
+        return new DefaultAcsClient(profile);
     }
 }

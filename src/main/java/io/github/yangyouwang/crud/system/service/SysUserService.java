@@ -73,7 +73,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
             for (SysMenu menu : menus) {
                 authorities.add(new SimpleGrantedAuthority(menu.getPerms()));
             }
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRoleKey()));
+            authorities.add(new SimpleGrantedAuthority(Constants.ROLE_PREFIX + role.getRoleKey()));
         }
         return new User(user.getUserName(), user.getPassWord(), Constants.ENABLED_YES.equals(user.getEnabled()),
                 true, true, true, authorities);

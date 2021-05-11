@@ -35,9 +35,13 @@ public enum ResultStatus {
      */
     NO_PERMISSION(401,"无权限"),
     /**
+     * 未登录
+     */
+    NO_LOGIN(402,"未登录"),
+    /**
      * 用户名或密码错误
      */
-    LOGIN_ERROR(402,"用户名或密码错误"),
+    LOGIN_ERROR(403,"用户名或密码错误"),
 
     /**
      * 新增数据出错
@@ -73,6 +77,10 @@ public enum ResultStatus {
      * 批量新增或者修改字典项出错
      */
     BATCH_INSTALL_DICT_ERROR(702,"批量新增或者修改字典项出错"),
+    /**
+     * 字典已存在
+     */
+    DICT_EXIST_ERROR(703,"字典已存在"),
 
     /**
      * 菜单存在子节点

@@ -88,7 +88,7 @@ public class SysDictService extends ServiceImpl<SysDictTypeMapper, SysDictType> 
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public int add(SysDictAddReq sysDictAddReq) {
         SysDictType sysDictType = sysDictTypeMapper.findDictByKey(sysDictAddReq.getDictKey());
-        Assert.isNull(sysDictType, "字典已存在");
+        Assert.isNull(sysDictType, ResultStatus.DICT_EXIST_ERROR.message);
         SysDictType sysDict = new SysDictType();
         // vo -> po
         BeanUtils.copyProperties(sysDictAddReq,sysDict);

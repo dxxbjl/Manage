@@ -1,4 +1,5 @@
 package io.github.yangyouwang.core.config;
+import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.core.filter.ValidateCodeFilter;
 import io.github.yangyouwang.core.security.DefaultAuthenticationFailureHandler;
 import io.github.yangyouwang.core.security.DefaultAuthenticationSuccessHandler;
@@ -82,7 +83,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 设置哪些页面可以直接访问，哪些需要验证
         http.authorizeRequests()
                 // 放过
-                .antMatchers("/loginPage","/getImgCode").permitAll()
+                .antMatchers(Constants.DEFAULT_LOGIN_PAGE, Constants.IMG_CODE_URL).permitAll()
                 // 剩下的所有的地址都是需要在认证状态下才可以访问
                 .anyRequest().authenticated()
         .and()
@@ -93,9 +94,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 usernameParameter("userName")
                 .passwordParameter("passWord")
                 // 指定指定要的登录页面
-                .loginPage("/loginPage")
+                .loginPage(Constants.DEFAULT_LOGIN_PAGE)
                 // 处理认证路径的请求
-                .loginProcessingUrl("/login")
+                .loginProcessingUrl(Constants.DEFAULT_LOGIN_URL)
                 .successHandler(defaultAuthenticationSuccessHandler)
                 .failureHandler(defaultAuthenticationFailureHandler)
                 .and()
@@ -103,14 +104,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/loginPage")
+                .logoutUrl(Constants.DEFAULT_LOGOUT_URL)
+                .logoutSuccessUrl(Constants.DEFAULT_LOGIN_PAGE)
                  .and()
                 .rememberMe()
                 // 有效期7天
-                .tokenValiditySeconds(3600 * 24 * 7)
+                .tokenValiditySeconds(Constants.REMEMBERME_VALIDITY)
                 // 开启记住我功能
-                .rememberMeParameter("remember")
+                .rememberMeParameter(Constants.REMEMBERME_COOKIES)
                 .and()
                 //禁用csrf
                 .csrf().disable()
@@ -120,7 +121,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 配置session管理
                 .sessionManagement()
                 //session失效默认的跳转地址
-                .invalidSessionUrl("/loginPage")
+                .invalidSessionUrl(Constants.DEFAULT_LOGIN_PAGE)
                 // 同一用户 只允许一个在线 自动踢出在线用户
                 .maximumSessions(1);
     }

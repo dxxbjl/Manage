@@ -1,6 +1,7 @@
 package io.github.yangyouwang.core.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.core.util.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
@@ -26,14 +27,14 @@ public class MetaObjectHandlerConfig implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         User sysUser = SecurityUtils.getSysUser();
-        Assert.notNull(sysUser, "请登录后重试");
+        Assert.notNull(sysUser, ResultStatus.NO_LOGIN.message);
         this.setFieldValByName("createBy",sysUser.getUsername(),metaObject);
         this.setFieldValByName("createTime",new Date(),metaObject);
     }
     @Override
     public void updateFill(MetaObject metaObject) {
         User sysUser = SecurityUtils.getSysUser();
-        Assert.notNull(sysUser, "请登录后重试");
+        Assert.notNull(sysUser, ResultStatus.NO_LOGIN.message);
         this.setFieldValByName("updateBy", sysUser.getUsername(), metaObject);
         this.setFieldValByName("updateTime", new Date(), metaObject);
     }
