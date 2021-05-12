@@ -5,7 +5,7 @@ spring:
       primary: master #设置默认的数据源或者数据源组,默认值即为master
       datasource:
         master:
-          url: jdbc:mysql://localhost:3306/crud?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&nullCatalogMeansCurrent=true&autoReconnect=true&allowMultiQueries=true&useSSL=false
+          url: jdbc:mysql://172.17.0.2:3306/crud?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&nullCatalogMeansCurrent=true&autoReconnect=true&allowMultiQueries=true&useSSL=false
           username: root
           password: 123456
           driver-class-name: com.mysql.jdbc.Driver # 3.2.0开始支持SPI可省略此配置

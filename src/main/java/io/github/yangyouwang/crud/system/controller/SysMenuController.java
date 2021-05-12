@@ -32,7 +32,7 @@ import java.util.Objects;
 @RequestMapping("/sysMenu")
 public class SysMenuController {
 
-    private static final String SUFFIX = "/system/sysMenu";
+    private static final String SUFFIX = "system/sysMenu";
 
     private final SysMenuService sysMenuService;
 

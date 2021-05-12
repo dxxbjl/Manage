@@ -27,7 +27,7 @@ import java.util.Objects;
 public class SysLogController {
 
 
-    private static final String SUFFIX = "/system/sysLog";
+    private static final String SUFFIX = "system/sysLog";
 
     private final SysLogService sysLogService;
 

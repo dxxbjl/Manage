@@ -30,7 +30,7 @@ import java.util.Objects;
 @RequestMapping("/sysDict")
 public class SysDictController {
 
-    private static final String SUFFIX = "/system/sysDict";
+    private static final String SUFFIX = "system/sysDict";
 
     private final SysDictService sysDictService;
 

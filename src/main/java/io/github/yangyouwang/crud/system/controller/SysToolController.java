@@ -19,7 +19,7 @@ public class SysToolController {
      * 跳转到swagger页面
      * @return swagger页面
      */
-    @GetMapping("/swagger")
+    @GetMapping("swagger")
     public String swagger(){
         return "redirect:/swagger-ui.html";
     }
@@ -28,7 +28,7 @@ public class SysToolController {
      * 跳转到druid页面
      * @return druid页面
      */
-    @GetMapping("/druid")
+    @GetMapping("druid")
     public String druid(){
         return "redirect:/druid/index.html";
     }

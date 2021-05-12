@@ -31,7 +31,7 @@ import java.util.Objects;
 @RequestMapping("/sysUser")
 public class SysUserController {
 
-    private static final String SUFFIX = "/system/sysUser";
+    private static final String SUFFIX = "system/sysUser";
 
     private final SysUserService sysUserService;
 

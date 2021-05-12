@@ -17,6 +17,7 @@
 
 	<!-- 集中定义依赖版本号 -->
 	<properties>
+		<docker.image.prefix>crud</docker.image.prefix>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
@@ -291,6 +292,7 @@
 				<!--引入所需环境的配置文件-->
 				<filtering>true</filtering>
 				<includes>
+					<!--加载配置文件-->
 					<include>application.yml</include>
 					<include>application-${profile.active}.yml</include>
 				</includes>
@@ -300,8 +302,30 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<!--Docker打包镜像 插件-->
+			<plugin>
+				<!--三个坐标定位dockerfile插件-->
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>1.4.7</version>
+				<executions>
+					<execution>
+						<id>default</id>
+						<goals>
+							<goal>build</goal>
+							<goal>push</goal>
+						</goals>
+					</execution>
+				</executions>
 				<configuration>
-					<classifier>exec</classifier>
+					<!--这里指定打包镜像的名称-->
+					<repository>${docker.image.prefix}/${project.artifactId}</repository>
+					<tag>${project.version}</tag>
+					<!-- 这里是复制 jar 包到 docker 容器指定目录配置 -->
+					<buildArgs>
+						<JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+					</buildArgs>
 				</configuration>
 			</plugin>
 		</plugins>

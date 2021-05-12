@@ -8,7 +8,6 @@ server:
     context-path: /
   tomcat:
     uri-encoding: UTF-8
-    context-path: /tale_blog
 spring:
   autoconfigure:
     #自动化配置 例外处理
@@ -70,17 +69,17 @@ spring:
 # thymeleaf静态资源配置
 #
 ##############################################
-thymeleaf:
-  # 默认路径
-  prefix: classpath:/templates/
-  # 后缀
-  suffix: .html
-  # 模版样式
-  mode: HTML5
-  encoding: UTF-8
-  cache: false
-  servlet:
-    content-type: text/html
+  thymeleaf:
+    # 默认路径
+    prefix: classpath:/templates/
+    # 后缀
+    suffix: .html
+    # 模版样式
+    mode: HTML5
+    encoding: UTF-8
+    cache: false
+    servlet:
+      content-type: text/html
 ##############################################
 #
 # mybatis-plus 配置

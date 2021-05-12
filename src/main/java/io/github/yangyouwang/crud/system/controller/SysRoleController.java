@@ -30,7 +30,7 @@ import java.util.Objects;
 @RequestMapping("/sysRole")
 public class SysRoleController {
 
-    private static final String SUFFIX = "/system/sysRole";
+    private static final String SUFFIX = "system/sysRole";
 
     private final SysRoleService sysRoleService;
 

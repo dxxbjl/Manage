@@ -34,7 +34,7 @@ import java.util.Objects;
 @RequestMapping("/sysTask")
 public class SysTaskController {
 
-    private static final String SUFFIX = "/system/sysTask";
+    private static final String SUFFIX = "system/sysTask";
 
     private final SysTaskService sysTaskService;
 

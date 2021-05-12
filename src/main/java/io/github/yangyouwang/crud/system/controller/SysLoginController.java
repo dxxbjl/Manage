@@ -54,7 +54,7 @@ public class SysLoginController {
         List<SysMenu> sysMenus = sysMenuService.selectMenusByUser(sysUser.getId());
         map.put("sysMenus",sysMenus);
         map.put("sysUser",sysUser);
-        return "/index";
+        return "index";
     }
 
     /**
@@ -63,7 +63,7 @@ public class SysLoginController {
      */
     @GetMapping("/loginPage")
     public String loginPage(){
-        return "/login";
+        return "login";
     }
 
     /**
@@ -72,7 +72,7 @@ public class SysLoginController {
      */
     @GetMapping("/mainPage")
     public String mainPage(){
-        return "/main";
+        return "main";
     }
 
     /**
