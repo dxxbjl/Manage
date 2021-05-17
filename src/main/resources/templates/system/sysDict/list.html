@@ -39,7 +39,7 @@
         </div>
         <div class="layui-col-md7">
             <div class="layui-card-body">
-                <table id="dictKeyTable" lay-filter="dictKeyTable"></table>
+                <table id="dictTypeTable" lay-filter="dictTypeTable"></table>
                 <script type="text/html" id="enabledTpl">
                     <input type="checkbox" lay-filter="enabled" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" {{d.enabled==='Y'?'checked':''}} />
                 </script>
@@ -71,8 +71,11 @@
         form.on('submit(dictKeySearch)', function(data){
             let field = data.field;
             //执行重载
-            table.reload('dictKeyTable', {
+            table.reload('dictTypeTable', {
                 where: field
+            });
+            table.reload('dictValueTable',{
+                data: []
             });
         });
         // 监听字典状态
@@ -83,7 +86,7 @@
         });
         // 查询列表接口
         table.render({
-            elem: '#dictKeyTable'
+            elem: '#dictTypeTable'
             ,height: 'full-110'
             ,url:  ctx + '/sysDict/list'
             ,page: true //开启分页,
@@ -122,14 +125,13 @@
                     {field: 'dictValueName', title: '字典项名称'}
                     ,{field: 'dictValueKey', title: '字典项别名'}
                     ,{field: 'remark', title: '备注'}
-                    ,{field: 'orderNum', title: '序号'}
                 ]
             ]
             ,data: []
             ,even: true
         });
         //监听字典行单击事件
-        table.on('row(dictKeyTable)', function(obj){
+        table.on('row(dictTypeTable)', function(obj){
             table.reload('dictValueTable',{
                 data: obj.data.dictValues
             });
@@ -137,7 +139,7 @@
             obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
         });
         //监听行工具事件
-        table.on('tool(dictKeyTable)', function(obj){
+        table.on('tool(dictTypeTable)', function(obj){
             let data = obj.data //获得当前行数据
                 ,layEvent = obj.event;
             if(layEvent === 'edit'){
@@ -203,7 +205,10 @@
                             layer.msg(result.message);
                             if (result.code === 200) {
                                 layer.close(index);
-                                table.reload('dictKeyTable');
+                                table.reload('dictTypeTable');
+                                table.reload('dictValueTable',{
+                                    data: []
+                                });
                             }
                         }
                     });
@@ -227,7 +232,7 @@
                     success: function(result) {
                         layer.msg(result.message);
                         if (result.code === 200) {
-                            table.reload('dictKeyTable');
+                            table.reload('dictTypeTable');
                         }
                     }
                 });
