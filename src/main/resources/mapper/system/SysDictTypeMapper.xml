@@ -50,4 +50,13 @@
     left join sys_dict_value dv on dt.id = dv.dict_type_id
     where dt.id = #{id}
   </select>
+    <!-- 自定义字典列表查询-->
+    <select id="selectDictPage"  resultMap="DictResultMap">
+    select dt.id as dict_type_id,dt.dict_key,dt.dict_name,dt.enabled,dt.order_num as dict_type_num,dt.remark as dict_type_remark,
+    dv.id as dict_value_id,dv.dict_value_key,dv.dict_value_name,dv.order_num as dict_value_num,dv.remark as dict_value_remark
+    from sys_dict_type dt
+    left join sys_dict_value dv on dt.id = dv.dict_type_id
+    ${ew.customSqlSegment}
+    order by dv.order_num asc
+    </select>
 </mapper>

@@ -10,39 +10,49 @@
     <link rel="stylesheet" th:href="@{/static/layuiadmin/style/admin.css}" media="all">
 </head>
 <body>
+
 <div class="layui-fluid">
     <div class="layui-card">
-        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">字典名称</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="dictName" placeholder="请输入字典名称" class="layui-input">
+        <div class="layui-col-md12">
+            <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">字典名称</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="dictName" placeholder="请输入字典名称" class="layui-input">
+                        </div>
                     </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">字典别名</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="dictKey" placeholder="请输入字典别名" class="layui-input">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">字典别名</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="dictKey" placeholder="请输入字典别名" class="layui-input">
+                        </div>
                     </div>
-                </div>
-                <div class="layui-inline">
-                    <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
-                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
-                    </button>
-                    <button sec:authorize="hasAuthority('dict:add')" class="layui-btn layuiadmin-btn-useradmin" data-type="addView">添加</button>
+                    <div class="layui-inline">
+                        <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="dictKeySearch">
+                            <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                        </button>
+                        <button sec:authorize="hasAuthority('dict:add')" class="layui-btn layuiadmin-btn-useradmin" data-type="addView">添加</button>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="layui-card-body">
-            <table id="dictTable" lay-filter="dictTable"></table>
-            <script type="text/html" id="enabledTpl">
-                <input type="checkbox" lay-filter="enabled" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" {{d.enabled==='Y'?'checked':''}} />
-            </script>
-            <script type="text/html" id="tableBar">
-                <a sec:authorize="hasAuthority('dict:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-                <a sec:authorize="hasAuthority('dict:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
-            </script>
+        <div class="layui-col-md7">
+            <div class="layui-card-body">
+                <table id="dictKeyTable" lay-filter="dictKeyTable"></table>
+                <script type="text/html" id="enabledTpl">
+                    <input type="checkbox" lay-filter="enabled" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" {{d.enabled==='Y'?'checked':''}} />
+                </script>
+                <script type="text/html" id="tableBar">
+                    <a sec:authorize="hasAuthority('dict:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+                    <a sec:authorize="hasAuthority('dict:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                </script>
+            </div>
+        </div>
+        <div class="layui-col-md5">
+            <div class="layui-card-body">
+                <table id="dictValueTable" lay-filter="dictValueTable"></table>
+            </div>
         </div>
     </div>
 </div>
@@ -56,12 +66,12 @@
     }).use(['index', 'useradmin', 'table'], function() {
         let $ = layui.$
             ,form = layui.form
-            , table = layui.table;
+            ,table = layui.table
         //监听搜索
-        form.on('submit(search)', function(data){
+        form.on('submit(dictKeySearch)', function(data){
             let field = data.field;
             //执行重载
-            table.reload('dictTable', {
+            table.reload('dictKeyTable', {
                 where: field
             });
         });
@@ -73,7 +83,7 @@
         });
         // 查询列表接口
         table.render({
-            elem: '#dictTable'
+            elem: '#dictKeyTable'
             ,height: 'full-110'
             ,url:  ctx + '/sysDict/list'
             ,page: true //开启分页,
@@ -101,9 +111,33 @@
                 ,{toolbar: '#tableBar', title: '操作', width: 165, align:'center',fixed: 'right'}
             ]]
         });
-
+        /**
+         * 字典值列表
+         */
+        table.render({
+            elem: '#dictValueTable'
+            ,cellMinWidth: 80
+            ,cols: [
+                [
+                    {field: 'dictValueName', edit: 'text', title: '字典项名称'}
+                    ,{field: 'dictValueKey', edit: 'text', title: '字典项别名'}
+                    ,{field: 'remark', edit: 'text', title: '备注'}
+                    ,{field: 'orderNum', edit: 'text', title: '序号'}
+                ]
+            ]
+            ,data: []
+            ,even: true
+        });
+        //监听字典行单击事件
+        table.on('row(dictKeyTable)', function(obj){
+            table.reload('dictValueTable',{
+                data: obj.data.dictValues
+            });
+            //标注选中样式
+            obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+        });
         //监听行工具事件
-        table.on('tool(dictTable)', function(obj){
+        table.on('tool(dictKeyTable)', function(obj){
             let data = obj.data //获得当前行数据
                 ,layEvent = obj.event;
             if(layEvent === 'edit'){
@@ -112,12 +146,10 @@
                 active.del(data.id);
             }
         });
-
         $('.layui-btn').on('click', function(){
             let type = $(this).data('type');
             active[type] && active[type].call(this);
         });
-
         /* 触发弹层 */
         let active = {
             /**
@@ -171,7 +203,7 @@
                             layer.msg(result.message);
                             if (result.code === 200) {
                                 layer.close(index);
-                                table.reload('dictTable');
+                                table.reload('dictKeyTable');
                             }
                         }
                     });
@@ -195,7 +227,7 @@
                     success: function(result) {
                         layer.msg(result.message);
                         if (result.code === 200) {
-                            table.reload('dictTable');
+                            table.reload('dictKeyTable');
                         }
                     }
                 });

@@ -54,7 +54,7 @@ public class SysDictService extends ServiceImpl<SysDictTypeMapper, SysDictType> 
      */
     @Transactional(readOnly = true)
     public IPage<SysDictType> list(SysDictListReq sysDictListReq) {
-        return sysDictTypeMapper.selectPage(new Page<>(sysDictListReq.getPageNum(), sysDictListReq.getPageSize()),
+        return sysDictTypeMapper.selectDictPage(new Page<>(sysDictListReq.getPageNum(), sysDictListReq.getPageSize()),
                 new LambdaQueryWrapper<SysDictType>()
                         .like(StringUtils.isNotBlank(sysDictListReq.getDictName()), SysDictType::getDictName , sysDictListReq.getDictName())
                         .like(StringUtils.isNotBlank(sysDictListReq.getDictKey()), SysDictType::getDictKey , sysDictListReq.getDictKey()));
