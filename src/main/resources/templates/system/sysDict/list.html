@@ -66,7 +66,7 @@
     }).use(['index', 'useradmin', 'table'], function() {
         let $ = layui.$
             ,form = layui.form
-            ,table = layui.table
+            ,table = layui.table;
         //监听搜索
         form.on('submit(dictKeySearch)', function(data){
             let field = data.field;
@@ -119,10 +119,10 @@
             ,cellMinWidth: 80
             ,cols: [
                 [
-                    {field: 'dictValueName', edit: 'text', title: '字典项名称'}
-                    ,{field: 'dictValueKey', edit: 'text', title: '字典项别名'}
-                    ,{field: 'remark', edit: 'text', title: '备注'}
-                    ,{field: 'orderNum', edit: 'text', title: '序号'}
+                    {field: 'dictValueName', title: '字典项名称'}
+                    ,{field: 'dictValueKey', title: '字典项别名'}
+                    ,{field: 'remark', title: '备注'}
+                    ,{field: 'orderNum', title: '序号'}
                 ]
             ]
             ,data: []
