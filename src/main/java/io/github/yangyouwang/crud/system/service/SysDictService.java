@@ -10,7 +10,7 @@ import io.github.yangyouwang.crud.system.mapper.SysDictTypeMapper;
 import io.github.yangyouwang.crud.system.mapper.SysDictValueMapper;
 import io.github.yangyouwang.crud.system.model.SysDictType;
 import io.github.yangyouwang.crud.system.model.SysDictValue;
-import io.github.yangyouwang.crud.system.model.dao.SysDictValueDto;
+import io.github.yangyouwang.crud.system.model.dto.SysDictValueDto;
 import io.github.yangyouwang.crud.system.model.req.SysDictAddReq;
 import io.github.yangyouwang.crud.system.model.req.SysDictEditReq;
 import io.github.yangyouwang.crud.system.model.req.SysDictEnabledReq;

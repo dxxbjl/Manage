@@ -1,4 +1,4 @@
-package io.github.yangyouwang.crud.system.model.dao;
+package io.github.yangyouwang.crud.system.model.dto;
 
 import lombok.Data;
 

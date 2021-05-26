@@ -1,6 +1,6 @@
 package io.github.yangyouwang.crud.system.model.resp;
 
-import io.github.yangyouwang.crud.system.model.dao.SysDictValueDto;
+import io.github.yangyouwang.crud.system.model.dto.SysDictValueDto;
 import lombok.Data;
 
 import java.io.Serializable;

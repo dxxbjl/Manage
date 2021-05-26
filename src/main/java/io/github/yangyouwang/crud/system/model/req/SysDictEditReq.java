@@ -1,6 +1,6 @@
 package io.github.yangyouwang.crud.system.model.req;
 
-import io.github.yangyouwang.crud.system.model.dao.SysDictValueDto;
+import io.github.yangyouwang.crud.system.model.dto.SysDictValueDto;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;

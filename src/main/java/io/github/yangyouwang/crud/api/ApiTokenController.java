@@ -17,7 +17,8 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author yangyouwang
  * @title: ApiTokenController
- * @projectName crud * @description: api 幂等接口控制层
+ * @projectName crud
+ * @description: api 幂等接口控制层
  * @date 2021/4/410:43 PM
  */
 @RestController
