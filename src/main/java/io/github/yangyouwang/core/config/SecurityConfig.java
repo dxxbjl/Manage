@@ -69,10 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 接口放行
                 .antMatchers("/api/**")
                 // 静态资源
-                .antMatchers("/static/**")
-                // 给 swagger 放行
-                .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/images/**",
-                        "/webjars/**", "/v2/handler-docs","/configuration/ui", "/configuration/security");
+                .antMatchers("/static/**");
     }
 
     /**

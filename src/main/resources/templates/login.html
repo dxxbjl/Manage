@@ -89,10 +89,14 @@
                 }
             });
         });
-
         $("#codeImg").on('click', function() {
             // 添加验证码
             getImgCode();
+        });
+        $(document).keydown(function (e) {
+            if (e.keyCode === 13) {
+                $('.layui-btn').click();
+            }
         });
     });
 

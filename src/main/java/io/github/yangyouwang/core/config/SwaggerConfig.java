@@ -3,6 +3,7 @@ package io.github.yangyouwang.core.config;
 import io.github.yangyouwang.common.annotation.ApiVersion;
 import io.github.yangyouwang.common.constant.ApiVersionConstant;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -30,6 +31,7 @@ import java.util.List;
  */
 @Configuration
 @EnableSwagger2
+@ConditionalOnProperty(name ="enabled" ,prefix = "swagger",havingValue = "true",matchIfMissing = true)
 public class SwaggerConfig {
 
     /**
@@ -58,10 +60,7 @@ public class SwaggerConfig {
                 .select()
                 .apis(input -> {
                     ApiVersion apiVersion = input.getHandlerMethod().getMethodAnnotation(ApiVersion.class);
-                    if(apiVersion != null && Arrays.asList(apiVersion.group()).contains(ApiVersionConstant.SWAGGER_API_V1)){
-                        return true;
-                    }
-                    return false;
+                    return apiVersion != null && Arrays.asList(apiVersion.group()).contains(ApiVersionConstant.SWAGGER_API_V1);
                 })
                 .paths(PathSelectors.any())
                 .build()
@@ -84,7 +83,6 @@ public class SwaggerConfig {
 
     /***
      * 构建 api文档的详细信息函数
-     * @return
      */
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()

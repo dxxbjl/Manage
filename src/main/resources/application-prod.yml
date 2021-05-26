@@ -52,6 +52,9 @@ spring:
         max-wait: -1
         min-idle: 0
         max-idle: 20
+# 是否启用swagger
+swagger:
+  enable: true
 aliyun:
   oss:
     endPoint: oss-cn-beijing.aliyuncs.com
