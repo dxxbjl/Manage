@@ -36,8 +36,10 @@ public class SchedulingConfig implements SchedulingConfigurer, ApplicationContex
     private ApplicationContext applicationContext;
 
     private ScheduledTaskRegistrar scheduledTaskRegistrar;
-
-    private static final int CORE_POOL_SIZE = 5;
+    /**
+     * 最大可用的CPU核数 x 2
+     */
+    private static final int CORE_POOL_SIZE =  Runtime.getRuntime().availableProcessors() << 1;
 
     @Override
     public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {
