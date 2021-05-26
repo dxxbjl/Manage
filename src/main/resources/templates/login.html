@@ -98,6 +98,12 @@
                 $('.layui-btn').click();
             }
         });
+        // 解决session过期跳转到登录页并跳出iframe框架
+        $(document).ready(function () {
+            if (window != top) {
+                top.location.href = location.href;
+            }
+        });
     });
 
     /**
