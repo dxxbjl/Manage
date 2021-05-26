@@ -82,6 +82,7 @@ sec:authorize="hasAuthority('权限标识')" // thymeleaf声明
 ## 项目运行截图
     
     登陆功能
+    账号：admin 密码：123456
    ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/0.png "0.png")
     
     首页
@@ -100,6 +101,7 @@ sec:authorize="hasAuthority('权限标识')" // thymeleaf声明
    ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/5.png "5.png")
    
     druid监控
+    账号：admin 密码：admin
    ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/6.png "6.png")
    
     定时任务
