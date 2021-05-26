@@ -1,12 +1,11 @@
-package io.github.yangyouwang.crud.system.model;
+package io.github.yangyouwang.crud.system.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.github.yangyouwang.common.domain.BaseEntity;
-import io.github.yangyouwang.core.converter.Treeable;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +18,8 @@ import java.util.List;
  * @date 2021/3/2112:22 AM
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class SysMenu extends BaseEntity implements Treeable {
+@TableName("sys_menu")
+public class SysMenu extends BaseEntity {
     /**
      * 主键id
      */
@@ -67,24 +66,4 @@ public class SysMenu extends BaseEntity implements Treeable {
      */
     @TableField(exist = false)
     private String parentName;
-
-    @Override
-    public Long getMapKey() {
-        return parentId;
-    }
-
-    @Override
-    public Long getChildrenKey() {
-        return id;
-    }
-
-    @Override
-    public Long getRootKey() {
-        return 0L;
-    }
-
-    @Override
-    public void setChildren(List children) {
-        this.children = children;
-    }
 }

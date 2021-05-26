@@ -3,7 +3,7 @@ package io.github.yangyouwang.crud.system.controller;
 import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.core.util.SecurityUtils;
 import io.github.yangyouwang.core.util.StringUtil;
-import io.github.yangyouwang.crud.system.model.SysMenu;
+import io.github.yangyouwang.crud.system.model.resp.SysMenuResp;
 import io.github.yangyouwang.crud.system.model.resp.SysUserResp;
 import io.github.yangyouwang.crud.system.service.SysMenuService;
 import io.github.yangyouwang.crud.system.service.SysUserService;
@@ -51,7 +51,7 @@ public class SysLoginController {
     public String indexPage(ModelMap map) {
         User user = SecurityUtils.getSysUser();
         SysUserResp sysUser = sysUserService.findUserByName(user.getUsername());
-        List<SysMenu> sysMenus = sysMenuService.selectMenusByUser(sysUser.getId());
+        List<SysMenuResp> sysMenus = sysMenuService.selectMenusByUser(sysUser.getId());
         map.put("sysMenus",sysMenus);
         map.put("sysUser",sysUser);
         return "index";

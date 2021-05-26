@@ -2,7 +2,7 @@ package io.github.yangyouwang.crud.act.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.yangyouwang.common.domain.Result;
-import io.github.yangyouwang.crud.act.model.ActReModel;
+import io.github.yangyouwang.crud.act.entity.ActReModel;
 import io.github.yangyouwang.crud.act.model.req.ActReModelAddReq;
 import io.github.yangyouwang.crud.act.model.req.ActReModelEditReq;
 import io.github.yangyouwang.crud.act.model.req.ActReModelListReq;
@@ -77,7 +77,7 @@ public class ActReModelController {
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        IPage<ActReModel> list = actReModelService.list(actReModelListReq);
+        IPage<ActReModelResp> list = actReModelService.list(actReModelListReq);
         return Result.success(list);
     }
 

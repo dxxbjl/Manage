@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="io.github.yangyouwang.crud.system.mapper.SysRoleMapper">
-  <resultMap id="BaseResultMap" type="io.github.yangyouwang.crud.system.model.SysRole">
+  <resultMap id="BaseResultMap" type="io.github.yangyouwang.crud.system.entity.SysRole">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="role_name" jdbcType="VARCHAR" property="roleName" />
     <result column="role_key" jdbcType="VARCHAR" property="roleKey" />
@@ -11,7 +11,7 @@
     <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
-  <resultMap id="RoleResultMap" type="io.github.yangyouwang.crud.system.model.SysRole">
+  <resultMap id="RoleResultMap" type="io.github.yangyouwang.crud.system.entity.SysRole">
     <id column="role_id" jdbcType="BIGINT" property="id" />
     <result column="role_name" jdbcType="VARCHAR" property="roleName" />
     <result column="role_key" jdbcType="VARCHAR" property="roleKey" />
@@ -20,7 +20,7 @@
     <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
-    <collection property="menus" javaType="java.util.ArrayList" ofType="io.github.yangyouwang.crud.system.model.SysMenu">
+    <collection property="menus" javaType="java.util.ArrayList" ofType="io.github.yangyouwang.crud.system.entity.SysMenu">
       <id column="menu_id" jdbcType="BIGINT" property="id" />
       <result column="menu_name" jdbcType="VARCHAR" property="menuName"/>
       <result column="menu_type" jdbcType="VARCHAR" property="menuType"/>

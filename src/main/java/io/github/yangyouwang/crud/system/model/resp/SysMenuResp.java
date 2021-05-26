@@ -1,8 +1,11 @@
 package io.github.yangyouwang.crud.system.model.resp;
 
+import io.github.yangyouwang.core.converter.Treeable;
+import io.github.yangyouwang.crud.system.entity.SysMenu;
 import lombok.Data;
 
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -13,7 +16,7 @@ import java.io.Serializable;
  * @date 2021/3/254:43 PM
  */
 @Data
-public class SysMenuResp implements Serializable {
+public class SysMenuResp implements Treeable {
 
     /**
      * 主键id
@@ -55,8 +58,30 @@ public class SysMenuResp implements Serializable {
      * 备注
      */
     private String remark;
+    /** 子菜单 */
+    private List<SysMenu> children = new ArrayList<>();
     /**
      * 父菜单名称
      */
     private String parentName;
+
+    @Override
+    public Long getMapKey() {
+        return parentId;
+    }
+
+    @Override
+    public Long getChildrenKey() {
+        return id;
+    }
+
+    @Override
+    public Long getRootKey() {
+        return 0L;
+    }
+
+    @Override
+    public void setChildren(List children) {
+        this.children = children;
+    }
 }

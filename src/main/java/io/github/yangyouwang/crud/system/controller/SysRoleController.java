@@ -3,7 +3,7 @@ package io.github.yangyouwang.crud.system.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.XmSelectNode;
-import io.github.yangyouwang.crud.system.model.SysRole;
+import io.github.yangyouwang.crud.system.entity.SysRole;
 import io.github.yangyouwang.crud.system.model.req.*;
 import io.github.yangyouwang.crud.system.model.resp.SysRoleResp;
 import io.github.yangyouwang.crud.system.service.SysRoleService;
@@ -79,7 +79,7 @@ public class SysRoleController {
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        IPage<SysRole> list = sysRoleService.list(sysRoleListReq);
+        IPage<SysRoleResp> list = sysRoleService.list(sysRoleListReq);
         return Result.success(list);
     }
 

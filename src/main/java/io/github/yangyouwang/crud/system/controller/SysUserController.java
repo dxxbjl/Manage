@@ -3,7 +3,7 @@ package io.github.yangyouwang.crud.system.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.core.util.SecurityUtils;
-import io.github.yangyouwang.crud.system.model.SysUser;
+import io.github.yangyouwang.crud.system.entity.SysUser;
 import io.github.yangyouwang.crud.system.model.req.*;
 import io.github.yangyouwang.crud.system.model.resp.SysUserResp;
 import io.github.yangyouwang.crud.system.service.SysUserService;
@@ -93,7 +93,6 @@ public class SysUserController {
         return SUFFIX + "/edit";
     }
 
-
     /**
      * 列表请求
      * @return 请求列表
@@ -104,7 +103,7 @@ public class SysUserController {
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        IPage<SysUser> list = sysUserService.list(sysUserListReq);
+        IPage<SysUserResp> list = sysUserService.list(sysUserListReq);
         return Result.success(list);
     }
 

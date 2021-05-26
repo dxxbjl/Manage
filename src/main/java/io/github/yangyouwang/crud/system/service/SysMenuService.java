@@ -1,5 +1,7 @@
 package io.github.yangyouwang.crud.system.service;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.constant.Constants;
@@ -11,8 +13,8 @@ import io.github.yangyouwang.core.converter.impl.ListToTreeImpl;
 import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.crud.system.mapper.SysMenuMapper;
 import io.github.yangyouwang.crud.system.mapper.SysRoleMenuMapper;
-import io.github.yangyouwang.crud.system.model.SysMenu;
-import io.github.yangyouwang.crud.system.model.SysRoleMenu;
+import io.github.yangyouwang.crud.system.entity.SysMenu;
+import io.github.yangyouwang.crud.system.entity.SysRoleMenu;
 import io.github.yangyouwang.crud.system.model.req.SysMenuAddReq;
 import io.github.yangyouwang.crud.system.model.req.SysMenuEditReq;
 import io.github.yangyouwang.crud.system.model.req.SysMenuListReq;
@@ -55,7 +57,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
      * @return 菜单信息
      */
     @Transactional(readOnly = true)
-    public List<SysMenu> selectMenusByUser(Long userId) {
+    public List<SysMenuResp> selectMenusByUser(Long userId) {
         List<SysMenu> menus;
         if (Constants.ADMIN_USER.equals(userId)) {
             menus = this.sysMenuMapper.findMenu();
@@ -65,8 +67,13 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
         if (menus.size() == 0) {
             throw new AccessDeniedException(ResultStatus.MENU_NULL_ERROR.message);
         }
+        List<SysMenuResp> sysMenuResps = menus.stream().map(sysMenu -> {
+            SysMenuResp sysMenuResp = new SysMenuResp();
+            BeanUtil.copyProperties(sysMenu, sysMenuResp, true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+            return sysMenuResp;
+        }).collect(Collectors.toList());
         ListToTree treeBuilder = new ListToTreeImpl();
-        return treeBuilder.toTree(menus);
+        return treeBuilder.toTree(sysMenuResps);
     }
 
     /**

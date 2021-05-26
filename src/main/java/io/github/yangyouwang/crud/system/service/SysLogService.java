@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.crud.system.mapper.SysLogMapper;
-import io.github.yangyouwang.crud.system.model.SysLog;
+import io.github.yangyouwang.crud.system.entity.SysLog;
 import io.github.yangyouwang.crud.system.model.req.SysLogListReq;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ public class SysLogService extends ServiceImpl<SysLogMapper,SysLog> {
      * @return 请求列表
      */
     @Transactional(readOnly = true)
-    public IPage<SysLog> list(SysLogListReq sysLogListReq) {
+    public IPage list(SysLogListReq sysLogListReq) {
         return sysLogMapper.selectPage(new Page<>(sysLogListReq.getPageNum(), sysLogListReq.getPageSize()),
                 new LambdaQueryWrapper<SysLog>()
                         .like(StringUtils.isNotBlank(sysLogListReq.getClassName()), SysLog::getClassName , sysLogListReq.getClassName())

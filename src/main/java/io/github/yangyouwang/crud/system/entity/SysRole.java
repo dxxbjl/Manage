@@ -1,11 +1,11 @@
-package io.github.yangyouwang.crud.system.model;
+package io.github.yangyouwang.crud.system.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.github.yangyouwang.common.domain.BaseEntity;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
  * @date 2021/3/2112:22 AM
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@TableName("sys_role")
 public class SysRole extends BaseEntity {
 
     /**

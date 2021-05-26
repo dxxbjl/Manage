@@ -1,7 +1,7 @@
 package io.github.yangyouwang.crud.system.mapper;
 
 import io.github.yangyouwang.common.base.CrudBaseMapper;
-import io.github.yangyouwang.crud.system.model.SysDictValue;
+import io.github.yangyouwang.crud.system.entity.SysDictValue;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

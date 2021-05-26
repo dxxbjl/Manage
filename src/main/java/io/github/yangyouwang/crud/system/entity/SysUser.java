@@ -1,8 +1,9 @@
-package io.github.yangyouwang.crud.system.model;
+package io.github.yangyouwang.crud.system.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.github.yangyouwang.common.domain.BaseEntity;
 import lombok.Data;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
  * @date 2021/3/2112:22 AM
  */
 @Data
+@TableName("sys_user")
 public class SysUser extends BaseEntity {
     /**
      * 主键id

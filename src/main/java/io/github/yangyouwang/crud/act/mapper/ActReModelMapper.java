@@ -1,7 +1,7 @@
 package io.github.yangyouwang.crud.act.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import io.github.yangyouwang.crud.act.model.ActReModel;
+import io.github.yangyouwang.crud.act.entity.ActReModel;
 
 /**
  * @author yangyouwang

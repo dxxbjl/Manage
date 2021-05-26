@@ -9,9 +9,9 @@ import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.crud.system.mapper.SysRoleMapper;
 import io.github.yangyouwang.crud.system.mapper.SysRoleMenuMapper;
-import io.github.yangyouwang.crud.system.model.SysMenu;
-import io.github.yangyouwang.crud.system.model.SysRole;
-import io.github.yangyouwang.crud.system.model.SysRoleMenu;
+import io.github.yangyouwang.crud.system.entity.SysMenu;
+import io.github.yangyouwang.crud.system.entity.SysRole;
+import io.github.yangyouwang.crud.system.entity.SysRoleMenu;
 import io.github.yangyouwang.crud.system.model.req.SysRoleAddReq;
 import io.github.yangyouwang.crud.system.model.req.SysRoleEditReq;
 import io.github.yangyouwang.crud.system.model.req.SysRoleListReq;
@@ -70,7 +70,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
      * @return 请求列表
      */
     @Transactional(readOnly = true)
-    public IPage<SysRole> list(SysRoleListReq sysRoleListReq) {
+    public IPage list(SysRoleListReq sysRoleListReq) {
         return sysRoleMapper.selectPage(new Page<>(sysRoleListReq.getPageNum(), sysRoleListReq.getPageSize()),
                 new LambdaQueryWrapper<SysRole>()
                         .like(StringUtils.isNotBlank(sysRoleListReq.getRoleName()), SysRole::getRoleName , sysRoleListReq.getRoleName())

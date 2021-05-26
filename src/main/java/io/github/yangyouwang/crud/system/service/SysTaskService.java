@@ -1,4 +1,5 @@
 package io.github.yangyouwang.crud.system.service;
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -6,7 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.core.config.SchedulingConfig;
 import io.github.yangyouwang.crud.system.mapper.SysTaskMapper;
-import io.github.yangyouwang.crud.system.model.SysTask;
+import io.github.yangyouwang.crud.system.entity.SysTask;
 import io.github.yangyouwang.crud.system.model.req.SysTaskAddReq;
 import io.github.yangyouwang.crud.system.model.req.SysTaskListReq;
 import io.github.yangyouwang.crud.system.model.resp.SysTaskResp;
@@ -51,7 +52,7 @@ public class SysTaskService extends ServiceImpl<SysTaskMapper, SysTask> {
      * @return 请求列表
      */
     @Transactional(readOnly = true)
-    public IPage<SysTask> list(SysTaskListReq sysTaskListReq) {
+    public IPage list(SysTaskListReq sysTaskListReq) {
         return sysTaskMapper.selectPage(new Page<>(sysTaskListReq.getPageNum(), sysTaskListReq.getPageSize()),
                 new LambdaQueryWrapper<SysTask>()
                         .like(StringUtils.isNotBlank(sysTaskListReq.getName()), SysTask::getName , sysTaskListReq.getName()));

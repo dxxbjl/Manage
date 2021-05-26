@@ -4,7 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.yangyouwang.common.domain.Result;
-import io.github.yangyouwang.crud.system.model.SysTask;
+import io.github.yangyouwang.crud.system.entity.SysTask;
 import io.github.yangyouwang.crud.system.model.req.SysTaskAddReq;
 import io.github.yangyouwang.crud.system.model.req.SysTaskEditReq;
 import io.github.yangyouwang.crud.system.model.req.SysTaskEnabledReq;
@@ -92,7 +92,7 @@ public class SysTaskController {
         if (bindingResult.hasErrors()) {
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        IPage<SysTask> list = sysTaskService.list(sysRoleListReq);
+        IPage<SysTaskResp> list = sysTaskService.list(sysRoleListReq);
         return Result.success(list);
     }
 

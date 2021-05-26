@@ -1,10 +1,10 @@
-package io.github.yangyouwang.crud.system.model;
+package io.github.yangyouwang.crud.system.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.github.yangyouwang.common.domain.BaseEntity;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * @author zhixin.yao
@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
  * @date 2021/4/12 11:27
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@TableName("sys_dict_value")
 public class SysDictValue extends BaseEntity {
 
     /**

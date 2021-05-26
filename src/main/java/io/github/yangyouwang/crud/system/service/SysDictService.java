@@ -8,8 +8,8 @@ import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.crud.system.mapper.SysDictTypeMapper;
 import io.github.yangyouwang.crud.system.mapper.SysDictValueMapper;
-import io.github.yangyouwang.crud.system.model.SysDictType;
-import io.github.yangyouwang.crud.system.model.SysDictValue;
+import io.github.yangyouwang.crud.system.entity.SysDictType;
+import io.github.yangyouwang.crud.system.entity.SysDictValue;
 import io.github.yangyouwang.crud.system.model.dto.SysDictValueDto;
 import io.github.yangyouwang.crud.system.model.req.SysDictAddReq;
 import io.github.yangyouwang.crud.system.model.req.SysDictEditReq;
@@ -53,11 +53,11 @@ public class SysDictService extends ServiceImpl<SysDictTypeMapper, SysDictType> 
      * @return 请求列表
      */
     @Transactional(readOnly = true)
-    public IPage<SysDictType> list(SysDictListReq sysDictListReq) {
-        return sysDictTypeMapper.selectDictPage(new Page<>(sysDictListReq.getPageNum(), sysDictListReq.getPageSize()),
+    public IPage list(SysDictListReq sysDictListReq) {
+         return sysDictTypeMapper.selectDictPage(new Page<>(sysDictListReq.getPageNum(), sysDictListReq.getPageSize()),
                 new LambdaQueryWrapper<SysDictType>()
-                        .like(StringUtils.isNotBlank(sysDictListReq.getDictName()), SysDictType::getDictName , sysDictListReq.getDictName())
-                        .like(StringUtils.isNotBlank(sysDictListReq.getDictKey()), SysDictType::getDictKey , sysDictListReq.getDictKey()));
+                        .like(StringUtils.isNotBlank(sysDictListReq.getDictName()), SysDictType::getDictName, sysDictListReq.getDictName())
+                        .like(StringUtils.isNotBlank(sysDictListReq.getDictKey()), SysDictType::getDictKey, sysDictListReq.getDictKey()));
     }
 
     /**

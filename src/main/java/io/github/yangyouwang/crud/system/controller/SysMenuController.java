@@ -70,7 +70,6 @@ public class SysMenuController {
         return SUFFIX + "/edit";
     }
 
-
     /**
      * 列表请求
      * @return 请求列表
@@ -144,7 +143,6 @@ public class SysMenuController {
     public List<TreeSelectNode> treeSelect() {
         return sysMenuService.treeSelect();
     }
-
 
     /**
      * 查询菜单列表

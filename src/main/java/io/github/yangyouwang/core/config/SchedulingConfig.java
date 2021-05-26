@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.crud.system.mapper.SysTaskMapper;
-import io.github.yangyouwang.crud.system.model.SysTask;
+import io.github.yangyouwang.crud.system.entity.SysTask;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;

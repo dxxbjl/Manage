@@ -10,10 +10,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.core.exception.CrudException;
+import io.github.yangyouwang.crud.system.entity.SysMenu;
+import io.github.yangyouwang.crud.system.entity.SysRole;
+import io.github.yangyouwang.crud.system.entity.SysUser;
+import io.github.yangyouwang.crud.system.entity.SysUserRole;
 import io.github.yangyouwang.crud.system.mapper.SysMenuMapper;
 import io.github.yangyouwang.crud.system.mapper.SysUserMapper;
 import io.github.yangyouwang.crud.system.mapper.SysUserRoleMapper;
-import io.github.yangyouwang.crud.system.model.*;
 import io.github.yangyouwang.crud.system.model.req.*;
 import io.github.yangyouwang.crud.system.model.resp.SysUserResp;
 import org.apache.commons.lang3.StringUtils;
@@ -101,7 +104,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
      * @return 列表
      */
     @Transactional(readOnly = true)
-    public IPage<SysUser> list(SysUserListReq sysUserListReq) {
+    public IPage list(SysUserListReq sysUserListReq) {
         return sysUserMapper.selectPage(new Page<>(sysUserListReq.getPageNum(), sysUserListReq.getPageSize()),
                 new LambdaQueryWrapper<SysUser>()
                         .like(StringUtils.isNotBlank(sysUserListReq.getUserName()), SysUser::getUserName , sysUserListReq.getUserName())

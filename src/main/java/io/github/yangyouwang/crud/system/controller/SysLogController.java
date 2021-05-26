@@ -2,8 +2,8 @@ package io.github.yangyouwang.crud.system.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.yangyouwang.common.domain.Result;
-import io.github.yangyouwang.crud.system.model.SysLog;
 import io.github.yangyouwang.crud.system.model.req.SysLogListReq;
+import io.github.yangyouwang.crud.system.model.resp.SysLogResp;
 import io.github.yangyouwang.crud.system.service.SysLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -55,8 +55,7 @@ public class SysLogController {
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        IPage<SysLog> list = sysLogService.list(sysLogListReq);
+        IPage<SysLogResp> list = sysLogService.list(sysLogListReq);
         return Result.success(list);
     }
-
 }

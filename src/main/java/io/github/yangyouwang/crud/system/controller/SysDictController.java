@@ -2,7 +2,7 @@ package io.github.yangyouwang.crud.system.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.yangyouwang.common.domain.Result;
-import io.github.yangyouwang.crud.system.model.SysDictType;
+import io.github.yangyouwang.crud.system.entity.SysDictType;
 import io.github.yangyouwang.crud.system.model.dto.SysDictValueDto;
 import io.github.yangyouwang.crud.system.model.req.*;
 import io.github.yangyouwang.crud.system.model.resp.SysDictResp;
@@ -78,7 +78,7 @@ public class SysDictController {
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        IPage<SysDictType> list = sysDictService.list(sysDictListReq);
+        IPage<SysDictResp> list = sysDictService.list(sysDictListReq);
         return Result.success(list);
     }
 

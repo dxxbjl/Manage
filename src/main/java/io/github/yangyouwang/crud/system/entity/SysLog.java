@@ -1,7 +1,8 @@
-package io.github.yangyouwang.crud.system.model;
+package io.github.yangyouwang.crud.system.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
@@ -16,6 +17,7 @@ import java.util.Date;
  * @date 2021/4/19:50 AM
  */
 @Data
+@TableName("sys_log")
 public class SysLog implements Serializable {
     /**
      * 主键id

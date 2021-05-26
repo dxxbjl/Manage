@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.yangyouwang.crud.act.mapper.ActReModelMapper;
-import io.github.yangyouwang.crud.act.model.ActReModel;
+import io.github.yangyouwang.crud.act.entity.ActReModel;
 import io.github.yangyouwang.crud.act.model.req.ActReModelAddReq;
 import io.github.yangyouwang.crud.act.model.req.ActReModelEditReq;
 import io.github.yangyouwang.crud.act.model.req.ActReModelListReq;
@@ -51,7 +51,7 @@ public class ActReModelService {
      * 获取列表
      * @return 列表数据
      */
-    public IPage<ActReModel> list(ActReModelListReq actReModelListReq) {
+    public IPage list(ActReModelListReq actReModelListReq) {
         return actReModelMapper.selectPage(new Page<>(actReModelListReq.getPageNum(), actReModelListReq.getPageSize()),
                 new LambdaQueryWrapper<ActReModel>()
                         .like(StringUtils.isNotBlank(actReModelListReq.getName()),ActReModel::getName , actReModelListReq.getName()));

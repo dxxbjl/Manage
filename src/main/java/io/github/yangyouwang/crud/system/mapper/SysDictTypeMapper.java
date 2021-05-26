@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import io.github.yangyouwang.common.base.CrudBaseMapper;
-import io.github.yangyouwang.crud.system.model.SysDictType;
+import io.github.yangyouwang.crud.system.entity.SysDictType;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -36,5 +36,5 @@ public interface SysDictTypeMapper extends CrudBaseMapper<SysDictType> {
      * @param queryWrapper wrapper查询条件
      * @return 数据字典列表
      */
-    IPage<SysDictType> selectDictPage(IPage<SysDictType> page, @Param(Constants.WRAPPER) Wrapper<SysDictType> queryWrapper);
+    IPage selectDictPage(IPage<SysDictType> page, @Param(Constants.WRAPPER) Wrapper<SysDictType> queryWrapper);
 }

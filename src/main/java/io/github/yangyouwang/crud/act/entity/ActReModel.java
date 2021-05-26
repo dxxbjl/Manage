@@ -1,4 +1,4 @@
-package io.github.yangyouwang.crud.act.model;
+package io.github.yangyouwang.crud.act.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;

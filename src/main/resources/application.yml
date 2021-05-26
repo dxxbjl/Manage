@@ -91,7 +91,7 @@ mybatis-plus:
     auto-mapping-behavior: full
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath*:mapper/**/*Mapper.xml
-  type-aliases-package: io.github.yangyouwang.crud.**.model
+  type-aliases-package: io.github.yangyouwang.crud.**.entity
   global-config:
     # 逻辑删除配置
     db-config:

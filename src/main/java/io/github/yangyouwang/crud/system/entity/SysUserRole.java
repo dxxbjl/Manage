@@ -1,7 +1,8 @@
-package io.github.yangyouwang.crud.system.model;
+package io.github.yangyouwang.crud.system.entity;
 
 import java.io.Serializable;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
@@ -10,6 +11,7 @@ import lombok.Data;
  * @author yangyouwang
  */
 @Data
+@TableName("sys_user_role")
 public class SysUserRole implements Serializable {
 
     private static final long serialVersionUID = 1L;
