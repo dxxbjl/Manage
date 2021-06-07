@@ -30,7 +30,9 @@ public class ActivitiConfig extends AbstractProcessEngineAutoConfiguration {
         SpringProcessEngineConfiguration configuration = new SpringProcessEngineConfiguration();
         configuration.setDataSource(dataSource);
         configuration.setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE);
-        configuration.setJobExecutorActivate(true);
+        // 关闭activiti定时任务刷新
+        configuration.setJobExecutorActivate(false);
+        // configuration.setJobExecutorActivate(true);
         configuration.setTransactionManager(transactionManager(dataSource));
         return configuration;
     }
