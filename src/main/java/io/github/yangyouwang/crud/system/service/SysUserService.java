@@ -236,4 +236,19 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
         BeanUtils.copyProperties(sysUser,sysUserResp);
         return sysUserResp;
     }
+
+    /**
+     * 导出用户列表
+     * @return 用户列表
+     */
+    @Transactional(readOnly = true)
+    public List<SysUserResp> exportSysUserList() {
+        List<SysUser> sysUsers = sysUserMapper.selectList(new LambdaQueryWrapper<SysUser>()
+                .eq(SysUser::getEnabled, Constants.ENABLED_YES));
+        return sysUsers.stream().map(sysUser -> {
+            SysUserResp sysUserResp = new SysUserResp();
+            BeanUtils.copyProperties(sysUser, sysUserResp);
+            return sysUserResp;
+        }).collect(Collectors.toList());
+    }
 }

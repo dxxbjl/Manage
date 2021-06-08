@@ -1,12 +1,18 @@
 package io.github.yangyouwang.crud.system.controller;
 
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.metadata.Sheet;
+import com.alibaba.excel.support.ExcelTypeEnum;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.core.util.SecurityUtils;
 import io.github.yangyouwang.crud.system.entity.SysUser;
 import io.github.yangyouwang.crud.system.model.req.*;
 import io.github.yangyouwang.crud.system.model.resp.SysUserResp;
 import io.github.yangyouwang.crud.system.service.SysUserService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -15,9 +21,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 /**
@@ -186,5 +198,27 @@ public class SysUserController {
         }
         int flag = sysUserService.modifyPass(modifyPassReq);
         return Result.success(flag);
+    }
+
+    /**
+     * 导出用户信息
+     */
+    @RequestMapping("/exportExcel")
+    public void export(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        List<SysUserResp> sysUserResps = sysUserService.exportSysUserList();
+        ServletOutputStream out = response.getOutputStream();
+        ExcelWriter writer = new ExcelWriter(out, ExcelTypeEnum.XLSX, true);
+        Sheet sheet = new Sheet(1, 0, SysUserResp.class);
+        //设置自适应宽度
+        sheet.setAutoWidth(Boolean.TRUE);
+        // 第一个 sheet 名称
+        sheet.setSheetName(Constants.SYS_USER_SHEET_NAME);
+        writer.write(sysUserResps, sheet);
+        //通知浏览器以附件的形式下载处理，设置返回头要注意文件名有中文
+        response.setHeader("Content-disposition", "attachment;filename=" + new String(Constants.SYS_USER_SHEET_NAME.getBytes("gb2312"), "ISO8859-1" ) + ".xlsx");
+        writer.finish();
+        response.setContentType("multipart/form-data");
+        response.setCharacterEncoding("utf-8");
+        out.flush();
     }
 }

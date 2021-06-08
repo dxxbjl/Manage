@@ -49,4 +49,12 @@ public interface Constants {
      * 是否启用 否
      */
     String ENABLED_NO = "N";
+    /**
+     * 用户SheetName
+     */
+    String SYS_USER_SHEET_NAME = "用户信息";
+    /**
+     * 字典性别key
+     */
+    String DICT_KEY_SEX = "sex";
 }

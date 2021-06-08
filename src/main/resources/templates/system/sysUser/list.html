@@ -36,6 +36,7 @@
             <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
               <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
             </button>
+            <button class="layui-btn layuiadmin-btn-useradmin" data-type="exportExcel">导出</button>
             <button sec:authorize="hasAuthority('user:add')" class="layui-btn layuiadmin-btn-useradmin" data-type="addView">添加</button>
           </div>
         </div>
@@ -136,6 +137,12 @@
 
       /* 触发弹层 */
       let active = {
+          /**
+           *  导出
+           * */
+          exportExcel: function() {
+            $(location).attr('href',  ctx + '/sysUser/exportExcel');
+          },
           /**
            * 添加
            * */
