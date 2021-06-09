@@ -98,7 +98,6 @@ public class SysLoginController {
         //将验证码放入HttpSession中
         HttpSession session = request.getSession();
         session.setAttribute(Constants.IMAGE_CODE_SESSION, checkCode);
-        session.setMaxInactiveInterval(60);
         //向图片上写入验证码
         graphics.drawString(checkCode, 15, 25);
         //将内存中的图片输出到浏览器
