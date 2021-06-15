@@ -108,7 +108,7 @@
           active[type] && active[type].call(this);
       });
 
-      // 修改user状态
+      // 修改任务状态
       form.on('switch(enabled)', function (obj) {
         let id = obj.elem.value;
         let checked = obj.elem.checked ? 'Y' : 'N';
