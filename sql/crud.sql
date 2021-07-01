@@ -3,15 +3,15 @@
 
  Source Server         : localhost_3306
  Source Server Type    : MySQL
- Source Server Version : 80023
+ Source Server Version : 80025
  Source Host           : localhost:3306
  Source Schema         : crud
 
  Target Server Type    : MySQL
- Target Server Version : 80023
+ Target Server Version : 80025
  File Encoding         : 65001
 
- Date: 12/05/2021 11:21:47
+ Date: 01/07/2021 16:13:56
 */
 
 SET NAMES utf8mb4;
@@ -827,7 +827,7 @@ CREATE TABLE `QRTZ_SCHEDULER_STATE`  (
 -- ----------------------------
 -- Records of QRTZ_SCHEDULER_STATE
 -- ----------------------------
-INSERT INTO `QRTZ_SCHEDULER_STATE` VALUES ('clusteredScheduler', 'LAPTOP-6CSRUMI11620789638301', 1620789708615, 10000);
+INSERT INTO `QRTZ_SCHEDULER_STATE` VALUES ('clusteredScheduler', 'LAPTOP-6CSRUMI11625127099279', 1625127229589, 10000);
 
 -- ----------------------------
 -- Table structure for QRTZ_SIMPLE_TRIGGERS
@@ -930,16 +930,18 @@ CREATE TABLE `sys_dict_type`  (
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '更新者',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `deleted` int NULL DEFAULT 0 COMMENT '逻辑删除 0 否、1 是',
   `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '数据字典类型' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 29 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '数据字典类型' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_dict_type
 -- ----------------------------
-INSERT INTO `sys_dict_type` VALUES (17, 'sex', '性别', 1, 'Y', 'admin', '2021-04-16 12:27:04', 'admin', '2021-05-11 14:25:45', '性别字典');
-INSERT INTO `sys_dict_type` VALUES (18, 'menuType', '菜单类型', 2, 'Y', 'admin', '2021-04-16 20:42:06', 'admin', '2021-05-07 13:06:18', '菜单类型');
-INSERT INTO `sys_dict_type` VALUES (19, 'enabled', '是否启用', 3, 'Y', 'admin', '2021-04-29 21:00:41', 'admin', '2021-05-11 14:26:00', '是否启用');
+INSERT INTO `sys_dict_type` VALUES (17, 'sex', '性别', 1, 'Y', 'admin', '2021-04-16 12:27:04', 'admin', '2021-07-01 14:59:06', 0, '性别字典');
+INSERT INTO `sys_dict_type` VALUES (18, 'menuType', '菜单类型', 2, 'Y', 'admin', '2021-04-16 20:42:06', 'admin', '2021-07-01 16:12:05', 0, '菜单类型');
+INSERT INTO `sys_dict_type` VALUES (19, 'enabled', '是否启用', 3, 'Y', 'admin', '2021-04-29 21:00:41', 'admin', '2021-07-01 15:14:31', 0, '是否启用');
+INSERT INTO `sys_dict_type` VALUES (29, '1', '1', 1, 'Y', 'admin', '2021-07-01 15:22:20', '', NULL, 1, '1');
 
 -- ----------------------------
 -- Table structure for sys_dict_value
@@ -955,21 +957,23 @@ CREATE TABLE `sys_dict_value`  (
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '更新者',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `deleted` int NULL DEFAULT 0 COMMENT '逻辑删除 0 否、1 是',
   `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 32 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '数据字典值' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 38 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '数据字典值' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_dict_value
 -- ----------------------------
-INSERT INTO `sys_dict_value` VALUES (22, 17, '0', '男', 0, 'admin', '2021-04-16 12:27:04', 'admin', '2021-04-25 16:41:48', '男');
-INSERT INTO `sys_dict_value` VALUES (23, 17, '1', '女', 1, 'admin', '2021-04-16 12:27:04', 'admin', '2021-04-25 16:41:48', '女');
-INSERT INTO `sys_dict_value` VALUES (24, 18, 'M', '目录', 1, 'admin', '2021-04-16 20:42:06', 'admin', '2021-04-16 20:42:06', '目录');
-INSERT INTO `sys_dict_value` VALUES (25, 18, 'C', '菜单', 2, 'admin', '2021-04-16 20:42:06', 'admin', '2021-04-16 20:42:06', '菜单');
-INSERT INTO `sys_dict_value` VALUES (26, 18, 'F', '按钮', 3, 'admin', '2021-04-16 20:42:06', 'admin', '2021-04-16 20:42:06', '按钮');
-INSERT INTO `sys_dict_value` VALUES (27, 17, '2', '未知', 2, '', NULL, '', NULL, '未知');
-INSERT INTO `sys_dict_value` VALUES (30, 19, 'Y', '启用', 1, '', NULL, '', NULL, '启用');
-INSERT INTO `sys_dict_value` VALUES (31, 19, 'N', '禁用', 2, '', NULL, '', NULL, '禁用');
+INSERT INTO `sys_dict_value` VALUES (22, 17, '0', '男', 0, 'admin', '2021-04-16 12:27:04', 'admin', '2021-04-25 16:41:48', 0, '男');
+INSERT INTO `sys_dict_value` VALUES (23, 17, '1', '女', 1, 'admin', '2021-04-16 12:27:04', 'admin', '2021-04-25 16:41:48', 0, '女');
+INSERT INTO `sys_dict_value` VALUES (24, 18, 'M', '目录', 1, 'admin', '2021-04-16 20:42:06', 'admin', '2021-04-16 20:42:06', 0, '目录');
+INSERT INTO `sys_dict_value` VALUES (25, 18, 'C', '菜单', 2, 'admin', '2021-04-16 20:42:06', 'admin', '2021-04-16 20:42:06', 0, '菜单');
+INSERT INTO `sys_dict_value` VALUES (26, 18, 'F', '按钮', 3, 'admin', '2021-04-16 20:42:06', 'admin', '2021-04-16 20:42:06', 0, '按钮');
+INSERT INTO `sys_dict_value` VALUES (27, 17, '2', '未知', 2, '', NULL, '', NULL, 0, '未知');
+INSERT INTO `sys_dict_value` VALUES (30, 19, 'Y', '启用', 1, '', NULL, '', NULL, 0, '启用');
+INSERT INTO `sys_dict_value` VALUES (31, 19, 'N', '禁用', 2, '', NULL, '', NULL, 0, '禁用');
+INSERT INTO `sys_dict_value` VALUES (54, 29, '1', '1', 1, '', NULL, '', NULL, 1, '1');
 
 -- ----------------------------
 -- Table structure for sys_log
@@ -1014,6 +1018,7 @@ CREATE TABLE `sys_menu`  (
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '更新者',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `deleted` int NULL DEFAULT 0 COMMENT '逻辑删除 0 否、1 是',
   `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 3027 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '菜单权限表' ROW_FORMAT = DYNAMIC;
@@ -1021,38 +1026,38 @@ CREATE TABLE `sys_menu`  (
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
-INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, 1, 'layui-icon-set', '#', 'M', 'Y', '', '1', '2018-03-16 11:33:00', 'admin', '2021-05-07 11:22:47', '系统管理目录');
-INSERT INTO `sys_menu` VALUES (3, '系统工具', 0, 2, 'layui-icon-util', '#', 'M', 'Y', '', '1', '2018-03-16 11:33:00', 'admin', '2021-05-07 12:10:46', '系统工具目录');
-INSERT INTO `sys_menu` VALUES (100, '用户管理', 1, 1, 'layui-icon-username', '/sysUser/listPage', 'C', 'Y', 'user:list', '1', '2018-03-16 11:33:00', 'admin', '2021-05-12 11:14:38', '用户管理菜单');
-INSERT INTO `sys_menu` VALUES (101, '角色管理', 1, 2, 'layui-icon-group', '/sysRole/listPage', 'C', 'Y', 'role:list', '1', '2018-03-16 11:33:00', 'admin', '2021-05-12 11:15:08', '角色管理菜单');
-INSERT INTO `sys_menu` VALUES (102, '菜单管理', 1, 3, 'layui-icon-theme', '/sysMenu/listPage', 'C', 'Y', 'menu:list', '1', '2018-03-16 11:33:00', 'admin', '2021-05-12 11:15:26', '菜单管理菜单');
-INSERT INTO `sys_menu` VALUES (115, '系统接口', 3, 3, 'layui-icon-rate', '/sysTool/swagger', 'C', 'Y', '', '1', '2018-03-16 11:33:00', 'admin', '2021-05-12 11:17:25', '系统接口菜单');
-INSERT INTO `sys_menu` VALUES (116, '数据库监控', 3, 3, 'layui-icon-video', '/sysTool/druid', 'C', 'Y', '', '1', '2018-03-16 11:33:00', 'admin', '2021-05-12 11:17:40', '系统接口菜单');
-INSERT INTO `sys_menu` VALUES (1005, '添加', 100, 1, NULL, '#', 'F', 'Y', 'user:add', 'admin', '2021-03-31 16:55:04', 'admin', '2021-04-29 21:30:49', '添加用户');
-INSERT INTO `sys_menu` VALUES (1006, '编辑', 100, 2, NULL, '#', 'F', 'Y', 'user:edit', 'admin', '2021-03-31 17:01:35', 'admin', '2021-04-10 11:25:48', '编辑用户');
-INSERT INTO `sys_menu` VALUES (1007, '删除', 100, 3, NULL, '#', 'F', 'Y', 'user:del', 'admin', '2021-03-31 17:01:57', 'admin', '2021-04-10 11:26:13', '删除用户');
-INSERT INTO `sys_menu` VALUES (2005, '添加', 101, 1, NULL, '#', 'F', 'Y', 'role:add', 'admin', '2021-03-31 16:55:04', 'admin', '2021-03-31 16:57:49', '添加用户');
-INSERT INTO `sys_menu` VALUES (2006, '编辑', 101, 2, NULL, '#', 'F', 'Y', 'role:edit', 'admin', '2021-03-31 17:01:35', 'admin', '2021-04-10 11:26:24', '编辑角色');
-INSERT INTO `sys_menu` VALUES (2007, '删除', 101, 3, NULL, '#', 'F', 'Y', 'role:del', 'admin', '2021-03-31 17:01:57', 'admin', '2021-04-10 11:26:32', '删除角色');
-INSERT INTO `sys_menu` VALUES (3005, '添加', 102, 1, NULL, '#', 'F', 'Y', 'menu:add', 'admin', '2021-03-31 16:55:04', 'admin', '2021-04-10 11:26:45', '添加菜单');
-INSERT INTO `sys_menu` VALUES (3006, '编辑', 102, 2, NULL, '#', 'F', 'Y', 'menu:edit', 'admin', '2021-03-31 17:01:35', 'admin', '2021-04-10 11:27:40', '编辑菜单');
-INSERT INTO `sys_menu` VALUES (3007, '删除', 102, 3, NULL, '#', 'F', 'Y', 'menu:del', 'admin', '2021-03-31 17:01:57', 'admin', '2021-04-10 11:27:49', '删除菜单');
-INSERT INTO `sys_menu` VALUES (3008, '异常日志', 1, 5, 'layui-icon-chart-screen', '/sysLog/listPage', 'C', 'Y', 'log:list', 'admin', '2021-04-01 11:01:52', 'admin', '2021-05-12 11:17:10', '异常日志列表');
-INSERT INTO `sys_menu` VALUES (3009, '任务管理', 1, 4, 'layui-icon-tabs', '/sysTask/listPage', 'C', 'Y', 'task:list', 'admin', '2021-04-10 11:10:15', 'admin', '2021-05-12 11:15:45', '任务管理列表');
-INSERT INTO `sys_menu` VALUES (3010, '添加', 3009, 1, NULL, '#', 'F', 'Y', 'task:add', 'admin', '2021-03-31 16:55:04', 'admin', '2021-04-10 11:26:53', '添加任务');
-INSERT INTO `sys_menu` VALUES (3011, '编辑', 3009, 2, NULL, '#', 'F', 'Y', 'task:edit', 'admin', '2021-03-31 17:01:35', 'admin', '2021-04-10 11:27:05', '编辑任务');
-INSERT INTO `sys_menu` VALUES (3012, '删除', 3009, 3, NULL, '#', 'F', 'Y', 'task:del', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', '删除任务');
-INSERT INTO `sys_menu` VALUES (3013, '流程管理', 0, 3, 'layui-icon-release', '#', 'M', 'Y', '', 'admin', '2021-04-10 20:06:40', 'admin', '2021-05-07 12:11:21', '工作流管理');
-INSERT INTO `sys_menu` VALUES (3014, '模型管理', 3013, 1, 'layui-icon-set-fill', '/actReModel/listPage', 'C', 'Y', 'model:list', 'admin', '2021-04-10 20:10:56', 'admin', '2021-05-12 11:19:24', '模型管理');
-INSERT INTO `sys_menu` VALUES (3015, '添加', 3014, 1, NULL, '#', 'F', 'Y', 'model:add', 'admin', '2021-03-31 16:55:04', 'admin', '2021-04-10 11:26:53', '添加模型');
-INSERT INTO `sys_menu` VALUES (3016, '编辑', 3014, 2, NULL, '#', 'F', 'Y', 'model:edit', 'admin', '2021-03-31 17:01:35', 'admin', '2021-04-10 11:27:05', '编辑模型');
-INSERT INTO `sys_menu` VALUES (3017, '删除', 3014, 3, NULL, '#', 'F', 'Y', 'model:del', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', '删除模型');
-INSERT INTO `sys_menu` VALUES (3018, '设计', 3014, 3, NULL, '#', 'F', 'Y', 'model:design', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', '设计模型');
-INSERT INTO `sys_menu` VALUES (3019, '部署', 3014, 3, NULL, '#', 'F', 'Y', 'model:deploy', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', '部署模型');
-INSERT INTO `sys_menu` VALUES (3020, '字典管理', 1, 5, 'layui-icon-edit', '/sysDict/listPage', 'C', 'Y', 'dict:list', 'admin', '2021-04-13 13:35:48', 'admin', '2021-05-12 11:16:28', '字典管理');
-INSERT INTO `sys_menu` VALUES (3021, '添加', 3020, 1, NULL, '#', 'F', 'Y', 'dict:add', 'admin', '2021-03-31 16:55:04', 'admin', '2021-04-10 11:26:53', '添加字典');
-INSERT INTO `sys_menu` VALUES (3022, '编辑', 3020, 2, NULL, '#', 'F', 'Y', 'dict:edit', 'admin', '2021-03-31 17:01:35', 'admin', '2021-04-10 11:27:05', '编辑字典');
-INSERT INTO `sys_menu` VALUES (3023, '删除', 3020, 3, NULL, '#', 'F', 'Y', 'dict:del', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', '删除字典');
+INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, 1, 'layui-icon-set', '#', 'M', 'Y', '', '1', '2018-03-16 11:33:00', 'admin', '2021-05-07 11:22:47', 0, '系统管理目录');
+INSERT INTO `sys_menu` VALUES (3, '系统工具', 0, 2, 'layui-icon-util', '#', 'M', 'Y', '', '1', '2018-03-16 11:33:00', 'admin', '2021-05-07 12:10:46', 0, '系统工具目录');
+INSERT INTO `sys_menu` VALUES (100, '用户管理', 1, 1, 'layui-icon-username', '/sysUser/listPage', 'C', 'Y', 'user:list', '1', '2018-03-16 11:33:00', 'admin', '2021-05-12 11:14:38', 0, '用户管理菜单');
+INSERT INTO `sys_menu` VALUES (101, '角色管理', 1, 2, 'layui-icon-group', '/sysRole/listPage', 'C', 'Y', 'role:list', '1', '2018-03-16 11:33:00', 'admin', '2021-05-12 11:15:08', 0, '角色管理菜单');
+INSERT INTO `sys_menu` VALUES (102, '菜单管理', 1, 3, 'layui-icon-theme', '/sysMenu/listPage', 'C', 'Y', 'menu:list', '1', '2018-03-16 11:33:00', 'admin', '2021-05-12 11:15:26', 0, '菜单管理菜单');
+INSERT INTO `sys_menu` VALUES (115, '系统接口', 3, 3, 'layui-icon-rate', '/sysTool/swagger', 'C', 'Y', '', '1', '2018-03-16 11:33:00', 'admin', '2021-05-12 11:17:25', 0, '系统接口菜单');
+INSERT INTO `sys_menu` VALUES (116, '数据库监控', 3, 3, 'layui-icon-video', '/sysTool/druid', 'C', 'Y', '', '1', '2018-03-16 11:33:00', 'admin', '2021-05-12 11:17:40', 0, '系统接口菜单');
+INSERT INTO `sys_menu` VALUES (1005, '添加', 100, 1, NULL, '#', 'F', 'Y', 'user:add', 'admin', '2021-03-31 16:55:04', 'admin', '2021-04-29 21:30:49', 0, '添加用户');
+INSERT INTO `sys_menu` VALUES (1006, '编辑', 100, 2, NULL, '#', 'F', 'Y', 'user:edit', 'admin', '2021-03-31 17:01:35', 'admin', '2021-04-10 11:25:48', 0, '编辑用户');
+INSERT INTO `sys_menu` VALUES (1007, '删除', 100, 3, NULL, '#', 'F', 'Y', 'user:del', 'admin', '2021-03-31 17:01:57', 'admin', '2021-04-10 11:26:13', 0, '删除用户');
+INSERT INTO `sys_menu` VALUES (2005, '添加', 101, 1, NULL, '#', 'F', 'Y', 'role:add', 'admin', '2021-03-31 16:55:04', 'admin', '2021-03-31 16:57:49', 0, '添加用户');
+INSERT INTO `sys_menu` VALUES (2006, '编辑', 101, 2, NULL, '#', 'F', 'Y', 'role:edit', 'admin', '2021-03-31 17:01:35', 'admin', '2021-04-10 11:26:24', 0, '编辑角色');
+INSERT INTO `sys_menu` VALUES (2007, '删除', 101, 3, NULL, '#', 'F', 'Y', 'role:del', 'admin', '2021-03-31 17:01:57', 'admin', '2021-04-10 11:26:32', 0, '删除角色');
+INSERT INTO `sys_menu` VALUES (3005, '添加', 102, 1, NULL, '#', 'F', 'Y', 'menu:add', 'admin', '2021-03-31 16:55:04', 'admin', '2021-04-10 11:26:45', 0, '添加菜单');
+INSERT INTO `sys_menu` VALUES (3006, '编辑', 102, 2, NULL, '#', 'F', 'Y', 'menu:edit', 'admin', '2021-03-31 17:01:35', 'admin', '2021-04-10 11:27:40', 0, '编辑菜单');
+INSERT INTO `sys_menu` VALUES (3007, '删除', 102, 3, NULL, '#', 'F', 'Y', 'menu:del', 'admin', '2021-03-31 17:01:57', 'admin', '2021-04-10 11:27:49', 0, '删除菜单');
+INSERT INTO `sys_menu` VALUES (3008, '异常日志', 1, 5, 'layui-icon-chart-screen', '/sysLog/listPage', 'C', 'Y', 'log:list', 'admin', '2021-04-01 11:01:52', 'admin', '2021-05-12 11:17:10', 0, '异常日志列表');
+INSERT INTO `sys_menu` VALUES (3009, '任务管理', 1, 4, 'layui-icon-tabs', '/sysTask/listPage', 'C', 'Y', 'task:list', 'admin', '2021-04-10 11:10:15', 'admin', '2021-05-12 11:15:45', 0, '任务管理列表');
+INSERT INTO `sys_menu` VALUES (3010, '添加', 3009, 1, NULL, '#', 'F', 'Y', 'task:add', 'admin', '2021-03-31 16:55:04', 'admin', '2021-04-10 11:26:53', 0, '添加任务');
+INSERT INTO `sys_menu` VALUES (3011, '编辑', 3009, 2, NULL, '#', 'F', 'Y', 'task:edit', 'admin', '2021-03-31 17:01:35', 'admin', '2021-04-10 11:27:05', 0, '编辑任务');
+INSERT INTO `sys_menu` VALUES (3012, '删除', 3009, 3, NULL, '#', 'F', 'Y', 'task:del', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', 0, '删除任务');
+INSERT INTO `sys_menu` VALUES (3013, '流程管理', 0, 3, 'layui-icon-release', '#', 'M', 'Y', '', 'admin', '2021-04-10 20:06:40', 'admin', '2021-05-07 12:11:21', 0, '工作流管理');
+INSERT INTO `sys_menu` VALUES (3014, '模型管理', 3013, 1, 'layui-icon-set-fill', '/actReModel/listPage', 'C', 'Y', 'model:list', 'admin', '2021-04-10 20:10:56', 'admin', '2021-05-12 11:19:24', 0, '模型管理');
+INSERT INTO `sys_menu` VALUES (3015, '添加', 3014, 1, NULL, '#', 'F', 'Y', 'model:add', 'admin', '2021-03-31 16:55:04', 'admin', '2021-04-10 11:26:53', 0, '添加模型');
+INSERT INTO `sys_menu` VALUES (3016, '编辑', 3014, 2, NULL, '#', 'F', 'Y', 'model:edit', 'admin', '2021-03-31 17:01:35', 'admin', '2021-04-10 11:27:05', 0, '编辑模型');
+INSERT INTO `sys_menu` VALUES (3017, '删除', 3014, 3, NULL, '#', 'F', 'Y', 'model:del', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', 0, '删除模型');
+INSERT INTO `sys_menu` VALUES (3018, '设计', 3014, 3, NULL, '#', 'F', 'Y', 'model:design', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', 0, '设计模型');
+INSERT INTO `sys_menu` VALUES (3019, '部署', 3014, 3, NULL, '#', 'F', 'Y', 'model:deploy', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', 0, '部署模型');
+INSERT INTO `sys_menu` VALUES (3020, '字典管理', 1, 5, 'layui-icon-edit', '/sysDictType/listPage', 'C', 'Y', 'dict:list', 'admin', '2021-04-13 13:35:48', 'admin', '2021-07-01 14:58:37', 0, '字典管理');
+INSERT INTO `sys_menu` VALUES (3021, '添加', 3020, 1, NULL, '#', 'F', 'Y', 'dict:add', 'admin', '2021-03-31 16:55:04', 'admin', '2021-04-10 11:26:53', 0, '添加字典');
+INSERT INTO `sys_menu` VALUES (3022, '编辑', 3020, 2, NULL, '#', 'F', 'Y', 'dict:edit', 'admin', '2021-03-31 17:01:35', 'admin', '2021-04-10 11:27:05', 0, '编辑字典');
+INSERT INTO `sys_menu` VALUES (3023, '删除', 3020, 3, NULL, '#', 'F', 'Y', 'dict:del', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', 0, '删除字典');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -1062,19 +1067,20 @@ CREATE TABLE `sys_role`  (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
   `role_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '名称',
   `role_key` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '标识',
-  `remark` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '描述',
   `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '创建者',
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '更新者',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `deleted` int NULL DEFAULT 0 COMMENT '逻辑删除 0 否、1 是',
+  `remark` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '描述',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '角色表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
-INSERT INTO `sys_role` VALUES (1, '超级管理员', 'ADMIN', '超级管理员', '', NULL, 'admin', '2021-03-31 20:46:12');
-INSERT INTO `sys_role` VALUES (2, '基本角色', 'USER', '基本角色', '', NULL, 'admin', '2021-04-28 20:02:36');
+INSERT INTO `sys_role` VALUES (1, '超级管理员', 'ADMIN', '', NULL, 'admin', '2021-03-31 20:46:12', 0, '超级管理员');
+INSERT INTO `sys_role` VALUES (2, '基本角色', 'USER', '', NULL, 'admin', '2021-04-28 20:02:36', 0, '基本角色');
 
 -- ----------------------------
 -- Table structure for sys_role_menu
@@ -1144,6 +1150,7 @@ CREATE TABLE `sys_task`  (
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '更新者',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `deleted` int NULL DEFAULT 0 COMMENT '逻辑删除 0 否、1 是',
   `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '任务表' ROW_FORMAT = DYNAMIC;
@@ -1151,7 +1158,7 @@ CREATE TABLE `sys_task`  (
 -- ----------------------------
 -- Records of sys_task
 -- ----------------------------
-INSERT INTO `sys_task` VALUES (1, '测试', '*/1 * * * * ?', 'testJob', 'test', 'N', '1', '2021-04-09 21:29:48', 'admin', '2021-05-12 03:06:56', '');
+INSERT INTO `sys_task` VALUES (1, '测试', '*/1 * * * * ?', 'testJob', 'test', 'N', '1', '2021-04-09 21:29:48', 'admin', '2021-05-12 03:06:56', 0, '');
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -1170,6 +1177,7 @@ CREATE TABLE `sys_user`  (
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '更新者',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `deleted` int NULL DEFAULT 0 COMMENT '逻辑删除 0 否、1 是',
   `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 26 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '用户表' ROW_FORMAT = DYNAMIC;
@@ -1177,8 +1185,8 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 'admin', '$2a$10$YajcgOCR3KE76BkuTVBTvuWOrmtzh0MyY87m7jAbA5idFYZ8XJQbO', 'Y', '616505453@qq.com', '17515087128', '0', 'https://platform-application.oss-cn-beijing.aliyuncs.com/img/def/1617164595541-821b4344-5d94-4b29.png', '', NULL, 'admin', '2021-05-12 02:58:59', '');
-INSERT INTO `sys_user` VALUES (24, 'test', '$2a$10$YajcgOCR3KE76BkuTVBTvuWOrmtzh0MyY87m7jAbA5idFYZ8XJQbO', 'Y', '123', '123', '0', 'https://platform-application.oss-cn-beijing.aliyuncs.com/img/def/1617194953511-4fa23d1f-e5f7-4bd2.png', 'admin', '2021-03-30 20:25:07', 'admin', '2021-05-11 14:25:36', '');
+INSERT INTO `sys_user` VALUES (1, 'admin', '$2a$10$YajcgOCR3KE76BkuTVBTvuWOrmtzh0MyY87m7jAbA5idFYZ8XJQbO', 'Y', '616505453@qq.com', '17515087128', '0', 'https://platform-application.oss-cn-beijing.aliyuncs.com/img/def/1617164595541-821b4344-5d94-4b29.png', '', NULL, 'admin', '2021-07-01 16:12:48', 0, '超级管理员');
+INSERT INTO `sys_user` VALUES (24, 'test', '$2a$10$YajcgOCR3KE76BkuTVBTvuWOrmtzh0MyY87m7jAbA5idFYZ8XJQbO', 'Y', '123', '123', '0', 'https://platform-application.oss-cn-beijing.aliyuncs.com/img/def/1617194953511-4fa23d1f-e5f7-4bd2.png', 'admin', '2021-03-30 20:25:07', 'admin', '2021-07-01 16:12:40', 0, '测试账号');
 
 -- ----------------------------
 -- Table structure for sys_user_role

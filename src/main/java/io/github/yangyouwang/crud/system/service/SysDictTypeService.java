@@ -11,11 +11,11 @@ import io.github.yangyouwang.crud.system.mapper.SysDictValueMapper;
 import io.github.yangyouwang.crud.system.entity.SysDictType;
 import io.github.yangyouwang.crud.system.entity.SysDictValue;
 import io.github.yangyouwang.crud.system.model.dto.SysDictValueDto;
-import io.github.yangyouwang.crud.system.model.req.SysDictAddReq;
-import io.github.yangyouwang.crud.system.model.req.SysDictEditReq;
-import io.github.yangyouwang.crud.system.model.req.SysDictEnabledReq;
-import io.github.yangyouwang.crud.system.model.req.SysDictListReq;
-import io.github.yangyouwang.crud.system.model.resp.SysDictResp;
+import io.github.yangyouwang.crud.system.model.req.SysDictTypeAddReq;
+import io.github.yangyouwang.crud.system.model.req.SysDictTypeEditReq;
+import io.github.yangyouwang.crud.system.model.req.SysDictTypeEnabledReq;
+import io.github.yangyouwang.crud.system.model.req.SysDictTypeListReq;
+import io.github.yangyouwang.crud.system.model.resp.SysDictTypeResp;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -23,13 +23,9 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-
 import javax.annotation.Resource;
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
-
 import static java.util.Optional.*;
 
 /**
@@ -40,7 +36,7 @@ import static java.util.Optional.*;
  * @date 2021/4/13下午1:11
  */
 @Service
-public class SysDictService extends ServiceImpl<SysDictTypeMapper, SysDictType> {
+public class SysDictTypeService extends ServiceImpl<SysDictTypeMapper, SysDictType> {
 
     @Resource
     private SysDictTypeMapper sysDictTypeMapper;
@@ -53,7 +49,7 @@ public class SysDictService extends ServiceImpl<SysDictTypeMapper, SysDictType> 
      * @return 请求列表
      */
     @Transactional(readOnly = true)
-    public IPage list(SysDictListReq sysDictListReq) {
+    public IPage list(SysDictTypeListReq sysDictListReq) {
          return sysDictTypeMapper.selectDictPage(new Page<>(sysDictListReq.getPageNum(), sysDictListReq.getPageSize()),
                 new LambdaQueryWrapper<SysDictType>()
                         .like(StringUtils.isNotBlank(sysDictListReq.getDictName()), SysDictType::getDictName, sysDictListReq.getDictName())
@@ -65,9 +61,9 @@ public class SysDictService extends ServiceImpl<SysDictTypeMapper, SysDictType> 
      * @return 编辑页面
      */
     @Transactional(readOnly = true)
-    public SysDictResp detail(Long id) {
+    public SysDictTypeResp detail(Long id) {
         SysDictType sysDict = sysDictTypeMapper.findDictById(id);
-        SysDictResp sysDictResp = new SysDictResp();
+        SysDictTypeResp sysDictResp = new SysDictTypeResp();
         BeanUtils.copyProperties(sysDict,sysDictResp);
         ofNullable(sysDict.getDictValues()).ifPresent(result -> {
             List<SysDictValueDto> sysDictValueDtos = result.stream().filter(dictValue ->
@@ -86,7 +82,7 @@ public class SysDictService extends ServiceImpl<SysDictTypeMapper, SysDictType> 
      * @return 添加状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public int add(SysDictAddReq sysDictAddReq) {
+    public int add(SysDictTypeAddReq sysDictAddReq) {
         SysDictType sysDictType = sysDictTypeMapper.findDictByKey(sysDictAddReq.getDictKey());
         Assert.isNull(sysDictType, ResultStatus.DICT_EXIST_ERROR.message);
         SysDictType sysDict = new SysDictType();
@@ -107,7 +103,7 @@ public class SysDictService extends ServiceImpl<SysDictTypeMapper, SysDictType> 
      * @return 编辑状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public int edit(SysDictEditReq sysDictEditReq) {
+    public int edit(SysDictTypeEditReq sysDictEditReq) {
         SysDictType sysDictType = new SysDictType();
         // vo -> po
         BeanUtils.copyProperties(sysDictEditReq,sysDictType);
@@ -150,7 +146,7 @@ public class SysDictService extends ServiceImpl<SysDictTypeMapper, SysDictType> 
      * @return 删除状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public int delKey(Long id) {
+    public int del(Long id) {
         int flag = sysDictTypeMapper.deleteById(id);
         if (flag > 0) {
             sysDictValueMapper.delete(new LambdaQueryWrapper<SysDictValue>()
@@ -161,40 +157,15 @@ public class SysDictService extends ServiceImpl<SysDictTypeMapper, SysDictType> 
     }
 
     /**
-     * 根据字典类型获取字典列表
-     * @return 请求列表
-     */
-    @Transactional(readOnly = true)
-    public List<SysDictValueDto> getDictValues(String dictKey) {
-        SysDictType sysDictType = sysDictTypeMapper.findDictByKey(dictKey);
-        if (Objects.nonNull(sysDictType)) {
-            return sysDictType.getDictValues().stream().map(sysDictValue -> {
-                SysDictValueDto sysDictValueDto = new SysDictValueDto();
-                BeanUtils.copyProperties(sysDictValue,sysDictValueDto);
-                return sysDictValueDto;
-            }).collect(Collectors.toList());
-        }
-       return Collections.emptyList();
-    }
-
-    /**
      * 修改字典状态
      * @return 修改状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public int changeDict(SysDictEnabledReq sysDictEnabledReq) {
+    public int changeDictType(SysDictTypeEnabledReq sysDictTypeEnabledReq) {
         SysDictType sysDictType = new SysDictType();
-        sysDictType.setId(sysDictEnabledReq.getId());
-        sysDictType.setEnabled(sysDictEnabledReq.getEnabled());
+        sysDictType.setId(sysDictTypeEnabledReq.getId());
+        sysDictType.setEnabled(sysDictTypeEnabledReq.getEnabled());
         return sysDictTypeMapper.updateById(sysDictType);
     }
 
-    /**
-     * 删除字典值请求
-     * @return 删除状态
-     */
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public int delValue(Long id) {
-        return sysDictValueMapper.deleteById(id);
-    }
 }

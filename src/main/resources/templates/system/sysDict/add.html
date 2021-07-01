@@ -79,7 +79,7 @@
       data.field.sysDictValues = values;
       $.ajax({
         type: 'POST',
-        url:  ctx + '/sysDict/add',
+        url:  ctx + '/sysDictType/add',
         data: JSON.stringify(data.field),
         contentType:'application/json;charset=UTF-8',
         dataType: 'json',

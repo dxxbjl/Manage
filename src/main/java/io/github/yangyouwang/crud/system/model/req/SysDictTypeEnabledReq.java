@@ -14,7 +14,7 @@ import java.io.Serializable;
  * @date 2021/4/16下午6:09
  */
 @Data
-public class SysDictEnabledReq implements Serializable {
+public class SysDictTypeEnabledReq implements Serializable {
 
     /**
      * id

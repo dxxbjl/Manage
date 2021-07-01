@@ -2,6 +2,7 @@ package io.github.yangyouwang.common.domain;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import java.io.Serializable;
@@ -34,6 +35,10 @@ public abstract class BaseEntity implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(value = "update_time",fill = FieldFill.UPDATE)
     private Date updateTime;
+
+    /** 逻辑删除 0 否、1 是 */
+    @TableLogic
+    private Integer deleted;
 
     /** 备注 */
     private String remark;

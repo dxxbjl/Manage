@@ -37,6 +37,6 @@
     from sys_role r
     left join sys_role_menu rm on r.id = rm.role_id
     left join sys_menu m on rm.menu_id = m.id
-    where r.id = #{id}
+    where r.deleted = 0 and r.id = #{id}
     </select>
 </mapper>

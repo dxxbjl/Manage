@@ -11,7 +11,7 @@ layui.define(['jquery'], function(exports){
             // 获取字典
             $.ajax({
                 type: 'get',
-                url:  '/sysDict/getDictValues/' + name,
+                url:  '/sysDictValue/getDictValues/' + name,
                 contentType:'application/json;charset=UTF-8',
                 dataType: 'json',
                 async : false,

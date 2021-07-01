@@ -32,7 +32,7 @@
                         <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="dictKeySearch">
                             <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
                         </button>
-                        <button sec:authorize="hasAuthority('dict:add')" class="layui-btn layuiadmin-btn-useradmin" data-type="addView">添加</button>
+                        <button sec:authorize="hasAuthority('dict:add')" class="layui-btn layuiadmin-btn-useradmin" data-type="dictTypeAddView">添加</button>
                     </div>
                 </div>
             </div>
@@ -43,9 +43,9 @@
                 <script type="text/html" id="enabledTpl">
                     <input type="checkbox" lay-filter="enabled" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" {{d.enabled==='Y'?'checked':''}} />
                 </script>
-                <script type="text/html" id="tableBar">
-                    <a sec:authorize="hasAuthority('dict:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-                    <a sec:authorize="hasAuthority('dict:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                <script type="text/html" id="dictTypeTableBar">
+                    <a sec:authorize="hasAuthority('dict:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="dictTypeEdit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+                    <a sec:authorize="hasAuthority('dict:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="dictTypeDel"><i class="layui-icon layui-icon-delete"></i>删除</a>
                 </script>
             </div>
         </div>
@@ -82,13 +82,13 @@
         form.on('switch(enabled)', function (obj) {
             let id = obj.elem.value;
             let checked = obj.elem.checked ? 'Y' : 'N';
-            active.changeDictEnabled(id,checked);
+            active.changeDictTypeEnabled(id,checked);
         });
         // 查询列表接口
         table.render({
             elem: '#dictTypeTable'
             ,height: 'full-110'
-            ,url:  ctx + '/sysDict/list'
+            ,url:  ctx + '/sysDictType/list'
             ,page: true //开启分页,
             ,limit: 10 // 多少条
             ,request: {
@@ -111,7 +111,7 @@
                 ,{field: 'dictKey', title: '字典别名'}
                 ,{field: 'enabled', align: "center", sort: true, templet: '#enabledTpl', title: '状态'}
                 ,{field: 'remark', title: '备注'}
-                ,{toolbar: '#tableBar', title: '操作', width: 165, align:'center',fixed: 'right'}
+                ,{toolbar: '#dictTypeTableBar', title: '操作', width: 165, align:'center',fixed: 'right'}
             ]]
         });
         /**
@@ -122,6 +122,7 @@
             ,cellMinWidth: 80
             ,cols: [
                 [
+                    {field: 'id', title: 'ID', sort: true, fixed: 'left'},
                     {field: 'dictValueName', title: '字典项名称'}
                     ,{field: 'dictValueKey', title: '字典项别名'}
                     ,{field: 'remark', title: '备注'}
@@ -142,10 +143,10 @@
         table.on('tool(dictTypeTable)', function(obj){
             let data = obj.data //获得当前行数据
                 ,layEvent = obj.event;
-            if(layEvent === 'edit'){
-                active.editView(data.id);
-            } else if(layEvent === 'del'){
-                active.del(data.id);
+            if(layEvent === 'dictTypeEdit'){
+                active.dictTypeEditView(data.id);
+            } else if(layEvent === 'dictTypeDel'){
+                active.dictTypeDel(data.id);
             }
         });
         $('.layui-btn').on('click', function(){
@@ -157,11 +158,11 @@
             /**
              * 添加
              * */
-            addView: function(){
+            dictTypeAddView: function(){
                 layer.open({
                     type: 2,
                     title: "添加字典",
-                    content: ctx + '/sysDict/addPage'
+                    content: ctx + '/sysDictType/addPage'
                     ,maxmin: true
                     ,area: ['100%', '100%']
                     ,btn: ['确定', '取消']
@@ -175,11 +176,11 @@
              * 编辑
              * @param id id
              * */
-            editView: function(id){
+            dictTypeEditView: function(id){
                 layer.open({
                     type: 2
                     ,title: '修改字典'
-                    ,content: ctx + '/sysDict/editPage/' + id
+                    ,content: ctx + '/sysDictType/editPage/' + id
                     ,maxmin: true
                     ,area: ['100%', '100%']
                     ,btn: ['确定', '取消']
@@ -193,12 +194,12 @@
              * 删除
              * @param id id
              */
-            del: function(id){
+            dictTypeDel: function(id){
                 layer.confirm('真的删除行么', function(index){
                     //向服务端发送删除指令
                     $.ajax({
                         type: 'DELETE',
-                        url:  ctx + '/sysDict/delKey/' + id,
+                        url:  ctx + '/sysDictType/del/' + id,
                         contentType:'application/json;charset=UTF-8',
                         dataType: 'json',
                         success: function(result) {
@@ -219,10 +220,10 @@
              * @param id 字典id
              * @param checked 状态
              */
-            changeDictEnabled: function (id,checked) {
+            changeDictTypeEnabled: function (id,checked) {
                 $.ajax({
                     type: 'POST',
-                    url:  ctx + '/sysDict/changeDict',
+                    url:  ctx + '/sysDictType/changeDictType',
                     data: JSON.stringify({
                         id: id,
                         enabled: checked

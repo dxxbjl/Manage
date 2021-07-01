@@ -82,7 +82,7 @@
       data.field.sysDictValues = values;
       $.ajax({
         type: 'POST',
-        url:  ctx + '/sysDict/edit',
+        url:  ctx + '/sysDictType/edit',
         data: JSON.stringify(data.field),
         contentType:'application/json;charset=UTF-8',
         dataType: 'json',
@@ -146,7 +146,7 @@
             //向服务端发送删除指令
             $.ajax({
               type: 'DELETE',
-              url:  ctx + '/sysDict/delValue/' + data.id,
+              url:  ctx + '/sysDictValue/del/' + data.id,
               contentType:'application/json;charset=UTF-8',
               dataType: 'json',
               success: function(result) {

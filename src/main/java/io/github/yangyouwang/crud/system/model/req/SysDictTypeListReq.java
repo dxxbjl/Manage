@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @date 2021/4/13下午1:37
  */
 @Data
-public class SysDictListReq implements Serializable {
+public class SysDictTypeListReq implements Serializable {
     /**
      * pageNum
      */

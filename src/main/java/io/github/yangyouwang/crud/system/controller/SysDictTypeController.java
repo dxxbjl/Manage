@@ -2,11 +2,9 @@ package io.github.yangyouwang.crud.system.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.yangyouwang.common.domain.Result;
-import io.github.yangyouwang.crud.system.entity.SysDictType;
-import io.github.yangyouwang.crud.system.model.dto.SysDictValueDto;
 import io.github.yangyouwang.crud.system.model.req.*;
-import io.github.yangyouwang.crud.system.model.resp.SysDictResp;
-import io.github.yangyouwang.crud.system.service.SysDictService;
+import io.github.yangyouwang.crud.system.model.resp.SysDictTypeResp;
+import io.github.yangyouwang.crud.system.service.SysDictTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -15,9 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -27,16 +23,16 @@ import java.util.Objects;
  * @date 2021/4/12 11:00
  */
 @Controller
-@RequestMapping("/sysDict")
-public class SysDictController {
+@RequestMapping("/sysDictType")
+public class SysDictTypeController {
 
     private static final String SUFFIX = "system/sysDict";
 
-    private final SysDictService sysDictService;
+    private final SysDictTypeService sysDictTypeService;
 
     @Autowired
-    public SysDictController(SysDictService sysDictService) {
-        this.sysDictService = sysDictService;
+    public SysDictTypeController(SysDictTypeService sysDictTypeService) {
+        this.sysDictTypeService = sysDictTypeService;
     }
 
     /**
@@ -63,7 +59,7 @@ public class SysDictController {
      */
     @GetMapping("/editPage/{id}")
     public String editPage(@Valid @NotNull(message = "id能为空") @PathVariable Long id, ModelMap map){
-        SysDictResp sysDict = sysDictService.detail(id);
+        SysDictTypeResp sysDict = sysDictTypeService.detail(id);
         map.put("sysDict",sysDict);
         return SUFFIX + "/edit";
     }
@@ -74,23 +70,12 @@ public class SysDictController {
      */
     @GetMapping("/list")
     @ResponseBody
-    public Result list(@Validated SysDictListReq sysDictListReq, BindingResult bindingResult) {
+    public Result list(@Validated SysDictTypeListReq sysDictListReq, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        IPage<SysDictResp> list = sysDictService.list(sysDictListReq);
+        IPage<SysDictTypeResp> list = sysDictTypeService.list(sysDictListReq);
         return Result.success(list);
-    }
-
-    /**
-     * 根据字典类型获取字典值列表
-     * @return 请求列表
-     */
-    @GetMapping("/getDictValues/{dictKey}")
-    @ResponseBody
-    public Result getDictValues(@Valid @NotBlank(message = "字典类型不能为空") @PathVariable String dictKey) {
-        List<SysDictValueDto> sysDictValueDtos = sysDictService.getDictValues(dictKey);
-        return Result.success(sysDictValueDtos);
     }
 
     /**
@@ -99,11 +84,11 @@ public class SysDictController {
      */
     @PostMapping("/add")
     @ResponseBody
-    public Result add(@RequestBody @Validated SysDictAddReq sysDictAddReq, BindingResult bindingResult){
+    public Result add(@RequestBody @Validated SysDictTypeAddReq sysDictAddReq, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        int flag = sysDictService.add(sysDictAddReq);
+        int flag = sysDictTypeService.add(sysDictAddReq);
         return Result.success(flag);
     }
 
@@ -113,11 +98,11 @@ public class SysDictController {
      */
     @PostMapping("/edit")
     @ResponseBody
-    public Result edit(@RequestBody @Validated SysDictEditReq sysDictEditReq, BindingResult bindingResult){
+    public Result edit(@RequestBody @Validated SysDictTypeEditReq sysDictEditReq, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        int flag = sysDictService.edit(sysDictEditReq);
+        int flag = sysDictTypeService.edit(sysDictEditReq);
         return Result.success(flag);
     }
 
@@ -125,13 +110,13 @@ public class SysDictController {
      * 修改字典状态
      * @return 修改状态
      */
-    @PostMapping("/changeDict")
+    @PostMapping("/changeDictType")
     @ResponseBody
-    public Result changeDict(@RequestBody @Validated SysDictEnabledReq sysDictEnabledReq, BindingResult bindingResult){
+    public Result changeDictType(@RequestBody @Validated SysDictTypeEnabledReq sysDictTypeEnabledReq, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        int flag = sysDictService.changeDict(sysDictEnabledReq);
+        int flag = sysDictTypeService.changeDictType(sysDictTypeEnabledReq);
         return Result.success(flag);
     }
 
@@ -139,21 +124,10 @@ public class SysDictController {
      * 删除请求
      * @return 删除状态
      */
-    @DeleteMapping("/delKey/{id}")
+    @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result delKey(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
-        int flag = sysDictService.delKey(id);
-        return Result.success(flag);
-    }
-
-    /**
-     * 删除字典值请求
-     * @return 删除状态
-     */
-    @DeleteMapping("/delValue/{id}")
-    @ResponseBody
-    public Result delValue(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
-        int flag = sysDictService.delValue(id);
+        int flag = sysDictTypeService.del(id);
         return Result.success(flag);
     }
 }

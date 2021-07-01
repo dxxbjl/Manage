@@ -4,7 +4,6 @@ import io.github.yangyouwang.crud.system.model.dto.SysDictValueDto;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
@@ -12,16 +11,11 @@ import java.util.List;
  * @author yangyouwang
  * @title: SysDictAddReq
  * @projectName crud
- * @description: 字典编辑请求
+ * @description: 字典添加请求
  * @date 2021/4/13下午2:27
  */
 @Data
-public class SysDictEditReq implements Serializable {
-    /**
-     * 主键
-     */
-    @NotNull(message = "id不能为空")
-    private Long id;
+public class SysDictTypeAddReq implements Serializable {
     /**
      * 类型key
      */
@@ -42,11 +36,11 @@ public class SysDictEditReq implements Serializable {
     @NotBlank(message = "是否启用不能为空")
     private String enabled;
 
-    /** 备注 */
-    private String remark;
-
     /**
      * 字典类型与字典项 一对多
      */
     private List<SysDictValueDto> sysDictValues;
+
+    /** 备注 */
+    private String remark;
 }
