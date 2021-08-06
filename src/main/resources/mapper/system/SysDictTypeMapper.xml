@@ -39,7 +39,7 @@
     dv.id as dict_value_id,dv.dict_value_key,dv.dict_value_name,dv.order_num as dict_value_num,dv.remark as dict_value_remark
     from sys_dict_type dt
     left join sys_dict_value dv on dt.id = dv.dict_type_id
-    where dt.deleted = 0 and dt.enabled = 'Y' and dt.dict_key = #{dictKey}
+    where dt.deleted = 0 and dv.deleted = 0 and dt.enabled = 'Y' and dt.dict_key = #{dictKey}
     order by dv.order_num asc
   </select>
   <!-- 根据字典类型id查询字典 -->
@@ -48,7 +48,7 @@
     dv.id as dict_value_id,dv.dict_value_key,dv.dict_value_name,dv.order_num as dict_value_num,dv.remark as dict_value_remark
     from sys_dict_type dt
     left join sys_dict_value dv on dt.id = dv.dict_type_id
-    where dt.deleted = 0 and dt.id = #{id}
+    where dt.deleted = 0 and dv.deleted = 0 and dt.id = #{id}
   </select>
     <!-- 自定义字典列表查询-->
     <select id="selectDictPage"  resultMap="DictResultMap">
@@ -57,7 +57,7 @@
     from sys_dict_type dt
     join sys_dict_value dv on dt.id = dv.dict_type_id
     ${ew.customSqlSegment}
-    and dt.deleted = 0
+    and dt.deleted = 0 and dv.deleted = 0
     order by dv.order_num asc
     </select>
 </mapper>

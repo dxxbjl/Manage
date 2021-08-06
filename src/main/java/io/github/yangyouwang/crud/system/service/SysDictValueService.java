@@ -2,6 +2,7 @@ package io.github.yangyouwang.crud.system.service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.crud.system.entity.SysDictType;
+import io.github.yangyouwang.crud.system.entity.SysDictValue;
 import io.github.yangyouwang.crud.system.mapper.SysDictTypeMapper;
 import io.github.yangyouwang.crud.system.mapper.SysDictValueMapper;
 import io.github.yangyouwang.crud.system.model.dto.SysDictValueDto;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
  * @date 2021/4/13下午1:11
  */
 @Service
-public class SysDictValueService extends ServiceImpl<SysDictTypeMapper, SysDictType> {
+public class SysDictValueService extends ServiceImpl<SysDictValueMapper, SysDictValue> {
 
     @Resource
     private SysDictTypeMapper sysDictTypeMapper;
