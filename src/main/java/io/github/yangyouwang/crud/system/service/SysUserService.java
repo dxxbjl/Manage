@@ -251,4 +251,16 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
             return sysUserResp;
         }).collect(Collectors.toList());
     }
+
+    /**
+     * 重置密码
+     * @return 重置密码
+     */
+    public int resetPass(SysUserResetPassReq sysUserResetPassReq) {
+        SysUser sysUser = new SysUser();
+        String password = passwordEncoder.encode(sysUserResetPassReq.getPassWord());
+        sysUser.setId(sysUserResetPassReq.getId());
+        sysUser.setPassWord(password);
+        return sysUserMapper.updateById(sysUser);
+    }
 }

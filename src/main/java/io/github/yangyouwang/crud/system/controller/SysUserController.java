@@ -106,6 +106,31 @@ public class SysUserController {
     }
 
     /**
+     * 跳转重置密码
+     * @return 重置密码页面
+     */
+    @GetMapping("/resetPass/{id}")
+    public String resetPass(@Valid @NotNull(message = "id不能为空") @PathVariable Long id, ModelMap map){
+        SysUserResp sysUser = sysUserService.detail(id);
+        map.put("sysUser",sysUser);
+        return SUFFIX + "/resetPass";
+    }
+
+    /**
+     * 重置密码
+     * @return 重置密码状态
+     */
+    @PostMapping("/resetPass")
+    @ResponseBody
+    public Result resetPass(@RequestBody @Validated SysUserResetPassReq sysUserResetPassReq,BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
+        }
+        int flag = sysUserService.resetPass(sysUserResetPassReq);
+        return Result.success(flag);
+    }
+
+    /**
      * 列表请求
      * @return 请求列表
      */
