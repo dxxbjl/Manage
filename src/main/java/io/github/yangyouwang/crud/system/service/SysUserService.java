@@ -198,20 +198,6 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
     }
 
     /**
-     * 修改密码
-     * @return 修改状态
-     */
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public int modifyPass(ModifyPassReq modifyPassReq) {
-        SysUser sysUser = sysUserMapper.selectById(modifyPassReq.getId());
-        boolean matches = passwordEncoder.matches(modifyPassReq.getOldPassword(),sysUser.getPassWord());
-        Assert.isTrue(matches,ResultStatus.OLD_PASSWORD_ERROR.message);
-        String password = passwordEncoder.encode(modifyPassReq.getPassword());
-        sysUser.setPassWord(password);
-        return sysUserMapper.updateById(sysUser);
-    }
-
-    /**
      * 修改用户状态
      * @param sysUserEnabledReq 用户状态dto
      * @return 修改状态
@@ -250,6 +236,20 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
             BeanUtils.copyProperties(sysUser, sysUserResp);
             return sysUserResp;
         }).collect(Collectors.toList());
+    }
+
+    /**
+     * 修改密码
+     * @return 修改状态
+     */
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
+    public int modifyPass(ModifyPassReq modifyPassReq) {
+        SysUser sysUser = sysUserMapper.selectById(modifyPassReq.getId());
+        boolean matches = passwordEncoder.matches(modifyPassReq.getOldPassword(),sysUser.getPassWord());
+        Assert.isTrue(matches,ResultStatus.OLD_PASSWORD_ERROR.message);
+        String password = passwordEncoder.encode(modifyPassReq.getPassword());
+        sysUser.setPassWord(password);
+        return sysUserMapper.updateById(sysUser);
     }
 
     /**

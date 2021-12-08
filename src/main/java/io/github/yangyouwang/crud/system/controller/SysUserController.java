@@ -73,7 +73,7 @@ public class SysUserController {
         User user = SecurityUtils.getSysUser();
         SysUserResp sysUser = sysUserService.findUserByName(user.getUsername());
         map.put("sysUser",sysUser);
-        return SUFFIX + "/password";
+        return SUFFIX + "/modifyPass";
     }
 
     /**
@@ -109,7 +109,7 @@ public class SysUserController {
      * 跳转重置密码
      * @return 重置密码页面
      */
-    @GetMapping("/resetPass/{id}")
+    @GetMapping("/resetPassPage/{id}")
     public String resetPass(@Valid @NotNull(message = "id不能为空") @PathVariable Long id, ModelMap map){
         SysUserResp sysUser = sysUserService.detail(id);
         map.put("sysUser",sysUser);
@@ -127,6 +127,20 @@ public class SysUserController {
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
         int flag = sysUserService.resetPass(sysUserResetPassReq);
+        return Result.success(flag);
+    }
+
+    /**
+     * 修改密码
+     * @return 修改状态
+     */
+    @PostMapping("/modifyPass")
+    @ResponseBody
+    public Result modifyPass(@RequestBody @Validated ModifyPassReq modifyPassReq, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()){
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
+        }
+        int flag = sysUserService.modifyPass(modifyPassReq);
         return Result.success(flag);
     }
 
@@ -208,20 +222,6 @@ public class SysUserController {
     @ResponseBody
     public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
         int flag = sysUserService.del(id);
-        return Result.success(flag);
-    }
-
-    /**
-     * 修改密码
-     * @return 修改状态
-     */
-    @PostMapping("/modifyPass")
-    @ResponseBody
-    public Result modifyPass(@RequestBody @Validated ModifyPassReq modifyPassReq, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()){
-            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
-        }
-        int flag = sysUserService.modifyPass(modifyPassReq);
         return Result.success(flag);
     }
 
