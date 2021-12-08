@@ -1,12 +1,8 @@
 package io.github.yangyouwang.crud.system.controller;
 
 import io.github.yangyouwang.common.domain.Result;
-import io.github.yangyouwang.crud.system.model.dto.SysDictValueDto;
-import io.github.yangyouwang.crud.system.model.req.SysDictTypeAddReq;
-import io.github.yangyouwang.crud.system.model.req.SysDictTypeEditReq;
 import io.github.yangyouwang.crud.system.model.req.SysDictValueAddReq;
 import io.github.yangyouwang.crud.system.model.req.SysDictValueEditReq;
-import io.github.yangyouwang.crud.system.model.resp.SysDictTypeResp;
 import io.github.yangyouwang.crud.system.model.resp.SysDictValueResp;
 import io.github.yangyouwang.crud.system.service.SysDictValueService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +44,8 @@ public class SysDictValueController {
     @GetMapping("/getDictValues/{dictKey}")
     @ResponseBody
     public Result getDictValues(@Valid @NotBlank(message = "字典类型不能为空") @PathVariable String dictKey) {
-        List<SysDictValueDto> sysDictValueDtos = sysDictValueService.getDictValues(dictKey);
-        return Result.success(sysDictValueDtos);
+        List<SysDictValueResp> sysDictValueResps = sysDictValueService.getDictValues(dictKey);
+        return Result.success(sysDictValueResps);
     }
 
     /**

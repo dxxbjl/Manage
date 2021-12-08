@@ -10,7 +10,7 @@ Target Server Type    : MariaDB
 Target Server Version : 100331
 File Encoding         : 65001
 
-Date: 2021-12-08 23:52:07
+Date: 2021-12-09 00:41:30
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -825,7 +825,7 @@ CREATE TABLE `QRTZ_SCHEDULER_STATE` (
 -- ----------------------------
 -- Records of QRTZ_SCHEDULER_STATE
 -- ----------------------------
-INSERT INTO `QRTZ_SCHEDULER_STATE` VALUES ('clusteredScheduler', 'LAPTOP-I5OGPHFQ1638978630602', '1638978752084', '10000');
+INSERT INTO `QRTZ_SCHEDULER_STATE` VALUES ('clusteredScheduler', 'LAPTOP-I5OGPHFQ1638981651987', '1638981672512', '10000');
 
 -- ----------------------------
 -- Table structure for QRTZ_SIMPLE_TRIGGERS
@@ -931,7 +931,7 @@ CREATE TABLE `sys_dict_type` (
   `deleted` int(11) DEFAULT 0 COMMENT '逻辑删除 0 否、1 是',
   `remark` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=DYNAMIC COMMENT='数据字典类型';
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=DYNAMIC COMMENT='数据字典类型';
 
 -- ----------------------------
 -- Records of sys_dict_type
@@ -957,7 +957,7 @@ CREATE TABLE `sys_dict_value` (
   `deleted` int(11) DEFAULT 0 COMMENT '逻辑删除 0 否、1 是',
   `remark` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=DYNAMIC COMMENT='数据字典值';
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=DYNAMIC COMMENT='数据字典值';
 
 -- ----------------------------
 -- Records of sys_dict_value

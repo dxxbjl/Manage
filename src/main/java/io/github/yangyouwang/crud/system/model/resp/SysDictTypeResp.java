@@ -1,10 +1,8 @@
 package io.github.yangyouwang.crud.system.model.resp;
 
-import io.github.yangyouwang.crud.system.model.dto.SysDictValueDto;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @author yangyouwang
@@ -38,8 +36,4 @@ public class SysDictTypeResp implements Serializable {
     private Integer orderNum;
     /** 备注 */
     private String remark;
-    /**
-     * 字典类型与字典项 一对多
-     */
-    private List<SysDictValueDto> sysDictValues;
 }

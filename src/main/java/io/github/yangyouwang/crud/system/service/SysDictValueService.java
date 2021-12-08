@@ -5,7 +5,6 @@ import io.github.yangyouwang.crud.system.entity.SysDictType;
 import io.github.yangyouwang.crud.system.entity.SysDictValue;
 import io.github.yangyouwang.crud.system.mapper.SysDictTypeMapper;
 import io.github.yangyouwang.crud.system.mapper.SysDictValueMapper;
-import io.github.yangyouwang.crud.system.model.dto.SysDictValueDto;
 import io.github.yangyouwang.crud.system.model.req.SysDictValueAddReq;
 import io.github.yangyouwang.crud.system.model.req.SysDictValueEditReq;
 import io.github.yangyouwang.crud.system.model.resp.SysDictValueResp;
@@ -43,13 +42,13 @@ public class SysDictValueService extends ServiceImpl<SysDictValueMapper, SysDict
      * @return 请求列表
      */
     @Transactional(readOnly = true)
-    public List<SysDictValueDto> getDictValues(String dictKey) {
+    public List<SysDictValueResp> getDictValues(String dictKey) {
         SysDictType sysDictType = sysDictTypeMapper.findDictByKey(dictKey);
         if (Objects.nonNull(sysDictType)) {
             return sysDictType.getDictValues().stream().map(sysDictValue -> {
-                SysDictValueDto sysDictValueDto = new SysDictValueDto();
-                BeanUtils.copyProperties(sysDictValue,sysDictValueDto);
-                return sysDictValueDto;
+                SysDictValueResp sysDictValueResp = new SysDictValueResp();
+                BeanUtils.copyProperties(sysDictValue,sysDictValueResp);
+                return sysDictValueResp;
             }).collect(Collectors.toList());
         }
         return Collections.emptyList();

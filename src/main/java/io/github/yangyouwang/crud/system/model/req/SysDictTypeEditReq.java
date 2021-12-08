@@ -1,12 +1,10 @@
 package io.github.yangyouwang.crud.system.model.req;
 
-import io.github.yangyouwang.crud.system.model.dto.SysDictValueDto;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @author yangyouwang
@@ -45,9 +43,4 @@ public class SysDictTypeEditReq implements Serializable {
 
     /** 备注 */
     private String remark;
-
-    /**
-     * 字典类型与字典项 一对多
-     */
-    private List<SysDictValueDto> sysDictValues;
 }

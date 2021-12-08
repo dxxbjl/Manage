@@ -21,15 +21,6 @@ public interface SysDictTypeMapper extends CrudBaseMapper<SysDictType> {
      * @return 字典
      */
     SysDictType findDictByKey(String dictKey);
-
-    /**
-     * 查询字典
-     * @param id 主键
-     * @return 字典
-     */
-    SysDictType findDictById(Long id);
-
-
     /**
      * 自定义sql分页
      * @param page page

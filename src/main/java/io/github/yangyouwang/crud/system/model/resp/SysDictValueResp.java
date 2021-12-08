@@ -1,11 +1,8 @@
 package io.github.yangyouwang.crud.system.model.resp;
 
-import io.github.yangyouwang.crud.system.model.dto.SysDictValueDto;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.List;
-
 /**
  * @author yangyouwang
  * @title: SysDictValueResp

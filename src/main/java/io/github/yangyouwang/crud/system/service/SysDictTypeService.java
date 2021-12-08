@@ -10,7 +10,6 @@ import io.github.yangyouwang.crud.system.mapper.SysDictTypeMapper;
 import io.github.yangyouwang.crud.system.mapper.SysDictValueMapper;
 import io.github.yangyouwang.crud.system.entity.SysDictType;
 import io.github.yangyouwang.crud.system.entity.SysDictValue;
-import io.github.yangyouwang.crud.system.model.dto.SysDictValueDto;
 import io.github.yangyouwang.crud.system.model.req.SysDictTypeAddReq;
 import io.github.yangyouwang.crud.system.model.req.SysDictTypeEditReq;
 import io.github.yangyouwang.crud.system.model.req.SysDictTypeEnabledReq;
@@ -24,9 +23,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import javax.annotation.Resource;
-import java.util.List;
-import java.util.stream.Collectors;
-import static java.util.Optional.*;
 
 /**
  * @author yangyouwang
@@ -62,18 +58,9 @@ public class SysDictTypeService extends ServiceImpl<SysDictTypeMapper, SysDictTy
      */
     @Transactional(readOnly = true)
     public SysDictTypeResp detail(Long id) {
-        SysDictType sysDict = sysDictTypeMapper.findDictById(id);
+        SysDictType sysDict = sysDictTypeMapper.selectById(id);
         SysDictTypeResp sysDictResp = new SysDictTypeResp();
         BeanUtils.copyProperties(sysDict,sysDictResp);
-        ofNullable(sysDict.getDictValues()).ifPresent(result -> {
-            List<SysDictValueDto> sysDictValueDtos = result.stream().filter(dictValue ->
-                    StringUtils.isNotBlank(dictValue.getDictValueKey())).map(sysDictValue -> {
-                SysDictValueDto sysDictValueDto = new SysDictValueDto();
-                BeanUtils.copyProperties(sysDictValue, sysDictValueDto);
-                return sysDictValueDto;
-            }).collect(Collectors.toList());
-            sysDictResp.setSysDictValues(sysDictValueDtos);
-        });
         return sysDictResp;
     }
 
@@ -88,14 +75,7 @@ public class SysDictTypeService extends ServiceImpl<SysDictTypeMapper, SysDictTy
         SysDictType sysDict = new SysDictType();
         // vo -> po
         BeanUtils.copyProperties(sysDictAddReq,sysDict);
-        int flag = sysDictTypeMapper.insert(sysDict);
-        if (flag > 0) {
-            ofNullable(sysDictAddReq.getSysDictValues()).ifPresent(sysDictValueDtos -> {
-                insertDictValueBatch(sysDictValueDtos, sysDict.getId());
-            });
-            return flag;
-        }
-        throw new CrudException(ResultStatus.SAVE_DATA_ERROR);
+        return sysDictTypeMapper.insert(sysDict);
     }
 
     /**
@@ -107,38 +87,7 @@ public class SysDictTypeService extends ServiceImpl<SysDictTypeMapper, SysDictTy
         SysDictType sysDictType = new SysDictType();
         // vo -> po
         BeanUtils.copyProperties(sysDictEditReq,sysDictType);
-        int flag = sysDictTypeMapper.updateById(sysDictType);
-        if (flag > 0) {
-            ofNullable(sysDictEditReq.getSysDictValues()).ifPresent(sysDictValueDtos -> {
-                insertDictValueBatch(sysDictValueDtos, sysDictType.getId());
-            });
-            return flag;
-        }
-        throw new CrudException(ResultStatus.UPDATE_DATA_ERROR);
-    }
-
-    /**
-     * 批量新增或者修改字典项
-     * @param sysDictValueDtos 字典列表
-     * @param id 字典类型id
-     */
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Throwable.class)
-    public void insertDictValueBatch(List<SysDictValueDto> sysDictValueDtos, Long id) {
-        // 字典项
-        List<SysDictValue> sysDictValues = sysDictValueDtos.stream().filter(dictValue ->
-                StringUtils.isNotBlank(dictValue.getDictValueKey())).map(dictValue -> {
-            SysDictValue sysDictValue = new SysDictValue();
-            BeanUtils.copyProperties(dictValue, sysDictValue);
-            sysDictValue.setDictTypeId(id);
-            return sysDictValue;
-        }).collect(Collectors.toList());
-        if(sysDictValues.size() == 0) {
-            throw new CrudException(ResultStatus.DICT_ITEM_NULL_ERROR);
-        }
-        int flag = sysDictValueMapper.insertBatch(sysDictValues);
-        if (flag == 0) {
-            throw new CrudException(ResultStatus.BATCH_INSTALL_DICT_ERROR);
-        }
+        return sysDictTypeMapper.updateById(sysDictType);
     }
 
     /**

@@ -43,16 +43,6 @@
     <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
   </div>
 </div>
-<div class="layui-card">
-  <div class="layui-card-header">字典项</div>
-  <div class="layui-card-body">
-    <table id="dictTable" lay-filter="dictTable"></table>
-    <script type="text/html" id="tableBar">
-      <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="add"><i class="layui-icon layui-icon-edit"></i>添加</a>
-      <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
-    </script>
-  </div>
-</div>
   <script th:src="@{/static/layuiadmin/layui/layui.js}"></script>
   <script th:inline="javascript">
   let ctx = [[${#request.getContextPath()}]];
@@ -60,23 +50,11 @@
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
      index: 'lib/index', //主入口模块
-  }).use(['index', 'form','table','crud'], function(){
+  }).use(['index', 'form','crud'], function(){
     let $ = layui.$
         , form = layui.form
-        , crud = layui.crud
-        , table = layui.table
-        , dictValues = []
-        ,defJson = {
-          "dictValueName": ""
-          ,"dictValueKey": ""
-          ,"orderNum": ""
-          ,"remark": ""
-        };
-      dictValues.push(defJson);
-
+        , crud = layui.crud;
     form.on('submit(save-submit)', function(data) {
-      let values = table.cache['dictTable'];
-      data.field.sysDictValues = values;
       $.ajax({
         type: 'POST',
         url:  ctx + '/sysDictType/add',
@@ -94,59 +72,6 @@
           }
         }
       });
-    });
-    /**
-     * 字典值列表
-     */
-    table.render({
-      elem: '#dictTable'
-      ,cellMinWidth: 80
-      ,cols: [
-              [
-               {field: 'dictValueName', edit: 'text', title: '字典项名称'}
-              ,{field: 'dictValueKey', edit: 'text', title: '字典项别名'}
-              ,{field: 'remark', edit: 'text', title: '备注'}
-              ,{field: 'orderNum', edit: 'text', title: '序号'}
-              ,{toolbar: '#tableBar', title: '操作', width: 165, align:'center',fixed: 'right'}
-            ]
-      ]
-      ,data: dictValues
-      ,even: true
-    });
-
-    //监听单元格编辑
-    table.on('edit(dictTable)', function(obj){
-      let value = obj.value //得到修改后的值
-              ,field = obj.field; //得到字段
-      layer.msg(field + ' 字段更改为：'+ value);
-    });
-
-    //监听行工具事件
-    table.on('tool(dictTable)', function(obj){
-      let layEvent = obj.event;
-      let dictData = table.cache['dictTable'];
-      if(layEvent === 'add'){
-        let defJson = {
-          "dictValueName": ""
-          ,"dictValueKey": ""
-          ,"orderNum": ""
-          ,"remark": ""
-        };
-        dictData.push(defJson);
-        table.reload('dictTable',{
-          data: dictData
-        });
-      } else if(layEvent === 'del'){
-        layer.confirm('真的删除行么', function(index) {
-          let rowIndex = $(obj.tr).attr("data-index");
-          obj.del();
-          dictData.splice(rowIndex,1);
-          table.reload('dictTable',{
-            data: dictData
-          });
-          layer.close(index);
-        });
-      }
     });
     crud.setRadio("enabled","enabled","Y");
   });
