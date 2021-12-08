@@ -26,7 +26,7 @@ import java.util.Objects;
 @RequestMapping("/sysDictType")
 public class SysDictTypeController {
 
-    private static final String SUFFIX = "system/sysDict";
+    private static final String SUFFIX = "system/sysDictType";
 
     private final SysDictTypeService sysDictTypeService;
 
@@ -60,7 +60,7 @@ public class SysDictTypeController {
     @GetMapping("/editPage/{id}")
     public String editPage(@Valid @NotNull(message = "id能为空") @PathVariable Long id, ModelMap map){
         SysDictTypeResp sysDict = sysDictTypeService.detail(id);
-        map.put("sysDict",sysDict);
+        map.put("sysDictType",sysDict);
         return SUFFIX + "/edit";
     }
 

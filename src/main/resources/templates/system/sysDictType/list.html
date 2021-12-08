@@ -32,7 +32,7 @@
                         <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="dictKeySearch">
                             <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
                         </button>
-                        <button sec:authorize="hasAuthority('dict:add')" class="layui-btn layuiadmin-btn-useradmin" data-type="dictTypeAddView">添加</button>
+                        <button sec:authorize="hasAuthority('dictType:add')" class="layui-btn layuiadmin-btn-useradmin" data-type="dictTypeAddView">添加</button>
                     </div>
                 </div>
             </div>
@@ -44,8 +44,13 @@
                     <input type="checkbox" lay-filter="enabled" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" {{d.enabled==='Y'?'checked':''}} />
                 </script>
                 <script type="text/html" id="dictTypeTableBar">
-                    <a sec:authorize="hasAuthority('dict:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="dictTypeEdit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-                    <a sec:authorize="hasAuthority('dict:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="dictTypeDel"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                    <a sec:authorize="hasAuthority('dictValue:add')" class="layui-btn layui-btn-xs" lay-event="dictValueAdd"><i class="layui-icon layui-icon-add-1"></i>添加字典项</a>
+                    <a sec:authorize="hasAuthority('dictType:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="dictTypeEdit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+                    <a sec:authorize="hasAuthority('dictType:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="dictTypeDel"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                </script>
+                <script type="text/html" id="dictValueTableBar">
+                    <a sec:authorize="hasAuthority('dictValue:add')" class="layui-btn layui-btn-xs" lay-event="dictValueEdit"><i class="layui-icon layui-icon-add-1"></i>编辑</a>
+                    <a sec:authorize="hasAuthority('dictValue:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="dictValueDel"><i class="layui-icon layui-icon-delete"></i>删除</a>
                 </script>
             </div>
         </div>
@@ -126,6 +131,7 @@
                     {field: 'dictValueName', title: '字典项名称'}
                     ,{field: 'dictValueKey', title: '字典项别名'}
                     ,{field: 'remark', title: '备注'}
+                    ,{toolbar: '#dictValueTableBar', title: '操作', width: 200, align:'center',fixed: 'right'}
                 ]
             ]
             ,data: []
@@ -147,6 +153,17 @@
                 active.dictTypeEditView(data.id);
             } else if(layEvent === 'dictTypeDel'){
                 active.dictTypeDel(data.id);
+            } else if(layEvent === 'dictValueAdd'){
+                active.dictValueAdd(data.id);
+            }
+        });
+        table.on('tool(dictValueTable)', function(obj){
+            let data = obj.data //获得当前行数据
+                ,layEvent = obj.event;
+            if(layEvent === 'dictValueEdit'){
+                active.dictValueEdit(data.id);
+            } else if(layEvent === 'dictValueDel'){
+                active.dictValueDel(data.id);
             }
         });
         $('.layui-btn').on('click', function(){
@@ -236,6 +253,67 @@
                             table.reload('dictTypeTable');
                         }
                     }
+                });
+            },
+            /**
+             * 添加字典项
+             * @param id 字典id
+             */
+            dictValueAdd(id) {
+                layer.open({
+                    type: 2
+                    ,title: '添加字典项'
+                    ,content: ctx + '/sysDictValue/addPage/' + id
+                    ,maxmin: true
+                    ,area: ['500px', '600px']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        let submit = layero.find('iframe').contents().find('#save-submit');
+                        submit.trigger('click');
+                    }
+                });
+            },
+            /**
+             * 修改字典项
+             * @param id 字典id
+             */
+            dictValueEdit(id) {
+                layer.open({
+                    type: 2
+                    ,title: '修改字典项'
+                    ,content: ctx + '/sysDictValue/editPage/' + id
+                    ,maxmin: true
+                    ,area: ['500px', '600px']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        let submit = layero.find('iframe').contents().find('#save-submit');
+                        submit.trigger('click');
+                    }
+                });
+            },
+            /**
+             * 刪除字典项
+             * @param id 字典id
+             */
+            dictValueDel(id) {
+                layer.confirm('真的删除行么', function(index){
+                    //向服务端发送删除指令
+                    $.ajax({
+                        type: 'DELETE',
+                        url:  ctx + '/sysDictValue/del/' + id,
+                        contentType:'application/json;charset=UTF-8',
+                        dataType: 'json',
+                        success: function(result) {
+                            layer.msg(result.message);
+                            if (result.code === 200) {
+                                layer.close(index);
+                                table.reload('dictTypeTable');
+                                table.reload('dictValueTable',{
+                                    data: []
+                                });
+                            }
+                        }
+                    });
                 });
             }
         }

@@ -10,7 +10,7 @@
   <link rel="stylesheet" th:href="@{/static/layuiadmin/style/admin.css}" media="all">
 </head>
 <body>
-<div class="layui-form" lay-filter="sys-dict-form" id="sys-dict-form"  style="padding: 20px 0 0 0;">
+<div class="layui-form" lay-filter="sys-dict-type-form" id="sys-dict-type-form" style="padding: 20px 0 0 0;">
   <input type="hidden" name="id" id="id">
   <div class="layui-form-item">
     <label class="layui-form-label">字典名称</label>
@@ -66,8 +66,8 @@
           , form = layui.form
           , crud = layui.crud
           , table = layui.table
-          , sysDict = [[${sysDict}]]
-          , dictValues = sysDict.sysDictValues
+          , sysDictType = [[${sysDictType}]]
+          , dictValues = sysDictType.sysDictValues
           , defJson = {
             "dictValueName": ""
             ,"dictValueKey": ""
@@ -75,7 +75,7 @@
             ,"remark": ""
           };
     dictValues.push(defJson);
-    form.val('sys-dict-form', sysDict);
+    form.val('sys-dict-type-form', sysDictType);
     // 编辑
     form.on('submit(save-submit)', function(data) {
       let values = table.cache['dictTable'];
@@ -166,7 +166,7 @@
         });
       }
     });
-    crud.setRadio("enabled","enabled",sysDict.enabled);
+    crud.setRadio("enabled","enabled",sysDictType.enabled);
   });
   </script>
 </body>

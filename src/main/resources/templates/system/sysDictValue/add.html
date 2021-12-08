@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>添加字典项</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" th:href="@{/static/layuiadmin/layui/css/layui.css}" media="all">
+  <link rel="stylesheet" th:href="@{/static/layuiadmin/style/admin.css}" media="all">
+</head>
+<body>
+<div class="layui-form" lay-filter="sys-dict-value-form" id="sys-dict-value-form" style="padding: 20px 0 0 0;">
+  <input type="hidden" name="dictTypeId" id="dictTypeId">
+  <div class="layui-form-item">
+    <label class="layui-form-label">字典项名称</label>
+    <div class="layui-input-inline">
+      <input type="text" name="dictValueName" lay-verify="required" placeholder="请输入字典项名称" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">字典项别名</label>
+    <div class="layui-input-inline">
+      <input type="text" name="dictValueKey" lay-verify="required" placeholder="请输入字典项别名" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">序号</label>
+    <div class="layui-input-inline">
+      <input type="number" name="orderNum" lay-verify="required" placeholder="请输入序号" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">备注</label>
+    <div class="layui-input-inline">
+      <input type="text" name="remark" placeholder="请输入备注" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item layui-hide">
+    <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
+  </div>
+</div>
+  <script th:src="@{/static/layuiadmin/layui/layui.js}"></script>
+  <script th:inline="javascript">
+  let ctx = [[${#request.getContextPath()}]];
+  layui.config({
+      base: '/static/layuiadmin/' //静态资源所在路径
+  }).extend({
+     index: 'lib/index', //主入口模块
+  }).use(['index', 'form','crud'], function(){
+    let $ = layui.$
+        , form = layui.form
+        , crud = layui.crud
+        , dictTypeId = [[${dictTypeId}]];
+    $("#dictTypeId").val(dictTypeId);
+    form.on('submit(save-submit)', function(data) {
+      $.ajax({
+        type: 'POST',
+        url:  ctx + '/sysDictValue/add',
+        data: JSON.stringify(data.field),
+        contentType:'application/json;charset=UTF-8',
+        dataType: 'json',
+        success: function(result) {
+          layer.msg(result.message);
+          if (result.code === 200) {
+            let index = parent.layer.getFrameIndex(window.name);
+            // 关闭
+            parent.layer.close(index);
+            // 刷新
+            parent.location.reload();
+          }
+        }
+      });
+    });
+  });
+  </script>
+</body>
+</html>

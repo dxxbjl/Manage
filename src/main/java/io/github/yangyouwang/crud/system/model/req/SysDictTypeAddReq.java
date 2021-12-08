@@ -4,6 +4,7 @@ import io.github.yangyouwang.crud.system.model.dto.SysDictValueDto;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class SysDictTypeAddReq implements Serializable {
     /**
      * 显示顺序
      */
+    @NotNull(message = "显示顺序不能为空")
     private Integer orderNum;
     /**
      * 启用

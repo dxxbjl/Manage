@@ -10,7 +10,7 @@ Target Server Type    : MariaDB
 Target Server Version : 100331
 File Encoding         : 65001
 
-Date: 2021-12-08 00:03:15
+Date: 2021-12-08 23:52:07
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -825,7 +825,7 @@ CREATE TABLE `QRTZ_SCHEDULER_STATE` (
 -- ----------------------------
 -- Records of QRTZ_SCHEDULER_STATE
 -- ----------------------------
-INSERT INTO `QRTZ_SCHEDULER_STATE` VALUES ('clusteredScheduler', 'LAPTOP-I5OGPHFQ1638892827205', '1638892979707', '10000');
+INSERT INTO `QRTZ_SCHEDULER_STATE` VALUES ('clusteredScheduler', 'LAPTOP-I5OGPHFQ1638978630602', '1638978752084', '10000');
 
 -- ----------------------------
 -- Table structure for QRTZ_SIMPLE_TRIGGERS
@@ -936,10 +936,9 @@ CREATE TABLE `sys_dict_type` (
 -- ----------------------------
 -- Records of sys_dict_type
 -- ----------------------------
-INSERT INTO `sys_dict_type` VALUES ('17', 'sex', '性别', '1', 'Y', 'admin', '2021-04-16 12:27:04', 'admin', '2021-07-01 14:59:06', '0', '性别字典');
+INSERT INTO `sys_dict_type` VALUES ('17', 'sex', '性别', '1', 'Y', 'admin', '2021-04-16 12:27:04', 'admin', '2021-12-08 23:45:56', '0', '性别字典');
 INSERT INTO `sys_dict_type` VALUES ('18', 'menuType', '菜单类型', '2', 'Y', 'admin', '2021-04-16 20:42:06', 'admin', '2021-07-01 16:12:05', '0', '菜单类型');
 INSERT INTO `sys_dict_type` VALUES ('19', 'enabled', '是否启用', '3', 'Y', 'admin', '2021-04-29 21:00:41', 'admin', '2021-07-01 15:14:31', '0', '是否启用');
-INSERT INTO `sys_dict_type` VALUES ('29', '1', '1', '1', 'Y', 'admin', '2021-07-01 15:22:20', '', null, '1', '1');
 
 -- ----------------------------
 -- Table structure for sys_dict_value
@@ -958,7 +957,7 @@ CREATE TABLE `sys_dict_value` (
   `deleted` int(11) DEFAULT 0 COMMENT '逻辑删除 0 否、1 是',
   `remark` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=DYNAMIC COMMENT='数据字典值';
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=DYNAMIC COMMENT='数据字典值';
 
 -- ----------------------------
 -- Records of sys_dict_value
@@ -971,7 +970,6 @@ INSERT INTO `sys_dict_value` VALUES ('26', '18', 'F', '按钮', '3', 'admin', '2
 INSERT INTO `sys_dict_value` VALUES ('27', '17', '2', '未知', '2', '', null, '', null, '0', '未知');
 INSERT INTO `sys_dict_value` VALUES ('30', '19', 'Y', '启用', '1', '', null, '', null, '0', '启用');
 INSERT INTO `sys_dict_value` VALUES ('31', '19', 'N', '禁用', '2', '', null, '', null, '0', '禁用');
-INSERT INTO `sys_dict_value` VALUES ('54', '29', '1', '1', '1', '', null, '', null, '1', '1');
 
 -- ----------------------------
 -- Table structure for sys_log
@@ -1019,7 +1017,7 @@ CREATE TABLE `sys_menu` (
   `deleted` int(11) DEFAULT 0 COMMENT '逻辑删除 0 否、1 是',
   `remark` varchar(500) COLLATE utf8_bin DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3028 DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=DYNAMIC COMMENT='菜单权限表';
+) ENGINE=InnoDB AUTO_INCREMENT=3031 DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=DYNAMIC COMMENT='菜单权限表';
 
 -- ----------------------------
 -- Records of sys_menu
@@ -1052,11 +1050,14 @@ INSERT INTO `sys_menu` VALUES ('3016', '编辑', '3014', '2', null, '#', 'F', 'Y
 INSERT INTO `sys_menu` VALUES ('3017', '删除', '3014', '3', null, '#', 'F', 'Y', 'model:del', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', '0', '删除模型');
 INSERT INTO `sys_menu` VALUES ('3018', '设计', '3014', '3', null, '#', 'F', 'Y', 'model:design', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', '0', '设计模型');
 INSERT INTO `sys_menu` VALUES ('3019', '部署', '3014', '3', null, '#', 'F', 'Y', 'model:deploy', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', '0', '部署模型');
-INSERT INTO `sys_menu` VALUES ('3020', '字典管理', '1', '5', 'layui-icon-edit', '/sysDictType/listPage', 'C', 'Y', 'dict:list', 'admin', '2021-04-13 13:35:48', 'admin', '2021-07-01 14:58:37', '0', '字典管理');
-INSERT INTO `sys_menu` VALUES ('3021', '添加', '3020', '1', null, '#', 'F', 'Y', 'dict:add', 'admin', '2021-03-31 16:55:04', 'admin', '2021-04-10 11:26:53', '0', '添加字典');
-INSERT INTO `sys_menu` VALUES ('3022', '编辑', '3020', '2', null, '#', 'F', 'Y', 'dict:edit', 'admin', '2021-03-31 17:01:35', 'admin', '2021-04-10 11:27:05', '0', '编辑字典');
-INSERT INTO `sys_menu` VALUES ('3023', '删除', '3020', '3', null, '#', 'F', 'Y', 'dict:del', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', '0', '删除字典');
+INSERT INTO `sys_menu` VALUES ('3020', '字典管理', '1', '5', 'layui-icon-edit', '/sysDictType/listPage', 'C', 'Y', 'dictType:list', 'admin', '2021-04-13 13:35:48', 'admin', '2021-07-01 14:58:37', '0', '字典管理');
+INSERT INTO `sys_menu` VALUES ('3021', '添加', '3020', '1', null, '#', 'F', 'Y', 'dictType:add', 'admin', '2021-03-31 16:55:04', 'admin', '2021-04-10 11:26:53', '0', '添加字典');
+INSERT INTO `sys_menu` VALUES ('3022', '编辑', '3020', '2', null, '#', 'F', 'Y', 'dictType:edit', 'admin', '2021-03-31 17:01:35', 'admin', '2021-04-10 11:27:05', '0', '编辑字典');
+INSERT INTO `sys_menu` VALUES ('3023', '删除', '3020', '3', null, '#', 'F', 'Y', 'dictType:del', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', '0', '删除字典');
 INSERT INTO `sys_menu` VALUES ('3027', '重置密码', '100', '4', '', '#', 'F', 'Y', 'user:pass', 'admin', '2021-12-07 23:37:52', 'admin', '2021-12-07 23:38:04', '0', '重置密码');
+INSERT INTO `sys_menu` VALUES ('3028', '添加字典项', '3020', '4', '', '#', 'F', 'Y', 'dictValue:add', 'admin', '2021-12-08 22:50:27', 'admin', '2021-12-08 23:42:49', '0', '添加字典项');
+INSERT INTO `sys_menu` VALUES ('3029', '修改字典项', '3020', '5', '', '#', 'F', 'Y', 'dictValue:edit', 'admin', '2021-12-08 23:19:20', 'admin', '2021-12-08 23:43:00', '0', '修改字典项');
+INSERT INTO `sys_menu` VALUES ('3030', '删除字典项', '3020', '6', '', '#', 'F', 'Y', 'dictValue:del', 'admin', '2021-12-08 23:42:39', 'admin', '2021-12-08 23:43:09', '0', '删除字典项');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -1078,7 +1079,7 @@ CREATE TABLE `sys_role` (
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
-INSERT INTO `sys_role` VALUES ('1', '超级管理员', 'ADMIN', '', null, 'admin', '2021-12-07 23:47:31', '0', '超级管理员');
+INSERT INTO `sys_role` VALUES ('1', '超级管理员', 'ADMIN', '', null, 'admin', '2021-12-08 23:43:26', '0', '超级管理员');
 INSERT INTO `sys_role` VALUES ('2', '基本角色', 'USER', '', null, 'admin', '2021-12-07 23:47:37', '0', '基本角色');
 
 -- ----------------------------
@@ -1129,6 +1130,9 @@ INSERT INTO `sys_role_menu` VALUES ('1', '3021');
 INSERT INTO `sys_role_menu` VALUES ('1', '3022');
 INSERT INTO `sys_role_menu` VALUES ('1', '3023');
 INSERT INTO `sys_role_menu` VALUES ('1', '3027');
+INSERT INTO `sys_role_menu` VALUES ('1', '3028');
+INSERT INTO `sys_role_menu` VALUES ('1', '3029');
+INSERT INTO `sys_role_menu` VALUES ('1', '3030');
 INSERT INTO `sys_role_menu` VALUES ('2', '1');
 INSERT INTO `sys_role_menu` VALUES ('2', '100');
 INSERT INTO `sys_role_menu` VALUES ('2', '1005');
