@@ -89,7 +89,7 @@
                   statusCode: 200 //成功的状态码，默认：0
               },
               cols: [[ //表头
-                  {field: 'id', title: 'ID', sort: true, fixed: 'left'},
+                  {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
                   {field: 'menuName', title: '菜单名称'},
                   {field: 'menuType', title: "菜单类型",templet: function (d) { return crud.getDictValue('menuType',d.menuType);}},
                   {field: 'url', title: '请求地址'},

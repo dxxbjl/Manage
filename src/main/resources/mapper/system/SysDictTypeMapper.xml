@@ -3,8 +3,8 @@
 <mapper namespace="io.github.yangyouwang.crud.system.mapper.SysDictTypeMapper">
   <resultMap id="BaseResultMap" type="io.github.yangyouwang.crud.system.entity.SysDictType">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="dict_key" jdbcType="VARCHAR" property="dictKey" />
-    <result column="dict_name" jdbcType="VARCHAR" property="dictName" />
+    <result column="dictKey" jdbcType="VARCHAR" property="dictKey" />
+    <result column="dictName" jdbcType="VARCHAR" property="dictName" />
     <result column="order_num" jdbcType="INTEGER" property="orderNum" />
     <result column="enabled" jdbcType="VARCHAR" property="enabled" />
     <result column="create_by" jdbcType="VARCHAR" property="createBy" />
@@ -14,19 +14,19 @@
     <result column="remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
   <resultMap id="DictResultMap" type="io.github.yangyouwang.crud.system.entity.SysDictType">
-    <id column="dict_type_id" jdbcType="BIGINT" property="id" />
-    <result column="dict_key" jdbcType="VARCHAR" property="dictKey" />
-    <result column="dict_name" jdbcType="VARCHAR" property="dictName" />
-    <result column="enabled" jdbcType="VARCHAR" property="enabled" />
-    <result column="dict_type_num" jdbcType="VARCHAR" property="orderNum" />
-    <result column="dict_type_remark" jdbcType="VARCHAR" property="remark" />
+    <id column="dictId" jdbcType="BIGINT" property="id" />
+    <result column="dictKey" jdbcType="VARCHAR" property="dictKey" />
+    <result column="dictName" jdbcType="VARCHAR" property="dictName" />
+    <result column="dictEnabled" jdbcType="VARCHAR" property="enabled" />
+    <result column="dictNum" jdbcType="VARCHAR" property="orderNum" />
+    <result column="dictRemark" jdbcType="VARCHAR" property="remark" />
     <collection property="dictValues" javaType="java.util.ArrayList" ofType="io.github.yangyouwang.crud.system.entity.SysDictValue">
-      <id column="dict_value_id" jdbcType="BIGINT" property="id" />
-      <result column="dict_type_id" jdbcType="BIGINT" property="dictTypeId"/>
-      <result column="dict_value_key" jdbcType="VARCHAR" property="dictValueKey"/>
-      <result column="dict_value_name" jdbcType="VARCHAR" property="dictValueName"/>
-      <result column="dict_value_num" jdbcType="BIGINT" property="orderNum"/>
-      <result column="dict_value_remark" jdbcType="VARCHAR" property="remark"/>
+      <id column="dictValueId" jdbcType="BIGINT" property="id" />
+      <result column="dictTypeId" jdbcType="BIGINT" property="dictTypeId"/>
+      <result column="dictValueKey" jdbcType="VARCHAR" property="dictValueKey"/>
+      <result column="dictValueName" jdbcType="VARCHAR" property="dictValueName"/>
+      <result column="dictValueNum" jdbcType="BIGINT" property="orderNum"/>
+      <result column="dictValueRemark" jdbcType="VARCHAR" property="remark"/>
     </collection>
   </resultMap>
   <sql id="Base_Column_List">
@@ -35,8 +35,18 @@
   </sql>
   <!-- 根据字典类型key查询字典 -->
   <select id="findDictByKey" parameterType="string" resultMap="DictResultMap">
-    select dt.id as dict_type_id,dt.dict_key,dt.dict_name,dt.enabled,dt.order_num as dict_type_num,dt.remark as dict_type_remark,
-    dv.id as dict_value_id,dv.dict_value_key,dv.dict_value_name,dv.order_num as dict_value_num,dv.remark as dict_value_remark
+    select dt.id as dictId,
+           dt.dict_key as dictKey,
+           dt.dict_name as dictName,
+           dt.enabled as dictEnabled,
+           dt.order_num as dictNum,
+           dt.remark as dictRemark,
+           dv.id as dictValueId,
+           dv.dict_type_id as dictTypeId,
+           dv.dict_value_key as dictValueKey,
+           dv.dict_value_name as dictValueName,
+           dv.order_num as dictValueNum,
+           dv.remark as dictValueRemark
     from sys_dict_type dt
     left join sys_dict_value dv on dt.id = dv.dict_type_id
     where dt.deleted = 0 and dt.enabled = 'Y' and dt.dict_key = #{dictKey}
@@ -44,17 +54,27 @@
   </select>
     <!-- 自定义字典列表查询-->
     <select id="selectDictPage"  resultMap="DictResultMap">
-    select dt.id as dict_type_id,dt.dict_key,dt.dict_name,dt.enabled,dt.order_num as dict_type_num,dt.remark as dict_type_remark,
-    dv.id as dict_value_id,dv.dict_value_key,dv.dict_value_name,dv.order_num as dict_value_num,dv.remark as dict_value_remark
+    select dt.id as dictId,
+           dt.dict_key as dictKey,
+           dt.dict_name as dictName,
+           dt.enabled as dictEnabled,
+           dt.order_num as dictNum,
+           dt.remark as dictRemark,
+           dv.id as dictValueId,
+           dv.dict_type_id as dictTypeId,
+           dv.dict_value_key as dictValueKey,
+           dv.dict_value_name as dictValueName,
+           dv.order_num as dictValueNum,
+           dv.remark as dictValueRemark
     from sys_dict_type dt
     left join sys_dict_value dv on dt.id = dv.dict_type_id
-    <if test="ew.emptyOfWhere == true">
-        where dt.deleted = 0
-    </if>
-    <if test="ew.emptyOfWhere == false">
-        ${ew.customSqlSegment}
-        and dt.deleted = 0
-    </if>
+        <if test="ew.emptyOfWhere == true">
+            where dt.deleted = 0
+        </if>
+        <if test="ew.emptyOfWhere == false">
+            ${ew.customSqlSegment}
+            and dt.deleted = 0
+        </if>
     order by dv.order_num asc
     </select>
 </mapper>

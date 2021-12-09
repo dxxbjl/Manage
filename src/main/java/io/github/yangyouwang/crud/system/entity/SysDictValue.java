@@ -3,7 +3,6 @@ package io.github.yangyouwang.crud.system.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.github.yangyouwang.common.domain.BaseEntity;
 import lombok.Data;
 
 /**
@@ -14,7 +13,7 @@ import lombok.Data;
  */
 @Data
 @TableName("sys_dict_value")
-public class SysDictValue extends BaseEntity {
+public class SysDictValue {
 
     /**
      * 主键id
@@ -38,4 +37,7 @@ public class SysDictValue extends BaseEntity {
      * 显示顺序
      */
     private Integer orderNum;
+
+    /** 备注 */
+    private String remark;
 }
