@@ -20,8 +20,8 @@
     <div class="layui-form-item">
       <label class="layui-form-label">父级编号</label>
       <div class="layui-input-inline">
-        <input id="parentId" name="parentId" value="0" type="hidden">
-        <div id="parentName" class="xm-select-demo"></div>
+        <input id="parentId" name="parentId" type="hidden">
+        <div id="parentName" lay-filter="parentName" class="xm-select-demo"></div>
       </div>
     </div>
     <div class="layui-form-item">
@@ -80,7 +80,8 @@
      treeSelect= layui.treeSelect,
      crud = layui.crud,
      iconPicker = layui.iconPicker,
-     form = layui.form;
+     form = layui.form,
+     parentId = [[${parentId}]];
 
     form.on('submit(save-submit)', function(data){
         $.ajax({
@@ -120,6 +121,11 @@
       // 加载完成后的回调函数
       success: function (d) {
         console.log(d);
+        $("#parentId").val(parentId);
+        if (parentId !== 0) {
+          treeSelect.checkNode('parentName', parentId);
+          treeSelect.refresh('parentName');
+        }
       }
     });
     crud.setSelect("menuType","menuType",'M');

@@ -26,7 +26,7 @@
             </button>
             <button class="layui-btn layuiadmin-btn-useradmin" data-type="expand">全部展开</button>
             <button class="layui-btn layuiadmin-btn-useradmin" data-type="fold">全部折叠</button>
-            <button sec:authorize="hasAuthority('menu:add')" class="layui-btn layuiadmin-btn-useradmin" data-type="addView">添加</button>
+            <button sec:authorize="hasAuthority('menu:add')" class="layui-btn layuiadmin-btn-useradmin" data-type="addViewDef">添加</button>
           </div>
         </div>
       </div>
@@ -36,6 +36,7 @@
           <input type="checkbox" lay-filter="visible" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" {{d.visible==='Y'?'checked':''}} />
         </script>
         <script type="text/html" id="tableBar">
+          <a sec:authorize="hasAuthority('menu:add')" class="layui-btn layui-btn-xs" lay-event="add"><i class="layui-icon layui-icon-add-1"></i>添加</a>
           <a sec:authorize="hasAuthority('menu:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
           <a sec:authorize="hasAuthority('menu:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
         </script>
@@ -111,6 +112,8 @@
               active.editView(data.id);
           } else if(layEvent === 'del'){
               active.del(data.id);
+          } else if(layEvent === 'add'){
+            active.addView(data.id);
           }
       });
 
@@ -134,13 +137,19 @@
               treetable.foldAll('#menuTable');
           },
           /**
+          * 添加
+          * */
+          addViewDef: function() {
+            active.addView(0);
+          },
+          /**
            * 添加
            * */
-          addView: function(){
+          addView: function(id) {
               layer.open({
                   type: 2,
                   title: "添加菜单",
-                  content: ctx + '/sysMenu/addPage'
+                  content: ctx + '/sysMenu/addPage?id='+id
                   ,maxmin: true
                   ,area: ['500px', '450px']
                   ,btn: ['确定', '取消']
@@ -154,7 +163,7 @@
            * 编辑
            * @param id id
            * */
-          editView: function(id){
+          editView: function(id) {
               layer.open({
                   type: 2
                   ,title: '修改菜单'

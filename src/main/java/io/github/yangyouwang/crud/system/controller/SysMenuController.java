@@ -55,7 +55,8 @@ public class SysMenuController {
      * @return 添加页面
      */
     @GetMapping("/addPage")
-    public String addPage(){
+    public String addPage(Long id, ModelMap map) {
+        map.put("parentId",id);
         return SUFFIX + "/add";
     }
 
