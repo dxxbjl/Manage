@@ -28,4 +28,7 @@ public class ActReModelListReq implements Serializable {
 
     /** 名称 */
     private String name;
+
+    /** KEY **/
+    private String key;
 }

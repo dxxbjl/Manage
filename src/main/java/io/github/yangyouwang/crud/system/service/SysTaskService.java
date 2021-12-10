@@ -55,7 +55,8 @@ public class SysTaskService extends ServiceImpl<SysTaskMapper, SysTask> {
     public IPage list(SysTaskListReq sysTaskListReq) {
         return sysTaskMapper.selectPage(new Page<>(sysTaskListReq.getPageNum(), sysTaskListReq.getPageSize()),
                 new LambdaQueryWrapper<SysTask>()
-                        .like(StringUtils.isNotBlank(sysTaskListReq.getName()), SysTask::getName , sysTaskListReq.getName()));
+                        .like(StringUtils.isNotBlank(sysTaskListReq.getName()), SysTask::getName , sysTaskListReq.getName())
+                        .like(StringUtils.isNotBlank(sysTaskListReq.getClassName()), SysTask::getClassName , sysTaskListReq.getClassName()));
     }
 
     /**

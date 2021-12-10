@@ -28,4 +28,8 @@ public class SysTaskListReq implements Serializable {
      * 名称
      */
     private String name;
+    /**
+     * 类名称
+     */
+    private String className;
 }

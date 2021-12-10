@@ -54,7 +54,8 @@ public class ActReModelService {
     public IPage list(ActReModelListReq actReModelListReq) {
         return actReModelMapper.selectPage(new Page<>(actReModelListReq.getPageNum(), actReModelListReq.getPageSize()),
                 new LambdaQueryWrapper<ActReModel>()
-                        .like(StringUtils.isNotBlank(actReModelListReq.getName()),ActReModel::getName , actReModelListReq.getName()));
+                        .like(StringUtils.isNotBlank(actReModelListReq.getName()),ActReModel::getName , actReModelListReq.getName())
+                        .like(StringUtils.isNotBlank(actReModelListReq.getKey()),ActReModel::getKey , actReModelListReq.getKey()));
     }
 
     /**

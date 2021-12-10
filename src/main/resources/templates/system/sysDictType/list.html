@@ -32,6 +32,7 @@
                         <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="dictKeySearch">
                             <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
                         </button>
+                        <button class="layui-btn layui-btn-primary" data-type="resetForm">重置</button>
                         <button sec:authorize="hasAuthority('dictType:add')" class="layui-btn layuiadmin-btn-useradmin" data-type="dictTypeAddView">添加</button>
                     </div>
                 </div>
@@ -172,6 +173,22 @@
         });
         /* 触发弹层 */
         let active = {
+            /**
+             * 重置
+             */
+            resetForm:function () {
+                $(".layui-form").find("input").val("");
+                form.render();
+                table.reload('dictTypeTable', {
+                    where: {
+                        dictName: "",
+                        dictKey: ""
+                    }
+                });
+                table.reload('dictValueTable',{
+                    data: []
+                });
+            },
             /**
              * 添加
              * */

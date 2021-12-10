@@ -21,9 +21,16 @@
             </div>
           </div>
           <div class="layui-inline">
+            <label class="layui-form-label">KEY_</label>
+            <div class="layui-input-block">
+              <input type="text" name="key" placeholder="请输入KEY_" class="layui-input">
+            </div>
+          </div>
+          <div class="layui-inline">
             <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
               <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
             </button>
+            <button class="layui-btn layui-btn-primary" data-type="resetForm">重置</button>
             <button sec:authorize="hasAuthority('model:add')" class="layui-btn layuiadmin-btn-useradmin" data-type="addView">添加</button>
           </div>
         </div>
@@ -117,6 +124,19 @@
 
       /* 触发弹层 */
       var active = {
+          /**
+           * 重置
+           */
+          resetForm:function () {
+            $(".layui-form").find("input").val("");
+            form.render();
+            table.reload('modelTable', {
+              where: {
+                name: "",
+                key: ""
+              }
+            });
+          },
           /**
            * 添加
            * */
