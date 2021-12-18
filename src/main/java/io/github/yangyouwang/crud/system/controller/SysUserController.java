@@ -5,6 +5,7 @@ import com.alibaba.excel.metadata.Sheet;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.core.util.SecurityUtils;
@@ -120,6 +121,7 @@ public class SysUserController {
      * 重置密码
      * @return 重置密码状态
      */
+    @CrudLog
     @PostMapping("/resetPass")
     @ResponseBody
     public Result resetPass(@RequestBody @Validated SysUserResetPassReq sysUserResetPassReq,BindingResult bindingResult){
@@ -134,6 +136,7 @@ public class SysUserController {
      * 修改密码
      * @return 修改状态
      */
+    @CrudLog
     @PostMapping("/modifyPass")
     @ResponseBody
     public Result modifyPass(@RequestBody @Validated ModifyPassReq modifyPassReq, BindingResult bindingResult) {
@@ -162,6 +165,7 @@ public class SysUserController {
      * 添加请求
      * @return 添加状态
      */
+    @CrudLog
     @PostMapping("/add")
     @ResponseBody
     public Result add(@RequestBody @Validated SysUserAddReq sysUserAddReq,BindingResult bindingResult){
@@ -176,6 +180,7 @@ public class SysUserController {
      * 编辑请求
      * @return 编辑状态
      */
+    @CrudLog
     @PostMapping("/edit")
     @ResponseBody
     public Result edit(@RequestBody @Validated SysUserEditReq sysUserEditReq, BindingResult bindingResult){
@@ -190,6 +195,7 @@ public class SysUserController {
      * 编辑用户信息请求
      * @return 编辑状态
      */
+    @CrudLog
     @PostMapping("/editUserInfo")
     @ResponseBody
     public Result editUserInfo(@RequestBody @Validated SysUserEditUserInfoReq sysUserEditUserInfoReq, BindingResult bindingResult){
@@ -204,6 +210,7 @@ public class SysUserController {
      * 修改用户状态
      * @return 修改状态
      */
+    @CrudLog
     @PostMapping("/changeUser")
     @ResponseBody
     public Result changeUser(@RequestBody @Validated SysUserEnabledReq sysUserEnabledReq, BindingResult bindingResult){
@@ -218,6 +225,7 @@ public class SysUserController {
      * 删除请求
      * @return 删除状态
      */
+    @CrudLog
     @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){

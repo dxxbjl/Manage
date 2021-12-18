@@ -1,5 +1,6 @@
 package io.github.yangyouwang.crud.system.controller;
 
+import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.crud.system.model.req.SysDictValueAddReq;
 import io.github.yangyouwang.crud.system.model.req.SysDictValueEditReq;
@@ -52,6 +53,7 @@ public class SysDictValueController {
      * 删除字典值请求
      * @return 删除状态
      */
+    @CrudLog
     @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
@@ -84,6 +86,7 @@ public class SysDictValueController {
      * 添加请求
      * @return 添加状态
      */
+    @CrudLog
     @PostMapping("/add")
     @ResponseBody
     public Result add(@RequestBody @Validated SysDictValueAddReq sysDictValueAddReq, BindingResult bindingResult){
@@ -98,6 +101,7 @@ public class SysDictValueController {
      * 编辑请求
      * @return 编辑状态
      */
+    @CrudLog
     @PostMapping("/edit")
     @ResponseBody
     public Result edit(@RequestBody @Validated SysDictValueEditReq sysDictValueEditReq, BindingResult bindingResult){

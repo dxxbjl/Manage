@@ -60,10 +60,6 @@ spring:
     check-process-definitions: false
     process-definition-location-prefix: classpath:/processes/
     history-level: full
-    font:
-      activityFontName: 宋体
-      labelFontName: 宋体
-
 ##############################################
 #
 # thymeleaf静态资源配置
@@ -101,7 +97,6 @@ mybatis-plus:
       logic-not-delete-value: 0
       # 删除后
       logic-delete-value: 1
-
 ##############################################
 #
 # 日志配置

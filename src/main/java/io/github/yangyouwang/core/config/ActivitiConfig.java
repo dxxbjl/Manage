@@ -32,8 +32,9 @@ public class ActivitiConfig extends AbstractProcessEngineAutoConfiguration {
         configuration.setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE);
         // 关闭activiti定时任务刷新
         configuration.setJobExecutorActivate(false);
-        // configuration.setJobExecutorActivate(true);
         configuration.setTransactionManager(transactionManager(dataSource));
+        configuration.setLabelFontName("宋体");
+        configuration.setActivityFontName("宋体");
         return configuration;
     }
 }

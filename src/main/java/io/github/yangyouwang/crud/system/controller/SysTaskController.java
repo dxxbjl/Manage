@@ -3,6 +3,7 @@ package io.github.yangyouwang.crud.system.controller;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.crud.system.entity.SysTask;
 import io.github.yangyouwang.crud.system.model.req.SysTaskAddReq;
@@ -100,6 +101,7 @@ public class SysTaskController {
      * 添加请求
      * @return 添加状态
      */
+    @CrudLog
     @PostMapping("/add")
     @ResponseBody
     public Result add(@RequestBody @Validated SysTaskAddReq sysTaskAddReq, BindingResult bindingResult) {
@@ -114,6 +116,7 @@ public class SysTaskController {
      * 编辑请求
      * @return 编辑状态
      */
+    @CrudLog
     @PostMapping("/edit")
     @ResponseBody
     public Result edit(@RequestBody @Validated SysTaskEditReq sysTaskEditReq, BindingResult bindingResult){
@@ -130,6 +133,7 @@ public class SysTaskController {
      * 修改任务请求
      * @return 修改状态
      */
+    @CrudLog
     @PostMapping("/changeTask")
     @ResponseBody
     public Result changeTask(@RequestBody @Validated SysTaskEnabledReq sysTaskEnabledReq, BindingResult bindingResult){
@@ -146,6 +150,7 @@ public class SysTaskController {
      * 删除请求
      * @return 删除状态
      */
+    @CrudLog
     @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){

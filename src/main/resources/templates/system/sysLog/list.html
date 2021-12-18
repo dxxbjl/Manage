@@ -36,6 +36,9 @@
       </div>
       <div class="layui-card-body">
         <table id="logTable" lay-filter="logTable"></table>
+        <script type="text/html" id="tableBar">
+          <a sec:authorize="hasAuthority('log:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+        </script>
       </div>
     </div>
   </div>
@@ -90,15 +93,14 @@
               ,{field: 'errMsg', title: '错误信息'}
               ,{field: 'stackTrace', title: '异常堆栈信息'}
               ,{field: 'createTime', title: '创建时间'}
+              ,{toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
           ]]
       });
-      table.on('tool(dictValueTable)', function(obj){
+      table.on('tool(logTable)', function(obj){
         let data = obj.data //获得当前行数据
                 ,layEvent = obj.event;
-        if(layEvent === 'dictValueEdit'){
-          active.dictValueEdit(data.id);
-        } else if(layEvent === 'dictValueDel'){
-          active.dictValueDel(data.id);
+        if(layEvent === 'del'){
+          active.del(data.id);
         }
       });
       $('.layui-btn').on('click', function(){
@@ -110,7 +112,7 @@
         /**
          * 重置
          */
-        resetForm:function () {
+        resetForm: function () {
           $(".layui-form").find("input").val("");
           form.render();
           table.reload('logTable', {
@@ -120,6 +122,28 @@
             }
           });
         },
+        /**
+         * 删除
+         * @param id id
+         */
+        del: function(id){
+          layer.confirm('真的删除行么', function(index){
+            //向服务端发送删除指令
+            $.ajax({
+              type: 'DELETE',
+              url:  ctx + '/sysLog/del/' + id,
+              contentType:'application/json;charset=UTF-8',
+              dataType: 'json',
+              success: function(result) {
+                layer.msg(result.message);
+                if (result.code === 200) {
+                  layer.close(index);
+                  table.reload('logTable');
+                }
+              }
+            });
+          });
+        }
       }
   });
   </script>

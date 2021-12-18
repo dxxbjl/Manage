@@ -1,5 +1,6 @@
 package io.github.yangyouwang.crud.system.controller;
 
+import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.TreeSelectNode;
 import io.github.yangyouwang.common.domain.XmSelectNode;
@@ -86,6 +87,7 @@ public class SysMenuController {
      * 添加请求
      * @return 添加状态
      */
+    @CrudLog
     @PostMapping("/add")
     @ResponseBody
     public Result add(@RequestBody @Validated SysMenuAddReq sysMenuAddReq, BindingResult bindingResult){
@@ -100,6 +102,7 @@ public class SysMenuController {
      * 编辑请求
      * @return 编辑状态
      */
+    @CrudLog
     @PostMapping("/edit")
     @ResponseBody
     public Result edit(@RequestBody @Validated SysMenuEditReq sysMenuEditReq, BindingResult bindingResult){
@@ -114,6 +117,7 @@ public class SysMenuController {
      * 更新菜单状态
      * @return 菜单状态
      */
+    @CrudLog
     @PostMapping("/changeMenu")
     @ResponseBody
     public Result changeMenu(@RequestBody @Validated SysMenuVisibleReq sysMenuVisibleReq, BindingResult bindingResult){
@@ -128,6 +132,7 @@ public class SysMenuController {
      * 删除请求
      * @return 删除状态
      */
+    @CrudLog
     @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){

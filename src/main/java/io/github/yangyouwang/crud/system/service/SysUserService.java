@@ -20,6 +20,7 @@ import io.github.yangyouwang.crud.system.mapper.SysUserRoleMapper;
 import io.github.yangyouwang.crud.system.model.req.*;
 import io.github.yangyouwang.crud.system.model.resp.SysUserResp;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.GrantedAuthority;
@@ -127,7 +128,8 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
         user.setPassWord(passWord);
         int flag = sysUserMapper.insert(user);
         if (flag > 0) {
-            insertUserRoleBatch(user.getId(), sysUserAddReq.getRoleIds());
+            SysUserService proxy = (SysUserService) AopContext.currentProxy();
+            proxy.insertUserRoleBatch(user.getId(), sysUserAddReq.getRoleIds());
             return flag;
         }
         throw new CrudException(ResultStatus.SAVE_DATA_ERROR);
@@ -145,7 +147,8 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
         if (flag > 0) {
             if (sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>()
                     .eq(SysUserRole::getUserId, user.getId())) > 0) {
-                insertUserRoleBatch(user.getId(), sysUserEditReq.getRoleIds());
+                SysUserService proxy = (SysUserService) AopContext.currentProxy();
+                proxy.insertUserRoleBatch(user.getId(), sysUserEditReq.getRoleIds());
             }
             return flag;
         }
@@ -168,7 +171,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
      * @param userId 用户id
      * @param roleIds 角色id
      */
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Throwable.class)
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
     public void insertUserRoleBatch(Long userId, Long[] roleIds) {
         List<SysUserRole> userRoles = Arrays.stream(roleIds).map(s -> {
             SysUserRole userRole = new SysUserRole();

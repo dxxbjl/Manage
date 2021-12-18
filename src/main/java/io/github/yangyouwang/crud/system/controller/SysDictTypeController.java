@@ -1,6 +1,7 @@
 package io.github.yangyouwang.crud.system.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.crud.system.model.req.*;
 import io.github.yangyouwang.crud.system.model.resp.SysDictTypeResp;
@@ -82,6 +83,7 @@ public class SysDictTypeController {
      * 添加请求
      * @return 添加状态
      */
+    @CrudLog
     @PostMapping("/add")
     @ResponseBody
     public Result add(@RequestBody @Validated SysDictTypeAddReq sysDictAddReq, BindingResult bindingResult){
@@ -96,6 +98,7 @@ public class SysDictTypeController {
      * 编辑请求
      * @return 编辑状态
      */
+    @CrudLog
     @PostMapping("/edit")
     @ResponseBody
     public Result edit(@RequestBody @Validated SysDictTypeEditReq sysDictEditReq, BindingResult bindingResult){
@@ -110,6 +113,7 @@ public class SysDictTypeController {
      * 修改字典状态
      * @return 修改状态
      */
+    @CrudLog
     @PostMapping("/changeDictType")
     @ResponseBody
     public Result changeDictType(@RequestBody @Validated SysDictTypeEnabledReq sysDictTypeEnabledReq, BindingResult bindingResult){
@@ -124,6 +128,7 @@ public class SysDictTypeController {
      * 删除请求
      * @return 删除状态
      */
+    @CrudLog
     @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result delKey(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){

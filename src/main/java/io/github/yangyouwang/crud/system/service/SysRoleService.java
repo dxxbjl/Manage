@@ -17,6 +17,7 @@ import io.github.yangyouwang.crud.system.model.req.SysRoleEditReq;
 import io.github.yangyouwang.crud.system.model.req.SysRoleListReq;
 import io.github.yangyouwang.crud.system.model.resp.SysRoleResp;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -90,7 +91,8 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
         int flag = sysRoleMapper.insert(role);
         if (flag > 0) {
             // 关联菜单
-            insertRoleMenuBatch(role.getId(), sysRoleAddReq.getMenuIds());
+            SysRoleService proxy = (SysRoleService) AopContext.currentProxy();
+            proxy.insertRoleMenuBatch(role.getId(), sysRoleAddReq.getMenuIds());
             return flag;
         }
         throw new CrudException(ResultStatus.SAVE_DATA_ERROR);
@@ -108,7 +110,8 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
         if (flag > 0) {
             if (sysRoleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>()
                     .eq(SysRoleMenu::getRoleId, role.getId())) > 0) {
-                insertRoleMenuBatch(role.getId(), sysRoleEditReq.getMenuIds());
+                SysRoleService proxy = (SysRoleService) AopContext.currentProxy();
+                proxy.insertRoleMenuBatch(role.getId(), sysRoleEditReq.getMenuIds());
                 return flag;
             }
         }
@@ -120,7 +123,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
      * @param roleId 角色id
      * @param menuIds 菜单id
      */
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Throwable.class)
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
     public void insertRoleMenuBatch(Long roleId, Long[] menuIds) {
         List<SysRoleMenu> roleMenus = Arrays.stream(menuIds).map(s -> {
             SysRoleMenu roleMenu = new SysRoleMenu();

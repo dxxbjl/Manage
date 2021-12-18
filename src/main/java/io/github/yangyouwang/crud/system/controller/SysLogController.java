@@ -1,6 +1,7 @@
 package io.github.yangyouwang.crud.system.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.crud.system.model.req.SysLogListReq;
 import io.github.yangyouwang.crud.system.model.resp.SysLogResp;
@@ -9,10 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 /**
@@ -57,5 +58,17 @@ public class SysLogController {
         }
         IPage<SysLogResp> list = sysLogService.list(sysLogListReq);
         return Result.success(list);
+    }
+
+    /**
+     * 删除请求
+     * @return 删除状态
+     */
+    @CrudLog
+    @DeleteMapping("/del/{id}")
+    @ResponseBody
+    public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
+        boolean flag = sysLogService.removeById(id);
+        return Result.success(flag);
     }
 }
