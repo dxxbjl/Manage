@@ -73,6 +73,7 @@ public class SysTaskController {
 
     /**
      * 跳转编辑
+     * @param id  任务id
      * @return 编辑页面
      */
     @GetMapping("/editPage/{id}")
@@ -85,20 +86,22 @@ public class SysTaskController {
 
     /**
      * 列表请求
+     * @param sysTaskListReq 请求任务列表对象
      * @return 请求列表
      */
     @GetMapping("/list")
     @ResponseBody
-    public Result list(@Validated SysTaskListReq sysRoleListReq, BindingResult bindingResult) {
+    public Result list(@Validated SysTaskListReq sysTaskListReq, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        IPage<SysTaskResp> list = sysTaskService.list(sysRoleListReq);
+        IPage<SysTaskResp> list = sysTaskService.list(sysTaskListReq);
         return Result.success(list);
     }
 
     /**
      * 添加请求
+     * @param sysTaskAddReq 添加任务对象
      * @return 添加状态
      */
     @CrudLog
@@ -108,12 +111,13 @@ public class SysTaskController {
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        int flag = sysTaskService.add(sysTaskAddReq);
+        boolean flag = sysTaskService.add(sysTaskAddReq);
         return Result.success(flag);
     }
 
     /**
      * 编辑请求
+     * @param sysTaskEditReq 修改任务对象
      * @return 编辑状态
      */
     @CrudLog
@@ -125,12 +129,13 @@ public class SysTaskController {
         }
         SysTask sysTask = new SysTask();
         BeanUtil.copyProperties(sysTaskEditReq,sysTask,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
-        int flag = sysTaskService.edit(sysTask);
+        boolean flag = sysTaskService.edit(sysTask);
         return Result.success(flag);
     }
 
     /**
      * 修改任务请求
+     * @param sysTaskEnabledReq 修改任务状态对象
      * @return 修改状态
      */
     @CrudLog
@@ -140,21 +145,22 @@ public class SysTaskController {
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        SysTask sysTask = sysTaskService.findTaskById(sysTaskEnabledReq.getId());
+        SysTask sysTask = sysTaskService.getById(sysTaskEnabledReq.getId());
         sysTask.setEnabled(sysTaskEnabledReq.getEnabled());
-        int flag = sysTaskService.edit(sysTask);
+        boolean flag = sysTaskService.edit(sysTask);
         return Result.success(flag);
     }
 
     /**
      * 删除请求
+     * @param id 任务id
      * @return 删除状态
      */
     @CrudLog
     @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
-        int flag = sysTaskService.del(id);
-        return Result.success(flag);
+        sysTaskService.del(id);
+        return Result.success();
     }
 }

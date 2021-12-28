@@ -39,6 +39,7 @@ public class SysDictValueService extends ServiceImpl<SysDictValueMapper, SysDict
 
     /**
      * 根据字典类型获取字典列表
+     * @param dictKey 字典key
      * @return 请求列表
      */
     @Transactional(readOnly = true)
@@ -54,15 +55,6 @@ public class SysDictValueService extends ServiceImpl<SysDictValueMapper, SysDict
         return Collections.emptyList();
     }
     /**
-     * 删除字典值请求
-     * @return 删除状态
-     */
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public int del(Long id) {
-        return sysDictValueMapper.deleteById(id);
-    }
-
-    /**
      * 获取字典项详情
      * @param id 字典项id
      * @return 字典项详情
@@ -76,6 +68,7 @@ public class SysDictValueService extends ServiceImpl<SysDictValueMapper, SysDict
     }
     /**
      * 添加请求
+     * @param sysDictValueAddReq 添加字典值对象
      * @return 添加状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
@@ -86,6 +79,7 @@ public class SysDictValueService extends ServiceImpl<SysDictValueMapper, SysDict
     }
     /**
      * 编辑请求
+     * @param sysDictValueEditReq 编辑字典值对象
      * @return 编辑状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)

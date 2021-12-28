@@ -102,11 +102,12 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
 
     /**
      * 列表请求
+     * @param sysUserListReq 用户列表对象
      * @return 列表
      */
     @Transactional(readOnly = true)
     public IPage list(SysUserListReq sysUserListReq) {
-        return sysUserMapper.selectPage(new Page<>(sysUserListReq.getPageNum(), sysUserListReq.getPageSize()),
+        return this.page(new Page<>(sysUserListReq.getPageNum(), sysUserListReq.getPageSize()),
                 new LambdaQueryWrapper<SysUser>()
                         .like(StringUtils.isNotBlank(sysUserListReq.getUserName()), SysUser::getUserName , sysUserListReq.getUserName())
                         .like(StringUtils.isNotBlank(sysUserListReq.getEmail()), SysUser::getEmail , sysUserListReq.getEmail())
@@ -115,6 +116,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
 
     /**
      * 添加请求
+     * @param sysUserAddReq 添加用户对象
      * @return 添加状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
@@ -137,6 +139,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
 
     /**
      * 编辑请求
+     * @param sysUserEditReq 编辑用户对象
      * @return 编辑状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
@@ -157,6 +160,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
 
     /**
      * 编辑请求
+     * @param sysUserEditUserInfoReq 编辑用户对象
      * @return 编辑状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
@@ -187,17 +191,13 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
 
     /**
      * 删除请求
-     * @return 删除状态
+     * @param id 用户id
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public int del(Long id) {
-        int flag = sysUserMapper.deleteById(id);
-        if (flag > 0) {
-            sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>()
-                    .eq(SysUserRole::getUserId,id));
-            return flag;
-        }
-        throw new CrudException(ResultStatus.DELETE_DATA_ERROR);
+    public void del(Long id) {
+        sysUserMapper.deleteById(id);
+        sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>()
+                .eq(SysUserRole::getUserId,id));
     }
 
     /**
@@ -243,6 +243,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
 
     /**
      * 修改密码
+     * @param modifyPassReq 修改密码对象
      * @return 修改状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
@@ -257,6 +258,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
 
     /**
      * 重置密码
+     * @param sysUserResetPassReq 重置用户密码对象
      * @return 重置密码
      */
     public int resetPass(SysUserResetPassReq sysUserResetPassReq) {

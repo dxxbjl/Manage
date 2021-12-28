@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @author yangyouwang
  * @title: SysLogListReq
  * @projectName crud
- * @description: 系统日期请求
+ * @description: 日志列表对象
  * @date 2021/4/111:09 AM
  */
 @Data

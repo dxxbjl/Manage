@@ -52,6 +52,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
 
     /**
      * 跳转编辑
+     * @param id 角色id
      * @return 编辑页面
      */
     @Transactional(readOnly = true)
@@ -68,11 +69,12 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
 
     /**
      * 列表请求
+     * @param sysRoleListReq 请求角色列表对象
      * @return 请求列表
      */
     @Transactional(readOnly = true)
     public IPage list(SysRoleListReq sysRoleListReq) {
-        return sysRoleMapper.selectPage(new Page<>(sysRoleListReq.getPageNum(), sysRoleListReq.getPageSize()),
+        return this.page(new Page<>(sysRoleListReq.getPageNum(), sysRoleListReq.getPageSize()),
                 new LambdaQueryWrapper<SysRole>()
                         .like(StringUtils.isNotBlank(sysRoleListReq.getRoleName()), SysRole::getRoleName , sysRoleListReq.getRoleName())
                         .like(StringUtils.isNotBlank(sysRoleListReq.getRoleKey()), SysRole::getRoleKey , sysRoleListReq.getRoleKey()));
@@ -80,6 +82,8 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
 
     /**
      * 添加请求
+     * @param sysRoleAddReq 添加角色对象
+     * @return 添加角色状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public int add(@NotNull SysRoleAddReq sysRoleAddReq) {
@@ -100,6 +104,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
 
     /**
      * 编辑请求
+     * @param sysRoleEditReq 编辑角色对象
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public int edit(SysRoleEditReq sysRoleEditReq) {
@@ -139,22 +144,19 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
 
     /**
      * 删除请求
+     * @param id 角色id
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public int del(Long id) {
-        int flag = sysRoleMapper.deleteById(id);
-        if (flag > 0) {
-            // 删除角色关联菜单
-             sysRoleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>()
-                    .eq(SysRoleMenu::getRoleId,id));
-            return flag;
-        }
-        throw new CrudException(ResultStatus.DELETE_DATA_ERROR);
+    public void del(Long id) {
+        sysRoleMapper.deleteById(id);
+        // 删除角色关联菜单
+        sysRoleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>()
+                .eq(SysRoleMenu::getRoleId,id));
     }
 
     /**
      * 查询角色列表
-     * @param ids ids
+     * @param ids 角色ids
      * @return 角色列表
      */
     @Transactional(readOnly = true)

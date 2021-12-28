@@ -11,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 
 /**
  * @author yangyouwang
@@ -23,16 +22,14 @@ import javax.annotation.Resource;
 @Service
 public class SysLogService extends ServiceImpl<SysLogMapper,SysLog> {
 
-    @Resource
-    private SysLogMapper sysLogMapper;
-
     /**
      * 列表请求
+     * @param sysLogListReq 日志列表对象
      * @return 请求列表
      */
     @Transactional(readOnly = true)
     public IPage list(SysLogListReq sysLogListReq) {
-        return sysLogMapper.selectPage(new Page<>(sysLogListReq.getPageNum(), sysLogListReq.getPageSize()),
+        return this.page(new Page<>(sysLogListReq.getPageNum(), sysLogListReq.getPageSize()),
                 new LambdaQueryWrapper<SysLog>()
                         .like(StringUtils.isNotBlank(sysLogListReq.getClassName()), SysLog::getClassName , sysLogListReq.getClassName())
                         .like(StringUtils.isNotBlank(sysLogListReq.getMethodName()), SysLog::getMethodName , sysLogListReq.getMethodName()));

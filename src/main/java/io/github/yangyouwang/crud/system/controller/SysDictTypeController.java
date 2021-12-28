@@ -56,6 +56,7 @@ public class SysDictTypeController {
 
     /**
      * 跳转编辑
+     * @param id 字典id
      * @return 编辑页面
      */
     @GetMapping("/editPage/{id}")
@@ -67,6 +68,7 @@ public class SysDictTypeController {
 
     /**
      * 列表请求
+     * @param sysDictListReq 请求字典列表参数
      * @return 请求列表
      */
     @GetMapping("/list")
@@ -81,6 +83,7 @@ public class SysDictTypeController {
 
     /**
      * 添加请求
+     * @param sysDictAddReq 添加字典参数
      * @return 添加状态
      */
     @CrudLog
@@ -96,6 +99,7 @@ public class SysDictTypeController {
 
     /**
      * 编辑请求
+     * @param sysDictEditReq 编辑字典参数
      * @return 编辑状态
      */
     @CrudLog
@@ -111,6 +115,7 @@ public class SysDictTypeController {
 
     /**
      * 修改字典状态
+     * @param sysDictTypeEnabledReq 修改字典参数
      * @return 修改状态
      */
     @CrudLog
@@ -126,13 +131,14 @@ public class SysDictTypeController {
 
     /**
      * 删除请求
+     * @param id 字典id
      * @return 删除状态
      */
     @CrudLog
     @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result delKey(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
-        int flag = sysDictTypeService.del(id);
-        return Result.success(flag);
+        sysDictTypeService.del(id);
+        return Result.success();
     }
 }

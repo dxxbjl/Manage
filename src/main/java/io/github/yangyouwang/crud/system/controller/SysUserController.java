@@ -3,17 +3,14 @@ package io.github.yangyouwang.crud.system.controller;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.metadata.Sheet;
 import com.alibaba.excel.support.ExcelTypeEnum;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.core.util.SecurityUtils;
-import io.github.yangyouwang.crud.system.entity.SysUser;
 import io.github.yangyouwang.crud.system.model.req.*;
 import io.github.yangyouwang.crud.system.model.resp.SysUserResp;
 import io.github.yangyouwang.crud.system.service.SysUserService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -30,7 +27,6 @@ import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 
 /**
@@ -97,6 +93,7 @@ public class SysUserController {
 
     /**
      * 跳转编辑
+     * @param id 用户id
      * @return 编辑页面
      */
     @GetMapping("/editPage/{id}")
@@ -108,6 +105,7 @@ public class SysUserController {
 
     /**
      * 跳转重置密码
+     * @param id 用户id
      * @return 重置密码页面
      */
     @GetMapping("/resetPassPage/{id}")
@@ -119,6 +117,7 @@ public class SysUserController {
 
     /**
      * 重置密码
+     * @param sysUserResetPassReq 重置用户密码对象
      * @return 重置密码状态
      */
     @CrudLog
@@ -134,6 +133,7 @@ public class SysUserController {
 
     /**
      * 修改密码
+     * @param modifyPassReq 修改密码对象
      * @return 修改状态
      */
     @CrudLog
@@ -149,6 +149,7 @@ public class SysUserController {
 
     /**
      * 列表请求
+     * @param sysUserListReq 用户列表对象
      * @return 请求列表
      */
     @GetMapping("/list")
@@ -163,6 +164,7 @@ public class SysUserController {
 
     /**
      * 添加请求
+     * @param sysUserAddReq 添加用户对象
      * @return 添加状态
      */
     @CrudLog
@@ -178,6 +180,7 @@ public class SysUserController {
 
     /**
      * 编辑请求
+     * @param sysUserEditReq 编辑用户对象
      * @return 编辑状态
      */
     @CrudLog
@@ -193,6 +196,7 @@ public class SysUserController {
 
     /**
      * 编辑用户信息请求
+     * @param sysUserEditUserInfoReq 编辑用户对象
      * @return 编辑状态
      */
     @CrudLog
@@ -208,6 +212,7 @@ public class SysUserController {
 
     /**
      * 修改用户状态
+     * @param sysUserEnabledReq 修改用户状态对象
      * @return 修改状态
      */
     @CrudLog
@@ -223,14 +228,15 @@ public class SysUserController {
 
     /**
      * 删除请求
+     * @param id 用户id
      * @return 删除状态
      */
     @CrudLog
     @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
-        int flag = sysUserService.del(id);
-        return Result.success(flag);
+        sysUserService.del(id);
+        return Result.success();
     }
 
     /**

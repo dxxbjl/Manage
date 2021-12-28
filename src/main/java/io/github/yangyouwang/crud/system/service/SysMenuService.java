@@ -78,6 +78,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
 
     /**
      * 跳转编辑
+     * @param id 菜单id
      * @return 编辑页面
      */
     @Transactional(readOnly = true)
@@ -90,6 +91,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
 
     /**
      * 列表请求
+     * @param sysMenuListReq 请求菜单列表对象
      * @return 请求列表
      */
     @Transactional(readOnly = true)
@@ -105,6 +107,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
 
     /**
      * 添加请求
+     * @param sysMenuAddReq 添加菜单对象
      * @return 添加状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
@@ -116,6 +119,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
 
     /**
      * 编辑请求
+     * @param sysMenuEditReq 编辑菜单对象
      * @return 修改状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
@@ -127,22 +131,18 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
 
     /**
      * 删除请求
-     * @return 删除状态
+     * @param id 菜单id
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public int del(Long id) {
+    public void del(Long id) {
         // 删除子菜单
         Integer count = sysMenuMapper.selectCount(new LambdaQueryWrapper<SysMenu>()
                 .eq(SysMenu::getParentId, id));
         if (count == 0) {
-            int flag = sysMenuMapper.deleteById(id);
-            if (flag  > 0) {
-                // 删除角色关联菜单
-                sysRoleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>()
-                        .eq(SysRoleMenu::getMenuId, id));
-                return flag;
-            }
-            throw new CrudException(ResultStatus.DELETE_DATA_ERROR);
+            sysMenuMapper.deleteById(id);
+            // 删除角色关联菜单
+            sysRoleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>()
+                    .eq(SysRoleMenu::getMenuId, id));
         }
         throw new CrudException(ResultStatus.MENU_EXIST_ERROR);
     }
@@ -169,7 +169,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
 
     /**
      * 查询菜单列表
-     * @param ids ids
+     * @param ids 菜单ids
      * @return 菜单列表
      */
     @Transactional(readOnly = true)
@@ -191,6 +191,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
 
     /**
      * 更新菜单状态
+     * @param sysMenuVisibleReq 更新菜单对象
      * @return 更新状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)

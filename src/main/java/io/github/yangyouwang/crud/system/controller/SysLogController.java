@@ -48,6 +48,7 @@ public class SysLogController {
 
     /**
      * 列表请求
+     * @param sysLogListReq 日志列表对象
      * @return 请求列表
      */
     @GetMapping("/list")
@@ -62,13 +63,14 @@ public class SysLogController {
 
     /**
      * 删除请求
+     * @param id 日志id
      * @return 删除状态
      */
     @CrudLog
     @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
-        boolean flag = sysLogService.removeById(id);
-        return Result.success(flag);
+        sysLogService.removeById(id);
+        return Result.success();
     }
 }

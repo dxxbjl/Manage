@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.XmSelectNode;
-import io.github.yangyouwang.crud.system.entity.SysRole;
 import io.github.yangyouwang.crud.system.model.req.*;
 import io.github.yangyouwang.crud.system.model.resp.SysRoleResp;
 import io.github.yangyouwang.crud.system.service.SysRoleService;
@@ -60,6 +59,7 @@ public class SysRoleController {
 
     /**
      * 跳转编辑
+     * @param id 角色id
      * @return 编辑页面
      */
     @GetMapping("/editPage/{id}")
@@ -72,6 +72,7 @@ public class SysRoleController {
 
     /**
      * 列表请求
+     * @param sysRoleListReq 请求角色列表对象
      * @return 请求列表
      */
     @GetMapping("/list")
@@ -86,6 +87,7 @@ public class SysRoleController {
 
     /**
      * 添加请求
+     * @param sysRoleAddReq 添加角色对象
      * @return 添加状态
      */
     @CrudLog
@@ -101,6 +103,7 @@ public class SysRoleController {
 
     /**
      * 编辑请求
+     * @param sysRoleEditReq 编辑角色对象
      * @return 编辑状态
      */
     @CrudLog
@@ -116,19 +119,20 @@ public class SysRoleController {
 
     /**
      * 删除请求
+     * @param id 角色id
      * @return 删除状态
      */
     @CrudLog
     @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
-        int flag = sysRoleService.del(id);
-        return Result.success(flag);
+        sysRoleService.del(id);
+        return Result.success();
     }
 
     /**
      * 查询角色列表
-     * @param ids ids
+     * @param ids 角色ids
      * @return 角色列表
      */
     @GetMapping("/xmSelect")

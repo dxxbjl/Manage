@@ -63,6 +63,7 @@ public class SysMenuController {
 
     /**
      * 跳转编辑
+     * @param id 菜单id
      * @return 编辑页面
      */
     @GetMapping("/editPage/{id}")
@@ -74,6 +75,7 @@ public class SysMenuController {
 
     /**
      * 列表请求
+     * @param sysMenuListReq 请求菜单列表对象
      * @return 请求列表
      */
     @GetMapping("/list")
@@ -85,6 +87,7 @@ public class SysMenuController {
 
     /**
      * 添加请求
+     * @param sysMenuAddReq 添加菜单对象
      * @return 添加状态
      */
     @CrudLog
@@ -100,6 +103,7 @@ public class SysMenuController {
 
     /**
      * 编辑请求
+     * @param sysMenuEditReq 编辑菜单对象
      * @return 编辑状态
      */
     @CrudLog
@@ -115,6 +119,7 @@ public class SysMenuController {
 
     /**
      * 更新菜单状态
+     * @param sysMenuVisibleReq 更新菜单对象
      * @return 菜单状态
      */
     @CrudLog
@@ -130,14 +135,15 @@ public class SysMenuController {
 
     /**
      * 删除请求
+     * @param id 删除id
      * @return 删除状态
      */
     @CrudLog
     @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
-        int flag = sysMenuService.del(id);
-        return Result.success(flag);
+        sysMenuService.del(id);
+        return Result.success();
     }
 
     /**
@@ -152,7 +158,7 @@ public class SysMenuController {
 
     /**
      * 查询菜单列表
-     * @param ids ids
+     * @param ids 菜单id列表
      * @return 菜单列表
      */
     @GetMapping("/xmSelect")

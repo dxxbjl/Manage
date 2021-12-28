@@ -51,18 +51,20 @@ public class SysDictValueController {
 
     /**
      * 删除字典值请求
+     * @param id 字典id
      * @return 删除状态
      */
     @CrudLog
     @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
-        int flag = sysDictValueService.del(id);
-        return Result.success(flag);
+        sysDictValueService.removeById(id);
+        return Result.success();
     }
 
     /**
      * 跳转添加
+     * @param id 字典类型id
      * @return 添加页面
      */
     @GetMapping("/addPage/{id}")
@@ -73,6 +75,7 @@ public class SysDictValueController {
 
     /**
      * 跳转编辑
+     * @param id 字典值id
      * @return 编辑页面
      */
     @GetMapping("/editPage/{id}")
@@ -84,6 +87,7 @@ public class SysDictValueController {
 
     /**
      * 添加请求
+     * @param sysDictValueAddReq 添加字典值对象
      * @return 添加状态
      */
     @CrudLog
@@ -99,6 +103,7 @@ public class SysDictValueController {
 
     /**
      * 编辑请求
+     * @param sysDictValueEditReq 编辑字典值对象
      * @return 编辑状态
      */
     @CrudLog

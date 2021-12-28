@@ -32,6 +32,8 @@ public class SysCommonController {
 
     /**
      * 通用上传请求
+     * @param fileDir 图片路径
+     * @return 图片路径相应
      */
     @PostMapping("/upload")
     @ResponseBody
