@@ -14,6 +14,7 @@ import java.io.Serializable;
  */
 @Data
 public class SysMenuListReq implements Serializable {
+    private static final long serialVersionUID = -1912383352435987548L;
     /**
      * 菜单名称
      */

@@ -19,6 +19,7 @@ import java.io.Serializable;
 @Data
 public class SysUserResp extends BaseRowModel implements Serializable {
 
+    private static final long serialVersionUID = -4440639783323640070L;
     /**
      * 主键id
      */

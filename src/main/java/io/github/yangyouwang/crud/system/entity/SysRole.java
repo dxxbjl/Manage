@@ -20,6 +20,7 @@ import java.util.List;
 @TableName("sys_role")
 public class SysRole extends BaseEntity {
 
+    private static final long serialVersionUID = -8932638904580917498L;
     /**
      * 主键id
      */

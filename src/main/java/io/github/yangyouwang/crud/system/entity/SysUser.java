@@ -18,6 +18,7 @@ import java.util.List;
 @Data
 @TableName("sys_user")
 public class SysUser extends BaseEntity {
+    private static final long serialVersionUID = 4718572152888798906L;
     /**
      * 主键id
      */

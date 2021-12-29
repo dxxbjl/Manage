@@ -5,9 +5,9 @@ spring:
       primary: master #设置默认的数据源或者数据源组,默认值即为master
       datasource:
         master:
-          url: jdbc:mysql://192.168.3.19:3306/crud?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&nullCatalogMeansCurrent=true&autoReconnect=true&allowMultiQueries=true&useSSL=false
+          url: jdbc:mysql://192.168.3.50:3306/crud?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&nullCatalogMeansCurrent=true&autoReconnect=true&allowMultiQueries=true&useSSL=false
           username: root
-          password: 123456
+          password: Root123..
           driver-class-name: com.mysql.jdbc.Driver # 3.2.0开始支持SPI可省略此配置
         slave:
           url: jdbc:mysql://localhost:3306/crud?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&nullCatalogMeansCurrent=true&autoReconnect=true&allowMultiQueries=true&useSSL=false
@@ -41,7 +41,7 @@ spring:
   # redis配置
   redis:
     ssl: false
-    host: 127.0.0.1
+    host: 192.168.3.50
     port: 6379
     database: 0
     timeout: 1000

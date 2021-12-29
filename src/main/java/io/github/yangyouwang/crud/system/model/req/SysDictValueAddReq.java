@@ -15,6 +15,7 @@ import java.util.List;
  */
 @Data
 public class SysDictValueAddReq implements Serializable {
+    private static final long serialVersionUID = -7563787018756901L;
     /**
      * 字典类型id
      */

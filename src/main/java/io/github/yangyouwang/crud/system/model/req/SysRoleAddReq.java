@@ -16,6 +16,7 @@ import java.io.Serializable;
  */
 @Data
 public class SysRoleAddReq implements Serializable {
+    private static final long serialVersionUID = 3505539384772250573L;
     /**
      * 角色名称
      */

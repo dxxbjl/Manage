@@ -17,6 +17,7 @@ import java.io.Serializable;
 @Data
 public class SysMenuEditReq implements Serializable {
 
+    private static final long serialVersionUID = -2759603071167420913L;
     /**
      * 主键id
      */

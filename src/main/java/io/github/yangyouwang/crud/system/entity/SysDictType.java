@@ -18,6 +18,7 @@ import java.util.List;
 @Data
 @TableName("sys_dict_type")
 public class SysDictType extends BaseEntity {
+    private static final long serialVersionUID = 616049205960190106L;
     /**
      * 主键id
      */

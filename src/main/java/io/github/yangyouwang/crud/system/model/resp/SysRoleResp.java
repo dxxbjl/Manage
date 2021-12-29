@@ -14,6 +14,7 @@ import java.io.Serializable;
  */
 @Data
 public class SysRoleResp implements Serializable {
+    private static final long serialVersionUID = 2757982456198348622L;
     /**
      * 主键id
      */

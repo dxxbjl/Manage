@@ -16,6 +16,7 @@ import java.io.Serializable;
 @Data
 public class ModifyPassReq implements Serializable {
 
+    private static final long serialVersionUID = -2784032352485715834L;
     /**
      * 主键id
      */

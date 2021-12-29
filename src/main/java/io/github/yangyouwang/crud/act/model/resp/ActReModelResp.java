@@ -14,6 +14,7 @@ import java.util.Date;
  */
 @Data
 public class ActReModelResp implements Serializable {
+    private static final long serialVersionUID = 6787178412838338861L;
     /** ID_ */
     private String id;
 

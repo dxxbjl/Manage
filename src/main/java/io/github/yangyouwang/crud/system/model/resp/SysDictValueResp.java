@@ -12,6 +12,7 @@ import java.io.Serializable;
  */
 @Data
 public class SysDictValueResp implements Serializable {
+    private static final long serialVersionUID = -3914109107568119461L;
     /**
      * 主键
      */

@@ -14,6 +14,7 @@ import java.io.Serializable;
  */
 @Data
 public class SysTaskListReq implements Serializable {
+    private static final long serialVersionUID = -8369361037044697047L;
     /**
      * pageNum
      */

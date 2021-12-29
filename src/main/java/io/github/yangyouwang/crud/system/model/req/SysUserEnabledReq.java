@@ -16,6 +16,7 @@ import java.io.Serializable;
 @Data
 public class SysUserEnabledReq implements Serializable {
 
+    private static final long serialVersionUID = -1514676296852041028L;
     /**
      * 主键id
      */

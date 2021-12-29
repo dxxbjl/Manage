@@ -17,6 +17,7 @@ import java.io.Serializable;
 @Data
 public class SysUserAddReq implements Serializable {
 
+    private static final long serialVersionUID = -4071718798454574198L;
     /**
      * 账号
      */

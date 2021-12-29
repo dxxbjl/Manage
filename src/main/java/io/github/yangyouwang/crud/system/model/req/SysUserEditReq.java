@@ -18,6 +18,7 @@ import java.io.Serializable;
 @Data
 public class SysUserEditReq implements Serializable {
 
+    private static final long serialVersionUID = -7564648683856200495L;
     /**
      * 主键id
      */

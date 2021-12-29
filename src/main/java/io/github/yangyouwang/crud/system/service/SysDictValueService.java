@@ -9,6 +9,7 @@ import io.github.yangyouwang.crud.system.model.req.SysDictValueAddReq;
 import io.github.yangyouwang.crud.system.model.req.SysDictValueEditReq;
 import io.github.yangyouwang.crud.system.model.resp.SysDictValueResp;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -42,6 +43,7 @@ public class SysDictValueService extends ServiceImpl<SysDictValueMapper, SysDict
      * @param dictKey 字典key
      * @return 请求列表
      */
+    @Cacheable(cacheNames = {"dictValues"},key = "#dictKey")
     @Transactional(readOnly = true)
     public List<SysDictValueResp> getDictValues(String dictKey) {
         SysDictType sysDictType = sysDictTypeMapper.findDictByKey(dictKey);

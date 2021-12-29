@@ -15,6 +15,7 @@ import java.io.Serializable;
  */
 @Data
 public class SysMenuVisibleReq implements Serializable {
+    private static final long serialVersionUID = 5932349475956234610L;
     /**
      * id
      */

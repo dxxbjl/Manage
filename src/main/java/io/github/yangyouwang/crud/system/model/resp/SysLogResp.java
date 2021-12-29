@@ -15,6 +15,7 @@ import java.util.Date;
  */
 @Data
 public class SysLogResp implements Serializable {
+    private static final long serialVersionUID = -6756889713225649305L;
     /**
      * 主键id
      */

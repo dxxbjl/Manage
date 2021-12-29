@@ -4,10 +4,7 @@ layui.define(['jquery'], function(exports){
 
     function options(name) {
         let list = [];
-        let dict = window.sessionStorage.getItem(name);
-        if (dict) {
-            list = JSON.parse(dict);
-        } else {
+        if (name) {
             // 获取字典
             $.ajax({
                 type: 'get',
@@ -21,7 +18,6 @@ layui.define(['jquery'], function(exports){
                     }
                 }
             });
-            window.sessionStorage.setItem(name, JSON.stringify(list));
         }
         return list;
     }

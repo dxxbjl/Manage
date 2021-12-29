@@ -20,6 +20,7 @@ import java.util.List;
 @Data
 @TableName("sys_menu")
 public class SysMenu extends BaseEntity {
+    private static final long serialVersionUID = -152572856637313896L;
     /**
      * 主键id
      */

@@ -13,9 +13,7 @@ import lombok.Data;
 @Data
 @TableName("sys_user_role")
 public class SysUserRole implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
+    private static final long serialVersionUID = -7264301461832724050L;
     /**
      * 用户id
      */

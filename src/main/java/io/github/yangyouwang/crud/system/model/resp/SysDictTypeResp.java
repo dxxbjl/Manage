@@ -14,6 +14,7 @@ import java.io.Serializable;
 @Data
 public class SysDictTypeResp implements Serializable {
 
+    private static final long serialVersionUID = 5385502603841755082L;
     /**
      * 主键id
      */

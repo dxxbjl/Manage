@@ -14,6 +14,7 @@ import java.io.Serializable;
  */
 @Data
 public class SysDictTypeListReq implements Serializable {
+    private static final long serialVersionUID = 278471990568899626L;
     /**
      * pageNum
      */

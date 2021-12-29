@@ -15,6 +15,7 @@ import java.io.Serializable;
 @Data
 public class SysTaskAddReq implements Serializable {
 
+    private static final long serialVersionUID = -5068908296247542518L;
     /**
      * 名称
      */

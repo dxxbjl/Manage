@@ -16,6 +16,7 @@ import java.io.Serializable;
 @Data
 public class SysUserResetPassReq implements Serializable {
 
+    private static final long serialVersionUID = 2034614882841217030L;
     /**
      * 主键id
      */

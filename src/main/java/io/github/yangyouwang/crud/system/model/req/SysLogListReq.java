@@ -14,6 +14,7 @@ import java.io.Serializable;
  */
 @Data
 public class SysLogListReq implements Serializable {
+    private static final long serialVersionUID = 5703718482416679645L;
     /**
      * pageNum
      */

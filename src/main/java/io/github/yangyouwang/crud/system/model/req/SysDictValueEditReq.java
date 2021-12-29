@@ -15,6 +15,7 @@ import java.io.Serializable;
  */
 @Data
 public class SysDictValueEditReq implements Serializable {
+    private static final long serialVersionUID = 6085691567117098661L;
     /**
      * 主键
      */

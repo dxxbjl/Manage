@@ -13,6 +13,7 @@ import java.io.Serializable;
  */
 @Data
 public class SysTaskResp implements Serializable {
+    private static final long serialVersionUID = 8901039427392745070L;
     /**
      * 用户id
      */

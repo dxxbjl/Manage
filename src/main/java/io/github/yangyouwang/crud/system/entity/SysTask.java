@@ -17,6 +17,7 @@ import lombok.Data;
 @Data
 @TableName("sys_task")
 public class SysTask extends BaseEntity {
+    private static final long serialVersionUID = -4300439268912742111L;
     /**
      * 主键id
      */
