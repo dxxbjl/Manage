@@ -5,6 +5,7 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.metadata.BaseRowModel;
 import io.github.yangyouwang.core.converter.SexConverter;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
@@ -17,6 +18,7 @@ import java.io.Serializable;
  * @date 2021/3/254:43 PM
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class SysUserDTO extends BaseRowModel implements Serializable {
 
     private static final long serialVersionUID = -4440639783323640070L;

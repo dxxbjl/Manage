@@ -1,6 +1,6 @@
 package io.github.yangyouwang.crud.system.model.params;
 
-import io.github.yangyouwang.common.domain.PageDto;
+import io.github.yangyouwang.common.domain.BasePageDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,7 +15,7 @@ import java.io.Serializable;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class SysTaskListDTO extends PageDto implements Serializable {
+public class SysTaskListDTO extends BasePageDTO implements Serializable {
     private static final long serialVersionUID = -8369361037044697047L;
     /**
      * 名称

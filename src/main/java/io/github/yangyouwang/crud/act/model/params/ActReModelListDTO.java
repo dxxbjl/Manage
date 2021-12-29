@@ -1,6 +1,6 @@
 package io.github.yangyouwang.crud.act.model.params;
 
-import io.github.yangyouwang.common.domain.PageDto;
+import io.github.yangyouwang.common.domain.BasePageDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,7 +15,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ActReModelListDTO extends PageDto implements Serializable {
+public class ActReModelListDTO extends BasePageDTO implements Serializable {
 
     private static final long serialVersionUID = 2888819015484058143L;
     /** 名称 */

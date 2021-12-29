@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
  * @since JDK 1.8
  */
 @Data
-public class PageDto {
+public class BasePageDTO {
     /**
      * pageNum
      */
