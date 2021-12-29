@@ -2,6 +2,7 @@ package io.github.yangyouwang.core.config;
 
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +26,7 @@ import static org.springframework.data.redis.cache.RedisCacheConfiguration.defau
  * @version v1.0
  * @since JDK 1.8
  */
+@EnableCaching
 @Configuration
 public class CacheConfig extends CachingConfigurerSupport {
 
