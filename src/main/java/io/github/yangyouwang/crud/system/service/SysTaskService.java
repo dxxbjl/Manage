@@ -8,9 +8,9 @@ import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.core.config.SchedulingConfig;
 import io.github.yangyouwang.crud.system.mapper.SysTaskMapper;
 import io.github.yangyouwang.crud.system.entity.SysTask;
-import io.github.yangyouwang.crud.system.model.req.SysTaskAddReq;
-import io.github.yangyouwang.crud.system.model.req.SysTaskListReq;
-import io.github.yangyouwang.crud.system.model.resp.SysTaskResp;
+import io.github.yangyouwang.crud.system.model.params.SysTaskAddDTO;
+import io.github.yangyouwang.crud.system.model.params.SysTaskListDTO;
+import io.github.yangyouwang.crud.system.model.result.SysTaskDTO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -38,35 +38,35 @@ public class SysTaskService extends ServiceImpl<SysTaskMapper, SysTask> {
      * @return 编辑页面
      */
     @Transactional(readOnly = true)
-    public SysTaskResp detail(Long id) {
+    public SysTaskDTO detail(Long id) {
         SysTask sysTask = this.getById(id);
-        SysTaskResp sysTaskResp = new SysTaskResp();
-        BeanUtils.copyProperties(sysTask,sysTaskResp);
-        return sysTaskResp;
+        SysTaskDTO sysTaskDTO = new SysTaskDTO();
+        BeanUtils.copyProperties(sysTask,sysTaskDTO);
+        return sysTaskDTO;
     }
 
     /**
      * 列表请求
-     * @param sysTaskListReq 请求任务列表对象
+     * @param sysTaskListDTO 请求任务列表对象
      * @return 请求列表
      */
     @Transactional(readOnly = true)
-    public IPage list(SysTaskListReq sysTaskListReq) {
-        return this.page(new Page<>(sysTaskListReq.getPageNum(), sysTaskListReq.getPageSize()),
+    public IPage list(SysTaskListDTO sysTaskListDTO) {
+        return this.page(new Page<>(sysTaskListDTO.getPageNum(), sysTaskListDTO.getPageSize()),
                 new LambdaQueryWrapper<SysTask>()
-                        .like(StringUtils.isNotBlank(sysTaskListReq.getName()), SysTask::getName , sysTaskListReq.getName())
-                        .like(StringUtils.isNotBlank(sysTaskListReq.getClassName()), SysTask::getClassName , sysTaskListReq.getClassName()));
+                        .like(StringUtils.isNotBlank(sysTaskListDTO.getName()), SysTask::getName , sysTaskListDTO.getName())
+                        .like(StringUtils.isNotBlank(sysTaskListDTO.getClassName()), SysTask::getClassName , sysTaskListDTO.getClassName()));
     }
 
     /**
      * 添加请求
-     * @param sysTaskAddReq 添加任务对象
+     * @param sysTaskAddDTO 添加任务对象
      * @return 添加任务状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public boolean add(SysTaskAddReq sysTaskAddReq) {
+    public boolean add(SysTaskAddDTO sysTaskAddDTO) {
         SysTask sysTask = new SysTask();
-        BeanUtils.copyProperties(sysTaskAddReq,sysTask);
+        BeanUtils.copyProperties(sysTaskAddDTO,sysTask);
         if (Constants.ENABLED_YES.equals(sysTask.getEnabled())) {
             // 添加任务
             schedulingConfig.addTriggerTask(sysTask.getName(),sysTask.getClassName(),sysTask.getMethodName(),sysTask.getCron());
@@ -86,7 +86,6 @@ public class SysTaskService extends ServiceImpl<SysTaskMapper, SysTask> {
         if (Constants.ENABLED_YES.equals(sysTask.getEnabled())) {
             // 添加任务
             schedulingConfig.addTriggerTask(sysTask.getName(),sysTask.getClassName(),sysTask.getMethodName(),sysTask.getCron());
-            return this.updateById(sysTask);
         }
         return this.updateById(sysTask);
     }

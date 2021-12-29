@@ -15,7 +15,7 @@ package io.github.yangyouwang.crud.act.controller;
 import cn.hutool.core.io.IoUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.github.yangyouwang.crud.act.model.req.SaveModelReq;
+import io.github.yangyouwang.crud.act.model.params.SaveModelDT0;
 import org.activiti.editor.constants.ModelDataJsonConstants;
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.RepositoryService;
@@ -51,7 +51,7 @@ public class ModelSaveRestResource implements ModelDataJsonConstants {
   
   @RequestMapping(value="/model/{modelId}/save", method = RequestMethod.PUT)
   @ResponseStatus(value = HttpStatus.OK)
-  public void saveModel(@PathVariable String modelId, SaveModelReq saveModelReq) {
+  public void saveModel(@PathVariable String modelId, SaveModelDT0 saveModelReq) {
     InputStream svgStream = null;
     ByteArrayOutputStream outStream = null;
     try {

@@ -3,8 +3,8 @@ package io.github.yangyouwang.crud.system.controller;
 import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.core.util.SecurityUtils;
 import io.github.yangyouwang.core.util.StringUtil;
-import io.github.yangyouwang.crud.system.model.resp.SysMenuResp;
-import io.github.yangyouwang.crud.system.model.resp.SysUserResp;
+import io.github.yangyouwang.crud.system.model.result.SysMenuDTO;
+import io.github.yangyouwang.crud.system.model.result.SysUserDTO;
 import io.github.yangyouwang.crud.system.service.SysMenuService;
 import io.github.yangyouwang.crud.system.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,8 +50,8 @@ public class SysLoginController {
     @GetMapping("/")
     public String indexPage(ModelMap map) {
         User user = SecurityUtils.getSysUser();
-        SysUserResp sysUser = sysUserService.findUserByName(user.getUsername());
-        List<SysMenuResp> sysMenus = sysMenuService.selectMenusByUser(sysUser.getId());
+        SysUserDTO sysUser = sysUserService.findUserByName(user.getUsername());
+        List<SysMenuDTO> sysMenus = sysMenuService.selectMenusByUser(sysUser.getId());
         map.put("sysMenus",sysMenus);
         map.put("sysUser",sysUser);
         return "index";

@@ -15,11 +15,11 @@ import io.github.yangyouwang.crud.system.mapper.SysMenuMapper;
 import io.github.yangyouwang.crud.system.mapper.SysRoleMenuMapper;
 import io.github.yangyouwang.crud.system.entity.SysMenu;
 import io.github.yangyouwang.crud.system.entity.SysRoleMenu;
-import io.github.yangyouwang.crud.system.model.req.SysMenuAddReq;
-import io.github.yangyouwang.crud.system.model.req.SysMenuEditReq;
-import io.github.yangyouwang.crud.system.model.req.SysMenuListReq;
-import io.github.yangyouwang.crud.system.model.req.SysMenuVisibleReq;
-import io.github.yangyouwang.crud.system.model.resp.SysMenuResp;
+import io.github.yangyouwang.crud.system.model.params.SysMenuAddDTO;
+import io.github.yangyouwang.crud.system.model.params.SysMenuEditDTO;
+import io.github.yangyouwang.crud.system.model.params.SysMenuListDTO;
+import io.github.yangyouwang.crud.system.model.params.SysMenuVisibleDTO;
+import io.github.yangyouwang.crud.system.model.result.SysMenuDTO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.access.AccessDeniedException;
@@ -57,7 +57,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
      * @return 菜单信息
      */
     @Transactional(readOnly = true)
-    public List<SysMenuResp> selectMenusByUser(Long userId) {
+    public List<SysMenuDTO> selectMenusByUser(Long userId) {
         List<SysMenu> menus;
         if (Constants.ADMIN_USER.equals(userId)) {
             menus = this.sysMenuMapper.findMenu();
@@ -67,13 +67,13 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
         if (menus.size() == 0) {
             throw new AccessDeniedException(ResultStatus.MENU_NULL_ERROR.message);
         }
-        List<SysMenuResp> sysMenuResps = menus.stream().map(sysMenu -> {
-            SysMenuResp sysMenuResp = new SysMenuResp();
-            BeanUtil.copyProperties(sysMenu, sysMenuResp, true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
-            return sysMenuResp;
+        List<SysMenuDTO> sysMenuDTOS = menus.stream().map(sysMenu -> {
+            SysMenuDTO sysMenuDTO = new SysMenuDTO();
+            BeanUtil.copyProperties(sysMenu, sysMenuDTO, true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+            return sysMenuDTO;
         }).collect(Collectors.toList());
         ListToTree treeBuilder = new ListToTreeImpl();
-        return treeBuilder.toTree(sysMenuResps);
+        return treeBuilder.toTree(sysMenuDTOS);
     }
 
     /**
@@ -82,51 +82,51 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
      * @return 编辑页面
      */
     @Transactional(readOnly = true)
-    public SysMenuResp detail(Long id) {
+    public SysMenuDTO detail(Long id) {
         SysMenu sysMenu = sysMenuMapper.findMenuById(id);
-        SysMenuResp sysMenuResp = new SysMenuResp();
-        BeanUtils.copyProperties(sysMenu,sysMenuResp);
-        return sysMenuResp;
+        SysMenuDTO sysMenuDTO = new SysMenuDTO();
+        BeanUtils.copyProperties(sysMenu,sysMenuDTO);
+        return sysMenuDTO;
     }
 
     /**
      * 列表请求
-     * @param sysMenuListReq 请求菜单列表对象
+     * @param sysMenuListDTO 请求菜单列表对象
      * @return 请求列表
      */
     @Transactional(readOnly = true)
-    public List<SysMenuResp> list(SysMenuListReq sysMenuListReq) {
-        List<SysMenu> sysMenus = sysMenuMapper.selectList(new LambdaQueryWrapper<SysMenu>()
-                .like(StringUtils.isNotBlank(sysMenuListReq.getMenuName()), SysMenu::getMenuName , sysMenuListReq.getMenuName()));
+    public List<SysMenuDTO> list(SysMenuListDTO sysMenuListDTO) {
+        List<SysMenu> sysMenus = this.list(new LambdaQueryWrapper<SysMenu>()
+                .like(StringUtils.isNotBlank(sysMenuListDTO.getMenuName()), SysMenu::getMenuName , sysMenuListDTO.getMenuName()));
         return sysMenus.stream().map(s -> {
-            SysMenuResp sysMenuResp = new SysMenuResp();
-            BeanUtils.copyProperties(s,sysMenuResp);
-            return sysMenuResp;
+            SysMenuDTO sysMenuDTO = new SysMenuDTO();
+            BeanUtils.copyProperties(s,sysMenuDTO);
+            return sysMenuDTO;
         }).collect(Collectors.toList());
     }
 
     /**
      * 添加请求
-     * @param sysMenuAddReq 添加菜单对象
+     * @param sysMenuAddDTO 添加菜单对象
      * @return 添加状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public int add(SysMenuAddReq sysMenuAddReq) {
+    public boolean add(SysMenuAddDTO sysMenuAddDTO) {
         SysMenu sysMenu = new SysMenu();
-        BeanUtils.copyProperties(sysMenuAddReq,sysMenu);
-        return sysMenuMapper.insert(sysMenu);
+        BeanUtils.copyProperties(sysMenuAddDTO,sysMenu);
+        return this.save(sysMenu);
     }
 
     /**
      * 编辑请求
-     * @param sysMenuEditReq 编辑菜单对象
+     * @param sysMenuEditDTO 编辑菜单对象
      * @return 修改状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public int edit(SysMenuEditReq sysMenuEditReq) {
+    public boolean edit(SysMenuEditDTO sysMenuEditDTO) {
         SysMenu sysMenu = new SysMenu();
-        BeanUtils.copyProperties(sysMenuEditReq,sysMenu);
-        return sysMenuMapper.updateById(sysMenu);
+        BeanUtils.copyProperties(sysMenuEditDTO,sysMenu);
+        return this.updateById(sysMenu);
     }
 
     /**
@@ -136,15 +136,15 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void del(Long id) {
         // 删除子菜单
-        Integer count = sysMenuMapper.selectCount(new LambdaQueryWrapper<SysMenu>()
+        int count = this.count(new LambdaQueryWrapper<SysMenu>()
                 .eq(SysMenu::getParentId, id));
-        if (count == 0) {
-            sysMenuMapper.deleteById(id);
-            // 删除角色关联菜单
-            sysRoleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>()
-                    .eq(SysRoleMenu::getMenuId, id));
+        if (count != 0) {
+            throw new CrudException(ResultStatus.MENU_EXIST_ERROR);
         }
-        throw new CrudException(ResultStatus.MENU_EXIST_ERROR);
+        this.removeById(id);
+        // 删除角色关联菜单
+        sysRoleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>()
+                .eq(SysRoleMenu::getMenuId, id));
     }
 
     /**
@@ -153,7 +153,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
      */
     @Transactional(readOnly = true)
     public List<TreeSelectNode> treeSelect() {
-        List<SysMenu> menus = sysMenuMapper.selectList(new LambdaQueryWrapper<SysMenu>()
+        List<SysMenu> menus = this.list(new LambdaQueryWrapper<SysMenu>()
                 .eq(SysMenu::getVisible,Constants.ENABLED_YES));
         List<TreeSelectNode> result = menus.stream().map(sysMenu -> {
             TreeSelectNode treeNode = new TreeSelectNode();
@@ -174,7 +174,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
      */
     @Transactional(readOnly = true)
     public List<XmSelectNode> xmSelect(Long[] ids) {
-        List<SysMenu> menus = sysMenuMapper.selectList(new LambdaQueryWrapper<SysMenu>()
+        List<SysMenu> menus = this.list(new LambdaQueryWrapper<SysMenu>()
                 .eq(SysMenu::getVisible,Constants.ENABLED_YES));
         List<XmSelectNode> result = menus.stream().map(sysMenu -> {
             XmSelectNode treeNode = new XmSelectNode();
@@ -191,16 +191,16 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
 
     /**
      * 更新菜单状态
-     * @param sysMenuVisibleReq 更新菜单对象
+     * @param sysMenuVisibleDTO 更新菜单对象
      * @return 更新状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public int changeMenu(SysMenuVisibleReq sysMenuVisibleReq) {
-        Long id = sysMenuVisibleReq.getId();
-        String visible = sysMenuVisibleReq.getVisible();
+    public boolean changeMenu(SysMenuVisibleDTO sysMenuVisibleDTO) {
+        Long id = sysMenuVisibleDTO.getId();
+        String visible = sysMenuVisibleDTO.getVisible();
         SysMenu sysMenu = new SysMenu();
         sysMenu.setId(id);
         sysMenu.setVisible(visible);
-        return sysMenuMapper.updateById(sysMenu);
+        return this.updateById(sysMenu);
     }
 }

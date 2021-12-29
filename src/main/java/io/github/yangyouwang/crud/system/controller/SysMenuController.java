@@ -4,11 +4,11 @@ import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.TreeSelectNode;
 import io.github.yangyouwang.common.domain.XmSelectNode;
-import io.github.yangyouwang.crud.system.model.req.SysMenuAddReq;
-import io.github.yangyouwang.crud.system.model.req.SysMenuEditReq;
-import io.github.yangyouwang.crud.system.model.req.SysMenuListReq;
-import io.github.yangyouwang.crud.system.model.req.SysMenuVisibleReq;
-import io.github.yangyouwang.crud.system.model.resp.SysMenuResp;
+import io.github.yangyouwang.crud.system.model.params.SysMenuAddDTO;
+import io.github.yangyouwang.crud.system.model.params.SysMenuEditDTO;
+import io.github.yangyouwang.crud.system.model.params.SysMenuListDTO;
+import io.github.yangyouwang.crud.system.model.params.SysMenuVisibleDTO;
+import io.github.yangyouwang.crud.system.model.result.SysMenuDTO;
 import io.github.yangyouwang.crud.system.service.SysMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -68,68 +68,68 @@ public class SysMenuController {
      */
     @GetMapping("/editPage/{id}")
     public String editPage(@Valid @NotNull(message = "id不能为空") @PathVariable Long id, ModelMap map){
-        SysMenuResp sysMenu = sysMenuService.detail(id);
+        SysMenuDTO sysMenu = sysMenuService.detail(id);
         map.put("sysMenu",sysMenu);
         return SUFFIX + "/edit";
     }
 
     /**
      * 列表请求
-     * @param sysMenuListReq 请求菜单列表对象
+     * @param sysMenuListDTO 请求菜单列表对象
      * @return 请求列表
      */
     @GetMapping("/list")
     @ResponseBody
-    public Result list(SysMenuListReq sysMenuListReq) {
-        List<SysMenuResp> list = sysMenuService.list(sysMenuListReq);
+    public Result list(SysMenuListDTO sysMenuListDTO) {
+        List<SysMenuDTO> list = sysMenuService.list(sysMenuListDTO);
         return Result.success(list);
     }
 
     /**
      * 添加请求
-     * @param sysMenuAddReq 添加菜单对象
+     * @param sysMenuAddDTO 添加菜单对象
      * @return 添加状态
      */
     @CrudLog
     @PostMapping("/add")
     @ResponseBody
-    public Result add(@RequestBody @Validated SysMenuAddReq sysMenuAddReq, BindingResult bindingResult){
+    public Result add(@RequestBody @Validated SysMenuAddDTO sysMenuAddDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        int flag = sysMenuService.add(sysMenuAddReq);
+        boolean flag = sysMenuService.add(sysMenuAddDTO);
         return Result.success(flag);
     }
 
     /**
      * 编辑请求
-     * @param sysMenuEditReq 编辑菜单对象
+     * @param sysMenuEditDTO 编辑菜单对象
      * @return 编辑状态
      */
     @CrudLog
     @PostMapping("/edit")
     @ResponseBody
-    public Result edit(@RequestBody @Validated SysMenuEditReq sysMenuEditReq, BindingResult bindingResult){
+    public Result edit(@RequestBody @Validated SysMenuEditDTO sysMenuEditDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        int flag = sysMenuService.edit(sysMenuEditReq);
+        boolean flag = sysMenuService.edit(sysMenuEditDTO);
         return Result.success(flag);
     }
 
     /**
      * 更新菜单状态
-     * @param sysMenuVisibleReq 更新菜单对象
+     * @param sysMenuVisibleDTO 更新菜单对象
      * @return 菜单状态
      */
     @CrudLog
     @PostMapping("/changeMenu")
     @ResponseBody
-    public Result changeMenu(@RequestBody @Validated SysMenuVisibleReq sysMenuVisibleReq, BindingResult bindingResult){
+    public Result changeMenu(@RequestBody @Validated SysMenuVisibleDTO sysMenuVisibleDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        int flag = sysMenuService.changeMenu(sysMenuVisibleReq);
+        boolean flag = sysMenuService.changeMenu(sysMenuVisibleDTO);
         return Result.success(flag);
     }
 

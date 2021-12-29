@@ -3,8 +3,8 @@ package io.github.yangyouwang.crud.system.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.domain.Result;
-import io.github.yangyouwang.crud.system.model.req.SysLogListReq;
-import io.github.yangyouwang.crud.system.model.resp.SysLogResp;
+import io.github.yangyouwang.crud.system.model.params.SysLogListDTO;
+import io.github.yangyouwang.crud.system.model.result.SysLogDTO;
 import io.github.yangyouwang.crud.system.service.SysLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,16 +48,16 @@ public class SysLogController {
 
     /**
      * 列表请求
-     * @param sysLogListReq 日志列表对象
+     * @param sysLogListDTO 日志列表对象
      * @return 请求列表
      */
     @GetMapping("/list")
     @ResponseBody
-    public Result list(@Validated SysLogListReq sysLogListReq, BindingResult bindingResult) {
+    public Result list(@Validated SysLogListDTO sysLogListDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        IPage<SysLogResp> list = sysLogService.list(sysLogListReq);
+        IPage<SysLogDTO> list = sysLogService.list(sysLogListDTO);
         return Result.success(list);
     }
 

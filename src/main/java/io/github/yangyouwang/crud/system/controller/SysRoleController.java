@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.XmSelectNode;
-import io.github.yangyouwang.crud.system.model.req.*;
-import io.github.yangyouwang.crud.system.model.resp.SysRoleResp;
+import io.github.yangyouwang.crud.system.model.params.*;
+import io.github.yangyouwang.crud.system.model.result.SysRoleDTO;
 import io.github.yangyouwang.crud.system.service.SysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -64,7 +64,7 @@ public class SysRoleController {
      */
     @GetMapping("/editPage/{id}")
     public String editPage(@Valid @NotNull(message = "id不能为空") @PathVariable Long id, ModelMap map){
-        SysRoleResp sysRole = sysRoleService.detail(id);
+        SysRoleDTO sysRole = sysRoleService.detail(id);
         map.put("sysRole",sysRole);
         return SUFFIX + "/edit";
     }
@@ -72,49 +72,49 @@ public class SysRoleController {
 
     /**
      * 列表请求
-     * @param sysRoleListReq 请求角色列表对象
+     * @param sysRoleListDTO 请求角色列表对象
      * @return 请求列表
      */
     @GetMapping("/list")
     @ResponseBody
-    public Result list(@Validated SysRoleListReq sysRoleListReq, BindingResult bindingResult) {
+    public Result list(@Validated SysRoleListDTO sysRoleListDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        IPage<SysRoleResp> list = sysRoleService.list(sysRoleListReq);
+        IPage<SysRoleDTO> list = sysRoleService.list(sysRoleListDTO);
         return Result.success(list);
     }
 
     /**
      * 添加请求
-     * @param sysRoleAddReq 添加角色对象
+     * @param sysRoleAddDTO 添加角色对象
      * @return 添加状态
      */
     @CrudLog
     @PostMapping("/add")
     @ResponseBody
-    public Result add(@RequestBody @Validated SysRoleAddReq sysRoleAddReq, BindingResult bindingResult){
+    public Result add(@RequestBody @Validated SysRoleAddDTO sysRoleAddDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        int flag = sysRoleService.add(sysRoleAddReq);
-        return Result.success(flag);
+        sysRoleService.add(sysRoleAddDTO);
+        return Result.success();
     }
 
     /**
      * 编辑请求
-     * @param sysRoleEditReq 编辑角色对象
+     * @param sysRoleEditDTO 编辑角色对象
      * @return 编辑状态
      */
     @CrudLog
     @PostMapping("/edit")
     @ResponseBody
-    public Result edit(@RequestBody @Validated SysRoleEditReq sysRoleEditReq, BindingResult bindingResult){
+    public Result edit(@RequestBody @Validated SysRoleEditDTO sysRoleEditDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        int flag = sysRoleService.edit(sysRoleEditReq);
-        return Result.success(flag);
+        sysRoleService.edit(sysRoleEditDTO);
+        return Result.success();
     }
 
     /**

@@ -3,8 +3,8 @@ package io.github.yangyouwang.crud.system.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.domain.Result;
-import io.github.yangyouwang.crud.system.model.req.*;
-import io.github.yangyouwang.crud.system.model.resp.SysDictTypeResp;
+import io.github.yangyouwang.crud.system.model.params.*;
+import io.github.yangyouwang.crud.system.model.result.SysDictTypeDTO;
 import io.github.yangyouwang.crud.system.service.SysDictTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -61,71 +61,71 @@ public class SysDictTypeController {
      */
     @GetMapping("/editPage/{id}")
     public String editPage(@Valid @NotNull(message = "id能为空") @PathVariable Long id, ModelMap map){
-        SysDictTypeResp sysDict = sysDictTypeService.detail(id);
+        SysDictTypeDTO sysDict = sysDictTypeService.detail(id);
         map.put("sysDictType",sysDict);
         return SUFFIX + "/edit";
     }
 
     /**
      * 列表请求
-     * @param sysDictListReq 请求字典列表参数
+     * @param sysDictTypeListDTO 请求字典列表参数
      * @return 请求列表
      */
     @GetMapping("/list")
     @ResponseBody
-    public Result list(@Validated SysDictTypeListReq sysDictListReq, BindingResult bindingResult) {
+    public Result list(@Validated SysDictTypeListDTO sysDictTypeListDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        IPage<SysDictTypeResp> list = sysDictTypeService.list(sysDictListReq);
+        IPage<SysDictTypeDTO> list = sysDictTypeService.list(sysDictTypeListDTO);
         return Result.success(list);
     }
 
     /**
      * 添加请求
-     * @param sysDictAddReq 添加字典参数
+     * @param sysDictTypeAddDTO 添加字典参数
      * @return 添加状态
      */
     @CrudLog
     @PostMapping("/add")
     @ResponseBody
-    public Result add(@RequestBody @Validated SysDictTypeAddReq sysDictAddReq, BindingResult bindingResult){
+    public Result add(@RequestBody @Validated SysDictTypeAddDTO sysDictTypeAddDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        int flag = sysDictTypeService.add(sysDictAddReq);
+        boolean flag = sysDictTypeService.add(sysDictTypeAddDTO);
         return Result.success(flag);
     }
 
     /**
      * 编辑请求
-     * @param sysDictEditReq 编辑字典参数
+     * @param sysDictTypeEditDTO 编辑字典参数
      * @return 编辑状态
      */
     @CrudLog
     @PostMapping("/edit")
     @ResponseBody
-    public Result edit(@RequestBody @Validated SysDictTypeEditReq sysDictEditReq, BindingResult bindingResult){
+    public Result edit(@RequestBody @Validated SysDictTypeEditDTO sysDictTypeEditDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        int flag = sysDictTypeService.edit(sysDictEditReq);
+        boolean flag = sysDictTypeService.edit(sysDictTypeEditDTO);
         return Result.success(flag);
     }
 
     /**
      * 修改字典状态
-     * @param sysDictTypeEnabledReq 修改字典参数
+     * @param sysDictTypeEnabledDTO 修改字典参数
      * @return 修改状态
      */
     @CrudLog
     @PostMapping("/changeDictType")
     @ResponseBody
-    public Result changeDictType(@RequestBody @Validated SysDictTypeEnabledReq sysDictTypeEnabledReq, BindingResult bindingResult){
+    public Result changeDictType(@RequestBody @Validated SysDictTypeEnabledDTO sysDictTypeEnabledDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        int flag = sysDictTypeService.changeDictType(sysDictTypeEnabledReq);
+        boolean flag = sysDictTypeService.changeDictType(sysDictTypeEnabledDTO);
         return Result.success(flag);
     }
 

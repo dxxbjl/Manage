@@ -6,11 +6,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.crud.system.entity.SysTask;
-import io.github.yangyouwang.crud.system.model.req.SysTaskAddReq;
-import io.github.yangyouwang.crud.system.model.req.SysTaskEditReq;
-import io.github.yangyouwang.crud.system.model.req.SysTaskEnabledReq;
-import io.github.yangyouwang.crud.system.model.req.SysTaskListReq;
-import io.github.yangyouwang.crud.system.model.resp.SysTaskResp;
+import io.github.yangyouwang.crud.system.model.params.SysTaskAddDTO;
+import io.github.yangyouwang.crud.system.model.params.SysTaskEditDTO;
+import io.github.yangyouwang.crud.system.model.params.SysTaskEnabledDTO;
+import io.github.yangyouwang.crud.system.model.params.SysTaskListDTO;
+import io.github.yangyouwang.crud.system.model.result.SysTaskDTO;
 import io.github.yangyouwang.crud.system.service.SysTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -78,7 +78,7 @@ public class SysTaskController {
      */
     @GetMapping("/editPage/{id}")
     public String editPage(@Valid @NotNull(message = "id不能为空") @PathVariable Long id, ModelMap map){
-        SysTaskResp sysTask = sysTaskService.detail(id);
+        SysTaskDTO sysTask = sysTaskService.detail(id);
         map.put("sysTask",sysTask);
         return SUFFIX + "/edit";
     }
@@ -86,67 +86,67 @@ public class SysTaskController {
 
     /**
      * 列表请求
-     * @param sysTaskListReq 请求任务列表对象
+     * @param sysTaskListDTO 请求任务列表对象
      * @return 请求列表
      */
     @GetMapping("/list")
     @ResponseBody
-    public Result list(@Validated SysTaskListReq sysTaskListReq, BindingResult bindingResult) {
+    public Result list(@Validated SysTaskListDTO sysTaskListDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        IPage<SysTaskResp> list = sysTaskService.list(sysTaskListReq);
+        IPage<SysTaskDTO> list = sysTaskService.list(sysTaskListDTO);
         return Result.success(list);
     }
 
     /**
      * 添加请求
-     * @param sysTaskAddReq 添加任务对象
+     * @param sysTaskAddDTO 添加任务对象
      * @return 添加状态
      */
     @CrudLog
     @PostMapping("/add")
     @ResponseBody
-    public Result add(@RequestBody @Validated SysTaskAddReq sysTaskAddReq, BindingResult bindingResult) {
+    public Result add(@RequestBody @Validated SysTaskAddDTO sysTaskAddDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        boolean flag = sysTaskService.add(sysTaskAddReq);
+        boolean flag = sysTaskService.add(sysTaskAddDTO);
         return Result.success(flag);
     }
 
     /**
      * 编辑请求
-     * @param sysTaskEditReq 修改任务对象
+     * @param sysTaskEditDTO 修改任务对象
      * @return 编辑状态
      */
     @CrudLog
     @PostMapping("/edit")
     @ResponseBody
-    public Result edit(@RequestBody @Validated SysTaskEditReq sysTaskEditReq, BindingResult bindingResult){
+    public Result edit(@RequestBody @Validated SysTaskEditDTO sysTaskEditDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
         SysTask sysTask = new SysTask();
-        BeanUtil.copyProperties(sysTaskEditReq,sysTask,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+        BeanUtil.copyProperties(sysTaskEditDTO,sysTask,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
         boolean flag = sysTaskService.edit(sysTask);
         return Result.success(flag);
     }
 
     /**
      * 修改任务请求
-     * @param sysTaskEnabledReq 修改任务状态对象
+     * @param sysTaskEnabledDTO 修改任务状态对象
      * @return 修改状态
      */
     @CrudLog
     @PostMapping("/changeTask")
     @ResponseBody
-    public Result changeTask(@RequestBody @Validated SysTaskEnabledReq sysTaskEnabledReq, BindingResult bindingResult){
+    public Result changeTask(@RequestBody @Validated SysTaskEnabledDTO sysTaskEnabledDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        SysTask sysTask = sysTaskService.getById(sysTaskEnabledReq.getId());
-        sysTask.setEnabled(sysTaskEnabledReq.getEnabled());
+        SysTask sysTask = sysTaskService.getById(sysTaskEnabledDTO.getId());
+        sysTask.setEnabled(sysTaskEnabledDTO.getEnabled());
         boolean flag = sysTaskService.edit(sysTask);
         return Result.success(flag);
     }

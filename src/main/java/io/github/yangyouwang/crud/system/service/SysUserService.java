@@ -9,7 +9,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.common.enums.ResultStatus;
-import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.crud.system.entity.SysMenu;
 import io.github.yangyouwang.crud.system.entity.SysRole;
 import io.github.yangyouwang.crud.system.entity.SysUser;
@@ -17,8 +16,8 @@ import io.github.yangyouwang.crud.system.entity.SysUserRole;
 import io.github.yangyouwang.crud.system.mapper.SysMenuMapper;
 import io.github.yangyouwang.crud.system.mapper.SysUserMapper;
 import io.github.yangyouwang.crud.system.mapper.SysUserRoleMapper;
-import io.github.yangyouwang.crud.system.model.req.*;
-import io.github.yangyouwang.crud.system.model.resp.SysUserResp;
+import io.github.yangyouwang.crud.system.model.params.*;
+import io.github.yangyouwang.crud.system.model.result.SysUserDTO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
@@ -89,85 +88,77 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
      * @return 用户详情
      */
     @Transactional(readOnly = true)
-    public SysUserResp detail(Long id) {
+    public SysUserDTO detail(Long id) {
         SysUser sysUser = sysUserMapper.findUserByUserId(id);
-        SysUserResp sysUserResp = new SysUserResp();
-        BeanUtils.copyProperties(sysUser,sysUserResp);
+        SysUserDTO sysUserDTO = new SysUserDTO();
+        BeanUtils.copyProperties(sysUser,sysUserDTO);
         ofNullable(sysUser.getRoles()).ifPresent(sysRoles -> {
             Long[] roleIds = sysRoles.stream().map(SysRole::getId).toArray(Long[]::new);
-            sysUserResp.setRoleIds(roleIds);
+            sysUserDTO.setRoleIds(roleIds);
         });
-        return sysUserResp;
+        return sysUserDTO;
     }
 
     /**
      * 列表请求
-     * @param sysUserListReq 用户列表对象
+     * @param sysUserListDTO 用户列表对象
      * @return 列表
      */
     @Transactional(readOnly = true)
-    public IPage list(SysUserListReq sysUserListReq) {
-        return this.page(new Page<>(sysUserListReq.getPageNum(), sysUserListReq.getPageSize()),
+    public IPage list(SysUserListDTO sysUserListDTO) {
+        return this.page(new Page<>(sysUserListDTO.getPageNum(), sysUserListDTO.getPageSize()),
                 new LambdaQueryWrapper<SysUser>()
-                        .like(StringUtils.isNotBlank(sysUserListReq.getUserName()), SysUser::getUserName , sysUserListReq.getUserName())
-                        .like(StringUtils.isNotBlank(sysUserListReq.getEmail()), SysUser::getEmail , sysUserListReq.getEmail())
-                        .like(StringUtils.isNotBlank(sysUserListReq.getPhonenumber()), SysUser::getPhonenumber , sysUserListReq.getPhonenumber()));
+                        .like(StringUtils.isNotBlank(sysUserListDTO.getUserName()), SysUser::getUserName , sysUserListDTO.getUserName())
+                        .like(StringUtils.isNotBlank(sysUserListDTO.getEmail()), SysUser::getEmail , sysUserListDTO.getEmail())
+                        .like(StringUtils.isNotBlank(sysUserListDTO.getPhonenumber()), SysUser::getPhonenumber , sysUserListDTO.getPhonenumber()));
     }
 
     /**
      * 添加请求
-     * @param sysUserAddReq 添加用户对象
-     * @return 添加状态
+     * @param sysUserAddDTO 添加用户对象
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public int add(SysUserAddReq sysUserAddReq) {
-        SysUser sysUser = sysUserMapper.selectOne(new LambdaQueryWrapper<SysUser>()
-                .eq(SysUser::getUserName,sysUserAddReq.getUserName()));
+    public void add(SysUserAddDTO sysUserAddDTO) {
+        SysUser sysUser = this.getOne(new LambdaQueryWrapper<SysUser>()
+                .eq(SysUser::getUserName,sysUserAddDTO.getUserName()));
         Assert.isNull(sysUser,ResultStatus.USER_EXIST_ERROR.message);
         SysUser user = new SysUser();
-        BeanUtils.copyProperties(sysUserAddReq,user);
-        String passWord = passwordEncoder.encode(sysUserAddReq.getPassWord());
+        BeanUtils.copyProperties(sysUserAddDTO,user);
+        String passWord = passwordEncoder.encode(sysUserAddDTO.getPassWord());
         user.setPassWord(passWord);
-        int flag = sysUserMapper.insert(user);
-        if (flag > 0) {
+        boolean flag = this.save(user);
+        if (flag) {
             SysUserService proxy = (SysUserService) AopContext.currentProxy();
-            proxy.insertUserRoleBatch(user.getId(), sysUserAddReq.getRoleIds());
-            return flag;
+            proxy.insertUserRoleBatch(user.getId(), sysUserAddDTO.getRoleIds());
         }
-        throw new CrudException(ResultStatus.SAVE_DATA_ERROR);
     }
 
     /**
      * 编辑请求
-     * @param sysUserEditReq 编辑用户对象
-     * @return 编辑状态
+     * @param sysUserEditDTO 编辑用户对象
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public int edit(SysUserEditReq sysUserEditReq) {
+    public void edit(SysUserEditDTO sysUserEditDTO) {
         SysUser user = new SysUser();
-        BeanUtil.copyProperties(sysUserEditReq,user,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
-        int flag = sysUserMapper.updateById(user);
-        if (flag > 0) {
-            if (sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>()
-                    .eq(SysUserRole::getUserId, user.getId())) > 0) {
-                SysUserService proxy = (SysUserService) AopContext.currentProxy();
-                proxy.insertUserRoleBatch(user.getId(), sysUserEditReq.getRoleIds());
-            }
-            return flag;
+        BeanUtil.copyProperties(sysUserEditDTO,user,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+        boolean flag = this.updateById(user);
+        if (flag && sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>()
+                .eq(SysUserRole::getUserId, user.getId())) > 0) {
+            SysUserService proxy = (SysUserService) AopContext.currentProxy();
+            proxy.insertUserRoleBatch(user.getId(), sysUserEditDTO.getRoleIds());
         }
-        throw new CrudException(ResultStatus.UPDATE_DATA_ERROR);
     }
 
     /**
      * 编辑请求
-     * @param sysUserEditUserInfoReq 编辑用户对象
+     * @param sysUserEditUserInfoDTO 编辑用户对象
      * @return 编辑状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public int editUserInfo(SysUserEditUserInfoReq sysUserEditUserInfoReq) {
+    public boolean editUserInfo(SysUserEditUserInfoDTO sysUserEditUserInfoDTO) {
         SysUser user = new SysUser();
-        BeanUtil.copyProperties(sysUserEditUserInfoReq,user,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
-        return sysUserMapper.updateById(user);
+        BeanUtil.copyProperties(sysUserEditUserInfoDTO,user,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+        return this.updateById(user);
     }
 
     /**
@@ -183,10 +174,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
             userRole.setRoleId(s);
             return userRole;
         }).collect(Collectors.toList());
-        int flag = sysUserRoleMapper.insertBatchSomeColumn(userRoles);
-        if (flag == 0) {
-            throw new CrudException(ResultStatus.BATCH_INSTALL_USER_ERROR);
-        }
+        sysUserRoleMapper.insertBatchSomeColumn(userRoles);
     }
 
     /**
@@ -195,22 +183,22 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void del(Long id) {
-        sysUserMapper.deleteById(id);
+        this.removeById(id);
         sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>()
                 .eq(SysUserRole::getUserId,id));
     }
 
     /**
      * 修改用户状态
-     * @param sysUserEnabledReq 用户状态dto
+     * @param sysUserEnabledDTO 用户状态dto
      * @return 修改状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public int changeUser(SysUserEnabledReq sysUserEnabledReq) {
+    public boolean changeUser(SysUserEnabledDTO sysUserEnabledDTO) {
         SysUser sysUser = new SysUser();
-        sysUser.setId(sysUserEnabledReq.getId());
-        sysUser.setEnabled(sysUserEnabledReq.getEnabled());
-        return sysUserMapper.updateById(sysUser);
+        sysUser.setId(sysUserEnabledDTO.getId());
+        sysUser.setEnabled(sysUserEnabledDTO.getEnabled());
+        return this.updateById(sysUser);
     }
 
     /**
@@ -219,11 +207,11 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
      * @return 用户信息
      */
     @Transactional(readOnly = true)
-    public SysUserResp findUserByName(String username) {
-        SysUser sysUser = sysUserMapper.selectOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUserName, username));
-        SysUserResp sysUserResp = new SysUserResp();
-        BeanUtils.copyProperties(sysUser,sysUserResp);
-        return sysUserResp;
+    public SysUserDTO findUserByName(String username) {
+        SysUser sysUser = this.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUserName, username));
+        SysUserDTO sysUserDTO = new SysUserDTO();
+        BeanUtils.copyProperties(sysUser,sysUserDTO);
+        return sysUserDTO;
     }
 
     /**
@@ -231,41 +219,41 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
      * @return 用户列表
      */
     @Transactional(readOnly = true)
-    public List<SysUserResp> exportSysUserList() {
-        List<SysUser> sysUsers = sysUserMapper.selectList(new LambdaQueryWrapper<SysUser>()
+    public List<SysUserDTO> exportSysUserList() {
+        List<SysUser> sysUsers = this.list(new LambdaQueryWrapper<SysUser>()
                 .eq(SysUser::getEnabled, Constants.ENABLED_YES));
         return sysUsers.stream().map(sysUser -> {
-            SysUserResp sysUserResp = new SysUserResp();
-            BeanUtils.copyProperties(sysUser, sysUserResp);
-            return sysUserResp;
+            SysUserDTO sysUserDTO = new SysUserDTO();
+            BeanUtils.copyProperties(sysUser, sysUserDTO);
+            return sysUserDTO;
         }).collect(Collectors.toList());
     }
 
     /**
      * 修改密码
-     * @param modifyPassReq 修改密码对象
+     * @param modifyPassDTO 修改密码对象
      * @return 修改状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public int modifyPass(ModifyPassReq modifyPassReq) {
-        SysUser sysUser = sysUserMapper.selectById(modifyPassReq.getId());
-        boolean matches = passwordEncoder.matches(modifyPassReq.getOldPassword(),sysUser.getPassWord());
+    public boolean modifyPass(ModifyPassDTO modifyPassDTO) {
+        SysUser sysUser = this.getById(modifyPassDTO.getId());
+        boolean matches = passwordEncoder.matches(modifyPassDTO.getOldPassword(),sysUser.getPassWord());
         Assert.isTrue(matches,ResultStatus.OLD_PASSWORD_ERROR.message);
-        String password = passwordEncoder.encode(modifyPassReq.getPassword());
+        String password = passwordEncoder.encode(modifyPassDTO.getPassword());
         sysUser.setPassWord(password);
-        return sysUserMapper.updateById(sysUser);
+        return this.updateById(sysUser);
     }
 
     /**
      * 重置密码
-     * @param sysUserResetPassReq 重置用户密码对象
+     * @param sysUserResetPassDTO 重置用户密码对象
      * @return 重置密码
      */
-    public int resetPass(SysUserResetPassReq sysUserResetPassReq) {
+    public boolean resetPass(SysUserResetPassDTO sysUserResetPassDTO) {
         SysUser sysUser = new SysUser();
-        String password = passwordEncoder.encode(sysUserResetPassReq.getPassWord());
-        sysUser.setId(sysUserResetPassReq.getId());
+        String password = passwordEncoder.encode(sysUserResetPassDTO.getPassWord());
+        sysUser.setId(sysUserResetPassDTO.getId());
         sysUser.setPassWord(password);
-        return sysUserMapper.updateById(sysUser);
+        return this.updateById(sysUser);
     }
 }

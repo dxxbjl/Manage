@@ -8,8 +8,8 @@ import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.constant.Constants;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.core.util.SecurityUtils;
-import io.github.yangyouwang.crud.system.model.req.*;
-import io.github.yangyouwang.crud.system.model.resp.SysUserResp;
+import io.github.yangyouwang.crud.system.model.params.*;
+import io.github.yangyouwang.crud.system.model.result.SysUserDTO;
 import io.github.yangyouwang.crud.system.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -56,7 +56,7 @@ public class SysUserController {
     @GetMapping("/userInfoPage")
     public String userInfoPage(ModelMap map){
         User user = SecurityUtils.getSysUser();
-        SysUserResp sysUser = sysUserService.findUserByName(user.getUsername());
+        SysUserDTO sysUser = sysUserService.findUserByName(user.getUsername());
         map.put("sysUser",sysUser);
         return SUFFIX + "/userInfo";
     }
@@ -68,7 +68,7 @@ public class SysUserController {
     @GetMapping("/modifyPassPage")
     public String modifyPassPage(ModelMap map) {
         User user = SecurityUtils.getSysUser();
-        SysUserResp sysUser = sysUserService.findUserByName(user.getUsername());
+        SysUserDTO sysUser = sysUserService.findUserByName(user.getUsername());
         map.put("sysUser",sysUser);
         return SUFFIX + "/modifyPass";
     }
@@ -98,7 +98,7 @@ public class SysUserController {
      */
     @GetMapping("/editPage/{id}")
     public String editPage(@Valid @NotNull(message = "id不能为空") @PathVariable Long id, ModelMap map){
-        SysUserResp sysUser = sysUserService.detail(id);
+        SysUserDTO sysUser = sysUserService.detail(id);
         map.put("sysUser",sysUser);
         return SUFFIX + "/edit";
     }
@@ -110,119 +110,119 @@ public class SysUserController {
      */
     @GetMapping("/resetPassPage/{id}")
     public String resetPass(@Valid @NotNull(message = "id不能为空") @PathVariable Long id, ModelMap map){
-        SysUserResp sysUser = sysUserService.detail(id);
+        SysUserDTO sysUser = sysUserService.detail(id);
         map.put("sysUser",sysUser);
         return SUFFIX + "/resetPass";
     }
 
     /**
      * 重置密码
-     * @param sysUserResetPassReq 重置用户密码对象
+     * @param sysUserResetPassDTO 重置用户密码对象
      * @return 重置密码状态
      */
     @CrudLog
     @PostMapping("/resetPass")
     @ResponseBody
-    public Result resetPass(@RequestBody @Validated SysUserResetPassReq sysUserResetPassReq,BindingResult bindingResult){
+    public Result resetPass(@RequestBody @Validated SysUserResetPassDTO sysUserResetPassDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        int flag = sysUserService.resetPass(sysUserResetPassReq);
+        boolean flag = sysUserService.resetPass(sysUserResetPassDTO);
         return Result.success(flag);
     }
 
     /**
      * 修改密码
-     * @param modifyPassReq 修改密码对象
+     * @param modifyPassDTO 修改密码对象
      * @return 修改状态
      */
     @CrudLog
     @PostMapping("/modifyPass")
     @ResponseBody
-    public Result modifyPass(@RequestBody @Validated ModifyPassReq modifyPassReq, BindingResult bindingResult) {
+    public Result modifyPass(@RequestBody @Validated ModifyPassDTO modifyPassDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        int flag = sysUserService.modifyPass(modifyPassReq);
+        boolean flag = sysUserService.modifyPass(modifyPassDTO);
         return Result.success(flag);
     }
 
     /**
      * 列表请求
-     * @param sysUserListReq 用户列表对象
+     * @param sysUserListDTO 用户列表对象
      * @return 请求列表
      */
     @GetMapping("/list")
     @ResponseBody
-    public Result list(@Validated SysUserListReq sysUserListReq,BindingResult bindingResult) {
+    public Result list(@Validated SysUserListDTO sysUserListDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        IPage<SysUserResp> list = sysUserService.list(sysUserListReq);
+        IPage<SysUserDTO> list = sysUserService.list(sysUserListDTO);
         return Result.success(list);
     }
 
     /**
      * 添加请求
-     * @param sysUserAddReq 添加用户对象
+     * @param sysUserAddDTO 添加用户对象
      * @return 添加状态
      */
     @CrudLog
     @PostMapping("/add")
     @ResponseBody
-    public Result add(@RequestBody @Validated SysUserAddReq sysUserAddReq,BindingResult bindingResult){
+    public Result add(@RequestBody @Validated SysUserAddDTO sysUserAddDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        int flag = sysUserService.add(sysUserAddReq);
-        return Result.success(flag);
+        sysUserService.add(sysUserAddDTO);
+        return Result.success();
     }
 
     /**
      * 编辑请求
-     * @param sysUserEditReq 编辑用户对象
+     * @param sysUserEditDTO 编辑用户对象
      * @return 编辑状态
      */
     @CrudLog
     @PostMapping("/edit")
     @ResponseBody
-    public Result edit(@RequestBody @Validated SysUserEditReq sysUserEditReq, BindingResult bindingResult){
+    public Result edit(@RequestBody @Validated SysUserEditDTO sysUserEditDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        int flag = sysUserService.edit(sysUserEditReq);
-        return Result.success(flag);
+        sysUserService.edit(sysUserEditDTO);
+        return Result.success();
     }
 
     /**
      * 编辑用户信息请求
-     * @param sysUserEditUserInfoReq 编辑用户对象
+     * @param sysUserEditUserInfoDTO 编辑用户对象
      * @return 编辑状态
      */
     @CrudLog
     @PostMapping("/editUserInfo")
     @ResponseBody
-    public Result editUserInfo(@RequestBody @Validated SysUserEditUserInfoReq sysUserEditUserInfoReq, BindingResult bindingResult){
+    public Result editUserInfo(@RequestBody @Validated SysUserEditUserInfoDTO sysUserEditUserInfoDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        int flag = sysUserService.editUserInfo(sysUserEditUserInfoReq);
+        boolean flag = sysUserService.editUserInfo(sysUserEditUserInfoDTO);
         return Result.success(flag);
     }
 
     /**
      * 修改用户状态
-     * @param sysUserEnabledReq 修改用户状态对象
+     * @param sysUserEnabledDTO 修改用户状态对象
      * @return 修改状态
      */
     @CrudLog
     @PostMapping("/changeUser")
     @ResponseBody
-    public Result changeUser(@RequestBody @Validated SysUserEnabledReq sysUserEnabledReq, BindingResult bindingResult){
+    public Result changeUser(@RequestBody @Validated SysUserEnabledDTO sysUserEnabledDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        int flag = sysUserService.changeUser(sysUserEnabledReq);
+        boolean flag = sysUserService.changeUser(sysUserEnabledDTO);
         return Result.success(flag);
     }
 
@@ -244,10 +244,10 @@ public class SysUserController {
      */
     @RequestMapping("/exportExcel")
     public void export(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        List<SysUserResp> sysUserResps = sysUserService.exportSysUserList();
+        List<SysUserDTO> sysUserResps = sysUserService.exportSysUserList();
         ServletOutputStream out = response.getOutputStream();
         ExcelWriter writer = new ExcelWriter(out, ExcelTypeEnum.XLSX, true);
-        Sheet sheet = new Sheet(1, 0, SysUserResp.class);
+        Sheet sheet = new Sheet(1, 0, SysUserDTO.class);
         //设置自适应宽度
         sheet.setAutoWidth(Boolean.TRUE);
         // 第一个 sheet 名称

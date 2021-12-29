@@ -2,9 +2,9 @@ package io.github.yangyouwang.crud.system.controller;
 
 import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.domain.Result;
-import io.github.yangyouwang.crud.system.model.req.SysDictValueAddReq;
-import io.github.yangyouwang.crud.system.model.req.SysDictValueEditReq;
-import io.github.yangyouwang.crud.system.model.resp.SysDictValueResp;
+import io.github.yangyouwang.crud.system.model.params.SysDictValueAddDTO;
+import io.github.yangyouwang.crud.system.model.params.SysDictValueEditDTO;
+import io.github.yangyouwang.crud.system.model.result.SysDictValueDTO;
 import io.github.yangyouwang.crud.system.service.SysDictValueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,8 +45,8 @@ public class SysDictValueController {
     @GetMapping("/getDictValues/{dictKey}")
     @ResponseBody
     public Result getDictValues(@Valid @NotBlank(message = "字典类型不能为空") @PathVariable String dictKey) {
-        List<SysDictValueResp> sysDictValueResps = sysDictValueService.getDictValues(dictKey);
-        return Result.success(sysDictValueResps);
+        List<SysDictValueDTO> dictValues = sysDictValueService.getDictValues(dictKey);
+        return Result.success(dictValues);
     }
 
     /**
@@ -80,40 +80,40 @@ public class SysDictValueController {
      */
     @GetMapping("/editPage/{id}")
     public String editPage(@Valid @NotNull(message = "id能为空") @PathVariable Long id, ModelMap map){
-        SysDictValueResp sysDictValue = sysDictValueService.detail(id);
+        SysDictValueDTO sysDictValue = sysDictValueService.detail(id);
         map.put("sysDictValue",sysDictValue);
         return SUFFIX + "/edit";
     }
 
     /**
      * 添加请求
-     * @param sysDictValueAddReq 添加字典值对象
+     * @param sysDictValueAddDTO 添加字典值对象
      * @return 添加状态
      */
     @CrudLog
     @PostMapping("/add")
     @ResponseBody
-    public Result add(@RequestBody @Validated SysDictValueAddReq sysDictValueAddReq, BindingResult bindingResult){
+    public Result add(@RequestBody @Validated SysDictValueAddDTO sysDictValueAddDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        int flag = sysDictValueService.add(sysDictValueAddReq);
+        boolean flag = sysDictValueService.add(sysDictValueAddDTO);
         return Result.success(flag);
     }
 
     /**
      * 编辑请求
-     * @param sysDictValueEditReq 编辑字典值对象
+     * @param sysDictValueEditDTO 编辑字典值对象
      * @return 编辑状态
      */
     @CrudLog
     @PostMapping("/edit")
     @ResponseBody
-    public Result edit(@RequestBody @Validated SysDictValueEditReq sysDictValueEditReq, BindingResult bindingResult){
+    public Result edit(@RequestBody @Validated SysDictValueEditDTO sysDictValueEditDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        int flag = sysDictValueService.edit(sysDictValueEditReq);
+        boolean flag = sysDictValueService.edit(sysDictValueEditDTO);
         return Result.success(flag);
     }
 }

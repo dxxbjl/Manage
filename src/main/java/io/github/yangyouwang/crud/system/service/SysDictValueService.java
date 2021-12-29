@@ -5,9 +5,9 @@ import io.github.yangyouwang.crud.system.entity.SysDictType;
 import io.github.yangyouwang.crud.system.entity.SysDictValue;
 import io.github.yangyouwang.crud.system.mapper.SysDictTypeMapper;
 import io.github.yangyouwang.crud.system.mapper.SysDictValueMapper;
-import io.github.yangyouwang.crud.system.model.req.SysDictValueAddReq;
-import io.github.yangyouwang.crud.system.model.req.SysDictValueEditReq;
-import io.github.yangyouwang.crud.system.model.resp.SysDictValueResp;
+import io.github.yangyouwang.crud.system.model.params.SysDictValueAddDTO;
+import io.github.yangyouwang.crud.system.model.params.SysDictValueEditDTO;
+import io.github.yangyouwang.crud.system.model.result.SysDictValueDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -35,9 +35,6 @@ public class SysDictValueService extends ServiceImpl<SysDictValueMapper, SysDict
     @Resource
     private SysDictTypeMapper sysDictTypeMapper;
 
-    @Resource
-    private SysDictValueMapper sysDictValueMapper;
-
     /**
      * 根据字典类型获取字典列表
      * @param dictKey 字典key
@@ -45,13 +42,13 @@ public class SysDictValueService extends ServiceImpl<SysDictValueMapper, SysDict
      */
     @Cacheable(cacheNames = {"dictValues"},key = "#dictKey")
     @Transactional(readOnly = true)
-    public List<SysDictValueResp> getDictValues(String dictKey) {
+    public List<SysDictValueDTO> getDictValues(String dictKey) {
         SysDictType sysDictType = sysDictTypeMapper.findDictByKey(dictKey);
         if (Objects.nonNull(sysDictType)) {
             return sysDictType.getDictValues().stream().map(sysDictValue -> {
-                SysDictValueResp sysDictValueResp = new SysDictValueResp();
-                BeanUtils.copyProperties(sysDictValue,sysDictValueResp);
-                return sysDictValueResp;
+                SysDictValueDTO sysDictValueDTO = new SysDictValueDTO();
+                BeanUtils.copyProperties(sysDictValue,sysDictValueDTO);
+                return sysDictValueDTO;
             }).collect(Collectors.toList());
         }
         return Collections.emptyList();
@@ -62,32 +59,32 @@ public class SysDictValueService extends ServiceImpl<SysDictValueMapper, SysDict
      * @return 字典项详情
      */
     @Transactional(readOnly = true)
-    public SysDictValueResp detail(Long id) {
-        SysDictValue sysDictValue = sysDictValueMapper.selectById(id);
-        SysDictValueResp sysDictValueResp = new SysDictValueResp();
-        BeanUtils.copyProperties(sysDictValue,sysDictValueResp);
-        return sysDictValueResp;
+    public SysDictValueDTO detail(Long id) {
+        SysDictValue sysDictValue = this.getById(id);
+        SysDictValueDTO sysDictValueDTO = new SysDictValueDTO();
+        BeanUtils.copyProperties(sysDictValue,sysDictValueDTO);
+        return sysDictValueDTO;
     }
     /**
      * 添加请求
-     * @param sysDictValueAddReq 添加字典值对象
+     * @param sysDictValueAddDTO 添加字典值对象
      * @return 添加状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public int add(SysDictValueAddReq sysDictValueAddReq) {
+    public boolean add(SysDictValueAddDTO sysDictValueAddDTO) {
         SysDictValue sysDictValue = new SysDictValue();
-        BeanUtils.copyProperties(sysDictValueAddReq,sysDictValue);
-        return sysDictValueMapper.insert(sysDictValue);
+        BeanUtils.copyProperties(sysDictValueAddDTO,sysDictValue);
+        return this.save(sysDictValue);
     }
     /**
      * 编辑请求
-     * @param sysDictValueEditReq 编辑字典值对象
+     * @param sysDictValueEditDTO 编辑字典值对象
      * @return 编辑状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public int edit(SysDictValueEditReq sysDictValueEditReq) {
+    public boolean edit(SysDictValueEditDTO sysDictValueEditDTO) {
         SysDictValue sysDictValue = new SysDictValue();
-        BeanUtils.copyProperties(sysDictValueEditReq,sysDictValue);
-        return sysDictValueMapper.updateById(sysDictValue);
+        BeanUtils.copyProperties(sysDictValueEditDTO,sysDictValue);
+        return this.updateById(sysDictValue);
     }
 }

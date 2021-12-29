@@ -2,11 +2,10 @@ package io.github.yangyouwang.crud.act.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.yangyouwang.common.domain.Result;
-import io.github.yangyouwang.crud.act.entity.ActReModel;
-import io.github.yangyouwang.crud.act.model.req.ActReModelAddReq;
-import io.github.yangyouwang.crud.act.model.req.ActReModelEditReq;
-import io.github.yangyouwang.crud.act.model.req.ActReModelListReq;
-import io.github.yangyouwang.crud.act.model.resp.ActReModelResp;
+import io.github.yangyouwang.crud.act.model.params.ActReModelAddDTO;
+import io.github.yangyouwang.crud.act.model.params.ActReModelEditDTO;
+import io.github.yangyouwang.crud.act.model.params.ActReModelListDTO;
+import io.github.yangyouwang.crud.act.model.result.ActReModelDTO;
 import io.github.yangyouwang.crud.act.service.ActReModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -62,41 +61,45 @@ public class ActReModelController {
      */
     @GetMapping("/editPage/{id}")
     public String editPage(@Valid @NotNull(message = "id不能为空")  @PathVariable String id, ModelMap map){
-        ActReModelResp actReModel = actReModelService.detail(id);
+        ActReModelDTO actReModel = actReModelService.detail(id);
         map.put("actReModel",actReModel);
         return SUFFIX + "/edit";
     }
 
     /**
      * 列表请求
+     * @param actReModelListDTO 模型列表对象
      * @return 请求列表
      */
     @GetMapping("/list")
     @ResponseBody
-    public Result list(@Valid ActReModelListReq actReModelListReq, BindingResult bindingResult) {
+    public Result list(@Valid ActReModelListDTO actReModelListDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        IPage<ActReModelResp> list = actReModelService.list(actReModelListReq);
+        IPage<ActReModelDTO> list = actReModelService.list(actReModelListDTO);
         return Result.success(list);
     }
 
     /**
      * 添加请求
+     * @param actReModelAddDTO 模型添加对象
      * @return 添加状态
      */
     @PostMapping("/add")
     @ResponseBody
-    public Result add(@RequestBody @Valid ActReModelAddReq actReModelAddReq, BindingResult bindingResult){
+    public Result add(@RequestBody @Valid ActReModelAddDTO actReModelAddDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(bindingResult.getFieldError().getDefaultMessage());
         }
-        String flag = actReModelService.add(actReModelAddReq);
+        String flag = actReModelService.add(actReModelAddDTO);
         return Result.success(flag);
     }
 
     /**
      * 设计流程模型
+     * @param id 模型id
+     * @return 模型设计页面
      */
     @GetMapping("/design/{id}")
     public String design(@Valid @NotNull(message = "id不能为空") @PathVariable("id") String id) {
@@ -106,6 +109,8 @@ public class ActReModelController {
 
     /**
      * 部署流程模型
+     * @param id 模型id
+     * @return 是否部署成功响应
      */
     @GetMapping("/deploy/{id}")
     @ResponseBody
@@ -116,26 +121,28 @@ public class ActReModelController {
 
     /**
      * 编辑请求
+     * @param actReModelEditDTO 模型编辑对象
      * @return 编辑状态
      */
     @PostMapping("/edit")
     @ResponseBody
-    public Result edit(@RequestBody @Valid ActReModelEditReq actReModelEditReq, BindingResult bindingResult) {
+    public Result edit(@RequestBody @Valid ActReModelEditDTO actReModelEditDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        int flag = actReModelService.edit(actReModelEditReq);
+        boolean flag = actReModelService.edit(actReModelEditDTO);
         return Result.success(flag);
     }
 
     /**
      * 删除请求
+     * @param id 模型id
      * @return 删除状态
      */
     @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable String id){
-        int flag = actReModelService.del(id);
-        return Result.success(flag);
+        actReModelService.removeById(id);
+        return Result.success();
     }
 }

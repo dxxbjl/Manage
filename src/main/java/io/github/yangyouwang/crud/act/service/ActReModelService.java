@@ -5,14 +5,15 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.yangyouwang.crud.act.mapper.ActReModelMapper;
 import io.github.yangyouwang.crud.act.entity.ActReModel;
-import io.github.yangyouwang.crud.act.model.req.ActReModelAddReq;
-import io.github.yangyouwang.crud.act.model.req.ActReModelEditReq;
-import io.github.yangyouwang.crud.act.model.req.ActReModelListReq;
-import io.github.yangyouwang.crud.act.model.resp.ActReModelResp;
+import io.github.yangyouwang.crud.act.model.params.ActReModelAddDTO;
+import io.github.yangyouwang.crud.act.model.params.ActReModelEditDTO;
+import io.github.yangyouwang.crud.act.model.params.ActReModelListDTO;
+import io.github.yangyouwang.crud.act.model.result.ActReModelDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
@@ -39,23 +40,21 @@ import java.io.IOException;
  */
 @Service
 @Slf4j
-public class ActReModelService {
-
-    @Resource
-    private ActReModelMapper actReModelMapper;
+public class ActReModelService extends ServiceImpl<ActReModelMapper, ActReModel> {
 
     @Resource
     private RepositoryService repositoryService;
 
     /**
      * 获取列表
+     * @param actReModelListDTO 模型列表对象
      * @return 列表数据
      */
-    public IPage list(ActReModelListReq actReModelListReq) {
-        return actReModelMapper.selectPage(new Page<>(actReModelListReq.getPageNum(), actReModelListReq.getPageSize()),
+    public IPage list(ActReModelListDTO actReModelListDTO) {
+        return this.page(new Page<>(actReModelListDTO.getPageNum(), actReModelListDTO.getPageSize()),
                 new LambdaQueryWrapper<ActReModel>()
-                        .like(StringUtils.isNotBlank(actReModelListReq.getName()),ActReModel::getName , actReModelListReq.getName())
-                        .like(StringUtils.isNotBlank(actReModelListReq.getKey()),ActReModel::getKey , actReModelListReq.getKey()));
+                        .like(StringUtils.isNotBlank(actReModelListDTO.getName()),ActReModel::getName , actReModelListDTO.getName())
+                        .like(StringUtils.isNotBlank(actReModelListDTO.getKey()),ActReModel::getKey , actReModelListDTO.getKey()));
     }
 
     /**
@@ -63,18 +62,19 @@ public class ActReModelService {
      * @param id id
      * @return 详情
      */
-    public ActReModelResp detail(String id) {
-        ActReModel actReModel = actReModelMapper.selectById(id);
-        ActReModelResp actReModelResp = new ActReModelResp();
-        BeanUtils.copyProperties(actReModel,actReModelResp);
-        return actReModelResp;
+    public ActReModelDTO detail(String id) {
+        ActReModel actReModel = this.getById(id);
+        ActReModelDTO actReModelDTO = new ActReModelDTO();
+        BeanUtils.copyProperties(actReModel,actReModelDTO);
+        return actReModelDTO;
     }
 
     /**
      * 添加模型
+     * @param actReModelAddDTO 模型添加对象
      * @return 添加状态
      */
-    public String add(ActReModelAddReq actReModelAddReq) {
+    public String add(ActReModelAddDTO actReModelAddDTO) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             ObjectNode editorNode = objectMapper.createObjectNode();
@@ -86,13 +86,13 @@ public class ActReModelService {
             Model modelData = repositoryService.newModel();
 
             ObjectNode modelObjectNode = objectMapper.createObjectNode();
-            modelObjectNode.put(ModelDataJsonConstants.MODEL_NAME, actReModelAddReq.getName());
+            modelObjectNode.put(ModelDataJsonConstants.MODEL_NAME, actReModelAddDTO.getName());
             modelObjectNode.put(ModelDataJsonConstants.MODEL_REVISION, 1);
-            String description = StringUtils.defaultString(actReModelAddReq.getDescription());
+            String description = StringUtils.defaultString(actReModelAddDTO.getDescription());
             modelObjectNode.put(ModelDataJsonConstants.MODEL_DESCRIPTION, description);
             modelData.setMetaInfo(modelObjectNode.toString());
-            modelData.setName(actReModelAddReq.getName());
-            modelData.setKey(StringUtils.defaultString(actReModelAddReq.getKey()));
+            modelData.setName(actReModelAddDTO.getName());
+            modelData.setKey(StringUtils.defaultString(actReModelAddDTO.getKey()));
 
             repositoryService.saveModel(modelData);
             repositoryService.addModelEditorSource(modelData.getId(), editorNode.toString().getBytes("utf-8"));
@@ -135,20 +135,12 @@ public class ActReModelService {
 
     /**
      * 编辑模型
+     * @param actReModelEditDTO 模型编辑对象
      * @return 编辑状态
      */
-    public int edit(ActReModelEditReq actReModelEditReq) {
+    public boolean edit(ActReModelEditDTO actReModelEditDTO) {
         ActReModel actReModel = new ActReModel();
-        BeanUtil.copyProperties(actReModelEditReq,actReModel,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
-        return actReModelMapper.updateById(actReModel);
-    }
-
-    /**
-     * 删除模型
-     * @return 删除状态
-     */
-    public int del(String id) {
-        // 删除模型
-        return actReModelMapper.deleteById(id);
+        BeanUtil.copyProperties(actReModelEditDTO,actReModel,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+        return this.updateById(actReModel);
     }
 }

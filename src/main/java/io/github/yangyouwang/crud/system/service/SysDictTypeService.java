@@ -9,11 +9,11 @@ import io.github.yangyouwang.crud.system.mapper.SysDictTypeMapper;
 import io.github.yangyouwang.crud.system.mapper.SysDictValueMapper;
 import io.github.yangyouwang.crud.system.entity.SysDictType;
 import io.github.yangyouwang.crud.system.entity.SysDictValue;
-import io.github.yangyouwang.crud.system.model.req.SysDictTypeAddReq;
-import io.github.yangyouwang.crud.system.model.req.SysDictTypeEditReq;
-import io.github.yangyouwang.crud.system.model.req.SysDictTypeEnabledReq;
-import io.github.yangyouwang.crud.system.model.req.SysDictTypeListReq;
-import io.github.yangyouwang.crud.system.model.resp.SysDictTypeResp;
+import io.github.yangyouwang.crud.system.model.params.SysDictTypeAddDTO;
+import io.github.yangyouwang.crud.system.model.params.SysDictTypeEditDTO;
+import io.github.yangyouwang.crud.system.model.params.SysDictTypeEnabledDTO;
+import io.github.yangyouwang.crud.system.model.params.SysDictTypeListDTO;
+import io.github.yangyouwang.crud.system.model.result.SysDictTypeDTO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -41,15 +41,15 @@ public class SysDictTypeService extends ServiceImpl<SysDictTypeMapper, SysDictTy
 
     /**
      * 列表请求
-     * @param sysDictListReq 请求字典列表参数
+     * @param sysDictListDTO 请求字典列表参数
      * @return 请求列表
      */
     @Transactional(readOnly = true)
-    public IPage list(SysDictTypeListReq sysDictListReq) {
-         return sysDictTypeMapper.selectDictPage(new Page<>(sysDictListReq.getPageNum(), sysDictListReq.getPageSize()),
+    public IPage list(SysDictTypeListDTO sysDictListDTO) {
+         return sysDictTypeMapper.selectDictPage(new Page<>(sysDictListDTO.getPageNum(), sysDictListDTO.getPageSize()),
                 new LambdaQueryWrapper<SysDictType>()
-                        .like(StringUtils.isNotBlank(sysDictListReq.getDictName()), SysDictType::getDictName, sysDictListReq.getDictName())
-                        .like(StringUtils.isNotBlank(sysDictListReq.getDictKey()), SysDictType::getDictKey, sysDictListReq.getDictKey()));
+                        .like(StringUtils.isNotBlank(sysDictListDTO.getDictName()), SysDictType::getDictName, sysDictListDTO.getDictName())
+                        .like(StringUtils.isNotBlank(sysDictListDTO.getDictKey()), SysDictType::getDictKey, sysDictListDTO.getDictKey()));
     }
 
     /**
@@ -58,37 +58,37 @@ public class SysDictTypeService extends ServiceImpl<SysDictTypeMapper, SysDictTy
      * @return 编辑页面
      */
     @Transactional(readOnly = true)
-    public SysDictTypeResp detail(Long id) {
-        SysDictType sysDict = sysDictTypeMapper.selectById(id);
-        SysDictTypeResp sysDictResp = new SysDictTypeResp();
-        BeanUtils.copyProperties(sysDict,sysDictResp);
-        return sysDictResp;
+    public SysDictTypeDTO detail(Long id) {
+        SysDictType sysDict = this.getById(id);
+        SysDictTypeDTO sysDictTypeDTO = new SysDictTypeDTO();
+        BeanUtils.copyProperties(sysDict,sysDictTypeDTO);
+        return sysDictTypeDTO;
     }
 
     /**
      * 添加请求
-     * @param sysDictAddReq 添加字典参数
+     * @param sysDictTypeAddDTO 添加字典参数
      * @return 添加状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public int add(SysDictTypeAddReq sysDictAddReq) {
-        SysDictType sysDictType = sysDictTypeMapper.findDictByKey(sysDictAddReq.getDictKey());
+    public boolean add(SysDictTypeAddDTO sysDictTypeAddDTO) {
+        SysDictType sysDictType = sysDictTypeMapper.findDictByKey(sysDictTypeAddDTO.getDictKey());
         Assert.isNull(sysDictType, ResultStatus.DICT_EXIST_ERROR.message);
         SysDictType sysDict = new SysDictType();
-        BeanUtils.copyProperties(sysDictAddReq,sysDict);
-        return sysDictTypeMapper.insert(sysDict);
+        BeanUtils.copyProperties(sysDictTypeAddDTO,sysDict);
+        return this.save(sysDict);
     }
 
     /**
      * 编辑请求
-     * @param sysDictEditReq 编辑字典参数
+     * @param sysDictTypeEditDTO 编辑字典参数
      * @return 编辑状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public int edit(SysDictTypeEditReq sysDictEditReq) {
+    public boolean edit(SysDictTypeEditDTO sysDictTypeEditDTO) {
         SysDictType sysDictType = new SysDictType();
-        BeanUtils.copyProperties(sysDictEditReq,sysDictType);
-        return sysDictTypeMapper.updateById(sysDictType);
+        BeanUtils.copyProperties(sysDictTypeEditDTO,sysDictType);
+        return this.updateById(sysDictType);
     }
 
     /**
@@ -97,21 +97,21 @@ public class SysDictTypeService extends ServiceImpl<SysDictTypeMapper, SysDictTy
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void del(Long id) {
-        sysDictTypeMapper.deleteById(id);
+        this.removeById(id);
         sysDictValueMapper.delete(new LambdaQueryWrapper<SysDictValue>()
                 .eq(SysDictValue::getDictTypeId,id));
     }
 
     /**
      * 修改字典状态
-     * @param sysDictTypeEnabledReq 修改字典参数
+     * @param sysDictTypeEnabledDTO 修改字典参数
      * @return 修改状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public int changeDictType(SysDictTypeEnabledReq sysDictTypeEnabledReq) {
+    public boolean changeDictType(SysDictTypeEnabledDTO sysDictTypeEnabledDTO) {
         SysDictType sysDictType = new SysDictType();
-        sysDictType.setId(sysDictTypeEnabledReq.getId());
-        sysDictType.setEnabled(sysDictTypeEnabledReq.getEnabled());
-        return sysDictTypeMapper.updateById(sysDictType);
+        sysDictType.setId(sysDictTypeEnabledDTO.getId());
+        sysDictType.setEnabled(sysDictTypeEnabledDTO.getEnabled());
+        return this.updateById(sysDictType);
     }
 }

@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.crud.system.mapper.SysLogMapper;
 import io.github.yangyouwang.crud.system.entity.SysLog;
-import io.github.yangyouwang.crud.system.model.req.SysLogListReq;
+import io.github.yangyouwang.crud.system.model.params.SysLogListDTO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,14 +24,14 @@ public class SysLogService extends ServiceImpl<SysLogMapper,SysLog> {
 
     /**
      * 列表请求
-     * @param sysLogListReq 日志列表对象
+     * @param sysLogListDTO 日志列表对象
      * @return 请求列表
      */
     @Transactional(readOnly = true)
-    public IPage list(SysLogListReq sysLogListReq) {
-        return this.page(new Page<>(sysLogListReq.getPageNum(), sysLogListReq.getPageSize()),
+    public IPage list(SysLogListDTO sysLogListDTO) {
+        return this.page(new Page<>(sysLogListDTO.getPageNum(), sysLogListDTO.getPageSize()),
                 new LambdaQueryWrapper<SysLog>()
-                        .like(StringUtils.isNotBlank(sysLogListReq.getClassName()), SysLog::getClassName , sysLogListReq.getClassName())
-                        .like(StringUtils.isNotBlank(sysLogListReq.getMethodName()), SysLog::getMethodName , sysLogListReq.getMethodName()));
+                        .like(StringUtils.isNotBlank(sysLogListDTO.getClassName()), SysLog::getClassName , sysLogListDTO.getClassName())
+                        .like(StringUtils.isNotBlank(sysLogListDTO.getMethodName()), SysLog::getMethodName , sysLogListDTO.getMethodName()));
     }
 }
