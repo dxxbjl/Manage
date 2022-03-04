@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import io.github.yangyouwang.common.constant.Constants;
+import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.core.config.SchedulingConfig;
 import io.github.yangyouwang.crud.system.mapper.SysTaskMapper;
 import io.github.yangyouwang.crud.system.entity.SysTask;
@@ -67,7 +67,7 @@ public class SysTaskService extends ServiceImpl<SysTaskMapper, SysTask> {
     public boolean add(SysTaskAddDTO sysTaskAddDTO) {
         SysTask sysTask = new SysTask();
         BeanUtils.copyProperties(sysTaskAddDTO,sysTask);
-        if (Constants.ENABLED_YES.equals(sysTask.getEnabled())) {
+        if (ConfigConsts.ENABLED_YES.equals(sysTask.getEnabled())) {
             // 添加任务
             schedulingConfig.addTriggerTask(sysTask.getName(),sysTask.getClassName(),sysTask.getMethodName(),sysTask.getCron());
         }
@@ -83,7 +83,7 @@ public class SysTaskService extends ServiceImpl<SysTaskMapper, SysTask> {
     public boolean edit(SysTask sysTask) {
         // 取消任务
         schedulingConfig.cancelTriggerTask(sysTask.getName());
-        if (Constants.ENABLED_YES.equals(sysTask.getEnabled())) {
+        if (ConfigConsts.ENABLED_YES.equals(sysTask.getEnabled())) {
             // 添加任务
             schedulingConfig.addTriggerTask(sysTask.getName(),sysTask.getClassName(),sysTask.getMethodName(),sysTask.getCron());
         }

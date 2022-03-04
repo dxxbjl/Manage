@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import io.github.yangyouwang.common.constant.Constants;
+import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.crud.system.entity.SysMenu;
 import io.github.yangyouwang.crud.system.entity.SysRole;
@@ -76,9 +76,9 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
             for (SysMenu menu : menus) {
                 authorities.add(new SimpleGrantedAuthority(menu.getPerms()));
             }
-            authorities.add(new SimpleGrantedAuthority(Constants.ROLE_PREFIX + role.getRoleKey()));
+            authorities.add(new SimpleGrantedAuthority(ConfigConsts.ROLE_PREFIX + role.getRoleKey()));
         }
-        return new User(user.getUserName(), user.getPassWord(), Constants.ENABLED_YES.equals(user.getEnabled()),
+        return new User(user.getUserName(), user.getPassWord(), ConfigConsts.ENABLED_YES.equals(user.getEnabled()),
                 true, true, true, authorities);
     }
 
@@ -221,7 +221,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
     @Transactional(readOnly = true)
     public List<SysUserDTO> exportSysUserList() {
         List<SysUser> sysUsers = this.list(new LambdaQueryWrapper<SysUser>()
-                .eq(SysUser::getEnabled, Constants.ENABLED_YES));
+                .eq(SysUser::getEnabled, ConfigConsts.ENABLED_YES));
         return sysUsers.stream().map(sysUser -> {
             SysUserDTO sysUserDTO = new SysUserDTO();
             BeanUtils.copyProperties(sysUser, sysUserDTO);

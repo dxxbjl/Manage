@@ -1,6 +1,6 @@
 package io.github.yangyouwang.crud.system.controller;
 
-import io.github.yangyouwang.common.constant.Constants;
+import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.core.util.SecurityUtils;
 import io.github.yangyouwang.core.util.StringUtil;
 import io.github.yangyouwang.crud.system.model.result.SysMenuDTO;
@@ -97,7 +97,7 @@ public class SysLoginController {
         String checkCode = StringUtil.getCheckCode();
         //将验证码放入HttpSession中
         HttpSession session = request.getSession();
-        session.setAttribute(Constants.IMAGE_CODE_SESSION, checkCode);
+        session.setAttribute(ConfigConsts.IMAGE_CODE_SESSION, checkCode);
         //向图片上写入验证码
         graphics.drawString(checkCode, 15, 25);
         //将内存中的图片输出到浏览器

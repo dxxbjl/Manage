@@ -4,7 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import io.github.yangyouwang.common.constant.Constants;
+import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.domain.TreeSelectNode;
 import io.github.yangyouwang.common.domain.XmSelectNode;
 import io.github.yangyouwang.common.enums.ResultStatus;
@@ -59,7 +59,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
     @Transactional(readOnly = true)
     public List<SysMenuDTO> selectMenusByUser(Long userId) {
         List<SysMenu> menus;
-        if (Constants.ADMIN_USER.equals(userId)) {
+        if (ConfigConsts.ADMIN_USER.equals(userId)) {
             menus = this.sysMenuMapper.findMenu();
         } else {
             menus = this.sysMenuMapper.findMenuByUserId(userId);
@@ -154,7 +154,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
     @Transactional(readOnly = true)
     public List<TreeSelectNode> treeSelect() {
         List<SysMenu> menus = this.list(new LambdaQueryWrapper<SysMenu>()
-                .eq(SysMenu::getVisible,Constants.ENABLED_YES));
+                .eq(SysMenu::getVisible,ConfigConsts.ENABLED_YES));
         List<TreeSelectNode> result = menus.stream().map(sysMenu -> {
             TreeSelectNode treeNode = new TreeSelectNode();
             treeNode.setId(sysMenu.getId());
@@ -175,7 +175,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
     @Transactional(readOnly = true)
     public List<XmSelectNode> xmSelect(Long[] ids) {
         List<SysMenu> menus = this.list(new LambdaQueryWrapper<SysMenu>()
-                .eq(SysMenu::getVisible,Constants.ENABLED_YES));
+                .eq(SysMenu::getVisible,ConfigConsts.ENABLED_YES));
         List<XmSelectNode> result = menus.stream().map(sysMenu -> {
             XmSelectNode treeNode = new XmSelectNode();
             treeNode.setName(sysMenu.getMenuName());

@@ -5,7 +5,7 @@ import com.alibaba.excel.metadata.Sheet;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.yangyouwang.common.annotation.CrudLog;
-import io.github.yangyouwang.common.constant.Constants;
+import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.core.util.SecurityUtils;
 import io.github.yangyouwang.crud.system.model.params.*;
@@ -251,10 +251,10 @@ public class SysUserController {
         //设置自适应宽度
         sheet.setAutoWidth(Boolean.TRUE);
         // 第一个 sheet 名称
-        sheet.setSheetName(Constants.SYS_USER_SHEET_NAME);
+        sheet.setSheetName(ConfigConsts.SYS_USER_SHEET_NAME);
         writer.write(sysUserResps, sheet);
         //通知浏览器以附件的形式下载处理，设置返回头要注意文件名有中文
-        response.setHeader("Content-disposition", "attachment;filename=" + new String(Constants.SYS_USER_SHEET_NAME.getBytes("gb2312"), "ISO8859-1" ) + ".xlsx");
+        response.setHeader("Content-disposition", "attachment;filename=" + new String(ConfigConsts.SYS_USER_SHEET_NAME.getBytes("gb2312"), "ISO8859-1" ) + ".xlsx");
         writer.finish();
         response.setContentType("multipart/form-data");
         response.setCharacterEncoding("utf-8");

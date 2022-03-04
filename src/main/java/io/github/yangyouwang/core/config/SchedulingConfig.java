@@ -2,7 +2,7 @@ package io.github.yangyouwang.core.config;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import io.github.yangyouwang.common.constant.Constants;
+import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.crud.system.mapper.SysTaskMapper;
 import io.github.yangyouwang.crud.system.entity.SysTask;
 import org.springframework.beans.BeansException;
@@ -47,7 +47,7 @@ public class SchedulingConfig implements SchedulingConfigurer, ApplicationContex
         this.init(scheduledTaskRegistrar);
         // 查询所有启用的任务
         List<SysTask> sysTasks = applicationContext.getBean(SysTaskMapper.class).selectList(new LambdaQueryWrapper<SysTask>()
-                .eq(SysTask::getEnabled, Constants.ENABLED_YES));
+                .eq(SysTask::getEnabled, ConfigConsts.ENABLED_YES));
         sysTasks.forEach(sysTask -> {
             this.addTriggerTask(sysTask.getName(),sysTask.getClassName(),sysTask.getMethodName(),sysTask.getCron());
         });

@@ -1,6 +1,7 @@
 package io.github.yangyouwang.crud.system.service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.github.yangyouwang.common.constant.CacheConsts;
 import io.github.yangyouwang.crud.system.entity.SysDictType;
 import io.github.yangyouwang.crud.system.entity.SysDictValue;
 import io.github.yangyouwang.crud.system.mapper.SysDictTypeMapper;
@@ -40,7 +41,7 @@ public class SysDictValueService extends ServiceImpl<SysDictValueMapper, SysDict
      * @param dictKey 字典key
      * @return 请求列表
      */
-    @Cacheable(cacheNames = {"dictValues"},key = "#dictKey")
+    @Cacheable(cacheNames = {CacheConsts.DICT_VALUES_KEY},key = "#dictKey")
     @Transactional(readOnly = true)
     public List<SysDictValueDTO> getDictValues(String dictKey) {
         SysDictType sysDictType = sysDictTypeMapper.findDictByKey(dictKey);

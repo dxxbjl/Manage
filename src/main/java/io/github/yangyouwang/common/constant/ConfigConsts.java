@@ -4,7 +4,7 @@ package io.github.yangyouwang.common.constant;
  * 通用常量
  * @author yangyouwang
  */
-public interface Constants {
+public interface ConfigConsts {
     /**
      * 登陆接口
      */
