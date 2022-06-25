@@ -1,10 +1,10 @@
 package io.github.yangyouwang.crud.system.model.params;
 
+import io.github.yangyouwang.common.domain.BaseEntity;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 /**
  * @author yangyouwang
@@ -14,7 +14,7 @@ import java.io.Serializable;
  * @date 2021/4/13下午2:27
  */
 @Data
-public class SysDictValueEditDTO implements Serializable {
+public class SysDictValueEditDTO extends BaseEntity {
     private static final long serialVersionUID = 6085691567117098661L;
     /**
      * 主键
@@ -43,7 +43,8 @@ public class SysDictValueEditDTO implements Serializable {
     @NotNull(message = "显示顺序不能为空")
     private Integer orderNum;
     /**
-     * 备注
-     * */
-    private String remark;
+     * 启用
+     */
+    @NotBlank(message = "是否启用不能为空")
+    private String enabled;
 }

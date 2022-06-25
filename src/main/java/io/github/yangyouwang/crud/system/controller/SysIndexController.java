@@ -5,6 +5,7 @@ import io.github.yangyouwang.core.util.SecurityUtils;
 import io.github.yangyouwang.core.util.StringUtil;
 import io.github.yangyouwang.crud.system.model.result.SysMenuDTO;
 import io.github.yangyouwang.crud.system.model.result.SysUserDTO;
+import io.github.yangyouwang.crud.system.service.SysDictTypeService;
 import io.github.yangyouwang.crud.system.service.SysMenuService;
 import io.github.yangyouwang.crud.system.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,16 +32,19 @@ import java.util.List;
  * @date 2021/3/216:40 PM
  */
 @Controller
-public class SysLoginController {
+public class SysIndexController {
 
     private final SysMenuService sysMenuService;
 
     private final SysUserService sysUserService;
 
+    private final SysDictTypeService sysDictTypeService;
+
     @Autowired
-    public SysLoginController(SysMenuService sysMenuService, SysUserService sysUserService) {
+    public SysIndexController(SysMenuService sysMenuService, SysUserService sysUserService, SysDictTypeService sysDictTypeService) {
         this.sysMenuService = sysMenuService;
         this.sysUserService = sysUserService;
+        this.sysDictTypeService = sysDictTypeService;
     }
 
     /**
@@ -49,11 +53,15 @@ public class SysLoginController {
      */
     @GetMapping("/")
     public String indexPage(ModelMap map) {
+        // 缓存字典
+        sysDictTypeService.cacheDict();
+        // 用户信息
         User user = SecurityUtils.getSysUser();
         SysUserDTO sysUser = sysUserService.findUserByName(user.getUsername());
+        map.put("sysUser",sysUser);
+        // 菜单权限
         List<SysMenuDTO> sysMenus = sysMenuService.selectMenusByUser(sysUser.getId());
         map.put("sysMenus",sysMenus);
-        map.put("sysUser",sysUser);
         return "index";
     }
 

@@ -2,6 +2,7 @@ package io.github.yangyouwang.crud.system.controller;
 
 import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.domain.Result;
+import io.github.yangyouwang.common.domain.EnabledDTO;
 import io.github.yangyouwang.crud.system.model.params.SysDictValueAddDTO;
 import io.github.yangyouwang.crud.system.model.params.SysDictValueEditDTO;
 import io.github.yangyouwang.crud.system.model.result.SysDictValueDTO;
@@ -14,9 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -36,17 +35,6 @@ public class SysDictValueController {
     @Autowired
     public SysDictValueController(SysDictValueService sysDictValueService) {
         this.sysDictValueService = sysDictValueService;
-    }
-
-    /**
-     * 根据字典类型获取字典值列表
-     * @return 请求列表
-     */
-    @GetMapping("/getDictValues/{dictKey}")
-    @ResponseBody
-    public Result getDictValues(@Valid @NotBlank(message = "字典类型不能为空") @PathVariable String dictKey) {
-        List<SysDictValueDTO> dictValues = sysDictValueService.getDictValues(dictKey);
-        return Result.success(dictValues);
     }
 
     /**
@@ -116,4 +104,21 @@ public class SysDictValueController {
         boolean flag = sysDictValueService.edit(sysDictValueEditDTO);
         return Result.success(flag);
     }
+
+    /**
+     * 修改字典值状态
+     * @param enabledDTO 修改字典值参数
+     * @return 修改状态
+     */
+    @CrudLog
+    @PostMapping("/changeDictValue")
+    @ResponseBody
+    public Result changeDictValue(@RequestBody @Validated EnabledDTO enabledDTO, BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
+        }
+        boolean flag = sysDictValueService.changeDictValue(enabledDTO);
+        return Result.success(flag);
+    }
+
 }

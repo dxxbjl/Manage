@@ -1,4 +1,4 @@
-package io.github.yangyouwang.crud.system.model.params;
+package io.github.yangyouwang.common.domain;
 
 import lombok.Data;
 
@@ -8,13 +8,13 @@ import java.io.Serializable;
 
 /**
  * @author yangyouwang
- * @title: SysDictTypeEnabledDTO
+ * @title: EnabledDTO
  * @projectName crud
- * @description: 修改字典状态
+ * @description: 修改状态
  * @date 2021/4/16下午6:09
  */
 @Data
-public class SysDictTypeEnabledDTO implements Serializable {
+public class EnabledDTO implements Serializable {
 
     private static final long serialVersionUID = -1539484186991323275L;
     /**

@@ -1,10 +1,10 @@
 package io.github.yangyouwang.crud.system.model.params;
 
+import io.github.yangyouwang.common.domain.BaseEntity;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import java.io.Serializable;
 
 
 /**
@@ -15,7 +15,7 @@ import java.io.Serializable;
  * @date 2021/3/269:56 AM
  */
 @Data
-public class SysRoleAddDTO implements Serializable {
+public class SysRoleAddDTO extends BaseEntity {
     private static final long serialVersionUID = 3505539384772250573L;
     /**
      * 角色名称

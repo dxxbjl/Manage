@@ -34,6 +34,10 @@ public class SysDictValueDTO implements Serializable {
      */
     private Integer orderNum;
     /**
+     * 启用
+     */
+    private String enabled;
+    /**
      * 备注
      * */
     private String remark;

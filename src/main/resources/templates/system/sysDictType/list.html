@@ -41,8 +41,11 @@
         <div class="layui-col-md7">
             <div class="layui-card-body">
                 <table id="dictTypeTable" lay-filter="dictTypeTable"></table>
-                <script type="text/html" id="enabledTpl">
-                    <input type="checkbox" lay-filter="enabled" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" {{d.enabled==='Y'?'checked':''}} />
+                <script type="text/html" id="dictTypeEnabledTpl">
+                    <input type="checkbox" lay-filter="dictTypeEnabled" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" {{d.enabled==='Y'?'checked':''}} />
+                </script>
+                <script type="text/html" id="dictValueEnabledTpl">
+                    <input type="checkbox" lay-filter="dictValueEnabled" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" {{d.enabled==='Y'?'checked':''}} />
                 </script>
                 <script type="text/html" id="dictTypeTableBar">
                     <a sec:authorize="hasAuthority('dictValue:add')" class="layui-btn layui-btn-xs" lay-event="dictValueAdd"><i class="layui-icon layui-icon-add-1"></i>添加字典项</a>
@@ -85,10 +88,15 @@
             });
         });
         // 监听字典状态
-        form.on('switch(enabled)', function (obj) {
+        form.on('switch(dictTypeEnabled)', function (obj) {
             let id = obj.elem.value;
             let checked = obj.elem.checked ? 'Y' : 'N';
             active.changeDictTypeEnabled(id,checked);
+        });
+        form.on('switch(dictValueEnabled)', function (obj) {
+            let id = obj.elem.value;
+            let checked = obj.elem.checked ? 'Y' : 'N';
+            active.changeDictValueEnabled(id,checked);
         });
         // 查询列表接口
         table.render({
@@ -115,7 +123,7 @@
                 {field: 'id', title: 'ID', sort: true, width: 60, fixed: 'left'}
                 ,{field: 'dictName', title: '字典名称'}
                 ,{field: 'dictKey', title: '字典别名'}
-                ,{field: 'enabled', align: "center", sort: true, templet: '#enabledTpl', title: '状态'}
+                ,{field: 'enabled', align: "center", sort: true, templet: '#dictTypeEnabledTpl', title: '状态'}
                 ,{field: 'remark', title: '备注'}
                 ,{toolbar: '#dictTypeTableBar', title: '操作', width: 260, align:'center',fixed: 'right'}
             ]]
@@ -131,6 +139,7 @@
                     {field: 'id', title: 'ID', sort: true, width: 60, fixed: 'left'},
                     {field: 'dictValueName', title: '字典项名称'}
                     ,{field: 'dictValueKey', title: '字典项别名'}
+                    ,{field: 'enabled', align: "center", sort: true, templet: '#dictValueEnabledTpl', title: '状态'}
                     ,{field: 'remark', title: '备注'}
                     ,{toolbar: '#dictValueTableBar', title: '操作', width: 150, align:'center',fixed: 'right'}
                 ]
@@ -139,7 +148,7 @@
             ,even: true
         });
         //监听字典行单击事件
-        table.on('row(dictTypeTable)', function(obj){
+        table.on('row(dictTypeTable)', function(obj) {
             table.reload('dictValueTable',{
                 data: obj.data.dictValues
             });
@@ -250,7 +259,7 @@
                 });
             },
             /**
-             * 修改字典状态
+             * 修改字典项状态
              * @param id 字典id
              * @param checked 状态
              */
@@ -258,6 +267,29 @@
                 $.ajax({
                     type: 'POST',
                     url:  ctx + '/sysDictType/changeDictType',
+                    data: JSON.stringify({
+                        id: id,
+                        enabled: checked
+                    }),
+                    contentType:'application/json;charset=UTF-8',
+                    dataType: 'json',
+                    success: function(result) {
+                        layer.msg(result.message);
+                        if (result.code === 200) {
+                            table.reload('dictTypeTable');
+                        }
+                    }
+                });
+            },
+            /**
+             * 修改字典值状态
+             * @param id 字典id
+             * @param checked 状态
+             */
+            changeDictValueEnabled: function (id,checked) {
+                $.ajax({
+                    type: 'POST',
+                    url:  ctx + '/sysDictValue/changeDictValue',
                     data: JSON.stringify({
                         id: id,
                         enabled: checked

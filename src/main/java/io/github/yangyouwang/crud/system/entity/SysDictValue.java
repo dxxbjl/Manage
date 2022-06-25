@@ -7,6 +7,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+
 /**
  * @author zhixin.yao
  * @version 1.0
@@ -40,7 +41,13 @@ public class SysDictValue implements Serializable {
      * 显示顺序
      */
     private Integer orderNum;
+    /**
+     * 启用
+     */
+    private String enabled;
 
-    /** 备注 */
+    /**
+     * 备注
+     *  */
     private String remark;
 }

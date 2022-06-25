@@ -1,11 +1,11 @@
 package io.github.yangyouwang.crud.system.model.params;
 
+import io.github.yangyouwang.common.domain.BaseEntity;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 
 /**
@@ -16,7 +16,7 @@ import java.io.Serializable;
  * @date 2021/3/269:56 AM
  */
 @Data
-public class SysRoleEditDTO implements Serializable {
+public class SysRoleEditDTO extends BaseEntity {
 
     private static final long serialVersionUID = -8956402886244571705L;
     /**

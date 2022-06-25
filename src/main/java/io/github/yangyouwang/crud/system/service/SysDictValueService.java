@@ -1,16 +1,15 @@
 package io.github.yangyouwang.crud.system.service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import io.github.yangyouwang.common.constant.CacheConsts;
 import io.github.yangyouwang.crud.system.entity.SysDictType;
 import io.github.yangyouwang.crud.system.entity.SysDictValue;
 import io.github.yangyouwang.crud.system.mapper.SysDictTypeMapper;
 import io.github.yangyouwang.crud.system.mapper.SysDictValueMapper;
+import io.github.yangyouwang.common.domain.EnabledDTO;
 import io.github.yangyouwang.crud.system.model.params.SysDictValueAddDTO;
 import io.github.yangyouwang.crud.system.model.params.SysDictValueEditDTO;
 import io.github.yangyouwang.crud.system.model.result.SysDictValueDTO;
 import org.springframework.beans.BeanUtils;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -41,7 +40,6 @@ public class SysDictValueService extends ServiceImpl<SysDictValueMapper, SysDict
      * @param dictKey 字典key
      * @return 请求列表
      */
-    @Cacheable(cacheNames = {CacheConsts.DICT_VALUES_KEY},key = "#dictKey")
     @Transactional(readOnly = true)
     public List<SysDictValueDTO> getDictValues(String dictKey) {
         SysDictType sysDictType = sysDictTypeMapper.findDictByKey(dictKey);
@@ -86,6 +84,18 @@ public class SysDictValueService extends ServiceImpl<SysDictValueMapper, SysDict
     public boolean edit(SysDictValueEditDTO sysDictValueEditDTO) {
         SysDictValue sysDictValue = new SysDictValue();
         BeanUtils.copyProperties(sysDictValueEditDTO,sysDictValue);
+        return this.updateById(sysDictValue);
+    }
+    /**
+     * 修改字典值状态
+     * @param enabledDTO 修改字典值参数
+     * @return 修改状态
+     */
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
+    public boolean changeDictValue(EnabledDTO enabledDTO) {
+        SysDictValue sysDictValue = new SysDictValue();
+        sysDictValue.setId(enabledDTO.getId());
+        sysDictValue.setEnabled(enabledDTO.getEnabled());
         return this.updateById(sysDictValue);
     }
 }

@@ -4,11 +4,11 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.yangyouwang.common.annotation.CrudLog;
+import io.github.yangyouwang.common.domain.EnabledDTO;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.crud.system.entity.SysTask;
 import io.github.yangyouwang.crud.system.model.params.SysTaskAddDTO;
 import io.github.yangyouwang.crud.system.model.params.SysTaskEditDTO;
-import io.github.yangyouwang.crud.system.model.params.SysTaskEnabledDTO;
 import io.github.yangyouwang.crud.system.model.params.SysTaskListDTO;
 import io.github.yangyouwang.crud.system.model.result.SysTaskDTO;
 import io.github.yangyouwang.crud.system.service.SysTaskService;
@@ -135,18 +135,18 @@ public class SysTaskController {
 
     /**
      * 修改任务请求
-     * @param sysTaskEnabledDTO 修改任务状态对象
+     * @param enabledDTO 修改任务状态对象
      * @return 修改状态
      */
     @CrudLog
     @PostMapping("/changeTask")
     @ResponseBody
-    public Result changeTask(@RequestBody @Validated SysTaskEnabledDTO sysTaskEnabledDTO, BindingResult bindingResult){
+    public Result changeTask(@RequestBody @Validated EnabledDTO enabledDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        SysTask sysTask = sysTaskService.getById(sysTaskEnabledDTO.getId());
-        sysTask.setEnabled(sysTaskEnabledDTO.getEnabled());
+        SysTask sysTask = sysTaskService.getById(enabledDTO.getId());
+        sysTask.setEnabled(enabledDTO.getEnabled());
         boolean flag = sysTaskService.edit(sysTask);
         return Result.success(flag);
     }

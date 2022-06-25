@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.constant.ConfigConsts;
+import io.github.yangyouwang.common.domain.EnabledDTO;
 import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.crud.system.entity.SysMenu;
 import io.github.yangyouwang.crud.system.entity.SysRole;
@@ -190,14 +191,14 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
 
     /**
      * 修改用户状态
-     * @param sysUserEnabledDTO 用户状态dto
+     * @param enabledDTO 用户状态dto
      * @return 修改状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public boolean changeUser(SysUserEnabledDTO sysUserEnabledDTO) {
+    public boolean changeUser(EnabledDTO enabledDTO) {
         SysUser sysUser = new SysUser();
-        sysUser.setId(sysUserEnabledDTO.getId());
-        sysUser.setEnabled(sysUserEnabledDTO.getEnabled());
+        sysUser.setId(enabledDTO.getId());
+        sysUser.setEnabled(enabledDTO.getEnabled());
         return this.updateById(sysUser);
     }
 

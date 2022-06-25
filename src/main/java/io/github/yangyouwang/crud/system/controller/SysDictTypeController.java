@@ -1,7 +1,7 @@
 package io.github.yangyouwang.crud.system.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.yangyouwang.common.annotation.CrudLog;
+import io.github.yangyouwang.common.domain.EnabledDTO;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.crud.system.model.params.*;
 import io.github.yangyouwang.crud.system.model.result.SysDictTypeDTO;
@@ -77,8 +77,7 @@ public class SysDictTypeController {
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        IPage<SysDictTypeDTO> list = sysDictTypeService.list(sysDictTypeListDTO);
-        return Result.success(list);
+        return Result.success(sysDictTypeService.list(sysDictTypeListDTO));
     }
 
     /**
@@ -115,17 +114,17 @@ public class SysDictTypeController {
 
     /**
      * 修改字典状态
-     * @param sysDictTypeEnabledDTO 修改字典参数
+     * @param enabledDTO 修改字典参数
      * @return 修改状态
      */
     @CrudLog
     @PostMapping("/changeDictType")
     @ResponseBody
-    public Result changeDictType(@RequestBody @Validated SysDictTypeEnabledDTO sysDictTypeEnabledDTO, BindingResult bindingResult){
+    public Result changeDictType(@RequestBody @Validated EnabledDTO enabledDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        boolean flag = sysDictTypeService.changeDictType(sysDictTypeEnabledDTO);
+        boolean flag = sysDictTypeService.changeDictType(enabledDTO);
         return Result.success(flag);
     }
 

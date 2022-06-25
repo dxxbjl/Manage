@@ -7,6 +7,7 @@
     <result column="dict_value_key" jdbcType="VARCHAR" property="dictValueKey" />
     <result column="dict_value_name" jdbcType="VARCHAR" property="dictValueName" />
     <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+    <result column="enabled" jdbcType="VARCHAR" property="enabled" />
     <result column="create_by" jdbcType="VARCHAR" property="createBy" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
@@ -14,7 +15,7 @@
     <result column="remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, dict_type_id, dict_value_key, dict_value_name, order_num, create_by, create_time, 
+    id, dict_type_id, dict_value_key, dict_value_name, order_num, enabled, create_by, create_time,
     update_by, update_time, remark
   </sql>
   <insert id="insertBatch" parameterType="java.util.List">

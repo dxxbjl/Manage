@@ -1,9 +1,9 @@
 package io.github.yangyouwang.crud.system.model.params;
 
+import io.github.yangyouwang.common.domain.BaseEntity;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
 
 /**
  * @author yangyouwang
@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @date 2021/4/10上午10:35
  */
 @Data
-public class SysTaskAddDTO implements Serializable {
+public class SysTaskAddDTO extends BaseEntity {
 
     private static final long serialVersionUID = -5068908296247542518L;
     /**
@@ -42,6 +42,4 @@ public class SysTaskAddDTO implements Serializable {
     @NotBlank(message = "是否启用不能为空")
     private String enabled;
 
-    /** 备注 */
-    private String remark;
 }

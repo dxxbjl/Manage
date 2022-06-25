@@ -1,5 +1,7 @@
 package io.github.yangyouwang.crud.system.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -11,7 +13,7 @@ import io.github.yangyouwang.crud.system.entity.SysDictType;
 import io.github.yangyouwang.crud.system.entity.SysDictValue;
 import io.github.yangyouwang.crud.system.model.params.SysDictTypeAddDTO;
 import io.github.yangyouwang.crud.system.model.params.SysDictTypeEditDTO;
-import io.github.yangyouwang.crud.system.model.params.SysDictTypeEnabledDTO;
+import io.github.yangyouwang.common.domain.EnabledDTO;
 import io.github.yangyouwang.crud.system.model.params.SysDictTypeListDTO;
 import io.github.yangyouwang.crud.system.model.result.SysDictTypeDTO;
 import org.apache.commons.lang3.StringUtils;
@@ -22,6 +24,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.List;
 
 /**
  * @author yangyouwang
@@ -38,6 +45,9 @@ public class SysDictTypeService extends ServiceImpl<SysDictTypeMapper, SysDictTy
 
     @Resource
     private SysDictValueMapper sysDictValueMapper;
+
+    @Resource
+    private HttpServletResponse response;
 
     /**
      * 列表请求
@@ -104,14 +114,33 @@ public class SysDictTypeService extends ServiceImpl<SysDictTypeMapper, SysDictTy
 
     /**
      * 修改字典状态
-     * @param sysDictTypeEnabledDTO 修改字典参数
+     * @param enabledDTO 修改字典参数
      * @return 修改状态
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public boolean changeDictType(SysDictTypeEnabledDTO sysDictTypeEnabledDTO) {
+    public boolean changeDictType(EnabledDTO enabledDTO) {
         SysDictType sysDictType = new SysDictType();
-        sysDictType.setId(sysDictTypeEnabledDTO.getId());
-        sysDictType.setEnabled(sysDictTypeEnabledDTO.getEnabled());
+        sysDictType.setId(enabledDTO.getId());
+        sysDictType.setEnabled(enabledDTO.getEnabled());
         return this.updateById(sysDictType);
+    }
+
+    /**
+     * 缓存字典
+     */
+    public void cacheDict() {
+        List<SysDictType> sysDictTypes = sysDictTypeMapper.selectDictList();
+        sysDictTypes.forEach(sysDictType -> {
+            List<SysDictValue> dictValues = sysDictType.getDictValues();
+            String dictValue = JSONArray.parseArray(JSON.toJSONString(dictValues)).toJSONString();
+            try {
+                Cookie cookie = new Cookie(sysDictType.getDictKey(), URLEncoder.encode(dictValue, "utf-8"));
+                cookie.setMaxAge(7 * 24 * 60 * 60);
+                cookie.setPath("/");
+                response.addCookie(cookie);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

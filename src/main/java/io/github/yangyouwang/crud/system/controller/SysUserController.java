@@ -6,6 +6,7 @@ import com.alibaba.excel.support.ExcelTypeEnum;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.constant.ConfigConsts;
+import io.github.yangyouwang.common.domain.EnabledDTO;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.core.util.SecurityUtils;
 import io.github.yangyouwang.crud.system.model.params.*;
@@ -212,17 +213,17 @@ public class SysUserController {
 
     /**
      * 修改用户状态
-     * @param sysUserEnabledDTO 修改用户状态对象
+     * @param enabledDTO 修改用户状态对象
      * @return 修改状态
      */
     @CrudLog
     @PostMapping("/changeUser")
     @ResponseBody
-    public Result changeUser(@RequestBody @Validated SysUserEnabledDTO sysUserEnabledDTO, BindingResult bindingResult){
+    public Result changeUser(@RequestBody @Validated EnabledDTO enabledDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        boolean flag = sysUserService.changeUser(sysUserEnabledDTO);
+        boolean flag = sysUserService.changeUser(enabledDTO);
         return Result.success(flag);
     }
 

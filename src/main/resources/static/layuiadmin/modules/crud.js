@@ -1,23 +1,11 @@
-layui.define(['jquery'], function(exports){
-    let $ = layui.jquery;
-
-
+layui.define(['jquery','cookie'], function(exports){
+    let $ = layui.jquery,
+        cookie = layui.cookie;
     function options(name) {
         let list = [];
         if (name) {
             // 获取字典
-            $.ajax({
-                type: 'get',
-                url:  '/sysDictValue/getDictValues/' + name,
-                contentType:'application/json;charset=UTF-8',
-                dataType: 'json',
-                async : false,
-                success: function(result) {
-                    if (result.code === 200) {
-                        list = result.data;
-                    }
-                }
-            });
+            list = JSON.parse(decodeURI($.cookie(name)));
         }
         return list;
     }

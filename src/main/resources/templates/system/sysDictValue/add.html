@@ -30,6 +30,10 @@
       <input type="number" name="orderNum" lay-verify="required" placeholder="请输入序号" class="layui-input">
     </div>
   </div>
+  <div class="layui-form-item" lay-filter="sex">
+    <label class="layui-form-label">状态</label>
+    <div class="layui-input-block" id="enabled"></div>
+  </div>
   <div class="layui-form-item">
     <label class="layui-form-label">备注</label>
     <div class="layui-input-inline">
@@ -72,6 +76,7 @@
         }
       });
     });
+    crud.setRadio("enabled","enabled","Y");
   });
   </script>
 </body>
