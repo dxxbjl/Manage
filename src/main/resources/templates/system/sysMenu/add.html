@@ -1,13 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="utf-8">
   <title>添加菜单</title>
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-  <link rel="stylesheet" th:href="@{/static/layuiadmin/layui/css/layui.css}" media="all">
-  <link rel="stylesheet" th:href="@{/static/layuiadmin/style/admin.css}" media="all">
+  <div th:replace="common/link::header"></div>
 </head>
 <body>
   <div class="layui-form" lay-filter="sys-menu-form" id="sys-menu-form"  style="padding: 20px 0 0 0;">
@@ -68,9 +63,8 @@
       <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
     </div>
   </div>
-  <script th:src="@{/static/layuiadmin/layui/layui.js}"></script>
-  <script th:inline="javascript">
-  let ctx = [[${#request.getContextPath()}]];
+<div th:replace="common/script::footer"></div>
+<script th:inline="javascript">
   layui.config({
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
@@ -130,7 +124,6 @@
     });
     crud.setSelect("menuType","menuType",'M');
     crud.setRadio("visible","enabled","Y");
-
     iconPicker.render({
       // 选择器，推荐使用input
       elem: '#iconPicker',
@@ -148,6 +141,6 @@
       }
     });
   });
-  </script>
+</script>
 </body>
 </html>

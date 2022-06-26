@@ -1,13 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="utf-8">
   <title>编辑用户</title>
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-  <link rel="stylesheet" th:href="@{/static/layuiadmin/layui/css/layui.css}" media="all">
-  <link rel="stylesheet" th:href="@{/static/layuiadmin/style/admin.css}" media="all">
+  <div th:replace="common/link::header"></div>
 </head>
 <body>
 <div class="layui-form" lay-filter="sys-user-form" id="sys-user-form"  style="padding: 20px 0 0 0;">
@@ -65,28 +60,24 @@
     <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
   </div>
 </div>
-
-<script th:src="@{/static/layuiadmin/layui/layui.js}"></script>
+<div th:replace="common/script::footer"></div>
 <script th:inline="javascript">
-    let ctx = [[${#request.getContextPath()}]];
     layui.config({
         base: '/static/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index', //主入口模块
         xmSelect: 'xm-select'
     }).use(['index', 'form','xmSelect','upload','crud'], function(){
-        let $ = layui.$
-            ,xmSelect = layui.xmSelect
-            ,upload = layui.upload
-            ,crud = layui.crud
-            ,form = layui.form
-            ,sysUser = [[${sysUser}]];
-
+        let $ = layui.$,
+                xmSelect = layui.xmSelect,
+                upload = layui.upload,
+                crud = layui.crud,
+                form = layui.form,
+                sysUser = [[${sysUser}]];
         if (sysUser.avatar) {
           $('#upload-img').attr('src', sysUser.avatar); //图片链接（base64）
         }
         form.val('sys-user-form', sysUser);
-
         form.on('submit(save-submit)', function(data) {
             let roleIds = crud.getXmSelectTreeIds(select);
             data.field.roleIds = roleIds;
