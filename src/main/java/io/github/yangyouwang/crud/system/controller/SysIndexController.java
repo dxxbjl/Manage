@@ -93,12 +93,12 @@ public class SysIndexController {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         //获取画笔
         Graphics graphics = image.getGraphics();
-        //设置画笔颜色为灰色
-        graphics.setColor(Color.GRAY);
+        //设置画笔颜色为白色
+        graphics.setColor(Color.white);
         //填充图片
         graphics.fillRect(0, 0, width, height);
-        //设置画笔颜色为黄色
-        graphics.setColor(Color.YELLOW);
+        //设置画笔颜色为黑色
+        graphics.setColor(Color.black);
         //设置字体的小大
         graphics.setFont(new Font("黑体", Font.BOLD, 24));
         //产生4个随机验证码

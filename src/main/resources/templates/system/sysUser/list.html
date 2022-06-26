@@ -97,22 +97,21 @@
             statusCode: 200 //成功的状态码，默认：0
           }
           ,cols: [[ //表头
-              {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'}
-              ,{field: 'avatar', title: "头像",
+              {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
+              {field: 'avatar', title: "头像",
                   templet: function (d) {
                     if (d.avatar) {
                       return '<div><img alt="" width="50%" height="50%" src='+d.avatar+'></div>'
                     }
                     return '<div><img alt="" width="50%" height="50%" src="/static/style/img/def_profile.jpg"></div>'
                   }
-              }
-              ,{field: 'userName', title: '账户'}
-              ,{field: 'email', title: '邮箱'}
-              ,{field: 'phonenumber', title: '手机号码'}
-              ,{field: 'sex', title: "性别",templet: function (d) { return crud.getDictValue('sex',d.sex);}}
-              ,{field: 'enabled', align: "center", sort: true, templet: '#enabledTpl', title: '状态'}
-              ,{field: 'remark', title: '备注'}
-              ,{toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
+              },
+              {field: 'userName', title: '账户'},
+              {field: 'email', title: '邮箱',width: 180},
+              {field: 'phonenumber', title: '手机号码',width: 180},
+              {field: 'sex', title: "性别",templet: function (d) { return crud.getDictValue('sex',d.sex);}},
+              {field: 'enabled', align: "center", sort: true, templet: '#enabledTpl', title: '状态'},
+              {toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
           ]]
       });
       //监听行工具事件

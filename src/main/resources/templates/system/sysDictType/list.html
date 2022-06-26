@@ -32,7 +32,7 @@
                 </div>
             </div>
         </div>
-        <div class="layui-col-md7">
+        <div class="layui-col-md6">
             <div class="layui-card-body">
                 <table id="dictTypeTable" lay-filter="dictTypeTable"></table>
                 <script type="text/html" id="dictTypeEnabledTpl">
@@ -52,7 +52,7 @@
                 </script>
             </div>
         </div>
-        <div class="layui-col-md5">
+        <div class="layui-col-md6">
             <div class="layui-card-body">
                 <table id="dictValueTable" lay-filter="dictValueTable"></table>
             </div>
@@ -117,8 +117,7 @@
                 ,{field: 'dictName', title: '字典名称'}
                 ,{field: 'dictKey', title: '字典别名'}
                 ,{field: 'enabled', align: "center", sort: true, templet: '#dictTypeEnabledTpl', title: '状态'}
-                ,{field: 'remark', title: '备注'}
-                ,{toolbar: '#dictTypeTableBar', title: '操作', width: 260, align:'center',fixed: 'right'}
+                ,{toolbar: '#dictTypeTableBar', title: '操作', width: 250, align:'center',fixed: 'right'}
             ]]
         });
         /**
@@ -130,11 +129,10 @@
             ,cols: [
                 [
                     {field: 'id', title: 'ID', sort: true, width: 60, fixed: 'left'},
-                    {field: 'dictValueName', title: '字典项名称'}
-                    ,{field: 'dictValueKey', title: '字典项别名'}
-                    ,{field: 'enabled', align: "center", sort: true, templet: '#dictValueEnabledTpl', title: '状态'}
-                    ,{field: 'remark', title: '备注'}
-                    ,{toolbar: '#dictValueTableBar', title: '操作', width: 150, align:'center',fixed: 'right'}
+                    {field: 'dictValueName', title: '字典项名称'},
+                    {field: 'dictValueKey', title: '字典项别名'},
+                    {field: 'enabled', align: "center", sort: true, templet: '#dictValueEnabledTpl', title: '状态'},
+                    {toolbar: '#dictValueTableBar', title: '操作', width: 150, align:'center',fixed: 'right'}
                 ]
             ]
             ,data: []

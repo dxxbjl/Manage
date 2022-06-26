@@ -29,7 +29,7 @@
                     </div>
                     <div class="layui-col-xs5">
                         <div style="margin-left: 10px;">
-                            <img id="codeImg" src="#" class="layadmin-user-login-codeimg">
+                            <img id="codeImg" class="layadmin-user-login-codeimg">
                         </div>
                     </div>
                 </div>
@@ -78,7 +78,7 @@
                     if (result.code === 200) {
                         layer.msg('登入成功', {
                              icon: 1
-                            ,time: 3000
+                            ,time: 1000
                         }, function(){
                             window.location.href = '/';
                         });

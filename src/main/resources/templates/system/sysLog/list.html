@@ -77,17 +77,17 @@
               statusCode: 200 //成功的状态码，默认：0
           }
           ,cols: [[ //表头
-              {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'}
-              ,{field: 'packageName', title: '包名称'}
-              ,{field: 'className', title: '类名称'}
-              ,{field: 'methodName', title: '方法名称'}
-              ,{field: 'argsName', title: '参数名'}
-              ,{field: 'argsValue', title: '参数值'}
-              ,{field: 'exceptionName', title: '异常类型'}
-              ,{field: 'errMsg', title: '错误信息'}
-              ,{field: 'stackTrace', title: '异常堆栈信息'}
-              ,{field: 'createTime', title: '创建时间'}
-              ,{toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
+              {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
+              {field: 'packageName', title: '包名称'},
+              {field: 'className', title: '类名称'},
+              {field: 'methodName', title: '方法名称'},
+              {field: 'argsName', title: '参数名'},
+              {field: 'argsValue', title: '参数值'},
+              {field: 'exceptionName', title: '异常类型'},
+              {field: 'errMsg', title: '错误信息'},
+              {field: 'stackTrace', title: '异常堆栈信息'},
+              {field: 'createTime', title: '创建时间'},
+              {toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
           ]]
       });
       table.on('tool(logTable)', function(obj){

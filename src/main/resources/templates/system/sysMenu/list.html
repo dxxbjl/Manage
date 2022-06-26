@@ -86,11 +86,10 @@
               },
               cols: [[ //表头
                   {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
-                  {field: 'menuName', title: '菜单名称'},
-                  {field: 'menuType', title: "菜单类型",templet: function (d) { return crud.getDictValue('menuType',d.menuType);}},
+                  {field: 'menuName', title: '菜单名称', width: 200},
+                  {field: 'menuType', title: "菜单类型", templet: function (d) { return crud.getDictValue('menuType',d.menuType);}},
                   {field: 'url', title: '请求地址'},
                   {field: 'perms', title: '权限标识'},
-                  {field: 'remark', title: '备注'},
                   {field: 'visible', align: "center", sort: true, templet: '#visibleTpl', title: '状态'},
                   {toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
               ]]
