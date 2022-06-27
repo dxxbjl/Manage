@@ -82,8 +82,6 @@ public class CodeGenerator {
 
         // 如果模板引擎是 freemarker
         String templatePath = "/templates/mapper.xml.ftl";
-        // 如果模板引擎是 velocity
-        // String templatePath = "/templates/mapper.xml.vm";
 
         // 自定义输出配置
         List<FileOutConfig> focList = new ArrayList<>();
@@ -96,21 +94,6 @@ public class CodeGenerator {
                         + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });
-        /*
-        cfg.setFileCreate(new IFileCreate() {
-            @Override
-            public boolean isCreate(ConfigBuilder configBuilder, FileType fileType, String filePath) {
-                // 判断自定义文件夹是否需要创建
-                checkDir("调用默认方法创建的目录，自定义目录用");
-                if (fileType == FileType.MAPPER) {
-                    // 已经生成 mapper 文件判断存在，不想重新生成返回 false
-                    return !new File(filePath).exists();
-                }
-                // 允许生成模板文件
-                return true;
-            }
-        });
-        */
         cfg.setFileOutConfigList(focList);
         mpg.setCfg(cfg);
 
@@ -119,9 +102,9 @@ public class CodeGenerator {
 
         // 配置自定义输出模板
         //指定自定义模板路径，注意不要带上.ftl/.vm, 会根据使用的模板引擎自动识别
-        // templateConfig.setEntity("templates/entity2.java");
-        // templateConfig.setService();
-        // templateConfig.setController();
+        templateConfig.setController("templates/ftl/controller.java");
+        templateConfig.setService("templates/ftl/service.java");
+        templateConfig.setServiceImpl("templates/ftl/serviceImpl.java");
 
         templateConfig.setXml(null);
         mpg.setTemplate(templateConfig);
@@ -131,12 +114,9 @@ public class CodeGenerator {
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
         strategy.setSuperEntityClass(BaseEntity.class);
+        strategy.setSuperEntityColumns("id","create_by","create_time","update_by","update_time","deleted","remark");
         strategy.setEntityLombokModel(true);
-        strategy.setRestControllerStyle(true);
-        // 公共父类
-        //strategy.setSuperControllerClass("你自己的父类控制器,没有就不用设置!");
-        // 写于父类中的公共字段
-        strategy.setSuperEntityColumns("id");
+        strategy.setRestControllerStyle(false);
         strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setTablePrefix(pc.getModuleName() + "_");

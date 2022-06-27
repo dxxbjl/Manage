@@ -1,8 +1,6 @@
 package io.github.yangyouwang.common.domain;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import java.io.Serializable;
@@ -17,6 +15,10 @@ import java.util.Date;
 public abstract class BaseEntity implements Serializable {
 
     private static final Long serialVersionUID = 1L;
+
+    /** 主键id */
+    @TableId(type = IdType.AUTO)
+    private Long id;
 
     /** 创建者 */
     @TableField(value = "create_by",fill = FieldFill.INSERT)

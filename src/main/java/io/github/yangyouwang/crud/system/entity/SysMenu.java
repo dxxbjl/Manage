@@ -1,8 +1,6 @@
 package io.github.yangyouwang.crud.system.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.github.yangyouwang.common.domain.BaseEntity;
 import lombok.Data;
@@ -21,11 +19,6 @@ import java.util.List;
 @TableName("sys_menu")
 public class SysMenu extends BaseEntity {
     private static final long serialVersionUID = -152572856637313896L;
-    /**
-     * 主键id
-     */
-    @TableId(type = IdType.AUTO)
-    private Long id;
     /**
      * 菜单名称
      */

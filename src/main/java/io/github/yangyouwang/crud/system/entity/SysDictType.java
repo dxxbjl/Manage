@@ -1,8 +1,6 @@
 package io.github.yangyouwang.crud.system.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.github.yangyouwang.common.domain.BaseEntity;
 import lombok.Data;
@@ -19,11 +17,6 @@ import java.util.List;
 @TableName("sys_dict_type")
 public class SysDictType extends BaseEntity {
     private static final long serialVersionUID = 616049205960190106L;
-    /**
-     * 主键id
-     */
-    @TableId(type = IdType.AUTO)
-    private Long id;
     /**
      * 类型key
      */
