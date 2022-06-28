@@ -1,49 +1,57 @@
-package io.github.yangyouwang;
-import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
+package io.github.yangyouwang.crud.api;
+
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+import io.github.yangyouwang.common.annotation.ApiVersion;
+import io.github.yangyouwang.common.annotation.CrudLog;
+import io.github.yangyouwang.common.annotation.PassToken;
+import io.github.yangyouwang.common.constant.ApiVersionConstant;
 import io.github.yangyouwang.common.domain.BaseEntity;
+import io.github.yangyouwang.common.domain.Result;
+import io.github.yangyouwang.core.properties.CodeGeneratorProperties;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 /**
- * Description: 演示例子，执行 main 方法控制台输入模块表名回车自动生成对应项目目录中 <br/>
- * date: 2022/6/25 23:17<br/>
+ * Description: 生成代码接口控制层 <br/>
+ * date: 2022/6/28 10:30<br/>
  *
  * @author yangyouwang<br />
  * @version v1.0
  * @since JDK 1.8
  */
-public class CodeGenerator {
+@RestController
+@RequestMapping("/api/{version}/code_generator")
+@Api(tags = "CodeGeneratorController", description = "生成代码接口控制层")
+public class CodeGeneratorController {
 
-    /**
-     * <p>
-     * 读取控制台内容
-     * </p>
-     */
-    public static String scanner(String tip) {
-        Scanner scanner = new Scanner(System.in);
-        StringBuilder help = new StringBuilder();
-        help.append("请输入" + tip + "：");
-        System.out.println(help.toString());
-        if (scanner.hasNext()) {
-            String ipt = scanner.next();
-            if (StringUtils.isNotBlank(ipt)) {
-                return ipt;
-            }
-        }
-        throw new MybatisPlusException("请输入正确的" + tip + "！");
-    }
+    @Autowired
+    private CodeGeneratorProperties codeGeneratorProperties;
 
-    public static void main(String[] args) {
+    @ApiOperation(value="生成代码接口")
+    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType="query", name = "moduleName", value = "模块名", required = true, dataType = "String"),
+            @ApiImplicitParam(paramType="query", name = "tables", value = "表名", required = true, dataType = "String")
+    })
+    @GetMapping("")
+    @PassToken
+    @CrudLog
+    public Result codeGenerator(String moduleName,String ... tables) {
         // 代码生成器
         AutoGenerator mpg = new AutoGenerator();
 
@@ -51,7 +59,7 @@ public class CodeGenerator {
         GlobalConfig gc = new GlobalConfig();
         String projectPath = System.getProperty("user.dir");
         gc.setOutputDir(projectPath + "/src/main/java");
-        gc.setAuthor("yangyouwang");
+        gc.setAuthor(codeGeneratorProperties.getAuthor());
         gc.setOpen(false);
         //实体属性 Swagger2 注解
         gc.setSwagger2(true);
@@ -59,16 +67,15 @@ public class CodeGenerator {
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://localhost:3306/crud?useUnicode=true&useSSL=false&characterEncoding=utf8");
-        // dsc.setSchemaName("public");
-        dsc.setDriverName("com.mysql.jdbc.Driver");
-        dsc.setUsername("root");
-        dsc.setPassword("123456");
+        dsc.setUrl(codeGeneratorProperties.getUrl());
+        dsc.setDriverName(codeGeneratorProperties.getDriverName());
+        dsc.setUsername(codeGeneratorProperties.getUsername());
+        dsc.setPassword(codeGeneratorProperties.getPassword());
         mpg.setDataSource(dsc);
 
         // 包配置
         PackageConfig pc = new PackageConfig();
-        pc.setModuleName(scanner("模块名"));
+        pc.setModuleName(moduleName);
         pc.setParent("io.github.yangyouwang.crud");
         mpg.setPackageInfo(pc);
 
@@ -117,11 +124,14 @@ public class CodeGenerator {
         strategy.setSuperEntityColumns("id","create_by","create_time","update_by","update_time","deleted","remark");
         strategy.setEntityLombokModel(true);
         strategy.setRestControllerStyle(false);
-        strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
+        strategy.setInclude(tables);
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setTablePrefix(pc.getModuleName() + "_");
         mpg.setStrategy(strategy);
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());
         mpg.execute();
+
+        // 导入sql到菜单中
+        return Result.success("生成代码在项目工程中");
     }
 }

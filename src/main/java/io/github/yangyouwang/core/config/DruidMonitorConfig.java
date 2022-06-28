@@ -30,8 +30,8 @@ public class DruidMonitorConfig {
         servletRegistrationBean.addUrlMappings("/druid/*");
         servletRegistrationBean.addInitParameter("allow", "");
         servletRegistrationBean.addInitParameter("deny", "");
-        servletRegistrationBean.addInitParameter("loginUsername", "admin");
-        servletRegistrationBean.addInitParameter("loginPassword", "admin");
+        servletRegistrationBean.addInitParameter("loginUsername", "");
+        servletRegistrationBean.addInitParameter("loginPassword", "");
         return servletRegistrationBean;
     }
 

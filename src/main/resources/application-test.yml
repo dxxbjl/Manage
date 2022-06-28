@@ -76,3 +76,10 @@ aliyun:
     tagName: xxx #邮件服务 控制台创建的标签
     replyToAddress: false #邮件服务 回信地址
     toAddress:  #邮件服务  目标地址
+# 配置代码生成
+code-generator:
+  url: jdbc:mysql://localhost:3306/crud?useUnicode=true&useSSL=false&characterEncoding=utf8
+  driver-name: com.mysql.jdbc.Driver
+  username: root
+  password: 123456
+  author: yangyouwang
