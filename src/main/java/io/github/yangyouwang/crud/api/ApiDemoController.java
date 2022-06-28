@@ -26,10 +26,10 @@ import java.util.Map;
 @Api(tags = "ApiDemoController", description = "demo控制层")
 public class ApiDemoController {
 
-
     @ApiOperation(value="测试hello接口")
     @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
     @GetMapping("/hello")
+    @ApiIdempotent
     public Map<String,Object> hello() {
         Long userId = ApiContext.getUserId();
         Map<String,Object> result = new HashMap<>(16);
@@ -37,15 +37,14 @@ public class ApiDemoController {
         return result;
     }
 
-
     @ApiOperation(value="获取token")
     @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
     @GetMapping("/getToken")
     @PassToken
-    @ApiIdempotent
     public Map<String,Object> getToken() {
         Map<String,Object> result = new HashMap<>(16);
-        result.put("token",JwtTokenUtil.buildJWT("123"));
+        String token = JwtTokenUtil.buildJWT("123");
+        result.put("token",token);
         return result;
     }
 

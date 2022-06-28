@@ -11,10 +11,9 @@ import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.schema.ModelRef;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
-import springfox.documentation.service.Parameter;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -49,7 +48,10 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.any())
                 .build()
-                .globalOperationParameters(globalOperation());
+                .globalOperationParameters(globalOperation())
+                //  安全上下文
+                .securityContexts(Arrays.asList(securityContexts()))
+                .securitySchemes(unifiedAuth());
     }
 
     @Bean
@@ -92,5 +94,25 @@ public class SwaggerConfig {
                 .contact(new Contact("杨有旺", "http://www.wbd.plus/", "616505453@qq.com"))
                 .version("1.0")
                 .build();
+    }
+
+    private static List<ApiKey> unifiedAuth() {
+        List<ApiKey> arrayList = new ArrayList();
+        arrayList.add(new ApiKey("Authorization", "Authorization", "header"));
+        return arrayList;
+    }
+
+    private SecurityContext securityContexts() {
+        return SecurityContext.builder()
+                .securityReferences(defaultAuth())
+                .forPaths(PathSelectors.any())
+                .build();
+    }
+
+    private List<SecurityReference> defaultAuth() {
+        AuthorizationScope authorizationScope = new AuthorizationScope("global", "描述信息");
+        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+        authorizationScopes[0] = authorizationScope;
+        return Arrays.asList(new SecurityReference("Authorization", authorizationScopes));
     }
 }

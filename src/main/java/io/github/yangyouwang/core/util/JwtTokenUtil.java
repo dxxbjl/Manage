@@ -38,7 +38,7 @@ public class JwtTokenUtil {
      * 使用JWT默认方式，生成加解密密钥
      *
      * @param alg 加解密类型
-     * @return
+     * @return 密钥
      */
     public static SecretKey generateKey(SignatureAlgorithm alg) {
         return MacProvider.generateKey(alg);
@@ -49,7 +49,7 @@ public class JwtTokenUtil {
      *
      * @param alg  加解密类型
      * @param rule 密钥生成规则
-     * @return
+     * @return 密钥
      */
     public static SecretKey generateKey(SignatureAlgorithm alg, String rule) {
         // 将密钥生成键转换为字节数组
@@ -202,7 +202,6 @@ public class JwtTokenUtil {
     /**
      * 获取token
      * @param token token
-     * @return userId
      */
     public static void parseJWT(String token) {
         SecretKey key = generateKey(JWT_ALG, JwtConstants.SECRET);

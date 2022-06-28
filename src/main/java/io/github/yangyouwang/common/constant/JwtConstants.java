@@ -13,15 +13,19 @@ public interface JwtConstants {
      */
     String TOKEN = "token";
     /**
-     * token前缀
+     * 根据key获取token
      */
-    String REDIS_TOKEN_PREFIX = "token:";
-
     String AUTH_HEADER = "Authorization";
-
+    /**
+     * 密钥生成规则
+     */
     String SECRET = "defaultSecret";
-
+    /**
+     * 过期时间
+     */
     int EXPIRATION = 604800;
-
+    /**
+     * jwt前缀
+     */
     String JWT_SEPARATOR = "Bearer ";
 }
