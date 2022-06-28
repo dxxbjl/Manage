@@ -31,12 +31,12 @@ public class StencilsetRestResource {
 
     @GetMapping(value = "/editor/stencilset")
     public String getStencilset() {
-        ClassPathResource resource = new ClassPathResource("static/stencilset.json");
+        ClassPathResource resource = new ClassPathResource("static/act/stencilset.json");
         try (InputStream in = resource.getInputStream()) {
             return StreamUtils.copyToString(in, StandardCharsets.UTF_8);
         } catch (IOException e) {
             e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return null;
     }
 }

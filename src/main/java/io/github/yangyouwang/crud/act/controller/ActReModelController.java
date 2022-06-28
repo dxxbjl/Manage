@@ -28,7 +28,7 @@ import java.util.Objects;
 @RequestMapping("/actReModel")
 public class ActReModelController {
 
-    private String SUFFIX = "act/model";
+    private static final String SUFFIX = "act/reModel";
 
     private final ActReModelService actReModelService;
 
@@ -77,7 +77,7 @@ public class ActReModelController {
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        IPage<ActReModelDTO> list = actReModelService.list(actReModelListDTO);
+        IPage list = actReModelService.list(actReModelListDTO);
         return Result.success(list);
     }
 
@@ -103,9 +103,8 @@ public class ActReModelController {
      */
     @GetMapping("/design/{id}")
     public String design(@Valid @NotNull(message = "id不能为空") @PathVariable("id") String id) {
-        return "redirect:/static/modeler.html?modelId=" + id;
+        return "redirect:/static/act/modeler.html?modelId=" + id;
     }
-
 
     /**
      * 部署流程模型

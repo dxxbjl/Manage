@@ -59,7 +59,7 @@ public class ${table.controllerName} {
   * @return 列表页面
   */
   @GetMapping("/listPage")
-    public String listPage(){
+  public String listPage(){
     return SUFFIX + "/list";
   }
 

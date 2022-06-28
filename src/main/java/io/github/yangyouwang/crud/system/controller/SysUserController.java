@@ -245,7 +245,7 @@ public class SysUserController {
      */
     @RequestMapping("/exportExcel")
     public void export(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        List<SysUserDTO> sysUserResps = sysUserService.exportSysUserList();
+        List<SysUserDTO> sysUsers= sysUserService.exportSysUserList();
         ServletOutputStream out = response.getOutputStream();
         ExcelWriter writer = new ExcelWriter(out, ExcelTypeEnum.XLSX, true);
         Sheet sheet = new Sheet(1, 0, SysUserDTO.class);
@@ -253,7 +253,7 @@ public class SysUserController {
         sheet.setAutoWidth(Boolean.TRUE);
         // 第一个 sheet 名称
         sheet.setSheetName(ConfigConsts.SYS_USER_SHEET_NAME);
-        writer.write(sysUserResps, sheet);
+        writer.write(sysUsers, sheet);
         //通知浏览器以附件的形式下载处理，设置返回头要注意文件名有中文
         response.setHeader("Content-disposition", "attachment;filename=" + new String(ConfigConsts.SYS_USER_SHEET_NAME.getBytes("gb2312"), "ISO8859-1" ) + ".xlsx");
         writer.finish();

@@ -57,13 +57,4 @@ public interface ConfigConsts {
      * 字典性别key
      */
     String DICT_KEY_SEX = "sex";
-
-    /**
-     * 逻辑删除 0 否
-     */
-    int DELETED_NO = 0;
-    /**
-     * 逻辑删除 1 是
-     */
-    int DELETED_YES = 1;
 }
