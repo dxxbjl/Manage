@@ -163,7 +163,7 @@
                   title: "添加用户",
                   content: ctx + '/sysUser/addPage'
                   ,maxmin: true
-                  ,area: ['500px', '600px']
+                  ,area: ['100%', '100%']
                   ,btn: ['确定', '取消']
                   ,yes: function(index, layero){
                       let submit = layero.find('iframe').contents().find('#save-submit');
@@ -181,7 +181,7 @@
                   ,title: '修改用户'
                   ,content: ctx + '/sysUser/editPage/' + id
                   ,maxmin: true
-                  ,area: ['500px', '600px']
+                  ,area: ['100%', '100%']
                   ,btn: ['确定', '取消']
                   ,yes: function(index, layero){
                       let submit = layero.find('iframe').contents().find('#save-submit');
@@ -244,7 +244,7 @@
             title: "重置密码",
             content: ctx + '/sysUser/resetPassPage/' + id
             ,maxmin: true
-            ,area: ['460px', '300px']
+            ,area: ['50%', '50%']
             ,btn: ['确定', '取消']
             ,yes: function(index, layero){
               let submit = layero.find('iframe').contents().find('#save-submit');

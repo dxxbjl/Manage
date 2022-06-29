@@ -5,64 +5,68 @@
   <div th:replace="common/link::header"></div>
 </head>
 <body>
-  <div class="layui-form" lay-filter="sys-menu-form" id="sys-menu-form"  style="padding: 20px 0 0 0;">
-    <div class="layui-form-item">
-      <label class="layui-form-label">菜单名称</label>
-      <div class="layui-input-inline">
-        <input type="text" name="menuName" lay-verify="required" placeholder="请输入菜单名称" class="layui-input">
+<div class="layui-fluid">
+  <div class="layui-row">
+    <div class="layui-form" lay-filter="sys-menu-form" id="sys-menu-form">
+      <div class="layui-form-item">
+        <label class="layui-form-label">菜单名称</label>
+        <div class="layui-input-inline">
+          <input type="text" name="menuName" lay-verify="required" placeholder="请输入菜单名称" class="layui-input">
+        </div>
       </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">父级编号</label>
-      <div class="layui-input-inline">
-        <input id="parentId" name="parentId" type="hidden">
-        <div id="parentName" lay-filter="parentName" class="xm-select-demo"></div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">父级编号</label>
+        <div class="layui-input-inline">
+          <input id="parentId" name="parentId" type="hidden">
+          <div id="parentName" lay-filter="parentName" class="xm-select-demo"></div>
+        </div>
       </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">请求地址</label>
-      <div class="layui-input-inline">
-        <input type="text" name="url" lay-verify="required" placeholder="请输入请求地址" class="layui-input">
+      <div class="layui-form-item">
+        <label class="layui-form-label">请求地址</label>
+        <div class="layui-input-inline">
+          <input type="text" name="url" lay-verify="required" placeholder="请输入请求地址" class="layui-input">
+        </div>
       </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">菜单类型</label>
-      <div class="layui-input-inline">
-        <select lay-filter="menuType" name="menuType" id="menuType"></select>
+      <div class="layui-form-item">
+        <label class="layui-form-label">菜单类型</label>
+        <div class="layui-input-inline">
+          <select lay-filter="menuType" name="menuType" id="menuType"></select>
+        </div>
       </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">菜单状态</label>
-      <div class="layui-input-inline" id="visible"></div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">权限标识</label>
-      <div class="layui-input-inline">
-        <input type="text" name="perms" placeholder="请输入权限标识" class="layui-input">
+      <div class="layui-form-item">
+        <label class="layui-form-label">菜单状态</label>
+        <div class="layui-input-inline" id="visible"></div>
       </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">显示顺序</label>
-      <div class="layui-input-inline">
-        <input type="text" name="orderNum" lay-verify="required" placeholder="请输入显示顺序" class="layui-input">
+      <div class="layui-form-item">
+        <label class="layui-form-label">权限标识</label>
+        <div class="layui-input-inline">
+          <input type="text" name="perms" placeholder="请输入权限标识" class="layui-input">
+        </div>
       </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">选择图标</label>
-      <div class="layui-input-inline">
-        <input type="text" id="iconPicker" name="icon" lay-filter="iconPicker" class="layui-input">
+      <div class="layui-form-item">
+        <label class="layui-form-label">显示顺序</label>
+        <div class="layui-input-inline">
+          <input type="text" name="orderNum" lay-verify="required" placeholder="请输入显示顺序" class="layui-input">
+        </div>
       </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">备注</label>
-      <div class="layui-input-inline">
-        <input type="text" name="remark" placeholder="请输入备注" class="layui-input">
+      <div class="layui-form-item">
+        <label class="layui-form-label">选择图标</label>
+        <div class="layui-input-inline">
+          <input type="text" id="iconPicker" name="icon" lay-filter="iconPicker" class="layui-input">
+        </div>
       </div>
-    </div>
-    <div class="layui-form-item layui-hide">
-      <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
+      <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-inline">
+          <input type="text" name="remark" placeholder="请输入备注" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
+      </div>
     </div>
   </div>
+</div>
 <div th:replace="common/script::footer"></div>
 <script th:inline="javascript">
   layui.config({

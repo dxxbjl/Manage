@@ -5,36 +5,39 @@
   <div th:replace="common/link::header"></div>
 </head>
 <body>
-  <div class="layui-form" lay-filter="sys-role-form" id="sys-role-form"  style="padding: 20px 0 0 0;">
-    <div class="layui-form-item">
-      <label class="layui-form-label">角色名称</label>
-      <div class="layui-input-inline">
-        <input type="text" name="roleName" lay-verify="required" placeholder="请输入角色名称" class="layui-input">
+<div class="layui-fluid">
+  <div class="layui-row">
+    <div class="layui-form" lay-filter="sys-role-form" id="sys-role-form">
+      <div class="layui-form-item">
+        <label class="layui-form-label">角色名称</label>
+        <div class="layui-input-inline">
+          <input type="text" name="roleName" lay-verify="required" placeholder="请输入角色名称" class="layui-input">
+        </div>
       </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">角色别名</label>
-      <div class="layui-input-inline">
-        <input type="text" name="roleKey" lay-verify="required" placeholder="请输入角色别名" class="layui-input">
+      <div class="layui-form-item">
+        <label class="layui-form-label">角色别名</label>
+        <div class="layui-input-inline">
+          <input type="text" name="roleKey" lay-verify="required" placeholder="请输入角色别名" class="layui-input">
+        </div>
       </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">备注</label>
-      <div class="layui-input-inline">
-        <input type="text" name="remark" placeholder="请输入备注" class="layui-input">
+      <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-inline">
+          <input type="text" name="remark" placeholder="请输入备注" class="layui-input">
+        </div>
       </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">菜单</label>
-      <div class="layui-input-inline">
-        <div id="menuName" class="xm-select-demo"></div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">菜单</label>
+        <div class="layui-input-inline">
+          <div id="menuName" class="xm-select-demo"></div>
+        </div>
       </div>
-    </div>
-    <div class="layui-form-item layui-hide">
-      <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
+      <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
+      </div>
     </div>
   </div>
-
+</div>
 <div th:replace="common/script::footer"></div>
 <script th:inline="javascript">
   layui.config({

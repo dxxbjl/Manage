@@ -5,37 +5,41 @@
   <div th:replace="common/link::header"></div>
 </head>
 <body>
-<div class="layui-form" lay-filter="sys-dict-type-form" id="sys-dict-type-form" style="padding: 20px 0 0 0;">
-  <div class="layui-form-item">
-    <label class="layui-form-label">字典名称</label>
-    <div class="layui-input-inline">
-      <input type="text" name="dictName" lay-verify="required" placeholder="请输入字典名称" class="layui-input">
+<div class="layui-fluid">
+  <div class="layui-row">
+    <div class="layui-form" lay-filter="sys-dict-type-form" id="sys-dict-type-form">
+      <div class="layui-form-item">
+        <label class="layui-form-label">字典名称</label>
+        <div class="layui-input-inline">
+          <input type="text" name="dictName" lay-verify="required" placeholder="请输入字典名称" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">字典别名</label>
+        <div class="layui-input-inline">
+          <input type="text" name="dictKey" lay-verify="required" placeholder="请输入字典别名" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">排序</label>
+        <div class="layui-input-inline">
+          <input type="number" name="orderNum" lay-verify="required" placeholder="请输入排序" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item" lay-filter="sex">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-block" id="enabled"></div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-inline">
+          <input type="text" name="remark" placeholder="请输入备注" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
+      </div>
     </div>
-  </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">字典别名</label>
-    <div class="layui-input-inline">
-      <input type="text" name="dictKey" lay-verify="required" placeholder="请输入字典别名" class="layui-input">
-    </div>
-  </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">排序</label>
-    <div class="layui-input-inline">
-      <input type="number" name="orderNum" lay-verify="required" placeholder="请输入排序" class="layui-input">
-    </div>
-  </div>
-  <div class="layui-form-item" lay-filter="sex">
-    <label class="layui-form-label">状态</label>
-    <div class="layui-input-block" id="enabled"></div>
-  </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">备注</label>
-    <div class="layui-input-inline">
-      <input type="text" name="remark" placeholder="请输入备注" class="layui-input">
-    </div>
-  </div>
-  <div class="layui-form-item layui-hide">
-    <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
   </div>
 </div>
 <div th:replace="common/script::footer"></div>

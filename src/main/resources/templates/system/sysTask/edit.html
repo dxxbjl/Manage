@@ -5,47 +5,50 @@
   <div th:replace="common/link::header"></div>
 </head>
 <body>
-<div class="layui-form" lay-filter="sys-task-form" id="sys-task-form"  style="padding: 20px 0 0 0;">
-  <input type="hidden" name="id" id="id">
-  <div class="layui-form-item">
-    <label class="layui-form-label">名称</label>
-    <div class="layui-input-inline">
-      <input type="text" name="name" lay-verify="required" placeholder="请输入名称" class="layui-input">
+<div class="layui-fluid">
+  <div class="layui-row">
+    <div class="layui-form" lay-filter="sys-task-form" id="sys-task-form">
+      <input type="hidden" name="id" id="id">
+      <div class="layui-form-item">
+        <label class="layui-form-label">名称</label>
+        <div class="layui-input-inline">
+          <input type="text" name="name" lay-verify="required" placeholder="请输入名称" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">表达式</label>
+        <div class="layui-input-inline">
+          <input id="cron" type="text" name="cron" lay-verify="required" placeholder="请输入表达式" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">类名称</label>
+        <div class="layui-input-inline">
+          <input type="text" name="className" lay-verify="required" placeholder="请输入类名称" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">方法名</label>
+        <div class="layui-input-inline">
+          <input type="text" name="methodName" lay-verify="required" placeholder="请输入方法名" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-block" id="enabled"></div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-inline">
+          <input type="text" name="remark" placeholder="请输入备注" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
+      </div>
     </div>
-  </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">表达式</label>
-    <div class="layui-input-inline">
-      <input id="cron" type="text" name="cron" lay-verify="required" placeholder="请输入表达式" class="layui-input">
-    </div>
-  </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">类名称</label>
-    <div class="layui-input-inline">
-      <input type="text" name="className" lay-verify="required" placeholder="请输入类名称" class="layui-input">
-    </div>
-  </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">方法名</label>
-    <div class="layui-input-inline">
-      <input type="text" name="methodName" lay-verify="required" placeholder="请输入方法名" class="layui-input">
-    </div>
-  </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">状态</label>
-    <div class="layui-input-block" id="enabled"></div>
-  </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">备注</label>
-    <div class="layui-input-inline">
-      <input type="text" name="remark" placeholder="请输入备注" class="layui-input">
-    </div>
-  </div>
-  <div class="layui-form-item layui-hide">
-    <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
   </div>
 </div>
-
 <div th:replace="common/script::footer"></div>
 <script th:inline="javascript">
     layui.config({

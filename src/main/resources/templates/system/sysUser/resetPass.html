@@ -5,22 +5,26 @@
   <div th:replace="common/link::header"></div>
 </head>
 <body>
-<div class="layui-form" lay-filter="sys-user-form" id="sys-user-form"  style="padding: 20px 0 0 0;">
-  <input type="hidden" name="id" id="id">
-  <div class="layui-form-item">
-    <label class="layui-form-label">账号</label>
-    <div class="layui-input-inline">
-      <input readonly type="text" name="userName" class="layui-input" disabled>
+<div class="layui-fluid">
+  <div class="layui-row">
+    <div class="layui-form" lay-filter="sys-user-form" id="sys-user-form">
+      <input type="hidden" name="id" id="id">
+      <div class="layui-form-item">
+        <label class="layui-form-label">账号</label>
+        <div class="layui-input-inline">
+          <input readonly type="text" name="userName" class="layui-input" disabled>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">密码</label>
+        <div class="layui-input-inline">
+          <input type="password" name="passWord" value="123456" lay-verify="required" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
+      </div>
     </div>
-  </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">密码</label>
-    <div class="layui-input-inline">
-      <input type="password" name="passWord" value="123456" lay-verify="required" class="layui-input">
-    </div>
-  </div>
-  <div class="layui-form-item layui-hide">
-    <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
   </div>
 </div>
 <div th:replace="common/script::footer"></div>
