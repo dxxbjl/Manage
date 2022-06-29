@@ -10,13 +10,13 @@
     <div class="layui-form" lay-filter="sys-user-form" id="sys-user-form">
       <input type="hidden" id="avatar" name="avatar">
       <div class="layui-form-item">
-        <label class="layui-form-label">头像</label>
+        <label class="layui-form-label"></label>
         <div class="layui-input-inline layui-upload">
-          <button type="button" class="layui-btn" id="upload-btn">上传图片</button>
           <div class="layui-upload-list">
             <img class="layui-upload-img" id="upload-img" width="100px" height="100px">
             <p id="upload-text"></p>
           </div>
+          <button type="button" class="layui-btn" id="upload-btn">上传图片</button>
         </div>
       </div>
       <div class="layui-form-item">
@@ -52,15 +52,15 @@
         <div class="layui-input-block" id="sex"></div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">备注</label>
-        <div class="layui-input-inline">
-          <input type="text" name="remark" placeholder="请输入备注" class="layui-input">
-        </div>
-      </div>
-      <div class="layui-form-item">
         <label class="layui-form-label">角色</label>
         <div class="layui-input-inline">
           <div id="roleName" class="xm-select-demo"></div>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-inline">
+          <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
         </div>
       </div>
       <div class="layui-form-item layui-hide">

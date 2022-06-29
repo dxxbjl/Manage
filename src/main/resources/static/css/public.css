@@ -1,1 +1,47 @@
-.layui-row {display:flex;justify-content:center;}
+.layui-row {
+    display:flex;
+    justify-content:center;
+}
+.layui-form-item .layui-input-inline {
+    width: 300px;
+}
+.layui-form-radio i {
+    top: 0;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    border: 1px solid #d2d2d2;
+    font-size: 12px;
+    border-radius: 2px;
+    background-color: #fff;
+    color: #fff !important;
+}
+.layui-form-radioed i {
+    position: relative;
+    width: 18px;
+    height: 18px;
+    border-style: solid;
+    background-color: #6A8BF5;
+    color: #6A8BF5 !important;
+}
+/* 使用伪类画选中的对号 */
+.layui-form-radioed i::after, .layui-form-radioed i::before {
+    content: "";
+    position: absolute;
+    top: 8px;
+    left: 5px;
+    display: block;
+    width: 12px;
+    height: 2px;
+    border-radius: 4px;
+    background-color: #fff;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+.layui-form-radioed i::before {
+    position: absolute;
+    top: 10px;
+    left: 2px;
+    width: 7px;
+    transform: rotate(-135deg);
+}
