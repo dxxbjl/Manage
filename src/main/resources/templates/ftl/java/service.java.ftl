@@ -22,11 +22,10 @@ interface ${table.serviceName} : ${superServiceClass}<${entity}>
 
   /**
   * ${table.comment!}分页列表
-  * @param param 根据需要进行传值
   * @param pageDTO 分页DTO
   * @return 结果
   */
-  IPage<${entity}> page(${entity} param,PageDTO pageDTO);
+  IPage<${entity}> page(PageDTO pageDTO);
 
   /**
   * ${table.comment!}详情

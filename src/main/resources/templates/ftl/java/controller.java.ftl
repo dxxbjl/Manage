@@ -69,11 +69,11 @@ public class ${table.controllerName} {
   @ApiImplicitParam(name = "pageSize", value = "每页记录数", dataType = "Integer")})
   @GetMapping(value = "/page")
   @ResponseBody
-  public Result page(@Validated ${entity} param, PageDTO pageDTO, BindingResult bindingResult) {
+  public Result page(@Validated PageDTO pageDTO, BindingResult bindingResult) {
     if (bindingResult.hasErrors()) {
         return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
     }
-    Object data = ${table.serviceName?uncap_first}.page(param,pageDTO);
+    Object data = ${table.serviceName?uncap_first}.page(pageDTO);
     return Result.success(data);
   }
 

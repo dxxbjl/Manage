@@ -8,7 +8,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import io.github.yangyouwang.common.domain.PageDTO;
 
 import java.util.List;
@@ -31,34 +30,12 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
 
   /**
   * ${table.comment!}分页列表
-  * @param param 根据需要进行传值
   * @param pageDTO 分页DTO
   * @return 结果
   */
   @Override
-  public IPage<${entity}> page(${entity} param, PageDTO pageDTO) {
+  public IPage<${entity}> page(PageDTO pageDTO) {
     QueryWrapper<${entity}> queryWrapper = new QueryWrapper<>();
-    queryWrapper.lambda()
-      <#list table.fields as field>
-       <#if !entityLombokModel>
-        <#if field.propertyType == "Boolean">
-         <#assign getprefix="is"/>
-        <#else>
-         <#assign getprefix="get"/>
-        </#if>
-        <#if field.propertyType == "String">
-         .eq(!StringUtils.isEmpty(param.${getprefix}${field.capitalName}()), ${entity}::${getprefix}${field.capitalName}, param.${getprefix}${field.capitalName}())
-        <#else>
-         .eq(param.${getprefix}${field.capitalName}() != null, ${entity}::${getprefix}${field.capitalName}, param.${getprefix}${field.capitalName}())
-        </#if>
-       <#else>
-        <#if field.propertyType == "String">
-         .eq(!StringUtils.isEmpty(param.get${field.capitalName}()), ${entity}::get${field.capitalName}, param.get${field.capitalName}())
-        <#else>
-         .eq(param.get${field.capitalName}() != null, ${entity}::get${field.capitalName}, param.get${field.capitalName}())
-        </#if>
-       </#if>
-      </#list>;
     IPage<${entity}> page = page(new Page<>(pageDTO.getPageNum(), pageDTO.getPageSize()), queryWrapper);
     return page;
   }
