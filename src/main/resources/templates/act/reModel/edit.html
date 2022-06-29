@@ -5,22 +5,26 @@
   <div th:replace="common/link::header"></div>
 </head>
 <body>
-<div class="layui-form" lay-filter="act-model-form" id="act-model-form"  style="padding: 20px 0 0 0;">
-  <input type="hidden" name="id" id="id">
-  <div class="layui-form-item">
-    <label class="layui-form-label">模型名称</label>
-    <div class="layui-input-inline">
-      <input type="text" name="name" lay-verify="required" placeholder="请输入模型名称" class="layui-input">
+<div class="layui-fluid">
+  <div class="layui-row">
+    <div class="layui-form" lay-filter="act-model-form" id="act-model-form">
+      <input type="hidden" name="id" id="id">
+      <div class="layui-form-item">
+        <label class="layui-form-label">模型名称</label>
+        <div class="layui-input-inline">
+          <input type="text" name="name" lay-verify="required" placeholder="请输入模型名称" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">KEY_</label>
+        <div class="layui-input-inline">
+          <input type="text" name="key" lay-verify="required" placeholder="请输入key" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
+      </div>
     </div>
-  </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">KEY_</label>
-    <div class="layui-input-inline">
-      <input type="text" name="key" lay-verify="required" placeholder="请输入key" class="layui-input">
-    </div>
-  </div>
-  <div class="layui-form-item layui-hide">
-    <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
   </div>
 </div>
 <div th:replace="common/script::footer"></div>
