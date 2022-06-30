@@ -136,11 +136,12 @@
            * */
           addView: function(){
               layer.open({
-                  type: 2,
-                  title: "添加模型",
-                  content: ctx + '/actReModel/addPage'
+                  type: 2
+                  ,shade: 0.3
+                  ,title: "添加模型"
+                  ,content: ctx + '/actReModel/addPage'
                   ,maxmin: true
-                  ,area: ['50%', '100%']
+                  ,area: ['50%', '80%']
                   ,btn: ['确定', '取消']
                   ,yes: function(index, layero){
                       var submit = layero.find('iframe').contents().find('#save-submit');
@@ -155,10 +156,11 @@
           editView: function(id){
               layer.open({
                   type: 2
+                  ,shade: 0.3
                   ,title: '修改模型'
                   ,content: ctx + '/actReModel/editPage/' + id
                   ,maxmin: true
-                  ,area: ['50%', '100%']
+                  ,area: ['50%', '80%']
                   ,btn: ['确定', '取消']
                   ,yes: function(index, layero){
                       var submit = layero.find('iframe').contents().find('#save-submit');
@@ -194,12 +196,13 @@
          */
         design: function(id){
           layer.open({
-            type: 2,
-            title: "设计模型",
-            content: ctx + '/actReModel/design/' + id,
-            area: ['100%', '100%'],
-            maxmin: true,
-            success: function(layero,index){
+             type: 2
+            ,shade: 0.3
+            ,title: "设计模型"
+            ,content: ctx + '/actReModel/design/' + id
+            ,area: ['100%', '100%'],
+            maxmin: true,
+            success: function(layero,index){
               layer.full(index);
             }
           });

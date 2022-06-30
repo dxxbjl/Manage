@@ -122,11 +122,12 @@
            * */
           addView: function(){
               layer.open({
-                  type: 2,
-                  title: "添加角色",
-                  content: ctx + '/sysRole/addPage'
+                   type: 2
+                  ,shade: 0.3
+                  ,title: "添加角色"
+                  ,content: ctx + '/sysRole/addPage'
                   ,maxmin: true
-                  ,area: ['50%', '100%']
+                  ,area: ['50%', '80%']
                   ,btn: ['确定', '取消']
                   ,yes: function(index, layero){
                       let submit = layero.find('iframe').contents().find('#save-submit');
@@ -141,10 +142,11 @@
           editView: function(id){
               layer.open({
                   type: 2
+                  ,shade: 0.3
                   ,title: '修改角色'
                   ,content: ctx + '/sysRole/editPage/' + id
                   ,maxmin: true
-                  ,area: ['50%', '100%']
+                  ,area: ['50%', '80%']
                   ,btn: ['确定', '取消']
                   ,yes: function(index, layero){
                       let submit = layero.find('iframe').contents().find('#save-submit');

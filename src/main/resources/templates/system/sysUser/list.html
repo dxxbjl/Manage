@@ -159,11 +159,12 @@
            * */
           addView: function(){
               layer.open({
-                  type: 2,
-                  title: "添加用户",
-                  content: ctx + '/sysUser/addPage'
+                  type: 2
+                  ,shade: 0.3
+                  ,title: "添加用户"
+                  ,content: ctx + '/sysUser/addPage'
                   ,maxmin: true
-                  ,area: ['50%', '100%']
+                  ,area: ['50%', '80%']
                   ,btn: ['确定', '取消']
                   ,yes: function(index, layero){
                       let submit = layero.find('iframe').contents().find('#save-submit');
@@ -177,11 +178,12 @@
            * */
           editView: function(id){
               layer.open({
-                  type: 2
+                   type: 2
+                  ,shade: 0.3
                   ,title: '修改用户'
                   ,content: ctx + '/sysUser/editPage/' + id
                   ,maxmin: true
-                  ,area: ['50%', '100%']
+                  ,area: ['50%', '80%']
                   ,btn: ['确定', '取消']
                   ,yes: function(index, layero){
                       let submit = layero.find('iframe').contents().find('#save-submit');
@@ -240,9 +242,10 @@
          */
         pass: function (id) {
           layer.open({
-            type: 2,
-            title: "重置密码",
-            content: ctx + '/sysUser/resetPassPage/' + id
+            type: 2
+            ,shade: 0.3
+            ,title: "重置密码"
+            ,content: ctx + '/sysUser/resetPassPage/' + id
             ,maxmin: true
             ,area: ['50%', '50%']
             ,btn: ['确定', '取消']
