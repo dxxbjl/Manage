@@ -195,10 +195,11 @@
             dictTypeAddView: function(){
                 layer.open({
                     type: 2,
+                    shade: 0.3,
                     title: "添加字典",
                     content: ctx + '/sysDictType/addPage'
                     ,maxmin: true
-                    ,area: ['50%', '100%']
+                    ,area: ['50%', '80%']
                     ,btn: ['确定', '取消']
                     ,yes: function(index, layero){
                         let submit = layero.find('iframe').contents().find('#save-submit');
@@ -213,10 +214,11 @@
             dictTypeEditView: function(id){
                 layer.open({
                     type: 2
+                    ,shade: 0.3
                     ,title: '修改字典'
                     ,content: ctx + '/sysDictType/editPage/' + id
                     ,maxmin: true
-                    ,area: ['50%', '100%']
+                    ,area: ['50%', '80%']
                     ,btn: ['确定', '取消']
                     ,yes: function(index, layero){
                         let submit = layero.find('iframe').contents().find('#save-submit');
@@ -302,10 +304,11 @@
             dictValueAdd(id) {
                 layer.open({
                     type: 2
+                    ,shade: 0.3
                     ,title: '添加字典项'
                     ,content: ctx + '/sysDictValue/addPage/' + id
                     ,maxmin: true
-                    ,area: ['50%', '100%']
+                    ,area: ['50%', '80%']
                     ,btn: ['确定', '取消']
                     ,yes: function(index, layero){
                         let submit = layero.find('iframe').contents().find('#save-submit');
@@ -319,11 +322,12 @@
              */
             dictValueEdit(id) {
                 layer.open({
-                    type: 2
+                     type: 2
+                    ,shade: 0.3
                     ,title: '修改字典项'
                     ,content: ctx + '/sysDictValue/editPage/' + id
                     ,maxmin: true
-                    ,area: ['50%', '100%']
+                    ,area: ['50%', '80%']
                     ,btn: ['确定', '取消']
                     ,yes: function(index, layero){
                         let submit = layero.find('iframe').contents().find('#save-submit');
