@@ -7,7 +7,7 @@
 <body>
   <div class="layui-fluid">
     <div class="layui-card">
-      <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+      <form class="layui-form layui-card-header layuiadmin-card-header-auto">
         <div class="layui-form-item">
           <div class="layui-inline">
             <label class="layui-form-label">菜单名称</label>
@@ -16,16 +16,16 @@
             </div>
           </div>
           <div class="layui-inline">
-            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+            <button type="button" class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
               <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
             </button>
-            <button class="layui-btn layui-btn-primary" data-type="resetForm">重置</button>
-            <button class="layui-btn layuiadmin-btn-useradmin" data-type="expand">全部展开</button>
-            <button class="layui-btn layuiadmin-btn-useradmin" data-type="fold">全部折叠</button>
-            <button sec:authorize="hasAuthority('menu:add')" class="layui-btn layuiadmin-btn-useradmin" data-type="addViewDef">添加</button>
+            <button type="button" class="layui-btn layui-btn-primary" data-type="resetForm">重置</button>
+            <button type="button" class="layui-btn layuiadmin-btn-useradmin" data-type="expand">全部展开</button>
+            <button type="button" class="layui-btn layuiadmin-btn-useradmin" data-type="fold">全部折叠</button>
+            <button type="button" sec:authorize="hasAuthority('menu:add')" class="layui-btn layuiadmin-btn-useradmin" data-type="addViewDef">添加</button>
           </div>
         </div>
-      </div>
+      </form>
       <div class="layui-card-body">
         <table id="menuTable" lay-filter="menuTable"></table>
         <script type="text/html" id="visibleTpl">
@@ -122,7 +122,7 @@
            * 重置
            */
           resetForm:function () {
-            $(".layui-form").find("input").val("");
+            $(".layui-form")[0].reset();
             form.render();
             initTable();
           },

@@ -8,7 +8,7 @@
 <div class="layui-fluid">
     <div class="layui-card">
         <div class="layui-col-md12">
-            <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <form class="layui-form layui-card-header layuiadmin-card-header-auto">
                 <div class="layui-form-item">
                     <div class="layui-inline">
                         <label class="layui-form-label">字典名称</label>
@@ -23,14 +23,14 @@
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="dictKeySearch">
+                        <button type="button" class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="dictKeySearch">
                             <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
                         </button>
-                        <button class="layui-btn layui-btn-primary" data-type="resetForm">重置</button>
-                        <button sec:authorize="hasAuthority('dictType:add')" class="layui-btn layuiadmin-btn-useradmin" data-type="dictTypeAddView">添加</button>
+                        <button type="button" class="layui-btn layui-btn-primary" data-type="resetForm">重置</button>
+                        <button type="button" sec:authorize="hasAuthority('dictType:add')" class="layui-btn layuiadmin-btn-useradmin" data-type="dictTypeAddView">添加</button>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
         <div class="layui-col-md6">
             <div class="layui-card-body">
@@ -177,7 +177,7 @@
              * 重置
              */
             resetForm:function () {
-                $(".layui-form").find("input").val("");
+                $(".layui-form")[0].reset();
                 form.render();
                 table.reload('dictTypeTable', {
                     where: {

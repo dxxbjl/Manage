@@ -7,7 +7,7 @@
 <body>
   <div class="layui-fluid">
     <div class="layui-card">
-      <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+      <form class="layui-form layui-card-header layuiadmin-card-header-auto">
         <div class="layui-form-item">
           <div class="layui-inline">
             <label class="layui-form-label">类名称</label>
@@ -22,13 +22,13 @@
             </div>
           </div>
           <div class="layui-inline">
-            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+            <button type="button" class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
               <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
             </button>
-            <button class="layui-btn layui-btn-primary" data-type="resetForm">重置</button>
+            <button type="button" class="layui-btn layui-btn-primary" data-type="resetForm">重置</button>
           </div>
         </div>
-      </div>
+      </form>
       <div class="layui-card-body">
         <table id="logTable" lay-filter="logTable"></table>
         <script type="text/html" id="tableBar">
@@ -107,7 +107,7 @@
          * 重置
          */
         resetForm: function () {
-          $(".layui-form").find("input").val("");
+          $(".layui-form")[0].reset();
           form.render();
           table.reload('logTable', {
             where: {
