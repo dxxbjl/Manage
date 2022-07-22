@@ -52,6 +52,17 @@ public class CodeGeneratorController {
     @PassToken
     @CrudLog
     public Result codeGenerator(String moduleName,String ... tables) {
+        createCode(moduleName,tables);
+        // TODO: 2022/7/22 导入sql到菜单中
+        return Result.success("生成代码在项目工程中");
+    }
+
+    /**
+     * 代码生成
+     * @param moduleName 模块名
+     * @param tables 表名
+     */
+    private void createCode(String moduleName, String... tables) {
         // 代码生成器
         AutoGenerator mpg = new AutoGenerator();
 
@@ -101,6 +112,15 @@ public class CodeGeneratorController {
                         + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });
+        // 自定义 xxList.ftl 生成
+        focList.add(new FileOutConfig("templates/ftl/html/list.html.ftl") {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                // 自定义输入文件名称
+                return projectPath + "/src/main/resources/templates/" + pc.getModuleName()
+                        + "/" + tableInfo.getEntityPath() + StringPool.SLASH + "list.html";
+            }
+        });
         cfg.setFileOutConfigList(focList);
         mpg.setCfg(cfg);
 
@@ -130,8 +150,5 @@ public class CodeGeneratorController {
         mpg.setStrategy(strategy);
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());
         mpg.execute();
-
-        // 导入sql到菜单中
-        return Result.success("生成代码在项目工程中");
     }
 }
