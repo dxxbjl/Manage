@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
+import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import io.github.yangyouwang.common.annotation.ApiVersion;
@@ -74,6 +75,8 @@ public class CodeGeneratorController {
         gc.setOpen(false);
         //实体属性 Swagger2 注解
         gc.setSwagger2(true);
+        //定义生成的实体类中日期类型
+        gc.setDateType(DateType.ONLY_DATE);
         mpg.setGlobalConfig(gc);
 
         // 数据源配置
@@ -112,13 +115,28 @@ public class CodeGeneratorController {
                         + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });
-        // 自定义 xxList.ftl 生成
         focList.add(new FileOutConfig("templates/ftl/html/list.html.ftl") {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输入文件名称
                 return projectPath + "/src/main/resources/templates/" + pc.getModuleName()
                         + "/" + tableInfo.getEntityPath() + StringPool.SLASH + "list.html";
+            }
+        });
+        focList.add(new FileOutConfig("templates/ftl/html/add.html.ftl") {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                // 自定义输入文件名称
+                return projectPath + "/src/main/resources/templates/" + pc.getModuleName()
+                        + "/" + tableInfo.getEntityPath() + StringPool.SLASH + "add.html";
+            }
+        });
+        focList.add(new FileOutConfig("templates/ftl/html/edit.html.ftl") {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                // 自定义输入文件名称
+                return projectPath + "/src/main/resources/templates/" + pc.getModuleName()
+                        + "/" + tableInfo.getEntityPath() + StringPool.SLASH + "edit.html";
             }
         });
         cfg.setFileOutConfigList(focList);
@@ -145,8 +163,12 @@ public class CodeGeneratorController {
         strategy.setEntityLombokModel(true);
         strategy.setRestControllerStyle(false);
         strategy.setInclude(tables);
+        //url中驼峰转连字符
         strategy.setControllerMappingHyphenStyle(true);
+        //生成实体时去掉表前缀
         strategy.setTablePrefix(pc.getModuleName() + "_");
+        // lombok 模型 @Accessors(chain = true) setter链式操作
+        strategy.setEntityLombokModel(true);
         mpg.setStrategy(strategy);
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());
         mpg.execute();
