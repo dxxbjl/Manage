@@ -71,29 +71,49 @@
 
         <!-- 递归查询菜单 -->
         <th:block th:fragment="row(menus)">
-            <li th:each="menu,menuStat:${menus}" class="layui-nav-item">
-                <a href="javascript:;" th:lay-tips="${menu.menuName}" th:lay-direction="${menu.orderNum}" th:if="${menu.parentId eq 0}">
-                    <i class="layui-icon"  th:classappend="${(menu.icon !=null ? menu.icon : 'layui-icon-home')}" ></i>
-                    <cite>[[${menu.menuName}]]</cite>
-                </a>
-                <dl class="layui-nav-child">
-                    <a th:lay-href="${menu.url}" th:if="${menu.parentId ne 0}">
-                        [[${menu.menuName}]]
+            <li th:each="menu,menuStat:${menus}" class="layui-nav-item" th:switch="${menu.menuType}">
+                <!-- 菜单 -->
+                <th:block th:case="C">
+                    <a th:lay-href="${menu.url}" th:lay-tips="${menu.menuName}" th:lay-direction="${menu.orderNum}">
+                        <i class="layui-icon"  th:classappend="${menu.icon}" ></i>
+                        <cite>[[${menu.menuName}]]</cite>
                     </a>
-                    <th:block th:include="this::children(${menu.children})"></th:block>
-                </dl>
+                </th:block>
+                <!-- 目录 -->
+                <th:block th:case="M">
+                    <a href="javascript:;" th:lay-tips="${menu.menuName}" th:lay-direction="${menu.orderNum}">
+                        <i class="layui-icon"  th:classappend="${menu.icon}" ></i>
+                        <cite>[[${menu.menuName}]]</cite>
+                    </a>
+                    <dl class="layui-nav-child">
+                        <a th:lay-href="${menu.url}" th:if="${menu.menuType == 'C'}">
+                            [[${menu.menuName}]]
+                        </a>
+                        <th:block th:include="this::children(${menu.children})"></th:block>
+                    </dl>
+                </th:block>
             </li>
         </th:block>
 
         <th:block th:fragment="children(menus)">
-            <dd th:each="menu,menuStat:${menus}">
-                <a th:lay-href="${menu.url}" th:if="${menu.parentId ne 0}">
-                    <i class="layui-icon"  th:classappend="${(menu.icon !=null ? menu.icon : 'layui-icon-home')}" ></i>
-                    [[${menu.menuName}]]
-                </a>
-                <dl class="layui-nav-child" th:if="not ${#lists.isEmpty(menu.children)}">
-                    <th:block th:include="this::children(${menu.children})"></th:block>
-                </dl>
+            <dd th:each="menu,menuStat:${menus}" th:switch="${menu.menuType}">
+                <!-- 菜单 -->
+                <th:block th:case="C">
+                    <a th:lay-href="${menu.url}">
+                        <i class="layui-icon"  th:classappend="${menu.icon}" ></i>
+                        [[${menu.menuName}]]
+                    </a>
+                </th:block>
+                <!-- 目录 -->
+                <th:block th:case="M">
+                    <a href="javascript:;">
+                        <i class="layui-icon"  th:classappend="${menu.icon}" ></i>
+                        [[${menu.menuName}]]
+                    </a>
+                    <dl class="layui-nav-child">
+                        <th:block th:include="this::children(${menu.children})"></th:block>
+                    </dl>
+                </th:block>
             </dd>
         </th:block>
 
