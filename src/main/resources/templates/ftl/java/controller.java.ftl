@@ -121,7 +121,7 @@ public class ${table.controllerName} {
   }
 
   @ApiOperation(value = "${table.comment}删除(单个条目)")
-  @GetMapping(value = "/remove/{id}")
+  @DeleteMapping(value = "/remove/{id}")
   @ResponseBody
   public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
     ${table.serviceName?uncap_first}.remove(id);
