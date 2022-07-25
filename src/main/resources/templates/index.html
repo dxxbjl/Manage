@@ -64,36 +64,30 @@
                     <span>CRUD</span>
                 </div>
                 <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
-                    <th:block th:include="this::row(${sysMenus})"/>
+                    <!-- 递归查询菜单 -->
+                    <li th:each="menu,menuStat:${sysMenus}" class="layui-nav-item" th:switch="${menu.menuType}">
+                        <!-- 菜单 -->
+                        <th:block th:case="C">
+                            <a th:lay-href="${menu.url}" th:lay-tips="${menu.menuName}" th:lay-direction="${menu.orderNum}">
+                                <i class="layui-icon"  th:classappend="${menu.icon}" ></i>
+                                <cite>[[${menu.menuName}]]</cite>
+                            </a>
+                        </th:block>
+                        <!-- 目录 -->
+                        <th:block th:case="M">
+                            <a href="javascript:;" th:lay-tips="${menu.menuName}" th:lay-direction="${menu.orderNum}">
+                                <i class="layui-icon"  th:classappend="${menu.icon}" ></i>
+                                <cite>[[${menu.menuName}]]</cite>
+                            </a>
+                            <dl class="layui-nav-child">
+                                <!-- 递归目录 -->
+                                <th:block th:include="this::children(${menu.children})"></th:block>
+                            </dl>
+                        </th:block>
+                    </li>
                 </ul>
             </div>
         </div>
-
-        <!-- 递归查询菜单 -->
-        <th:block th:fragment="row(menus)">
-            <li th:each="menu,menuStat:${menus}" class="layui-nav-item" th:switch="${menu.menuType}">
-                <!-- 菜单 -->
-                <th:block th:case="C">
-                    <a th:lay-href="${menu.url}" th:lay-tips="${menu.menuName}" th:lay-direction="${menu.orderNum}">
-                        <i class="layui-icon"  th:classappend="${menu.icon}" ></i>
-                        <cite>[[${menu.menuName}]]</cite>
-                    </a>
-                </th:block>
-                <!-- 目录 -->
-                <th:block th:case="M">
-                    <a href="javascript:;" th:lay-tips="${menu.menuName}" th:lay-direction="${menu.orderNum}">
-                        <i class="layui-icon"  th:classappend="${menu.icon}" ></i>
-                        <cite>[[${menu.menuName}]]</cite>
-                    </a>
-                    <dl class="layui-nav-child">
-                        <a th:lay-href="${menu.url}" th:if="${menu.menuType == 'C'}">
-                            [[${menu.menuName}]]
-                        </a>
-                        <th:block th:include="this::children(${menu.children})"></th:block>
-                    </dl>
-                </th:block>
-            </li>
-        </th:block>
 
         <th:block th:fragment="children(menus)">
             <dd th:each="menu,menuStat:${menus}" th:switch="${menu.menuType}">
@@ -111,6 +105,7 @@
                         [[${menu.menuName}]]
                     </a>
                     <dl class="layui-nav-child">
+                        <!-- 递归目录 -->
                         <th:block th:include="this::children(${menu.children})"></th:block>
                     </dl>
                 </th:block>
