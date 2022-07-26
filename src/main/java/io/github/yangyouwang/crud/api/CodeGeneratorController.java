@@ -114,7 +114,7 @@ public class CodeGeneratorController {
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
                 return projectPath + "/src/main/resources/mapper/" + pc.getModuleName()
-                        + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
+                        + StringPool.SLASH + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });
         focList.add(new FileOutConfig("templates/ftl/html/list.html.ftl") {
@@ -122,7 +122,7 @@ public class CodeGeneratorController {
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输入文件名称
                 return projectPath + "/src/main/resources/templates/" + pc.getModuleName()
-                        + "/" + tableInfo.getEntityPath() + StringPool.SLASH + "list.html";
+                        + StringPool.SLASH + tableInfo.getEntityPath() + StringPool.SLASH + "list.html";
             }
         });
         focList.add(new FileOutConfig("templates/ftl/html/add.html.ftl") {
@@ -130,7 +130,7 @@ public class CodeGeneratorController {
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输入文件名称
                 return projectPath + "/src/main/resources/templates/" + pc.getModuleName()
-                        + "/" + tableInfo.getEntityPath() + StringPool.SLASH + "add.html";
+                        + StringPool.SLASH + tableInfo.getEntityPath() + StringPool.SLASH + "add.html";
             }
         });
         focList.add(new FileOutConfig("templates/ftl/html/edit.html.ftl") {
@@ -138,7 +138,15 @@ public class CodeGeneratorController {
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输入文件名称
                 return projectPath + "/src/main/resources/templates/" + pc.getModuleName()
-                        + "/" + tableInfo.getEntityPath() + StringPool.SLASH + "edit.html";
+                        + StringPool.SLASH + tableInfo.getEntityPath() + StringPool.SLASH + "edit.html";
+            }
+        });
+        focList.add(new FileOutConfig("templates/ftl/sql/menu.sql.ftl") {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                // 自定义输入文件名称
+                return projectPath + "/src/main/resources/sql/" + pc.getModuleName()
+                        + StringPool.SLASH + tableInfo.getEntityPath() + StringPool.SLASH + "menu.sql";
             }
         });
         cfg.setFileOutConfigList(focList);
