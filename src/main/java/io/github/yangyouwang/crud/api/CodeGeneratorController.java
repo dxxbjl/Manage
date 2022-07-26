@@ -77,6 +77,8 @@ public class CodeGeneratorController {
         gc.setSwagger2(true);
         //定义生成的实体类中日期类型
         gc.setDateType(DateType.ONLY_DATE);
+        //TODO 是否覆盖已有的文件
+        gc.setFileOverride(true);
         mpg.setGlobalConfig(gc);
 
         // 数据源配置
