@@ -57,4 +57,28 @@ public interface ConfigConsts {
      * 字典性别key
      */
     String DICT_KEY_SEX = "sex";
+    /**
+     * 上传文件类型 PNG
+     */
+    String IMG_TYPE_PNG = "PNG";
+    /**
+     * 上传文件类型 JPG
+     */
+    String IMG_TYPE_JPG = "JPG";
+    /**
+     * 上传文件类型 JPEG
+     */
+    String IMG_TYPE_JPEG = "JPEG";
+    /**
+     * 上传文件类型 BMP
+     */
+    String IMG_TYPE_DMG = "BMP";
+    /**
+     * 上传文件类型 GIF
+     */
+    String IMG_TYPE_GIF = "GIF";
+    /**
+     * 上传文件类型 SVG
+     */
+    String IMG_TYPE_SVG = "SVG";
 }
