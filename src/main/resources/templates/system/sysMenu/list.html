@@ -90,6 +90,7 @@
                   {field: 'menuType', title: "菜单类型", templet: function (d) { return crud.getDictValue('menuType',d.menuType);}},
                   {field: 'url', title: '请求地址'},
                   {field: 'perms', title: '权限标识'},
+                  {field: 'icon', title: '图标', templet: function (d) { return  `<i class="layui-icon ${d.icon}"></i>`;}},
                   {field: 'visible', align: "center", sort: true, templet: '#visibleTpl', title: '状态'},
                   {toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
               ]]
