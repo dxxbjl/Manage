@@ -54,10 +54,6 @@ public class ${table.controllerName} {
   @Autowired
   private ${table.serviceName} ${table.serviceName?uncap_first};
 
-  /**
-  * 跳转列表
-  * @return 列表页面
-  */
   @GetMapping("/listPage")
   public String listPage(){
     return SUFFIX + "/list";
@@ -77,11 +73,6 @@ public class ${table.controllerName} {
     return Result.success(data);
   }
 
-   /**
-   * 跳转编辑
-   * @param id 主键
-   * @return 编辑页面
-   */
    @GetMapping("/editPage/{id}")
    public String editPage(@Valid @NotNull(message = "id不能为空") @PathVariable Long id, ModelMap map){
     Object data = ${table.serviceName?uncap_first}.info(id);
@@ -89,10 +80,6 @@ public class ${table.controllerName} {
     return SUFFIX + "/edit";
   }
 
-  /**
-  * 跳转添加
-  * @return 添加页面
-  */
   @GetMapping("/addPage")
   public String addPage(){
     return SUFFIX + "/add";
