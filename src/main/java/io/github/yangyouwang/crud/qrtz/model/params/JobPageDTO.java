@@ -14,7 +14,7 @@ import lombok.Data;
 @Data
 public class JobPageDTO extends PageDTO {
     /**
-     * 工作名字
+     * 任务名字
      */
     private String jobName;
 }

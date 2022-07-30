@@ -1,6 +1,5 @@
 package io.github.yangyouwang.crud.qrtz.controller;
 
-import io.github.yangyouwang.common.domain.EnabledDTO;
 import io.github.yangyouwang.crud.qrtz.entity.Job;
 import io.github.yangyouwang.crud.qrtz.model.params.JobEditDTO;
 import io.github.yangyouwang.crud.qrtz.model.params.JobPageDTO;
@@ -109,18 +108,8 @@ public class JobController {
      return Result.success();
    }
 
-    @PostMapping("/changeJob")
-    @ResponseBody
-    public Result changeJob(@RequestBody @Validated EnabledDTO enabledDTO, BindingResult bindingResult){
-        if (bindingResult.hasErrors()){
-            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
-        }
-        boolean flag = iJobService.changeJob(enabledDTO);
-        return Result.success(flag);
-    }
-
-    @GetMapping("/cronPage")
-    public String cronPage(){
+   @GetMapping("/cronPage")
+   public String cronPage(){
         return "qrtz/cron/index";
     }
 }

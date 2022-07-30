@@ -1,8 +1,6 @@
 package io.github.yangyouwang.crud.qrtz.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import io.github.yangyouwang.common.constant.ConfigConsts;
-import io.github.yangyouwang.common.domain.EnabledDTO;
 import io.github.yangyouwang.crud.qrtz.entity.Job;
 import io.github.yangyouwang.crud.qrtz.mapper.JobMapper;
 import io.github.yangyouwang.crud.qrtz.model.params.JobEditDTO;
@@ -107,12 +105,11 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobS
         scheduler.start();
       }
       System.err.println("--------定时任务启动成功 "+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+" ------------");
-    } catch (Exception e) {
-      throw new RuntimeException(String.format("程序出错了,%s",e));
+    } catch (ClassNotFoundException | SchedulerException | InstantiationException | IllegalAccessException e) {
+      throw new RuntimeException(String.format("创建定时任务出错:%s",e));
     }
     Job job = new Job();
     BeanUtils.copyProperties(param,job);
-    job.setEnabled(ConfigConsts.ENABLED_YES);
     save(job);
   }
 
@@ -133,7 +130,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobS
       //重置对应的job
       scheduler.rescheduleJob(triggerKey, trigger);
     } catch (Exception e) {
-      throw new RuntimeException(String.format("程序出错了,%s",e));
+      throw new RuntimeException(String.format("修改定时任务出错:%s",e));
     }
     Job job = new Job();
     BeanUtils.copyProperties(param,job);
@@ -156,7 +153,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobS
       // 删除任务
       scheduler.deleteJob(JobKey.jobKey(job.getJobName()));
     } catch (Exception e) {
-      throw new RuntimeException(String.format("程序出错了,%s",e));
+      throw new RuntimeException(String.format("删除定时任务出错:%s",e));
     }
     removeById(id);
   }
@@ -169,20 +166,4 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobS
   public void removes(List<Long> ids) {
      removeByIds(ids);
    }
-
-  @Override
-  public boolean changeJob(EnabledDTO enabledDTO) {
-    Job job = getById(enabledDTO.getId());
-    try {
-      JobKey jobKey = JobKey.jobKey(job.getJobName());
-      scheduler.pauseJob(jobKey);
-      if (ConfigConsts.ENABLED_YES.equals(enabledDTO.getEnabled())) {
-        scheduler.resumeJob(jobKey);
-      }
-    } catch (SchedulerException e) {
-      System.out.println("定时任务出错："+e.getMessage());
-    }
-    job.setEnabled(enabledDTO.getEnabled());
-    return updateById(job);
-  }
 }

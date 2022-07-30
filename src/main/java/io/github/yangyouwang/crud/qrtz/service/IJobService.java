@@ -1,6 +1,5 @@
 package io.github.yangyouwang.crud.qrtz.service;
 
-import io.github.yangyouwang.common.domain.EnabledDTO;
 import io.github.yangyouwang.crud.qrtz.entity.Job;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -58,11 +57,4 @@ import java.util.List;
   * @param ids 主键数组
   */
   void removes(List<Long> ids);
-
-  /**
-   * 修改任务状态
-   * @param enabledDTO 状态DTO
-   * @return 结果
-   */
-  boolean changeJob(EnabledDTO enabledDTO);
 }

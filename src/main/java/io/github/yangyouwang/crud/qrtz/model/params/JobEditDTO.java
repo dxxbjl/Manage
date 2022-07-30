@@ -17,7 +17,7 @@ public class JobEditDTO {
      */
     private Long id;
     /**
-     * 工作名字
+     * 任务名字
      */
     private String jobName;
     /**

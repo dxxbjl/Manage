@@ -17,22 +17,9 @@ public class JobDTO {
      */
     private Long id;
     /**
-     * 工作名字
+     * 任务名字
      */
     private String jobName;
-    /**
-     * 工作组
-     */
-    private String jobGroup;
-    /**
-     * 触发器名
-     */
-    private String triggerName;
-    /**
-     * 触发器组名
-     */
-    private String triggerGroup;
-
     /**
      * 工作类名字
      */

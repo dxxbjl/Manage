@@ -23,7 +23,7 @@ public class Job extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "工作名字")
+    @ApiModelProperty(value = "任务名字")
     private String jobName;
 
     @ApiModelProperty(value = "cron表达式")
@@ -31,7 +31,4 @@ public class Job extends BaseEntity {
 
     @ApiModelProperty(value = "类名称")
     private String jobClassName;
-
-    @ApiModelProperty(value = "是否启用 Y 启用 N 禁用")
-    private String enabled;
 }
