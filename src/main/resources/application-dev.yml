@@ -1,8 +1,12 @@
 spring:
   # 配置数据源
   datasource:
-    schema: classpath:sql/schema.sql
-    initialization-mode: never
+    schema:
+      - classpath:sql/sys.sql
+      - classpath:sql/app.sql
+      - classpath:sql/act.sql
+      - classpath:sql/qrtz.sql
+    initialization-mode: always
     dynamic:
       primary: master #设置默认的数据源或者数据源组,默认值即为master
       datasource:
