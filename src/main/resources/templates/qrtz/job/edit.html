@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>编辑任务表</title>
+  <div th:replace="common/link::header"></div>
+</head>
+<body>
+<div class="layui-fluid">
+  <div class="layui-row">
+    <div class="layui-form" lay-filter="job_form" id="job_form">
+      <input type="hidden" name="id" id="id">
+      <div class="layui-form-item">
+        <label class="layui-form-label">工作名字</label>
+        <div class="layui-input-inline">
+          <input type="text" class="layui-input" name="jobName" placeholder="请输入工作名字" disabled/>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">cron表达式</label>
+        <div class="layui-input-inline">
+          <input id="cron" type="text" name="cron" lay-verify="required" placeholder="请输入cron表达式" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">类名称</label>
+        <div class="layui-input-inline">
+          <input type="text" class="layui-input" name="jobClassName" placeholder="请输入类名称" readonly/>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-inline">
+          <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
+        </div>
+      </div>
+      <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
+      </div>
+    </div>
+  </div>
+</div>
+<div th:replace="common/script::footer"></div>
+<script th:inline="javascript">
+  layui.config({
+      base: '/static/layuiadmin/' //静态资源所在路径
+  }).extend({
+     index: 'lib/index', //主入口模块
+  }).use(['index', 'form','crud'], function(){
+    let $ = layui.$,
+            form = layui.form,
+            crud = layui.crud,
+            job = [[${job}]];
+    form.val('job_form',job);
+    // 编辑
+    form.on('submit(save-submit)', function(data) {
+      $.ajax({
+        type: 'POST',
+        url:  ctx + '/qrtz/job/modify',
+        data: JSON.stringify(data.field),
+        contentType:'application/json;charset=UTF-8',
+        dataType: 'json',
+        success: function(result) {
+          layer.msg(result.message);
+          if (result.code === 200) {
+            let index = parent.layer.getFrameIndex(window.name);
+            // 关闭
+            parent.layer.close(index);
+            // 刷新
+            parent.location.reload();
+          }
+        }
+      });
+    });
+    $('#cron').on('click', function(){
+      layer.open({
+        type: 2,
+        title: "Cron表达式生成器",
+        content: ctx + '/qrtz/job/cronPage'
+        ,maxmin: true
+        ,area: ['500px', '450px']
+        ,btn: ['确定', '取消']
+        ,yes: function(index, layero){
+          let iframeWin = window[layero.find('iframe')[0]['name']];
+          let cron = iframeWin.document.getElementById("cron").value;
+          $("#cron").val(cron);
+          layer.close(index);
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>
