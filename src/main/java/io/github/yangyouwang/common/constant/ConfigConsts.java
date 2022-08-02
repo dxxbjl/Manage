@@ -1,34 +1,13 @@
 package io.github.yangyouwang.common.constant;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * 通用常量
  * @author yangyouwang
  */
 public interface ConfigConsts {
-    /**
-     * 登陆接口
-     */
-    String DEFAULT_LOGIN_URL = "/login";
-    /**
-     * 退出接口
-     */
-    String DEFAULT_LOGOUT_URL = "/logout";
-    /**
-     * 登陆页面
-     */
-    String DEFAULT_LOGIN_PAGE = "/loginPage";
-    /**
-     * 验证码接口
-     */
-    String IMG_CODE_URL = "/getImgCode";
-    /**
-     * 记住我 有效时间秒
-     */
-    int REMEMBERME_VALIDITY = 3600 * 24 * 7;
-    /**
-     * 记住我 cookies
-     */
-    String REMEMBERME_COOKIES = "JSESSIONID";
     /**
      * 验证码存session
      */
@@ -58,27 +37,7 @@ public interface ConfigConsts {
      */
     String DICT_KEY_SEX = "sex";
     /**
-     * 上传文件类型 PNG
+     * 上传文件类型
      */
-    String IMG_TYPE_PNG = "PNG";
-    /**
-     * 上传文件类型 JPG
-     */
-    String IMG_TYPE_JPG = "JPG";
-    /**
-     * 上传文件类型 JPEG
-     */
-    String IMG_TYPE_JPEG = "JPEG";
-    /**
-     * 上传文件类型 BMP
-     */
-    String IMG_TYPE_DMG = "BMP";
-    /**
-     * 上传文件类型 GIF
-     */
-    String IMG_TYPE_GIF = "GIF";
-    /**
-     * 上传文件类型 SVG
-     */
-    String IMG_TYPE_SVG = "SVG";
+    List<String> IMG_TYPE = Arrays.asList("PNG","JPG","JPEG","BMP","GIF","SVG");
 }

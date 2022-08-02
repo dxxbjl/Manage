@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 通用请求处理
@@ -45,8 +46,7 @@ public class SysCommonController extends CrudController {
     @PostMapping("/upload")
     @ResponseBody
     @CrudLog
-    public Result uploadFile(MultipartFile file,
-                             @RequestParam(value = "fileDir",required = false,defaultValue = "img/def") String fileDir) {
+    public Result uploadFile(MultipartFile file, @RequestParam(value = "fileDir",required = false,defaultValue = "img/def") String fileDir) {
         // 上传文件路径
         String url = sampleOSS.upload( file, fileDir);
         Map<String,Object> ajax = new HashMap<>(16);
@@ -66,13 +66,8 @@ public class SysCommonController extends CrudController {
             return Result.failure("上传文件名称为空",file.getOriginalFilename());
         }
         log.info("正在做上传操作，上传文件为：{}",file.getOriginalFilename());
-        String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
-        if(!(ConfigConsts.IMG_TYPE_DMG.equals(suffix.toUpperCase()) ||
-                ConfigConsts.IMG_TYPE_GIF.equals(suffix.toUpperCase()) ||
-                ConfigConsts.IMG_TYPE_JPEG.equals(suffix.toUpperCase()) ||
-                ConfigConsts.IMG_TYPE_JPG.equals(suffix.toUpperCase()) ||
-                ConfigConsts.IMG_TYPE_PNG.equals(suffix.toUpperCase()) ||
-                ConfigConsts.IMG_TYPE_SVG.equals(suffix.toUpperCase()))){
+        String suffix = Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+        if(!ConfigConsts.IMG_TYPE.contains(suffix.toUpperCase())){
             return Result.failure("上传文件不符合规范",file.getOriginalFilename());
         }
         String bucketName = minioProperties.getBucketName();

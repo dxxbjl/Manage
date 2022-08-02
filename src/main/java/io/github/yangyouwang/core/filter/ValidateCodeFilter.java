@@ -29,7 +29,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 登陆请求
-        if (StringUtils.equals(ConfigConsts.DEFAULT_LOGIN_URL, request.getServletPath())
+        if (StringUtils.equals("/login", request.getServletPath())
                 && StringUtils.equalsIgnoreCase(request.getMethod(), "POST")) {
             try {
                 validate(request);

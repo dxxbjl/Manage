@@ -80,7 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 设置哪些页面可以直接访问，哪些需要验证
         http.authorizeRequests()
                 // 放过
-                .antMatchers(ConfigConsts.DEFAULT_LOGIN_PAGE, ConfigConsts.IMG_CODE_URL).permitAll()
+                .antMatchers("/loginPage", "/getImgCode").permitAll()
                 // 剩下的所有的地址都是需要在认证状态下才可以访问
                 .anyRequest().authenticated()
         .and()
@@ -91,9 +91,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 usernameParameter("userName")
                 .passwordParameter("passWord")
                 // 指定指定要的登录页面
-                .loginPage(ConfigConsts.DEFAULT_LOGIN_PAGE)
+                .loginPage("/loginPage")
                 // 处理认证路径的请求
-                .loginProcessingUrl(ConfigConsts.DEFAULT_LOGIN_URL)
+                .loginProcessingUrl("/login")
                 .successHandler(defaultAuthenticationSuccessHandler)
                 .failureHandler(defaultAuthenticationFailureHandler)
                 .and()
@@ -101,14 +101,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
-                .logoutUrl(ConfigConsts.DEFAULT_LOGOUT_URL)
-                .logoutSuccessUrl(ConfigConsts.DEFAULT_LOGIN_PAGE)
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/loginPage")
                  .and()
                 .rememberMe()
                 // 有效期7天
-                .tokenValiditySeconds(ConfigConsts.REMEMBERME_VALIDITY)
+                .tokenValiditySeconds(3600 * 24 * 7)
                 // 开启记住我功能
-                .rememberMeParameter(ConfigConsts.REMEMBERME_COOKIES)
+                .rememberMeParameter("JSESSIONID")
                 .and()
                 //禁用csrf
                 .csrf().disable()
@@ -118,7 +118,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 配置session管理
                 .sessionManagement()
                 //session失效默认的跳转地址
-                .invalidSessionUrl(ConfigConsts.DEFAULT_LOGIN_PAGE)
+                .invalidSessionUrl("/loginPage")
                 // 同一用户 只允许一个在线 自动踢出在线用户
                 .maximumSessions(1);
     }
