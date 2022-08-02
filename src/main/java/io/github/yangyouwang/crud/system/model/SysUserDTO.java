@@ -60,10 +60,4 @@ public class SysUserDTO extends BaseRowModel implements Serializable {
      * */
     @ExcelProperty(value = {"备注"}, index = 4)
     private String remark;
-
-    /**
-     * 角色id
-     */
-    @ExcelIgnore
-    private Long[] roleIds;
 }
