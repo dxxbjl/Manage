@@ -1,5 +1,6 @@
 package io.github.yangyouwang.crud.system.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.base.CrudController;
 import io.github.yangyouwang.common.domain.Result;
@@ -8,6 +9,7 @@ import io.github.yangyouwang.common.domain.XmSelectNode;
 import io.github.yangyouwang.crud.system.entity.SysMenu;
 import io.github.yangyouwang.crud.system.service.SysMenuService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -74,7 +76,8 @@ public class SysMenuController extends CrudController {
     @GetMapping("/page")
     @ResponseBody
     public Result page(SysMenu sysMenu) {
-        List<SysMenu> list = sysMenuService.list(sysMenu);
+        List<SysMenu> list = sysMenuService.list(new LambdaQueryWrapper<SysMenu>()
+                .like(StringUtils.isNotBlank(sysMenu.getMenuName()), SysMenu::getMenuName , sysMenu.getMenuName()));
         return Result.success(list);
     }
 

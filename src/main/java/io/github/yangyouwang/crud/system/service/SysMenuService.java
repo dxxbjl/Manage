@@ -16,7 +16,6 @@ import io.github.yangyouwang.crud.system.mapper.SysRoleMenuMapper;
 import io.github.yangyouwang.crud.system.entity.SysMenu;
 import io.github.yangyouwang.crud.system.entity.SysRoleMenu;
 import io.github.yangyouwang.crud.system.model.SysMenuDTO;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -79,17 +78,6 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
     @Transactional(readOnly = true)
     public SysMenu detail(Long id) {
         return sysMenuMapper.findMenuById(id);
-    }
-
-    /**
-     * 列表请求
-     * @param sysMenu 请求菜单列表对象
-     * @return 请求列表
-     */
-    @Transactional(readOnly = true)
-    public List<SysMenu> list(SysMenu sysMenu) {
-        return this.list(new LambdaQueryWrapper<SysMenu>()
-                .like(StringUtils.isNotBlank(sysMenu.getMenuName()), SysMenu::getMenuName , sysMenu.getMenuName()));
     }
 
     /**

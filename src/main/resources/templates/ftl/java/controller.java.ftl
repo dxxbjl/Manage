@@ -66,6 +66,7 @@ public class ${table.controllerName} {
   @GetMapping(value = "/page")
   @ResponseBody
   public TableDataInfo page(${entity} param) {
+    startPage();
     List<${entity}> data = ${table.serviceName?uncap_first}.page(param);
     return getDataTable(data);
   }

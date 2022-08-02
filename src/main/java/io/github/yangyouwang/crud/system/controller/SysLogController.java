@@ -1,5 +1,6 @@
 package io.github.yangyouwang.crud.system.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.base.CrudController;
 import io.github.yangyouwang.common.domain.Result;
@@ -7,6 +8,7 @@ import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.github.yangyouwang.crud.system.entity.SysLog;
 import io.github.yangyouwang.crud.system.service.SysLogService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,7 +51,9 @@ public class SysLogController extends CrudController {
     @ResponseBody
     public TableDataInfo page(SysLog sysLog) {
         startPage();
-        List<SysLog> list = sysLogService.list(sysLog);
+        List<SysLog> list = sysLogService.list(new LambdaQueryWrapper<SysLog>()
+                .like(StringUtils.isNotBlank(sysLog.getClassName()), SysLog::getClassName , sysLog.getClassName())
+                .like(StringUtils.isNotBlank(sysLog.getMethodName()), SysLog::getMethodName , sysLog.getMethodName()));
         return getDataTable(list);
     }
 

@@ -14,7 +14,6 @@ import io.github.yangyouwang.crud.system.mapper.SysUserMapper;
 import io.github.yangyouwang.crud.system.mapper.SysUserRoleMapper;
 import io.github.yangyouwang.crud.system.model.ModifyPassDTO;
 import io.github.yangyouwang.crud.system.model.SysUserDTO;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.lang.NonNull;
@@ -91,19 +90,6 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
             sysUser.setRoleIds(roleIds);
         });
         return sysUser;
-    }
-
-    /**
-     * 列表请求
-     * @param sysUser 用户列表对象
-     * @return 列表
-     */
-    @Transactional(readOnly = true)
-    public List<SysUser> list(SysUser sysUser) {
-        return this.list(new LambdaQueryWrapper<SysUser>()
-                        .like(StringUtils.isNotBlank(sysUser.getUserName()), SysUser::getUserName , sysUser.getUserName())
-                        .like(StringUtils.isNotBlank(sysUser.getEmail()), SysUser::getEmail , sysUser.getEmail())
-                        .like(StringUtils.isNotBlank(sysUser.getPhonenumber()), SysUser::getPhonenumber , sysUser.getPhonenumber()));
     }
 
     /**
