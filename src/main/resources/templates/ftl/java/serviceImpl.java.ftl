@@ -6,6 +6,7 @@ import ${package.Service}.${table.serviceName};
 import ${superServiceImplClassPackage};
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Service;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -33,6 +34,28 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
   @Override
   public List<${entity}> page(${entity} param) {
     QueryWrapper<${entity}> queryWrapper = new QueryWrapper<>();
+    queryWrapper.lambda()
+    <#list table.fields as field>
+      // ${field.comment}
+      <#if !entityLombokModel>
+        <#if field.propertyType == "Boolean">
+          <#assign getprefix="is"/>
+        <#else>
+          <#assign getprefix="get"/>
+        </#if>
+        <#if field.propertyType == "String">
+          .eq(!StringUtils.isEmpty(param.${getprefix}${field.capitalName}()), ${entity}::${getprefix}${field.capitalName}, param.${getprefix}${field.capitalName}())
+        <#else>
+          .eq(param.${getprefix}${field.capitalName}() != null, ${entity}::${getprefix}${field.capitalName}, param.${getprefix}${field.capitalName}())
+        </#if>
+      <#else>
+        <#if field.propertyType == "String">
+          .eq(!StringUtils.isEmpty(param.get${field.capitalName}()), ${entity}::get${field.capitalName}, param.get${field.capitalName}())
+        <#else>
+          .eq(param.get${field.capitalName}() != null, ${entity}::get${field.capitalName}, param.get${field.capitalName}())
+        </#if>
+      </#if>
+    </#list>;
     return list(queryWrapper);
   }
 

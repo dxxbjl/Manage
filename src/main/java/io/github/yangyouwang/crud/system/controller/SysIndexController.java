@@ -5,7 +5,6 @@ import io.github.yangyouwang.common.base.CrudController;
 import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.core.util.SecurityUtils;
 import io.github.yangyouwang.core.util.StringUtil;
-import io.github.yangyouwang.crud.system.entity.SysMenu;
 import io.github.yangyouwang.crud.system.entity.SysUser;
 import io.github.yangyouwang.crud.system.model.SysMenuDTO;
 import io.github.yangyouwang.crud.system.service.SysDictTypeService;
