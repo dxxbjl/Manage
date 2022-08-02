@@ -1,13 +1,11 @@
 package io.github.yangyouwang.crud.act.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.github.yangyouwang.common.base.CrudController;
 import io.github.yangyouwang.common.domain.Result;
-import io.github.yangyouwang.crud.act.model.params.ActReModelAddDTO;
-import io.github.yangyouwang.crud.act.model.params.ActReModelEditDTO;
-import io.github.yangyouwang.crud.act.model.params.ActReModelListDTO;
-import io.github.yangyouwang.crud.act.model.result.ActReModelDTO;
+import io.github.yangyouwang.common.domain.TableDataInfo;
+import io.github.yangyouwang.crud.act.entity.ActReModel;
 import io.github.yangyouwang.crud.act.service.ActReModelService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -26,16 +25,12 @@ import java.util.Objects;
  */
 @Controller
 @RequestMapping("/actReModel")
-public class ActReModelController {
+@RequiredArgsConstructor
+public class ActReModelController extends CrudController {
 
     private static final String SUFFIX = "act/reModel";
 
     private final ActReModelService actReModelService;
-
-    @Autowired
-    public ActReModelController(ActReModelService actReModelService) {
-        this.actReModelService = actReModelService;
-    }
 
     /**
      * 跳转列表
@@ -61,38 +56,36 @@ public class ActReModelController {
      */
     @GetMapping("/editPage/{id}")
     public String editPage(@Valid @NotNull(message = "id不能为空")  @PathVariable String id, ModelMap map){
-        ActReModelDTO actReModel = actReModelService.detail(id);
+        ActReModel actReModel = actReModelService.getById(id);
         map.put("actReModel",actReModel);
         return SUFFIX + "/edit";
     }
 
     /**
      * 列表请求
-     * @param actReModelListDTO 模型列表对象
+     * @param actReModel 模型列表对象
      * @return 请求列表
      */
-    @GetMapping("/list")
+    @GetMapping("/page")
     @ResponseBody
-    public Result list(@Valid ActReModelListDTO actReModelListDTO, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()){
-            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
-        }
-        IPage list = actReModelService.list(actReModelListDTO);
-        return Result.success(list);
+    public TableDataInfo page(ActReModel actReModel) {
+        startPage();
+        List<ActReModel> list = actReModelService.list(actReModel);
+        return getDataTable(list);
     }
 
     /**
      * 添加请求
-     * @param actReModelAddDTO 模型添加对象
+     * @param actReModel 模型添加对象
      * @return 添加状态
      */
     @PostMapping("/add")
     @ResponseBody
-    public Result add(@RequestBody @Valid ActReModelAddDTO actReModelAddDTO, BindingResult bindingResult){
+    public Result add(@RequestBody @Valid ActReModel actReModel, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
-            return Result.failure(bindingResult.getFieldError().getDefaultMessage());
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        String flag = actReModelService.add(actReModelAddDTO);
+        String flag = actReModelService.add(actReModel);
         return Result.success(flag);
     }
 
@@ -120,16 +113,16 @@ public class ActReModelController {
 
     /**
      * 编辑请求
-     * @param actReModelEditDTO 模型编辑对象
+     * @param actReModel 模型编辑对象
      * @return 编辑状态
      */
     @PostMapping("/edit")
     @ResponseBody
-    public Result edit(@RequestBody @Valid ActReModelEditDTO actReModelEditDTO, BindingResult bindingResult) {
+    public Result edit(@RequestBody @Valid ActReModel actReModel, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        boolean flag = actReModelService.edit(actReModelEditDTO);
+        boolean flag = actReModelService.updateById(actReModel);
         return Result.success(flag);
     }
 
@@ -141,7 +134,7 @@ public class ActReModelController {
     @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable String id){
-        actReModelService.removeById(id);
-        return Result.success();
+        boolean flag = actReModelService.removeById(id);
+        return Result.success(flag);
     }
 }

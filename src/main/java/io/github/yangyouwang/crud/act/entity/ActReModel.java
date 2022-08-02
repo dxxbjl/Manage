@@ -68,4 +68,9 @@ public class ActReModel implements Serializable {
 
     @TableField("TENANT_ID_")
     private String tenantId;
+    /**
+     * 描述
+     */
+    @TableField(exist = false)
+    private String description;
 }

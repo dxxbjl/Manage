@@ -1,20 +1,18 @@
 package io.github.yangyouwang.crud.system.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.yangyouwang.common.annotation.CrudLog;
+import io.github.yangyouwang.common.base.CrudController;
 import io.github.yangyouwang.common.domain.Result;
-import io.github.yangyouwang.crud.system.model.params.SysLogListDTO;
-import io.github.yangyouwang.crud.system.model.result.SysLogDTO;
+import io.github.yangyouwang.common.domain.TableDataInfo;
+import io.github.yangyouwang.crud.system.entity.SysLog;
 import io.github.yangyouwang.crud.system.service.SysLogService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.Objects;
+import java.util.List;
 
 /**
  * @author yangyouwang
@@ -25,17 +23,13 @@ import java.util.Objects;
  */
 @Controller
 @RequestMapping("/sysLog")
-public class SysLogController {
+@RequiredArgsConstructor
+public class SysLogController extends CrudController {
 
 
     private static final String SUFFIX = "system/sysLog";
 
     private final SysLogService sysLogService;
-
-    @Autowired
-    public SysLogController(SysLogService sysLogService) {
-        this.sysLogService = sysLogService;
-    }
 
     /**
      * 跳转列表
@@ -48,17 +42,15 @@ public class SysLogController {
 
     /**
      * 列表请求
-     * @param sysLogListDTO 日志列表对象
+     * @param sysLog 日志列表对象
      * @return 请求列表
      */
-    @GetMapping("/list")
+    @GetMapping("/page")
     @ResponseBody
-    public Result list(@Validated SysLogListDTO sysLogListDTO, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()){
-            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
-        }
-        IPage<SysLogDTO> list = sysLogService.list(sysLogListDTO);
-        return Result.success(list);
+    public TableDataInfo page(SysLog sysLog) {
+        startPage();
+        List<SysLog> list = sysLogService.list(sysLog);
+        return getDataTable(list);
     }
 
     /**
@@ -70,7 +62,7 @@ public class SysLogController {
     @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
-        sysLogService.removeById(id);
-        return Result.success();
+        boolean flag = sysLogService.removeById(id);
+        return Result.success(flag);
     }
 }

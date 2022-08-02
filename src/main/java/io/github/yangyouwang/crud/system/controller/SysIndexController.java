@@ -1,20 +1,24 @@
 package io.github.yangyouwang.crud.system.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import io.github.yangyouwang.common.base.CrudController;
 import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.core.util.SecurityUtils;
 import io.github.yangyouwang.core.util.StringUtil;
-import io.github.yangyouwang.crud.system.model.result.SysMenuDTO;
-import io.github.yangyouwang.crud.system.model.result.SysUserDTO;
+import io.github.yangyouwang.crud.system.entity.SysMenu;
+import io.github.yangyouwang.crud.system.entity.SysUser;
+import io.github.yangyouwang.crud.system.model.SysMenuDTO;
 import io.github.yangyouwang.crud.system.service.SysDictTypeService;
 import io.github.yangyouwang.crud.system.service.SysMenuService;
 import io.github.yangyouwang.crud.system.service.SysUserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,7 +26,6 @@ import javax.servlet.http.HttpSession;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * @author yangyouwang
@@ -32,20 +35,14 @@ import java.util.List;
  * @date 2021/3/216:40 PM
  */
 @Controller
-public class SysIndexController {
+@RequiredArgsConstructor
+public class SysIndexController extends CrudController {
 
     private final SysMenuService sysMenuService;
 
     private final SysUserService sysUserService;
 
     private final SysDictTypeService sysDictTypeService;
-
-    @Autowired
-    public SysIndexController(SysMenuService sysMenuService, SysUserService sysUserService, SysDictTypeService sysDictTypeService) {
-        this.sysMenuService = sysMenuService;
-        this.sysUserService = sysUserService;
-        this.sysDictTypeService = sysDictTypeService;
-    }
 
     /**
      * 跳转到首页页面
@@ -57,7 +54,7 @@ public class SysIndexController {
         sysDictTypeService.cacheDict();
         // 用户信息
         User user = SecurityUtils.getSysUser();
-        SysUserDTO sysUser = sysUserService.findUserByName(user.getUsername());
+        SysUser sysUser = sysUserService.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUserName, user.getUsername()));
         map.put("sysUser",sysUser);
         // 菜单权限
         List<SysMenuDTO> sysMenus = sysMenuService.selectMenusByUser(sysUser.getId());

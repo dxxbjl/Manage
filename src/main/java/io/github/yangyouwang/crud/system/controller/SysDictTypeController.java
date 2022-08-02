@@ -1,12 +1,12 @@
 package io.github.yangyouwang.crud.system.controller;
 
 import io.github.yangyouwang.common.annotation.CrudLog;
-import io.github.yangyouwang.common.domain.EnabledDTO;
+import io.github.yangyouwang.common.base.CrudController;
 import io.github.yangyouwang.common.domain.Result;
-import io.github.yangyouwang.crud.system.model.params.*;
-import io.github.yangyouwang.crud.system.model.result.SysDictTypeDTO;
+import io.github.yangyouwang.common.domain.TableDataInfo;
+import io.github.yangyouwang.crud.system.entity.SysDictType;
 import io.github.yangyouwang.crud.system.service.SysDictTypeService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -25,16 +26,12 @@ import java.util.Objects;
  */
 @Controller
 @RequestMapping("/sysDictType")
-public class SysDictTypeController {
+@RequiredArgsConstructor
+public class SysDictTypeController extends CrudController {
 
     private static final String SUFFIX = "system/sysDictType";
 
     private final SysDictTypeService sysDictTypeService;
-
-    @Autowired
-    public SysDictTypeController(SysDictTypeService sysDictTypeService) {
-        this.sysDictTypeService = sysDictTypeService;
-    }
 
     /**
      * 跳转列表
@@ -61,70 +58,69 @@ public class SysDictTypeController {
      */
     @GetMapping("/editPage/{id}")
     public String editPage(@Valid @NotNull(message = "id能为空") @PathVariable Long id, ModelMap map){
-        SysDictTypeDTO sysDict = sysDictTypeService.detail(id);
+        SysDictType sysDict = sysDictTypeService.getById(id);
         map.put("sysDictType",sysDict);
         return SUFFIX + "/edit";
     }
 
     /**
      * 列表请求
-     * @param sysDictTypeListDTO 请求字典列表参数
+     * @param sysDictType 请求字典列表参数
      * @return 请求列表
      */
-    @GetMapping("/list")
+    @GetMapping("/page")
     @ResponseBody
-    public Result list(@Validated SysDictTypeListDTO sysDictTypeListDTO, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()){
-            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
-        }
-        return Result.success(sysDictTypeService.list(sysDictTypeListDTO));
+    public TableDataInfo page(SysDictType sysDictType) {
+        startPage();
+        List<SysDictType> list = sysDictTypeService.list(sysDictType);
+        return getDataTable(list);
     }
 
     /**
      * 添加请求
-     * @param sysDictTypeAddDTO 添加字典参数
+     * @param sysDictType 添加字典参数
      * @return 添加状态
      */
     @CrudLog
     @PostMapping("/add")
     @ResponseBody
-    public Result add(@RequestBody @Validated SysDictTypeAddDTO sysDictTypeAddDTO, BindingResult bindingResult){
+    public Result add(@RequestBody @Validated SysDictType sysDictType, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        boolean flag = sysDictTypeService.add(sysDictTypeAddDTO);
+        boolean flag = sysDictTypeService.add(sysDictType);
         return Result.success(flag);
     }
 
     /**
      * 编辑请求
-     * @param sysDictTypeEditDTO 编辑字典参数
+     * @param sysDictType 编辑字典参数
      * @return 编辑状态
      */
     @CrudLog
     @PostMapping("/edit")
     @ResponseBody
-    public Result edit(@RequestBody @Validated SysDictTypeEditDTO sysDictTypeEditDTO, BindingResult bindingResult){
+    public Result edit(@RequestBody @Validated SysDictType sysDictType, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        boolean flag = sysDictTypeService.edit(sysDictTypeEditDTO);
+        boolean flag = sysDictTypeService.updateById(sysDictType);
         return Result.success(flag);
     }
 
     /**
      * 修改字典状态
-     * @param enabledDTO 修改字典参数
+     * @param sysDictType 修改字典参数
      * @return 修改状态
      */
     @CrudLog
     @PostMapping("/changeDictType")
     @ResponseBody
-    public Result changeDictType(@RequestBody @Validated EnabledDTO enabledDTO, BindingResult bindingResult){
+    public Result changeDictType(@RequestBody @Validated SysDictType sysDictType, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        boolean flag = sysDictTypeService.changeDictType(enabledDTO);
+        boolean flag = sysDictTypeService.updateById(sysDictType);
         return Result.success(flag);
     }
 

@@ -11,7 +11,7 @@
  Target Server Version : 80028
  File Encoding         : 65001
 
- Date: 30/07/2022 22:27:46
+ Date: 02/08/2022 11:39:46
 */
 
 SET NAMES utf8mb4;
@@ -67,7 +67,6 @@ CREATE TABLE `qrtz_cron_triggers`  (
 -- ----------------------------
 -- Records of qrtz_cron_triggers
 -- ----------------------------
-INSERT INTO `qrtz_cron_triggers` VALUES ('clusteredScheduler', '测试打印', 'DEFAULT', '* * * * * ?', 'Asia/Shanghai');
 
 -- ----------------------------
 -- Table structure for qrtz_fired_triggers
@@ -116,12 +115,11 @@ CREATE TABLE `qrtz_job`  (
   `deleted` int(0) NULL DEFAULT 0 COMMENT '逻辑删除 0 否、1 是',
   `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '任务表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '任务表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of qrtz_job
 -- ----------------------------
-INSERT INTO `qrtz_job` VALUES (10, '测试打印', '* * * * * ?', 'io.github.yangyouwang.core.job.TestJob', 'admin', '2022-07-30 22:19:58', '', NULL, 0, '备注');
 
 -- ----------------------------
 -- Table structure for qrtz_job_details
@@ -146,7 +144,6 @@ CREATE TABLE `qrtz_job_details`  (
 -- ----------------------------
 -- Records of qrtz_job_details
 -- ----------------------------
-INSERT INTO `qrtz_job_details` VALUES ('clusteredScheduler', '测试打印', 'DEFAULT', NULL, 'io.github.yangyouwang.core.job.TestJob', '0', '1', '0', '0', 0xACED0005737200156F72672E71756172747A2E4A6F62446174614D61709FB083E8BFA9B0CB020000787200266F72672E71756172747A2E7574696C732E537472696E674B65794469727479466C61674D61708208E8C3FBC55D280200015A0013616C6C6F77735472616E7369656E74446174617872001D6F72672E71756172747A2E7574696C732E4469727479466C61674D617013E62EAD28760ACE0200025A000564697274794C00036D617074000F4C6A6176612F7574696C2F4D61703B787000737200116A6176612E7574696C2E486173684D61700507DAC1C31660D103000246000A6C6F6164466163746F724900097468726573686F6C6478703F40000000000010770800000010000000007800);
 
 -- ----------------------------
 -- Table structure for qrtz_locks
@@ -161,8 +158,6 @@ CREATE TABLE `qrtz_locks`  (
 -- ----------------------------
 -- Records of qrtz_locks
 -- ----------------------------
-INSERT INTO `qrtz_locks` VALUES ('clusteredScheduler', 'STATE_ACCESS');
-INSERT INTO `qrtz_locks` VALUES ('clusteredScheduler', 'TRIGGER_ACCESS');
 
 -- ----------------------------
 -- Table structure for qrtz_paused_trigger_grps
@@ -193,8 +188,6 @@ CREATE TABLE `qrtz_scheduler_state`  (
 -- ----------------------------
 -- Records of qrtz_scheduler_state
 -- ----------------------------
-INSERT INTO `qrtz_scheduler_state` VALUES ('clusteredScheduler', 'yangyouwang1659191129481', 1659191171553, 10000);
-INSERT INTO `qrtz_scheduler_state` VALUES ('clusteredScheduler', 'yangyouwang1659191179302', 1659191180332, 10000);
 
 -- ----------------------------
 -- Table structure for qrtz_simple_triggers
@@ -282,6 +275,5 @@ CREATE TABLE `qrtz_triggers`  (
 -- ----------------------------
 -- Records of qrtz_triggers
 -- ----------------------------
-INSERT INTO `qrtz_triggers` VALUES ('clusteredScheduler', '测试打印', 'DEFAULT', '测试打印', 'DEFAULT', NULL, 1659191181000, 1659191180000, 5, 'WAITING', 'CRON', 1659190798000, 0, NULL, 0, '');
 
 SET FOREIGN_KEY_CHECKS = 1;

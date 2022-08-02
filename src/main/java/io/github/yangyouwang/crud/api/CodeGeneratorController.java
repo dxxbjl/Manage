@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import io.github.yangyouwang.common.annotation.ApiVersion;
 import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.annotation.PassToken;
+import io.github.yangyouwang.common.base.CrudController;
 import io.github.yangyouwang.common.constant.ApiVersionConstant;
 import io.github.yangyouwang.common.domain.BaseEntity;
 import io.github.yangyouwang.common.domain.Result;
@@ -169,6 +170,7 @@ public class CodeGeneratorController {
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
         strategy.setSuperEntityClass(BaseEntity.class);
+        strategy.setSuperControllerClass(CrudController.class);
         strategy.setSuperEntityColumns("id","create_by","create_time","update_by","update_time","deleted","remark");
         strategy.setEntityLombokModel(true);
         strategy.setRestControllerStyle(false);

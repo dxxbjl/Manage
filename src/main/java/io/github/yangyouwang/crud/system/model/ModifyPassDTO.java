@@ -1,4 +1,13 @@
-package io.github.yangyouwang.crud.system.model.params;
+package io.github.yangyouwang.crud.system.model;
+
+/**
+ * Description: <br/>
+ * date: 2022/8/2 10:26<br/>
+ *
+ * @author yangyouwang<br />
+ * @version v1.0
+ * @since JDK 1.8
+ */
 
 import lombok.Data;
 

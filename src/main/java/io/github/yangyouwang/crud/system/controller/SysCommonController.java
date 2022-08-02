@@ -1,14 +1,15 @@
 package io.github.yangyouwang.crud.system.controller;
 
 import io.github.yangyouwang.common.annotation.CrudLog;
+import io.github.yangyouwang.common.base.CrudController;
 import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.core.aliyun.SampleOSS;
 import io.github.yangyouwang.core.properties.MinioProperties;
 import io.github.yangyouwang.core.util.MinIoUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,20 +28,14 @@ import java.util.Map;
 @Slf4j
 @Controller
 @RequestMapping("/sysCommon")
-public class SysCommonController {
+@RequiredArgsConstructor
+public class SysCommonController extends CrudController {
 
     private final SampleOSS sampleOSS;
 
     private final MinIoUtil minIoUtil;
 
     private final MinioProperties minioProperties;
-
-    @Autowired
-    public SysCommonController(SampleOSS sampleOSS,MinIoUtil minIoUtil,MinioProperties minioProperties) {
-        this.sampleOSS = sampleOSS;
-        this.minIoUtil = minIoUtil;
-        this.minioProperties = minioProperties;
-    }
 
     /**
      * 通用上传请求

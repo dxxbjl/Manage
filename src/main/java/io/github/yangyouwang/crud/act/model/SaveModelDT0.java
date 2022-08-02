@@ -1,4 +1,4 @@
-package io.github.yangyouwang.crud.act.model.params;
+package io.github.yangyouwang.crud.act.model;
 
 import lombok.Data;
 

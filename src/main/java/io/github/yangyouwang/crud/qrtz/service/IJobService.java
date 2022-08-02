@@ -2,12 +2,6 @@ package io.github.yangyouwang.crud.qrtz.service;
 
 import io.github.yangyouwang.crud.qrtz.entity.Job;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.github.yangyouwang.crud.qrtz.model.params.JobEditDTO;
-import io.github.yangyouwang.crud.qrtz.model.params.JobPageDTO;
-import io.github.yangyouwang.crud.qrtz.model.params.JobAddDTO;
-import io.github.yangyouwang.crud.qrtz.model.result.JobDTO;
-
 import java.util.List;
 
 /**
@@ -22,29 +16,22 @@ import java.util.List;
 
   /**
   * 任务表分页列表
-  * @param pageDTO 分页DTO
+  * @param job 分页DTO
   * @return 结果
   */
-  IPage<Job> page(JobPageDTO pageDTO);
-
-  /**
-  * 任务表详情
-  * @param id 主键
-  * @return 结果
-  */
-  JobDTO info(Long id);
+  List<Job> page(Job job);
 
   /**
   * 任务表新增
   * @param param 根据需要进行传值
   */
-  void add(JobAddDTO param);
+  void add(Job param);
 
   /**
   * 任务表修改
   * @param param 根据需要进行传值
   */
-  void modify(JobEditDTO param);
+  void modify(Job param);
 
   /**
   * 任务表删除(单个条目)

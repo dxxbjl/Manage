@@ -51,4 +51,9 @@ public class SysUser extends BaseEntity {
      */
     @TableField(exist = false)
     private List<SysRole> roles;
+    /**
+     * 角色ID数组
+     */
+    @TableField(exist = false)
+    private Long[] roleIds;
 }

@@ -32,4 +32,9 @@ public class SysRole extends BaseEntity {
      */
     @TableField(exist = false)
     private List<SysMenu> menus;
+    /**
+     * 菜单ID数组
+     */
+    @TableField(exist = false)
+    private Long[] menuIds;
 }

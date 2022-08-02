@@ -5,10 +5,7 @@ import ${package.Mapper}.${table.mapperName};
 import ${package.Service}.${table.serviceName};
 import ${superServiceImplClassPackage};
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.stereotype.Service;
-import io.github.yangyouwang.common.domain.PageDTO;
 
 import java.util.List;
 
@@ -30,14 +27,13 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
 
   /**
   * ${table.comment!}分页列表
-  * @param pageDTO 分页DTO
+  * @param param 参数
   * @return 结果
   */
   @Override
-  public IPage<${entity}> page(PageDTO pageDTO) {
+  public List<${entity}> page(${entity} param) {
     QueryWrapper<${entity}> queryWrapper = new QueryWrapper<>();
-    IPage<${entity}> page = page(new Page<>(pageDTO.getPageNum(), pageDTO.getPageSize()), queryWrapper);
-    return page;
+    return list(queryWrapper);
   }
 
   /**

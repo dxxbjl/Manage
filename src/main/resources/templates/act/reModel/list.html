@@ -63,23 +63,8 @@
       table.render({
           elem: '#modelTable'
           ,height: 'full-110'
-          ,url:  ctx + '/actReModel/list'
-          ,page: true //开启分页,
-          ,limit: 10 // 多少条
-          ,request: {
-            pageName: 'pageNum', //页码的参数名称，默认：page
-            limitName: 'pageSize' //每页数据量的参数名，默认：limit
-          }
-          ,parseData: function (result) {
-            return {
-              "code": result.code,
-              "count": result.data.total,
-              "data": result.data.records
-            }
-          }
-          ,response: {
-               statusCode: 200 //成功的状态码，默认：0
-          }
+          ,url:  ctx + '/actReModel/page'
+          ,page: true //开启分页
           ,cols: [[ //表头
               {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'}
               ,{field: 'rev', title: '乐观锁'}

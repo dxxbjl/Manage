@@ -1,13 +1,15 @@
 package io.github.yangyouwang.crud.system.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.github.yangyouwang.common.annotation.CrudLog;
+import io.github.yangyouwang.common.base.CrudController;
 import io.github.yangyouwang.common.domain.Result;
+import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.github.yangyouwang.common.domain.XmSelectNode;
-import io.github.yangyouwang.crud.system.model.params.*;
-import io.github.yangyouwang.crud.system.model.result.SysRoleDTO;
+import io.github.yangyouwang.crud.system.entity.SysRole;
 import io.github.yangyouwang.crud.system.service.SysRoleService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -28,16 +30,12 @@ import java.util.Objects;
  */
 @Controller
 @RequestMapping("/sysRole")
-public class SysRoleController {
+@RequiredArgsConstructor
+public class SysRoleController extends CrudController {
 
     private static final String SUFFIX = "system/sysRole";
 
     private final SysRoleService sysRoleService;
-
-    @Autowired
-    public SysRoleController(SysRoleService sysRoleService) {
-        this.sysRoleService = sysRoleService;
-    }
 
     /**
      * 跳转列表
@@ -64,7 +62,7 @@ public class SysRoleController {
      */
     @GetMapping("/editPage/{id}")
     public String editPage(@Valid @NotNull(message = "id不能为空") @PathVariable Long id, ModelMap map){
-        SysRoleDTO sysRole = sysRoleService.detail(id);
+        SysRole sysRole = sysRoleService.detail(id);
         map.put("sysRole",sysRole);
         return SUFFIX + "/edit";
     }
@@ -72,48 +70,48 @@ public class SysRoleController {
 
     /**
      * 列表请求
-     * @param sysRoleListDTO 请求角色列表对象
+     * @param sysRole 请求角色列表对象
      * @return 请求列表
      */
-    @GetMapping("/list")
+    @GetMapping("/page")
     @ResponseBody
-    public Result list(@Validated SysRoleListDTO sysRoleListDTO, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()){
-            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
-        }
-        IPage<SysRoleDTO> list = sysRoleService.list(sysRoleListDTO);
-        return Result.success(list);
+    public TableDataInfo page(@Validated SysRole sysRole) {
+        startPage();
+        List<SysRole> list = sysRoleService.list(new LambdaQueryWrapper<SysRole>()
+                .like(StringUtils.isNotBlank(sysRole.getRoleName()), SysRole::getRoleName , sysRole.getRoleName())
+                .like(StringUtils.isNotBlank(sysRole.getRoleKey()), SysRole::getRoleKey , sysRole.getRoleKey()));
+        return getDataTable(list);
     }
 
     /**
      * 添加请求
-     * @param sysRoleAddDTO 添加角色对象
+     * @param sysRole 添加角色对象
      * @return 添加状态
      */
     @CrudLog
     @PostMapping("/add")
     @ResponseBody
-    public Result add(@RequestBody @Validated SysRoleAddDTO sysRoleAddDTO, BindingResult bindingResult){
+    public Result add(@RequestBody @Validated SysRole sysRole, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        sysRoleService.add(sysRoleAddDTO);
+        sysRoleService.add(sysRole);
         return Result.success();
     }
 
     /**
      * 编辑请求
-     * @param sysRoleEditDTO 编辑角色对象
+     * @param sysRole 编辑角色对象
      * @return 编辑状态
      */
     @CrudLog
     @PostMapping("/edit")
     @ResponseBody
-    public Result edit(@RequestBody @Validated SysRoleEditDTO sysRoleEditDTO, BindingResult bindingResult){
+    public Result edit(@RequestBody @Validated SysRole sysRole, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        sysRoleService.edit(sysRoleEditDTO);
+        sysRoleService.edit(sysRole);
         return Result.success();
     }
 

@@ -1,8 +1,6 @@
 package io.github.yangyouwang.crud.system.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.domain.XmSelectNode;
 import io.github.yangyouwang.common.enums.ResultStatus;
@@ -11,13 +9,7 @@ import io.github.yangyouwang.crud.system.mapper.SysRoleMenuMapper;
 import io.github.yangyouwang.crud.system.entity.SysMenu;
 import io.github.yangyouwang.crud.system.entity.SysRole;
 import io.github.yangyouwang.crud.system.entity.SysRoleMenu;
-import io.github.yangyouwang.crud.system.model.params.SysRoleAddDTO;
-import io.github.yangyouwang.crud.system.model.params.SysRoleEditDTO;
-import io.github.yangyouwang.crud.system.model.params.SysRoleListDTO;
-import io.github.yangyouwang.crud.system.model.result.SysRoleDTO;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.framework.AopContext;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -55,63 +47,44 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
      * @return 编辑页面
      */
     @Transactional(readOnly = true)
-    public SysRoleDTO detail(Long id) {
+    public SysRole detail(Long id) {
         SysRole sysRole = sysRoleMapper.findRoleById(id);
-        SysRoleDTO sysRoleDTO = new SysRoleDTO();
-        BeanUtils.copyProperties(sysRole,sysRoleDTO);
         ofNullable(sysRole.getMenus()).ifPresent(menus -> {
             Long[] menuIds = menus.stream().map(SysMenu::getId).toArray(Long[]::new);
-            sysRoleDTO.setMenuIds(menuIds);
+            sysRole.setMenuIds(menuIds);
         });
-        return sysRoleDTO;
-    }
-
-    /**
-     * 列表请求
-     * @param sysRoleListDTO 请求角色列表对象
-     * @return 请求列表
-     */
-    @Transactional(readOnly = true)
-    public IPage list(SysRoleListDTO sysRoleListDTO) {
-        return this.page(new Page<>(sysRoleListDTO.getPageNum(), sysRoleListDTO.getPageSize()),
-                new LambdaQueryWrapper<SysRole>()
-                        .like(StringUtils.isNotBlank(sysRoleListDTO.getRoleName()), SysRole::getRoleName , sysRoleListDTO.getRoleName())
-                        .like(StringUtils.isNotBlank(sysRoleListDTO.getRoleKey()), SysRole::getRoleKey , sysRoleListDTO.getRoleKey()));
+        return sysRole;
     }
 
     /**
      * 添加请求
-     * @param sysRoleAddDTO 添加角色对象
+     * @param sysRole 添加角色对象
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public void add(@NotNull SysRoleAddDTO sysRoleAddDTO) {
-        SysRole sysRole = this.getOne(new LambdaQueryWrapper<SysRole>().eq(SysRole::getRoleKey,sysRoleAddDTO.getRoleKey()));
-        Assert.isNull(sysRole, ResultStatus.ROLE_EXIST_ERROR.message);
+    public void add(@NotNull SysRole sysRole) {
+        SysRole old = this.getOne(new LambdaQueryWrapper<SysRole>().eq(SysRole::getRoleKey,sysRole.getRoleKey()));
+        Assert.isNull(old, ResultStatus.ROLE_EXIST_ERROR.message);
         // 添加角色
-        SysRole role = new SysRole();
-        BeanUtils.copyProperties(sysRoleAddDTO,role);
-        boolean flag = this.save(role);
+        boolean flag = this.save(sysRole);
         if (flag) {
             // 关联菜单
             SysRoleService proxy = (SysRoleService) AopContext.currentProxy();
-            proxy.insertRoleMenuBatch(role.getId(), sysRoleAddDTO.getMenuIds());
+            proxy.insertRoleMenuBatch(sysRole.getId(), sysRole.getMenuIds());
         }
     }
 
     /**
      * 编辑请求
-     * @param sysRoleEditDTO 编辑角色对象
+     * @param sysRole 编辑角色对象
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public void edit(SysRoleEditDTO sysRoleEditDTO) {
-        SysRole role = new SysRole();
-        BeanUtils.copyProperties(sysRoleEditDTO,role);
-        boolean flag = this.updateById(role);
+    public void edit(SysRole sysRole) {
+        boolean flag = this.updateById(sysRole);
         // 关联菜单
         if (flag && sysRoleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>()
-                .eq(SysRoleMenu::getRoleId, role.getId())) > 0) {
+                .eq(SysRoleMenu::getRoleId, sysRole.getId())) > 0) {
             SysRoleService proxy = (SysRoleService) AopContext.currentProxy();
-            proxy.insertRoleMenuBatch(role.getId(), sysRoleEditDTO.getMenuIds());
+            proxy.insertRoleMenuBatch(sysRole.getId(), sysRole.getMenuIds());
         }
     }
 
@@ -122,13 +95,15 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
     public void insertRoleMenuBatch(Long roleId, Long[] menuIds) {
-        List<SysRoleMenu> roleMenus = Arrays.stream(menuIds).map(s -> {
-            SysRoleMenu roleMenu = new SysRoleMenu();
-            roleMenu.setRoleId(roleId);
-            roleMenu.setMenuId(s);
-            return roleMenu;
-        }).collect(Collectors.toList());
-        sysRoleMenuMapper.insertBatchSomeColumn(roleMenus);
+        if (menuIds.length > 0) {
+            List<SysRoleMenu> roleMenus = Arrays.stream(menuIds).map(s -> {
+                SysRoleMenu roleMenu = new SysRoleMenu();
+                roleMenu.setRoleId(roleId);
+                roleMenu.setMenuId(s);
+                return roleMenu;
+            }).collect(Collectors.toList());
+            sysRoleMenuMapper.insertBatchSomeColumn(roleMenus);
+        }
     }
 
     /**

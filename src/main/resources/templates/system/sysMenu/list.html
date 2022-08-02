@@ -72,18 +72,8 @@
               treeDefaultClose: true,   // 是否默认折叠
               treeLinkage: true,        // 父级展开时是否自动展开所有子级
               elem: '#menuTable',
-              url:  ctx + '/sysMenu/list',
+              url:  ctx + '/sysMenu/page',
               where: data,
-              parseData: function (result) {
-                  return {
-                      "code": result.code,
-                      "count": result.data.length,
-                      "data": result.data
-                  }
-              },
-              response: {
-                  statusCode: 200 //成功的状态码，默认：0
-              },
               cols: [[ //表头
                   {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
                   {field: 'menuName', title: '菜单名称', width: 200},

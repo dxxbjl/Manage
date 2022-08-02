@@ -1,13 +1,11 @@
 package io.github.yangyouwang.crud.system.controller;
 
 import io.github.yangyouwang.common.annotation.CrudLog;
+import io.github.yangyouwang.common.base.CrudController;
 import io.github.yangyouwang.common.domain.Result;
-import io.github.yangyouwang.common.domain.EnabledDTO;
-import io.github.yangyouwang.crud.system.model.params.SysDictValueAddDTO;
-import io.github.yangyouwang.crud.system.model.params.SysDictValueEditDTO;
-import io.github.yangyouwang.crud.system.model.result.SysDictValueDTO;
+import io.github.yangyouwang.crud.system.entity.SysDictValue;
 import io.github.yangyouwang.crud.system.service.SysDictValueService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -26,16 +24,12 @@ import java.util.Objects;
  */
 @Controller
 @RequestMapping("/sysDictValue")
-public class SysDictValueController {
+@RequiredArgsConstructor
+public class SysDictValueController extends CrudController {
 
     private static final String SUFFIX = "system/sysDictValue";
 
     private final SysDictValueService sysDictValueService;
-
-    @Autowired
-    public SysDictValueController(SysDictValueService sysDictValueService) {
-        this.sysDictValueService = sysDictValueService;
-    }
 
     /**
      * 删除字典值请求
@@ -46,8 +40,8 @@ public class SysDictValueController {
     @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
-        sysDictValueService.removeById(id);
-        return Result.success();
+        boolean flag = sysDictValueService.removeById(id);
+        return Result.success(flag);
     }
 
     /**
@@ -68,57 +62,56 @@ public class SysDictValueController {
      */
     @GetMapping("/editPage/{id}")
     public String editPage(@Valid @NotNull(message = "id能为空") @PathVariable Long id, ModelMap map){
-        SysDictValueDTO sysDictValue = sysDictValueService.detail(id);
+        SysDictValue sysDictValue = sysDictValueService.getById(id);
         map.put("sysDictValue",sysDictValue);
         return SUFFIX + "/edit";
     }
 
     /**
      * 添加请求
-     * @param sysDictValueAddDTO 添加字典值对象
+     * @param sysDictValue 添加字典值对象
      * @return 添加状态
      */
     @CrudLog
     @PostMapping("/add")
     @ResponseBody
-    public Result add(@RequestBody @Validated SysDictValueAddDTO sysDictValueAddDTO, BindingResult bindingResult){
+    public Result add(@RequestBody @Validated SysDictValue sysDictValue, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        boolean flag = sysDictValueService.add(sysDictValueAddDTO);
+        boolean flag = sysDictValueService.save(sysDictValue);
         return Result.success(flag);
     }
 
     /**
      * 编辑请求
-     * @param sysDictValueEditDTO 编辑字典值对象
+     * @param sysDictValue 编辑字典值对象
      * @return 编辑状态
      */
     @CrudLog
     @PostMapping("/edit")
     @ResponseBody
-    public Result edit(@RequestBody @Validated SysDictValueEditDTO sysDictValueEditDTO, BindingResult bindingResult){
+    public Result edit(@RequestBody @Validated SysDictValue sysDictValue, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        boolean flag = sysDictValueService.edit(sysDictValueEditDTO);
+        boolean flag = sysDictValueService.updateById(sysDictValue);
         return Result.success(flag);
     }
 
     /**
      * 修改字典值状态
-     * @param enabledDTO 修改字典值参数
+     * @param sysDictValue 修改字典值参数
      * @return 修改状态
      */
     @CrudLog
     @PostMapping("/changeDictValue")
     @ResponseBody
-    public Result changeDictValue(@RequestBody @Validated EnabledDTO enabledDTO, BindingResult bindingResult){
+    public Result changeDictValue(@RequestBody @Validated SysDictValue sysDictValue, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        boolean flag = sysDictValueService.changeDictValue(enabledDTO);
+        boolean flag = sysDictValueService.updateById(sysDictValue);
         return Result.success(flag);
     }
-
 }

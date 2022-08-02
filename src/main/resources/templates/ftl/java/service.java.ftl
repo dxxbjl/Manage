@@ -2,8 +2,6 @@ package ${package.Service};
 
 import ${package.Entity}.${entity};
 import ${superServiceClassPackage};
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.github.yangyouwang.common.domain.PageDTO;
 
 import java.util.List;
 
@@ -22,10 +20,10 @@ interface ${table.serviceName} : ${superServiceClass}<${entity}>
 
   /**
   * ${table.comment!}分页列表
-  * @param pageDTO 分页DTO
+  * @param param 参数
   * @return 结果
   */
-  IPage<${entity}> page(PageDTO pageDTO);
+  List<${entity}> page(${entity} param);
 
   /**
   * ${table.comment!}详情

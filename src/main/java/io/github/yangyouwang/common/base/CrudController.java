@@ -1,0 +1,46 @@
+package io.github.yangyouwang.common.base;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import io.github.yangyouwang.common.domain.TableDataInfo;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Objects;
+
+/**
+ * Description: 抽象控制层 <br/>
+ * date: 2022/8/1 17:21<br/>
+ *
+ * @author yangyouwang<br />
+ * @version v1.0
+ * @since JDK 1.8
+ */
+public class CrudController {
+
+    /**
+     * 设置请求分页数据
+     */
+    public void startPage()
+    {
+        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+        int page = Integer.parseInt(request.getParameter("page"));
+        int limit = Integer.parseInt(request.getParameter("limit"));
+        PageHelper.startPage(page, limit);
+    }
+    /**
+     * 响应请求分页数据
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    protected TableDataInfo getDataTable(List<?> list)
+    {
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(0);
+        rspData.setData(list);
+        rspData.setCount(new PageInfo(list).getTotal());
+        return rspData;
+    }
+
+}

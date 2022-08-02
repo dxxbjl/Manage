@@ -1,19 +1,11 @@
 package io.github.yangyouwang.crud.act.service;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.yangyouwang.crud.act.mapper.ActReModelMapper;
 import io.github.yangyouwang.crud.act.entity.ActReModel;
-import io.github.yangyouwang.crud.act.model.params.ActReModelAddDTO;
-import io.github.yangyouwang.crud.act.model.params.ActReModelEditDTO;
-import io.github.yangyouwang.crud.act.model.params.ActReModelListDTO;
-import io.github.yangyouwang.crud.act.model.result.ActReModelDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
@@ -25,11 +17,11 @@ import org.activiti.engine.repository.DeploymentBuilder;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author yangyouwang
@@ -47,34 +39,21 @@ public class ActReModelService extends ServiceImpl<ActReModelMapper, ActReModel>
 
     /**
      * 获取列表
-     * @param actReModelListDTO 模型列表对象
+     * @param actReModel 模型列表对象
      * @return 列表数据
      */
-    public IPage list(ActReModelListDTO actReModelListDTO) {
-        return this.page(new Page<>(actReModelListDTO.getPageNum(), actReModelListDTO.getPageSize()),
-                new LambdaQueryWrapper<ActReModel>()
-                        .like(StringUtils.isNotBlank(actReModelListDTO.getName()),ActReModel::getName , actReModelListDTO.getName())
-                        .like(StringUtils.isNotBlank(actReModelListDTO.getKey()),ActReModel::getKey , actReModelListDTO.getKey()));
-    }
-
-    /**
-     * 获取详情
-     * @param id id
-     * @return 详情
-     */
-    public ActReModelDTO detail(String id) {
-        ActReModel actReModel = this.getById(id);
-        ActReModelDTO actReModelDTO = new ActReModelDTO();
-        BeanUtils.copyProperties(actReModel,actReModelDTO);
-        return actReModelDTO;
+    public List<ActReModel> list(ActReModel actReModel) {
+        return this.list(new LambdaQueryWrapper<ActReModel>()
+                        .like(StringUtils.isNotBlank(actReModel.getName()),ActReModel::getName,actReModel.getName())
+                        .like(StringUtils.isNotBlank(actReModel.getKey()),ActReModel::getKey,actReModel.getKey()));
     }
 
     /**
      * 添加模型
-     * @param actReModelAddDTO 模型添加对象
+     * @param actReModel 模型添加对象
      * @return 添加状态
      */
-    public String add(ActReModelAddDTO actReModelAddDTO) {
+    public String add(ActReModel actReModel) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             ObjectNode editorNode = objectMapper.createObjectNode();
@@ -86,13 +65,13 @@ public class ActReModelService extends ServiceImpl<ActReModelMapper, ActReModel>
             Model modelData = repositoryService.newModel();
 
             ObjectNode modelObjectNode = objectMapper.createObjectNode();
-            modelObjectNode.put(ModelDataJsonConstants.MODEL_NAME, actReModelAddDTO.getName());
+            modelObjectNode.put(ModelDataJsonConstants.MODEL_NAME, actReModel.getName());
             modelObjectNode.put(ModelDataJsonConstants.MODEL_REVISION, 1);
-            String description = StringUtils.defaultString(actReModelAddDTO.getDescription());
+            String description = StringUtils.defaultString(actReModel.getDescription());
             modelObjectNode.put(ModelDataJsonConstants.MODEL_DESCRIPTION, description);
             modelData.setMetaInfo(modelObjectNode.toString());
-            modelData.setName(actReModelAddDTO.getName());
-            modelData.setKey(StringUtils.defaultString(actReModelAddDTO.getKey()));
+            modelData.setName(actReModel.getName());
+            modelData.setKey(StringUtils.defaultString(actReModel.getKey()));
 
             repositoryService.saveModel(modelData);
             repositoryService.addModelEditorSource(modelData.getId(), editorNode.toString().getBytes("utf-8"));
@@ -131,16 +110,5 @@ public class ActReModelService extends ServiceImpl<ActReModelMapper, ActReModel>
             e.printStackTrace();
         }
         return null;
-    }
-
-    /**
-     * 编辑模型
-     * @param actReModelEditDTO 模型编辑对象
-     * @return 编辑状态
-     */
-    public boolean edit(ActReModelEditDTO actReModelEditDTO) {
-        ActReModel actReModel = new ActReModel();
-        BeanUtil.copyProperties(actReModelEditDTO,actReModel,true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
-        return this.updateById(actReModel);
     }
 }

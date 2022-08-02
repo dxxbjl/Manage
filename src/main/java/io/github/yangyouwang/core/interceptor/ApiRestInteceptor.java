@@ -21,7 +21,7 @@ import java.lang.reflect.Method;
 /**
  * @program: crud
  * @description: Rest Api接口鉴权
- * @author: 杨有旺
+ * @author: yangyouwang
  * @create: 2019-09-04 14:31
  **/
 @Component

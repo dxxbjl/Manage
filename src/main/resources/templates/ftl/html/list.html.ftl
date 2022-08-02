@@ -58,22 +58,7 @@
             elem: '#${table.entityPath}Table'
             ,height: 'full-110'
             ,url:  ctx + '<#if package.ModuleName??>/${package.ModuleName}</#if>/<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>/page'
-            ,page: true //开启分页,
-            ,limit: 10 // 多少条
-            ,request: {
-                pageName: 'pageNum', //页码的参数名称，默认：page
-                limitName: 'pageSize' //每页数据量的参数名，默认：limit
-            }
-            ,parseData: function (result) {
-                return {
-                    "code": result.code,
-                    "count": result.data.total,
-                    "data": result.data.records
-                }
-            }
-            ,response: {
-                statusCode: 200 //成功的状态码，默认：0
-            }
+            ,page: true //开启分页
             ,cols: [[ //表头
                 {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
             <#list table.fields as field>

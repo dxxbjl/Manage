@@ -3,7 +3,7 @@ package ${package.Controller};
 import ${package.Entity}.${entity};
 import ${package.Service}.${table.serviceName};
 import io.github.yangyouwang.common.domain.Result;
-import io.github.yangyouwang.common.domain.PageDTO;
+import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -24,8 +24,8 @@ import org.springframework.ui.ModelMap;
 </#if>
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Objects;
+import java.util.List;
 /**
 * <p>
 * ${table.comment} 前端控制器
@@ -61,16 +61,13 @@ public class ${table.controllerName} {
 
   @ApiOperation(value = "${table.comment}分页列表", response = ${entity}.class)
   @ApiImplicitParams({
-  @ApiImplicitParam(name = "pageNum", value = "第几页", dataType = "Integer"),
-  @ApiImplicitParam(name = "pageSize", value = "每页记录数", dataType = "Integer")})
+  @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer"),
+  @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer")})
   @GetMapping(value = "/page")
   @ResponseBody
-  public Result page(@Validated PageDTO pageDTO, BindingResult bindingResult) {
-    if (bindingResult.hasErrors()) {
-        return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
-    }
-    Object data = ${table.serviceName?uncap_first}.page(pageDTO);
-    return Result.success(data);
+  public TableDataInfo page(${entity} param) {
+    List<${entity}> data = ${table.serviceName?uncap_first}.page(param);
+    return getDataTable(data);
   }
 
    @GetMapping("/editPage/{id}")

@@ -3,14 +3,8 @@ package io.github.yangyouwang.crud.qrtz.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.github.yangyouwang.crud.qrtz.entity.Job;
 import io.github.yangyouwang.crud.qrtz.mapper.JobMapper;
-import io.github.yangyouwang.crud.qrtz.model.params.JobEditDTO;
-import io.github.yangyouwang.crud.qrtz.model.params.JobPageDTO;
-import io.github.yangyouwang.crud.qrtz.model.params.JobAddDTO;
-import io.github.yangyouwang.crud.qrtz.model.result.JobDTO;
 import io.github.yangyouwang.crud.qrtz.service.IJobService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.*;
 import org.springframework.beans.BeanUtils;
@@ -37,27 +31,14 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobS
 
   /**
   * 任务表分页列表
-  * @param pageDTO 分页DTO
+  * @param param 分页DTO
   * @return 结果
   */
   @Override
-  public IPage<Job> page(JobPageDTO pageDTO) {
+  public List<Job> page(Job param) {
     LambdaQueryWrapper<Job> queryWrapper = new LambdaQueryWrapper<>();
-    queryWrapper.like(StringUtils.isNotBlank(pageDTO.getJobName()),Job::getJobName,pageDTO.getJobName());
-    return page(new Page<>(pageDTO.getPageNum(), pageDTO.getPageSize()), queryWrapper);
-  }
-
-  /**
-  * 任务表详情
-  * @param id 主键
-  * @return 结果
-  */
-  @Override
-  public JobDTO info(Long id) {
-    Job job = getById(id);
-    JobDTO jobDTO = new JobDTO();
-    BeanUtils.copyProperties(job,jobDTO);
-    return jobDTO;
+    queryWrapper.like(StringUtils.isNotBlank(param.getJobName()),Job::getJobName,param.getJobName());
+    return list(queryWrapper);
   }
 
   /**
@@ -65,7 +46,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobS
   * @param param 根据需要进行传值
   */
   @Override
-  public void add(JobAddDTO param) {
+  public void add(Job param) {
     try {
       /**通过JobBuilder.newJob()方法获取到当前Job的具体实现(以下均为链式调用)
        * 这里是固定Job创建，所以代码写死XXX.class
@@ -118,7 +99,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobS
   * @param param 根据需要进行传值
   */
   @Override
-  public void modify(JobEditDTO param) {
+  public void modify(Job param) {
     try {
       //获取到对应任务的触发器
       TriggerKey triggerKey = TriggerKey.triggerKey(param.getJobName());
