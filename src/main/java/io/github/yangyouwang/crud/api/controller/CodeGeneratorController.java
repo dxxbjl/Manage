@@ -1,4 +1,4 @@
-package io.github.yangyouwang.crud.api;
+package io.github.yangyouwang.crud.api.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.generator.AutoGenerator;

@@ -1,4 +1,4 @@
-package io.github.yangyouwang.crud.api;
+package io.github.yangyouwang.crud.api.controller;
 
 import io.github.yangyouwang.common.annotation.*;
 import io.github.yangyouwang.common.constant.ApiVersionConstant;

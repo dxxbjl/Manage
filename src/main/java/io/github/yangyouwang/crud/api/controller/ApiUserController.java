@@ -1,4 +1,4 @@
-package io.github.yangyouwang.crud.api;
+package io.github.yangyouwang.crud.api.controller;
 
 import io.github.yangyouwang.common.annotation.ApiVersion;
 import io.github.yangyouwang.common.annotation.PassToken;
@@ -6,7 +6,7 @@ import io.github.yangyouwang.common.constant.ApiVersionConstant;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.crud.api.model.UserAuthDTO;
 import io.github.yangyouwang.crud.api.model.UserAuthVO;
-import io.github.yangyouwang.crud.app.service.IUserService;
+import io.github.yangyouwang.crud.api.service.ApiUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class ApiUserController {
 
-    private final IUserService userService;
+    private final ApiUserService apiUserService;
 
     /**
      * 用户授权
@@ -47,7 +47,7 @@ public class ApiUserController {
         if (bindingResult.hasErrors()) {
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        UserAuthVO result = userService.userAuth(userAuthDTO);
+        UserAuthVO result = apiUserService.userAuth(userAuthDTO);
         return Result.success(result);
     }
 }

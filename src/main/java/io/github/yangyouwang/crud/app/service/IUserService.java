@@ -1,7 +1,5 @@
 package io.github.yangyouwang.crud.app.service;
 
-import io.github.yangyouwang.crud.api.model.UserAuthDTO;
-import io.github.yangyouwang.crud.api.model.UserAuthVO;
 import io.github.yangyouwang.crud.app.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -54,11 +52,4 @@ import java.util.List;
   * @param ids 主键数组
   */
   void removes(List<Long> ids);
-
-  /**
-   * 用户授权接口
-   * @param userAuthDTO 授权DTO
-   * @return 响应
-   */
-  UserAuthVO userAuth(UserAuthDTO userAuthDTO);
 }
