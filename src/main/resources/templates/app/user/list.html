@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <title>用户表</title>
+    <div th:replace="common/link::header"></div>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <form class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">用户昵称或网络名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="nickName" placeholder="请输入用户昵称或网络名称" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">用户头像图片</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="avatar" placeholder="请输入用户头像图片" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">性别：1时是男性，值为2时是女性，值为0时是未知</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="gender" placeholder="请输入性别：1时是男性，值为2时是女性，值为0时是未知" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">生日</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="birthday" placeholder="请输入生日" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">手机号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="mobile" placeholder="请输入手机号" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">邮箱</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="email" placeholder="请输入邮箱" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">0 可用, 1 禁用, 2 注销</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="status" placeholder="请输入0 可用, 1 禁用, 2 注销" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button type="button" class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                    <button type="button" class="layui-btn layui-btn-primary" data-type="resetForm">重置</button>
+                    <button type="button" sec:authorize="hasAuthority('user:add')" class="layui-btn layuiadmin-btn-useradmin" data-type="addView">添加</button>
+                </div>
+            </div>
+        </form>
+        <div class="layui-card-body">
+            <table id="userTable" lay-filter="userTable"></table>
+            <script type="text/html" id="tableBar">
+                <a sec:authorize="hasAuthority('user:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+                <a sec:authorize="hasAuthority('user:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+            </script>
+        </div>
+    </div>
+</div>
+<div th:replace="common/script::footer"></div>
+<script th:inline="javascript">
+    layui.config({
+        base: '/static/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'useradmin', 'table'], function() {
+        let $ = layui.$,
+            form = layui.form,
+            table = layui.table;
+        //监听搜索
+        form.on('submit(search)', function(data){
+            let field = data.field;
+            //执行重载
+            table.reload('userTable', {
+                where: field
+            });
+        });
+        // 查询列表接口
+        table.render({
+            elem: '#userTable'
+            ,height: 'full-110'
+            ,url:  ctx + '/app/user/page'
+            ,page: true //开启分页
+            ,cols: [[ //表头
+                {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
+                {field: 'nickName', title: '用户昵称或网络名称'},
+                {field: 'avatar', title: '用户头像图片'},
+                {field: 'gender', title: '性别：1时是男性，值为2时是女性，值为0时是未知'},
+                {field: 'birthday', title: '生日'},
+                {field: 'mobile', title: '手机号'},
+                {field: 'email', title: '邮箱'},
+                {field: 'status', title: '0 可用, 1 禁用, 2 注销'},
+                {toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
+            ]]
+        });
+        table.on('tool(userTable)', function(obj){
+            let data = obj.data //获得当前行数据
+                ,layEvent = obj.event;
+            if(layEvent === 'edit'){
+                active.editView(data.id);
+            } else if(layEvent === 'del'){
+                active.del(data.id);
+            }
+        });
+        $('.layui-btn').on('click', function(){
+            let type = $(this).data('type');
+            active[type] && active[type].call(this);
+        });
+        /* 触发弹层 */
+        let active = {
+            /**
+             * 重置
+             */
+            resetForm: function () {
+                $(".layui-form")[0].reset();
+                form.render();
+                table.reload('userTable', {
+                    where: {
+                        nickName: "",
+                        avatar: "",
+                        gender: "",
+                        birthday: "",
+                        mobile: "",
+                        email: "",
+                        status: ""
+                    }
+                });
+            },
+            /**
+             * 添加
+             * */
+            addView: function(){
+                layer.open({
+                    type: 2
+                    ,shade: 0.3
+                    ,title: "添加用户表"
+                    ,content: ctx + '/app/user/addPage'
+                    ,maxmin: true
+                    ,area: ['50%', '80%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        let submit = layero.find('iframe').contents().find('#save-submit');
+                        submit.trigger('click');
+                    }
+                });
+            },
+            /**
+             * 编辑
+             * @param id id
+             * */
+            editView: function(id){
+                layer.open({
+                    type: 2
+                    ,shade: 0.3
+                    ,title: '修改用户表'
+                    ,content: ctx + '/app/user/editPage/' + id
+                    ,maxmin: true
+                    ,area: ['50%', '80%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        let submit = layero.find('iframe').contents().find('#save-submit');
+                        submit.trigger('click');
+                    }
+                });
+            },
+            /**
+             * 删除
+             * @param id id
+             */
+            del: function(id){
+                layer.confirm('真的删除行么', function(index){
+                    //向服务端发送删除指令
+                    $.ajax({
+                        type: 'DELETE',
+                        url:  ctx + '/app/user/remove/' + id,
+                        contentType:'application/json;charset=UTF-8',
+                        dataType: 'json',
+                        success: function(result) {
+                            layer.msg(result.message);
+                            if (result.code === 200) {
+                                layer.close(index);
+                                table.reload('userTable');
+                            }
+                        }
+                    });
+                });
+            }
+        }
+    });
+</script>
+</body>
+</html>

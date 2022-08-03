@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>编辑用户表</title>
+  <div th:replace="common/link::header"></div>
+</head>
+<body>
+<div class="layui-fluid">
+  <div class="layui-row">
+    <div class="layui-form" lay-filter="user_form" id="user_form">
+      <input type="hidden" name="id" id="id">
+        <div class="layui-form-item">
+          <label class="layui-form-label">用户昵称或网络名称</label>
+          <div class="layui-input-inline">
+            <input type="text" class="layui-input" name="nickName" placeholder="请输入用户昵称或网络名称"/>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">用户头像图片</label>
+          <div class="layui-input-inline">
+            <input type="text" class="layui-input" name="avatar" placeholder="请输入用户头像图片"/>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">性别：1时是男性，值为2时是女性，值为0时是未知</label>
+          <div class="layui-input-inline">
+            <input type="text" class="layui-input" name="gender" placeholder="请输入性别：1时是男性，值为2时是女性，值为0时是未知"/>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">生日</label>
+          <div class="layui-input-inline">
+            <input type="text" class="layui-input" name="birthday" placeholder="请输入生日"/>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">手机号</label>
+          <div class="layui-input-inline">
+            <input type="text" class="layui-input" name="mobile" placeholder="请输入手机号"/>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">邮箱</label>
+          <div class="layui-input-inline">
+            <input type="text" class="layui-input" name="email" placeholder="请输入邮箱"/>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">0 可用, 1 禁用, 2 注销</label>
+          <div class="layui-input-inline">
+            <input type="text" class="layui-input" name="status" placeholder="请输入0 可用, 1 禁用, 2 注销"/>
+          </div>
+        </div>
+      <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
+      </div>
+    </div>
+  </div>
+</div>
+<div th:replace="common/script::footer"></div>
+<script th:inline="javascript">
+  layui.config({
+      base: '/static/layuiadmin/' //静态资源所在路径
+  }).extend({
+     index: 'lib/index', //主入口模块
+  }).use(['index', 'form','crud'], function(){
+    let $ = layui.$,
+            form = layui.form,
+            crud = layui.crud,
+            user = [[${user}]];
+    form.val('user_form',user);
+    // 编辑
+    form.on('submit(save-submit)', function(data) {
+      $.ajax({
+        type: 'POST',
+        url:  ctx + '/app/user/modify',
+        data: JSON.stringify(data.field),
+        contentType:'application/json;charset=UTF-8',
+        dataType: 'json',
+        success: function(result) {
+          layer.msg(result.message);
+          if (result.code === 200) {
+            let index = parent.layer.getFrameIndex(window.name);
+            // 关闭
+            parent.layer.close(index);
+            // 刷新
+            parent.location.reload();
+          }
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>

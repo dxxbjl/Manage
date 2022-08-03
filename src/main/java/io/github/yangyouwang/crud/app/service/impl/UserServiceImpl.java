@@ -1,0 +1,160 @@
+package io.github.yangyouwang.crud.app.service.impl;
+
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import io.github.yangyouwang.common.constant.ConfigConsts;
+import io.github.yangyouwang.core.properties.WeChatProperties;
+import io.github.yangyouwang.core.util.JwtTokenUtil;
+import io.github.yangyouwang.core.util.RestTemplateUtil;
+import io.github.yangyouwang.crud.api.model.UserAuthDTO;
+import io.github.yangyouwang.crud.api.model.UserAuthVO;
+import io.github.yangyouwang.crud.app.entity.Oauth;
+import io.github.yangyouwang.crud.app.entity.User;
+import io.github.yangyouwang.crud.app.mapper.OauthMapper;
+import io.github.yangyouwang.crud.app.mapper.UserMapper;
+import io.github.yangyouwang.crud.app.service.IUserService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.springframework.stereotype.Service;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+/**
+* <p>
+ * 用户表 服务实现类
+ * </p>
+*
+* @author yangyouwang
+* @since 2022-08-03
+*/
+@Service
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
+
+  @Resource
+  private WeChatProperties weChatProperties;
+
+  @Resource
+  private OauthMapper oauthMapper;
+  /**
+  * 用户表分页列表
+  * @param param 参数
+  * @return 结果
+  */
+  @Override
+  public List<User> page(User param) {
+    QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+    queryWrapper.lambda()
+      // 用户昵称或网络名称
+          .eq(!StringUtils.isEmpty(param.getNickName()), User::getNickName, param.getNickName())
+          // 用户头像图片
+          .eq(!StringUtils.isEmpty(param.getAvatar()), User::getAvatar, param.getAvatar())
+          // 性别：1时是男性，值为2时是女性，值为0时是未知
+          .eq(param.getGender() != null, User::getGender, param.getGender())
+          // 生日
+          .eq(param.getBirthday() != null, User::getBirthday, param.getBirthday())
+          // 手机号
+          .eq(!StringUtils.isEmpty(param.getMobile()), User::getMobile, param.getMobile())
+          // 邮箱
+          .eq(!StringUtils.isEmpty(param.getEmail()), User::getEmail, param.getEmail())
+          // 0 可用, 1 禁用, 2 注销
+          .eq(param.getStatus() != null, User::getStatus, param.getStatus())
+    ;
+    return list(queryWrapper);
+  }
+
+  /**
+  * 用户表详情
+  * @param id 主键
+  * @return 结果
+  */
+  @Override
+  public User info(Long id) {
+    return getById(id);
+  }
+
+  /**
+  * 用户表新增
+  * @param param 根据需要进行传值
+  */
+  @Override
+  public void add(User param) {
+    save(param);
+  }
+
+  /**
+  * 用户表修改
+  * @param param 根据需要进行传值
+  */
+  @Override
+  public void modify(User param) {
+    updateById(param);
+  }
+
+  /**
+  * 用户表删除(单个条目)
+  * @param id 主键
+  */
+  @Override
+  public void remove(Long id) {
+    removeById(id);
+  }
+
+  /**
+  * 用户表删除(多个条目)
+  * @param ids 主键数组
+  */
+  @Override
+  public void removes(List<Long> ids) {
+     removeByIds(ids);
+   }
+
+  @Override
+  @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED,rollbackFor = Throwable.class)
+  public UserAuthVO userAuth(UserAuthDTO userAuthDTO) {
+    String openId = "";
+    UserAuthVO userAuthVO = new UserAuthVO();
+    if (ConfigConsts.WX_APP_TYPE == userAuthDTO.getAppType()) {
+      // 根据微信code获取openId
+      String api = ConfigConsts.WEIXIN_OPENID_API.replace("APPID",weChatProperties.getAppID())
+              .replace("SECRET",weChatProperties.getAppSecret())
+              .replace("JSCODE",userAuthDTO.getCode());
+      String res = RestTemplateUtil.get(api);
+      JSONObject jsonObject = JSONObject.parseObject(res);
+      if (jsonObject.containsKey("openid")) {
+        openId = jsonObject.getString("openid");
+        userAuthVO.setSessionKey(jsonObject.getString("session_key"));
+      } else {
+        throw new RuntimeException("获取openId失败");
+      }
+    } else {
+      throw new RuntimeException("授权类型错误");
+    }
+    Oauth oauth = oauthMapper.selectOne(new LambdaQueryWrapper<Oauth>()
+            .eq(Oauth::getOpenId,openId).eq(Oauth::getAppType,userAuthDTO.getAppType()));
+    if (Objects.isNull(oauth)) {
+      User user = new User();
+      user.setStatus(ConfigConsts.USER_STATUS_AVAILABLE);
+      if (this.save(user)) {
+        Long userId = user.getId();
+        oauth = new Oauth();
+        oauth.setUserId(userId);
+        oauth.setOpenId(openId);
+        oauth.setAppType(userAuthDTO.getAppType());
+        if (oauthMapper.insert(oauth) > 0) {
+          userAuthVO.setToken(JwtTokenUtil.buildJWT(userId.toString()));
+          return userAuthVO;
+        }
+      }
+      throw new RuntimeException("登陆失败");
+    }
+    userAuthVO.setToken(JwtTokenUtil.buildJWT(oauth.getUserId().toString()));
+    return userAuthVO;
+  }
+}

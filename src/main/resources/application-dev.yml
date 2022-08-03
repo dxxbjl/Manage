@@ -94,3 +94,10 @@ minio:
   accessKey: minioadmin
   secretKey: minioadmin
   bucketName: crud
+# 微信配置
+wechat:
+  spbillCreateIp: 127.0.0.1
+  apiKey: xxx
+  mchId: xxx
+  appID: xxx
+  appSecret: xxx

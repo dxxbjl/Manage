@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
  * @date 2021/4/410:43 PM
  */
 @RestController
-@RequestMapping("/api/token")
+@RequestMapping("/api/{version}/token")
 @Api(tags = "ApiTokenController", description = "幂等接口控制层")
 public class ApiTokenController {
 
