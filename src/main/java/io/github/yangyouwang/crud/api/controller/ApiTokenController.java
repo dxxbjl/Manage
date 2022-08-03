@@ -1,5 +1,7 @@
 package io.github.yangyouwang.crud.api.controller;
 
+import io.github.yangyouwang.common.annotation.ApiVersion;
+import io.github.yangyouwang.common.constant.ApiVersionConstant;
 import io.github.yangyouwang.common.constant.CacheConsts;
 import io.github.yangyouwang.common.domain.Result;
 import io.swagger.annotations.Api;
@@ -27,6 +29,7 @@ public class ApiTokenController {
     @Resource
     private RedisTemplate<String,Object> redisTemplate;
 
+    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
     @ApiOperation(value="生成幂等token接口")
     @GetMapping("/createToken")
     public Result createToken() {
