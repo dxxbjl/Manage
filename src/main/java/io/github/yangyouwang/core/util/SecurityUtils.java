@@ -26,7 +26,7 @@ public class SecurityUtils {
         if (userId == null && authentication == null) {
             return null;
         }
-        if (Objects.nonNull(authentication) && authentication instanceof User) {
+        if (Objects.nonNull(authentication)) {
             User user = (User) authentication.getPrincipal();
             return user.getUsername();
         }
