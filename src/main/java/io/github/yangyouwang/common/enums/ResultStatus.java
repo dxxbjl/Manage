@@ -35,10 +35,6 @@ public enum ResultStatus {
      */
     NO_PERMISSION(401,"无权限"),
     /**
-     * 未登录
-     */
-    NO_LOGIN(402,"未登录"),
-    /**
      * 用户名或密码错误
      */
     LOGIN_ERROR(403,"用户名或密码错误"),

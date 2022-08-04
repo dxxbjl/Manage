@@ -11,7 +11,6 @@ import io.github.yangyouwang.crud.system.service.SysDictTypeService;
 import io.github.yangyouwang.crud.system.service.SysMenuService;
 import io.github.yangyouwang.crud.system.service.SysUserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,8 +51,8 @@ public class SysIndexController extends CrudController {
         // 缓存字典
         sysDictTypeService.cacheDict();
         // 用户信息
-        User user = SecurityUtils.getSysUser();
-        SysUser sysUser = sysUserService.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUserName, user.getUsername()));
+        String userName = SecurityUtils.getUserName();
+        SysUser sysUser = sysUserService.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUserName, userName));
         map.put("sysUser",sysUser);
         // 菜单权限
         List<SysMenuDTO> sysMenus = sysMenuService.selectMenusByUser(sysUser.getId());

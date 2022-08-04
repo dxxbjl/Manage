@@ -16,7 +16,6 @@ import io.github.yangyouwang.crud.system.model.SysUserDTO;
 import io.github.yangyouwang.crud.system.service.SysUserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -55,8 +54,8 @@ public class SysUserController extends CrudController {
      */
     @GetMapping("/userInfoPage")
     public String userInfoPage(ModelMap map){
-        User user = SecurityUtils.getSysUser();
-        SysUser sysUser = sysUserService.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUserName,user.getUsername()));
+        String userName = SecurityUtils.getUserName();
+        SysUser sysUser = sysUserService.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUserName,userName));
         map.put("sysUser",sysUser);
         return SUFFIX + "/userInfo";
     }
@@ -67,8 +66,8 @@ public class SysUserController extends CrudController {
      */
     @GetMapping("/modifyPassPage")
     public String modifyPassPage(ModelMap map) {
-        User user = SecurityUtils.getSysUser();
-        SysUser sysUser = sysUserService.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUserName, user.getUsername()));
+        String userName = SecurityUtils.getUserName();
+        SysUser sysUser = sysUserService.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUserName, userName));
         map.put("sysUser",sysUser);
         return SUFFIX + "/modifyPass";
     }
