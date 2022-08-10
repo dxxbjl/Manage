@@ -97,7 +97,7 @@ minio:
 # 微信配置
 wechat:
   spbillCreateIp: 127.0.0.1
-  apiKey: 1165daaa79ca266750cb8937eee7b263
-  mchId: 1574837901
-  appID: wx1ff8306099ba7df4
-  appSecret: 40a8f67fc3d33df1efa8803c6751dbb2
+  apiKey: xxx
+  mchId: xxx
+  appID: xxx
+  appSecret: xxx
