@@ -1,8 +1,7 @@
-package io.github.yangyouwang.crud.app.service.impl;
+package io.github.yangyouwang.crud.app.service;
 
 import io.github.yangyouwang.crud.app.entity.Oauth;
 import io.github.yangyouwang.crud.app.mapper.OauthMapper;
-import io.github.yangyouwang.crud.app.service.IOauthService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Service;
@@ -19,14 +18,13 @@ import java.util.List;
 * @since 2022-08-03
 */
 @Service
-public class OauthServiceImpl extends ServiceImpl<OauthMapper, Oauth> implements IOauthService {
+public class OauthService extends ServiceImpl<OauthMapper, Oauth> {
 
   /**
   * 授权表分页列表
   * @param param 参数
   * @return 结果
   */
-  @Override
   public List<Oauth> page(Oauth param) {
     QueryWrapper<Oauth> queryWrapper = new QueryWrapper<>();
     queryWrapper.lambda()
@@ -45,7 +43,6 @@ public class OauthServiceImpl extends ServiceImpl<OauthMapper, Oauth> implements
   * @param id 主键
   * @return 结果
   */
-  @Override
   public Oauth info(Long id) {
     return getById(id);
   }
@@ -54,7 +51,6 @@ public class OauthServiceImpl extends ServiceImpl<OauthMapper, Oauth> implements
   * 授权表新增
   * @param param 根据需要进行传值
   */
-  @Override
   public void add(Oauth param) {
     save(param);
   }
@@ -63,7 +59,6 @@ public class OauthServiceImpl extends ServiceImpl<OauthMapper, Oauth> implements
   * 授权表修改
   * @param param 根据需要进行传值
   */
-  @Override
   public void modify(Oauth param) {
     updateById(param);
   }
@@ -72,7 +67,6 @@ public class OauthServiceImpl extends ServiceImpl<OauthMapper, Oauth> implements
   * 授权表删除(单个条目)
   * @param id 主键
   */
-  @Override
   public void remove(Long id) {
     removeById(id);
   }
@@ -81,7 +75,6 @@ public class OauthServiceImpl extends ServiceImpl<OauthMapper, Oauth> implements
   * 授权表删除(多个条目)
   * @param ids 主键数组
   */
-  @Override
   public void removes(List<Long> ids) {
      removeByIds(ids);
    }

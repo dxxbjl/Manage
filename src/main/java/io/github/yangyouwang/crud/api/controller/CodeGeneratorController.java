@@ -76,10 +76,12 @@ public class CodeGeneratorController {
         gc.setOpen(false);
         //实体属性 Swagger2 注解
         gc.setSwagger2(true);
-        //定义生成的实体类中日期类型
-        gc.setDateType(DateType.ONLY_DATE);
         //TODO 是否覆盖已有的文件
         gc.setFileOverride(true);
+        // 自定义Service模板 文件名
+        gc.setServiceName("%sService");
+        //定义生成的实体类中日期类型
+        gc.setDateType(DateType.ONLY_DATE);
         mpg.setGlobalConfig(gc);
 
         // 数据源配置
@@ -104,13 +106,17 @@ public class CodeGeneratorController {
             }
         };
 
-        // 如果模板引擎是 freemarker
-        String templatePath = "/templates/mapper.xml.ftl";
-
         // 自定义输出配置
         List<FileOutConfig> focList = new ArrayList<>();
         // 自定义配置会被优先输出
-        focList.add(new FileOutConfig(templatePath) {
+        focList.add(new FileOutConfig("/templates/ftl/java/service.java.ftl") {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                return projectPath + "/src/main/java/io/github/yangyouwang/crud/" + pc.getModuleName()
+                        + "/service/" + tableInfo.getEntityName() + "Service" + StringPool.DOT_JAVA;
+            }
+        });
+        focList.add(new FileOutConfig("/templates/mapper.xml.ftl") {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
@@ -159,8 +165,9 @@ public class CodeGeneratorController {
         // 配置自定义输出模板
         //指定自定义模板路径，注意不要带上.ftl/.vm, 会根据使用的模板引擎自动识别
         templateConfig.setController("templates/ftl/java/controller.java");
-        templateConfig.setService("templates/ftl/java/service.java");
-        templateConfig.setServiceImpl("templates/ftl/java/serviceImpl.java");
+        // 关闭原有生成
+        templateConfig.setService(null);
+        templateConfig.setServiceImpl(null);
 
         templateConfig.setXml(null);
         mpg.setTemplate(templateConfig);

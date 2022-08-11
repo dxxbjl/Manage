@@ -1,9 +1,9 @@
 package io.github.yangyouwang.crud.app.controller;
 
 import io.github.yangyouwang.crud.app.entity.Oauth;
-import io.github.yangyouwang.crud.app.service.IOauthService;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.TableDataInfo;
+import io.github.yangyouwang.crud.app.service.OauthService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -36,7 +36,7 @@ public class OauthController extends CrudController {
   private static final String SUFFIX = "/app/oauth";
 
   @Autowired
-  private IOauthService iOauthService;
+  private OauthService oauthService;
 
   @GetMapping("/listPage")
   public String listPage(){
@@ -51,13 +51,13 @@ public class OauthController extends CrudController {
   @ResponseBody
   public TableDataInfo page(Oauth param) {
     startPage();
-    List<Oauth> data = iOauthService.page(param);
+    List<Oauth> data = oauthService.page(param);
     return getDataTable(data);
   }
 
    @GetMapping("/editPage/{id}")
    public String editPage(@Valid @NotNull(message = "id不能为空") @PathVariable Long id, ModelMap map){
-    Object data = iOauthService.info(id);
+    Object data = oauthService.info(id);
     map.put("oauth",data);
     return SUFFIX + "/edit";
   }
@@ -74,7 +74,7 @@ public class OauthController extends CrudController {
     if (bindingResult.hasErrors()){
         return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
     }
-    iOauthService.add(param);
+    oauthService.add(param);
     return Result.success();
   }
 
@@ -85,7 +85,7 @@ public class OauthController extends CrudController {
     if (bindingResult.hasErrors()){
         return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
     }
-    iOauthService.modify(param);
+    oauthService.modify(param);
     return Result.success();
   }
 
@@ -93,7 +93,7 @@ public class OauthController extends CrudController {
   @DeleteMapping(value = "/remove/{id}")
   @ResponseBody
   public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
-    iOauthService.remove(id);
+    oauthService.remove(id);
     return Result.success();
   }
 
@@ -101,7 +101,7 @@ public class OauthController extends CrudController {
   @PostMapping(value = "/removes")
   @ResponseBody
   public Result removes(@RequestBody @Valid List<Long> ids) {
-     iOauthService.removes(ids);
+     oauthService.removes(ids);
      return Result.success();
    }
  }

@@ -1,9 +1,8 @@
-package io.github.yangyouwang.crud.qrtz.service.impl;
+package io.github.yangyouwang.crud.qrtz.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.github.yangyouwang.crud.qrtz.entity.Job;
 import io.github.yangyouwang.crud.qrtz.mapper.JobMapper;
-import io.github.yangyouwang.crud.qrtz.service.IJobService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.*;
@@ -24,7 +23,7 @@ import java.util.List;
 * @since 2022-07-30
 */
 @Service
-public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobService {
+public class JobService extends ServiceImpl<JobMapper, Job> {
 
   @Autowired
   private Scheduler scheduler;
@@ -34,7 +33,6 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobS
   * @param param 分页DTO
   * @return 结果
   */
-  @Override
   public List<Job> page(Job param) {
     LambdaQueryWrapper<Job> queryWrapper = new LambdaQueryWrapper<>();
     queryWrapper.like(StringUtils.isNotBlank(param.getJobName()),Job::getJobName,param.getJobName());
@@ -45,7 +43,6 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobS
   * 任务表新增
   * @param param 根据需要进行传值
   */
-  @Override
   public void add(Job param) {
     try {
       /**通过JobBuilder.newJob()方法获取到当前Job的具体实现(以下均为链式调用)
@@ -98,7 +95,6 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobS
   * 任务表修改
   * @param param 根据需要进行传值
   */
-  @Override
   public void modify(Job param) {
     try {
       //获取到对应任务的触发器
@@ -122,7 +118,6 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobS
   * 任务表删除(单个条目)
   * @param id 主键
   */
-  @Override
   public void remove(Long id) {
     Job job = getById(id);
     try {
@@ -143,7 +138,6 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobS
   * 任务表删除(多个条目)
   * @param ids 主键数组
   */
-  @Override
   public void removes(List<Long> ids) {
      removeByIds(ids);
    }

@@ -1,9 +1,9 @@
 package io.github.yangyouwang.crud.app.controller;
 
 import io.github.yangyouwang.crud.app.entity.User;
-import io.github.yangyouwang.crud.app.service.IUserService;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.TableDataInfo;
+import io.github.yangyouwang.crud.app.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -36,7 +36,7 @@ public class UserController extends CrudController {
   private static final String SUFFIX = "/app/user";
 
   @Autowired
-  private IUserService iUserService;
+  private UserService userService;
 
   @GetMapping("/listPage")
   public String listPage(){
@@ -51,13 +51,13 @@ public class UserController extends CrudController {
   @ResponseBody
   public TableDataInfo page(User param) {
     startPage();
-    List<User> data = iUserService.page(param);
+    List<User> data = userService.page(param);
     return getDataTable(data);
   }
 
    @GetMapping("/editPage/{id}")
    public String editPage(@Valid @NotNull(message = "id不能为空") @PathVariable Long id, ModelMap map){
-    Object data = iUserService.info(id);
+    Object data = userService.info(id);
     map.put("user",data);
     return SUFFIX + "/edit";
   }
@@ -74,7 +74,7 @@ public class UserController extends CrudController {
     if (bindingResult.hasErrors()){
         return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
     }
-    iUserService.add(param);
+    userService.add(param);
     return Result.success();
   }
 
@@ -85,7 +85,7 @@ public class UserController extends CrudController {
     if (bindingResult.hasErrors()){
         return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
     }
-    iUserService.modify(param);
+    userService.modify(param);
     return Result.success();
   }
 
@@ -93,7 +93,7 @@ public class UserController extends CrudController {
   @DeleteMapping(value = "/remove/{id}")
   @ResponseBody
   public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
-    iUserService.remove(id);
+    userService.remove(id);
     return Result.success();
   }
 
@@ -101,7 +101,7 @@ public class UserController extends CrudController {
   @PostMapping(value = "/removes")
   @ResponseBody
   public Result removes(@RequestBody @Valid List<Long> ids) {
-     iUserService.removes(ids);
+     userService.removes(ids);
      return Result.success();
    }
  }

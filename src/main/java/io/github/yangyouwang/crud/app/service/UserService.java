@@ -1,8 +1,7 @@
-package io.github.yangyouwang.crud.app.service.impl;
+package io.github.yangyouwang.crud.app.service;
 
 import io.github.yangyouwang.crud.app.entity.User;
 import io.github.yangyouwang.crud.app.mapper.UserMapper;
-import io.github.yangyouwang.crud.app.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Service;
@@ -18,14 +17,13 @@ import java.util.List;
 * @since 2022-08-03
 */
 @Service
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
+public class UserService extends ServiceImpl<UserMapper, User> {
 
   /**
   * 用户表分页列表
   * @param param 参数
   * @return 结果
   */
-  @Override
   public List<User> page(User param) {
     QueryWrapper<User> queryWrapper = new QueryWrapper<>();
     queryWrapper.lambda()
@@ -52,7 +50,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
   * @param id 主键
   * @return 结果
   */
-  @Override
   public User info(Long id) {
     return getById(id);
   }
@@ -61,7 +58,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
   * 用户表新增
   * @param param 根据需要进行传值
   */
-  @Override
   public void add(User param) {
     save(param);
   }
@@ -70,7 +66,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
   * 用户表修改
   * @param param 根据需要进行传值
   */
-  @Override
   public void modify(User param) {
     updateById(param);
   }
@@ -79,7 +74,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
   * 用户表删除(单个条目)
   * @param id 主键
   */
-  @Override
   public void remove(Long id) {
     removeById(id);
   }
@@ -88,7 +82,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
   * 用户表删除(多个条目)
   * @param ids 主键数组
   */
-  @Override
   public void removes(List<Long> ids) {
      removeByIds(ids);
    }

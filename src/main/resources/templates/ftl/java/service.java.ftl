@@ -1,59 +1,101 @@
 package ${package.Service};
 
 import ${package.Entity}.${entity};
-import ${superServiceClassPackage};
+import ${package.Mapper}.${table.mapperName};
+import ${superServiceImplClassPackage};
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.springframework.stereotype.Service;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
 /**
 * <p>
- * ${table.comment!} 服务类
+ * ${table.comment!} 服务实现类
  * </p>
 *
 * @author ${author}
 * @since ${date}
 */
+@Service
 <#if kotlin>
-interface ${table.serviceName} : ${superServiceClass}<${entity}>
+open class ${table.serviceName} : ${superServiceImplClass}<${table.mapperName}, ${entity}>() {
+
+}
 <#else>
-  public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
+public class ${table.serviceName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}> {
 
   /**
   * ${table.comment!}分页列表
   * @param param 参数
   * @return 结果
   */
-  List<${entity}> page(${entity} param);
+  public List<${entity}> page(${entity} param) {
+    QueryWrapper<${entity}> queryWrapper = new QueryWrapper<>();
+    queryWrapper.lambda()
+    <#list table.fields as field>
+      // ${field.comment}
+      <#if !entityLombokModel>
+        <#if field.propertyType == "Boolean">
+          <#assign getprefix="is"/>
+        <#else>
+          <#assign getprefix="get"/>
+        </#if>
+        <#if field.propertyType == "String">
+          .eq(!StringUtils.isEmpty(param.${getprefix}${field.capitalName}()), ${entity}::${getprefix}${field.capitalName}, param.${getprefix}${field.capitalName}())
+        <#else>
+          .eq(param.${getprefix}${field.capitalName}() != null, ${entity}::${getprefix}${field.capitalName}, param.${getprefix}${field.capitalName}())
+        </#if>
+      <#else>
+        <#if field.propertyType == "String">
+          .eq(!StringUtils.isEmpty(param.get${field.capitalName}()), ${entity}::get${field.capitalName}, param.get${field.capitalName}())
+        <#else>
+          .eq(param.get${field.capitalName}() != null, ${entity}::get${field.capitalName}, param.get${field.capitalName}())
+        </#if>
+      </#if>
+    </#list>;
+    return list(queryWrapper);
+  }
 
   /**
   * ${table.comment!}详情
   * @param id 主键
   * @return 结果
   */
-  ${entity} info(Long id);
+  public ${entity} info(Long id) {
+    return getById(id);
+  }
 
   /**
   * ${table.comment!}新增
   * @param param 根据需要进行传值
   */
-  void add(${entity} param);
+  public void add(${entity} param) {
+    save(param);
+  }
 
   /**
   * ${table.comment!}修改
   * @param param 根据需要进行传值
   */
-  void modify(${entity} param);
+  public void modify(${entity} param) {
+    updateById(param);
+  }
 
   /**
   * ${table.comment!}删除(单个条目)
   * @param id 主键
   */
-  void remove(Long id);
+  public void remove(Long id) {
+    removeById(id);
+  }
 
   /**
-  * 删除(多个条目)
+  * ${table.comment!}删除(多个条目)
   * @param ids 主键数组
   */
-  void removes(List<Long> ids);
- }
+  public void removes(List<Long> ids) {
+     removeByIds(ids);
+   }
+}
  </#if>

@@ -3,8 +3,8 @@ package io.github.yangyouwang.crud.qrtz.controller;
 import io.github.yangyouwang.common.base.CrudController;
 import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.github.yangyouwang.crud.qrtz.entity.Job;
-import io.github.yangyouwang.crud.qrtz.service.IJobService;
 import io.github.yangyouwang.common.domain.Result;
+import io.github.yangyouwang.crud.qrtz.service.JobService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -36,7 +36,7 @@ public class JobController extends CrudController {
 
   private static final String SUFFIX = "/qrtz/job";
 
-  private final IJobService iJobService;
+  private final JobService jobService;
 
   @GetMapping("/listPage")
   public String listPage(){
@@ -51,13 +51,13 @@ public class JobController extends CrudController {
   @ResponseBody
   public TableDataInfo page(@Validated Job job) {
     startPage();
-    List<Job> data = iJobService.page(job);
+    List<Job> data = jobService.page(job);
     return getDataTable(data);
   }
 
    @GetMapping("/editPage/{id}")
    public String editPage(@Valid @NotNull(message = "id不能为空") @PathVariable Long id, ModelMap map){
-    Object data = iJobService.getById(id);
+    Object data = jobService.getById(id);
     map.put("job",data);
     return SUFFIX + "/edit";
   }
@@ -74,7 +74,7 @@ public class JobController extends CrudController {
     if (bindingResult.hasErrors()){
         return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
     }
-    iJobService.add(param);
+      jobService.add(param);
     return Result.success();
   }
 
@@ -85,7 +85,7 @@ public class JobController extends CrudController {
     if (bindingResult.hasErrors()){
         return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
     }
-    iJobService.modify(param);
+    jobService.modify(param);
     return Result.success();
   }
 
@@ -93,7 +93,7 @@ public class JobController extends CrudController {
   @DeleteMapping(value = "/remove/{id}")
   @ResponseBody
   public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
-    iJobService.remove(id);
+    jobService.remove(id);
     return Result.success();
   }
 
@@ -101,7 +101,7 @@ public class JobController extends CrudController {
   @PostMapping(value = "/removes")
   @ResponseBody
   public Result removes(@RequestBody @Valid List<Long> ids) {
-     iJobService.removes(ids);
+     jobService.removes(ids);
      return Result.success();
    }
 
