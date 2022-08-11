@@ -21,7 +21,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-		<swagger.version>2.9.2</swagger.version>
+		<swagger2.version>2.9.2</swagger2.version>
+		<swagger.version>1.5.21</swagger.version>
 		<lombok.version>1.18.4</lombok.version>
 		<mysql.version>5.1.47</mysql.version>
 		<druid.version>1.1.10</druid.version>
@@ -162,13 +163,33 @@
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
+			<version>${swagger2.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>io.swagger</groupId>
+					<artifactId>swagger-annotations</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>io.swagger</groupId>
+					<artifactId>swagger-models</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>io.swagger</groupId>
+			<artifactId>swagger-annotations</artifactId>
+			<version>${swagger.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.swagger</groupId>
+			<artifactId>swagger-models</artifactId>
 			<version>${swagger.version}</version>
 		</dependency>
 		<!-- swagger2-UI-->
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
-			<version>${swagger.version}</version>
+			<version>${swagger2.version}</version>
 		</dependency>
 		<!-- 热更新 -->
 		<dependency>
