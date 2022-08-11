@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * @author yangyouwang
- * @title: TreeSelectNode
+ * @title: XmSelectNode
  * @projectName crud
  * @description: 节点类（必须继承Treeable）
  * @date 2021/3/2910:47 AM

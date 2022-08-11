@@ -11,7 +11,7 @@
  Target Server Version : 80028
  File Encoding         : 65001
 
- Date: 30/07/2022 22:30:24
+ Date: 11/08/2022 19:39:05
 */
 
 SET NAMES utf8mb4;
@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `app_ad`;
 CREATE TABLE `app_ad`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT,
   `ad_title` varchar(63) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '广告标题',
-  `ad_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '广告宣传图片',
+  `ad_url` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '广告宣传图片',
   `ad_content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '活动内容',
   `enabled` char(1) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '0' COMMENT '是否启用 Y 启用 N 禁用',
   `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '创建者',
@@ -38,10 +38,6 @@ CREATE TABLE `app_ad`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '广告表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of app_ad
--- ----------------------------
-
--- ----------------------------
 -- Table structure for app_oauth
 -- ----------------------------
 DROP TABLE IF EXISTS `app_oauth`;
@@ -52,10 +48,6 @@ CREATE TABLE `app_oauth`  (
   `user_id` bigint(0) NULL DEFAULT NULL COMMENT '用户id',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '授权表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of app_oauth
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for app_user
@@ -73,9 +65,5 @@ CREATE TABLE `app_user`  (
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '用户表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of app_user
--- ----------------------------
 
 SET FOREIGN_KEY_CHECKS = 1;

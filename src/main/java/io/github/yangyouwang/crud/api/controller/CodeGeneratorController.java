@@ -168,7 +168,6 @@ public class CodeGeneratorController {
         // 关闭原有生成
         templateConfig.setService(null);
         templateConfig.setServiceImpl(null);
-
         templateConfig.setXml(null);
         mpg.setTemplate(templateConfig);
 

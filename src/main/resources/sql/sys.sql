@@ -11,7 +11,7 @@
  Target Server Version : 80028
  File Encoding         : 65001
 
- Date: 30/07/2022 22:32:29
+ Date: 11/08/2022 19:39:48
 */
 
 SET NAMES utf8mb4;
@@ -90,7 +90,7 @@ CREATE TABLE `sys_log`  (
   `stack_trace` text CHARACTER SET utf8 COLLATE utf8_bin NULL COMMENT '异常堆栈信息',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '系统日志' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '系统日志' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_log
@@ -159,6 +159,11 @@ INSERT INTO `sys_menu` VALUES (3043, '任务管理', 1, 6, 'layui-icon-ok-circle
 INSERT INTO `sys_menu` VALUES (3044, '添加任务表', 3043, 1, '', '#', 'F', 'Y', 'job:add', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3045, '编辑任务表', 3043, 2, '', '#', 'F', 'Y', 'job:edit', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3046, '删除任务表', 3043, 3, '', '#', 'F', 'Y', 'job:del', '', NULL, '', NULL, 0, '');
+INSERT INTO `sys_menu` VALUES (3047, '广告表管理', 3051, 1, 'layui-icon-home', '/app/ad/listPage', 'C', 'Y', 'ad:list', '', NULL, 'admin', '2022-08-11 19:34:04', 0, '');
+INSERT INTO `sys_menu` VALUES (3048, '添加广告表', 3047, 1, '', '#', 'F', 'Y', 'ad:add', '', NULL, '', NULL, 0, '');
+INSERT INTO `sys_menu` VALUES (3049, '编辑广告表', 3047, 2, '', '#', 'F', 'Y', 'ad:edit', '', NULL, '', NULL, 0, '');
+INSERT INTO `sys_menu` VALUES (3050, '删除广告表', 3047, 3, '', '#', 'F', 'Y', 'ad:del', '', NULL, '', NULL, 0, '');
+INSERT INTO `sys_menu` VALUES (3051, 'APP管理', 0, 4, 'layui-icon-cellphone', '#', 'M', 'Y', '', 'admin', '2022-08-11 19:33:57', 'admin', '2022-08-11 19:34:19', 0, '');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -180,7 +185,7 @@ CREATE TABLE `sys_role`  (
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
-INSERT INTO `sys_role` VALUES (1, '超级管理员', 'ADMIN', '', NULL, 'admin', '2022-07-30 15:18:22', 0, '超级管理员');
+INSERT INTO `sys_role` VALUES (1, '超级管理员', 'ADMIN', '', NULL, 'admin', '2022-08-11 19:34:55', 0, '超级管理员');
 INSERT INTO `sys_role` VALUES (2, '基本角色', 'USER', '', NULL, 'admin', '2021-12-07 23:47:37', 0, '基本角色');
 
 -- ----------------------------
@@ -241,6 +246,11 @@ INSERT INTO `sys_role_menu` VALUES (1, 3043);
 INSERT INTO `sys_role_menu` VALUES (1, 3044);
 INSERT INTO `sys_role_menu` VALUES (1, 3045);
 INSERT INTO `sys_role_menu` VALUES (1, 3046);
+INSERT INTO `sys_role_menu` VALUES (1, 3047);
+INSERT INTO `sys_role_menu` VALUES (1, 3048);
+INSERT INTO `sys_role_menu` VALUES (1, 3049);
+INSERT INTO `sys_role_menu` VALUES (1, 3050);
+INSERT INTO `sys_role_menu` VALUES (1, 3051);
 
 -- ----------------------------
 -- Table structure for sys_user
