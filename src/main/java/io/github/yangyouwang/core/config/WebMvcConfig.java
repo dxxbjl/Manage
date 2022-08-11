@@ -93,7 +93,7 @@ public class WebMvcConfig implements WebMvcConfigurer, WebMvcRegistrations {
     }
 
     /**
-     * API版本配置、
+     * API版本配置
      */
     @Override
     public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
