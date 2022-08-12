@@ -50,11 +50,6 @@
 </div>
 <div th:replace="common/script::footer"></div>
 <script th:inline="javascript">
-  ClassicEditor.create(document.querySelector('#adContent'),{}).then(editor => {
-    window.editor = editor;
-  }).catch(err => {
-    console.error(err.stack);
-  });
   layui.config({
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
@@ -65,8 +60,13 @@
             crud = layui.crud,
             upload = layui.upload,
             ad = [[${ad}]];
+    ClassicEditor.create(document.querySelector('#adContent'),{}).then(editor => {
+      window.editor = editor;
+      window.editor.setData(ad.adContent);
+    }).catch(err => {
+      console.error(err.stack);
+    });
     $('#upload-img').attr('src', ad.adUrl);
-    window.editor.setData(ad.adContent);
     form.val('ad_form',ad);
     // 编辑
     form.on('submit(save-submit)', function(data) {
