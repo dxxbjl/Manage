@@ -29,7 +29,7 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("/api/{version}/user")
-@Api(tags = "ApiUserController", description = "用户相关接口")
+@Api(tags = "用户相关接口")
 @RequiredArgsConstructor
 @ResponseResultBody
 public class ApiUserController {

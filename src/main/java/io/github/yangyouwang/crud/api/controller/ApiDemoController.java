@@ -23,7 +23,7 @@ import java.util.Map;
 @ResponseResultBody
 @Controller
 @RequestMapping("/api/{version}/demo")
-@Api(tags = "ApiDemoController", description = "demo控制层")
+@Api(tags = "demo控制层")
 public class ApiDemoController {
 
     @ApiOperation(value="测试hello接口")

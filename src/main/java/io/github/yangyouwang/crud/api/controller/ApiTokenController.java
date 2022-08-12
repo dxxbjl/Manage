@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
  */
 @RestController
 @RequestMapping("/api/{version}/token")
-@Api(tags = "ApiTokenController", description = "幂等接口控制层")
+@Api(tags = "幂等接口控制层")
 public class ApiTokenController {
 
     @Resource

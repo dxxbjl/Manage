@@ -38,7 +38,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/{version}/code_generator")
-@Api(tags = "CodeGeneratorController", description = "生成代码接口控制层")
+@Api(tags = "生成代码接口控制层")
 public class CodeGeneratorController {
 
     @Autowired

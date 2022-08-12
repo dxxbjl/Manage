@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/{version}/index")
-@Api(tags = "ApiIndexController", description = "首页相关接口")
+@Api(tags = "首页相关接口")
 @RequiredArgsConstructor
 @ResponseResultBody
 public class ApiIndexController {
