@@ -9,14 +9,14 @@
   <div class="layui-row">
     <div class="layui-form" lay-filter="ad_form" id="ad_form">
         <div class="layui-form-item">
-          <label class="layui-form-label">广告标题</label>
+          <label class="layui-form-label">标题</label>
           <div class="layui-input-inline">
             <input type="text" class="layui-input" name="adTitle" placeholder="请输入广告标题"/>
           </div>
         </div>
         <input type="hidden" id="adUrl" name="adUrl">
         <div class="layui-form-item">
-            <label class="layui-form-label">广告宣传图片</label>
+            <label class="layui-form-label">宣传图片</label>
             <div class="layui-input-inline layui-upload">
                 <div class="layui-upload-list">
                     <img class="layui-upload-img" id="upload-img" width="100px" height="100px">
@@ -28,12 +28,18 @@
         <div class="layui-form-item">
           <label class="layui-form-label">活动内容</label>
           <div class="layui-input-inline">
-            <input type="text" class="layui-input" name="adContent" placeholder="请输入活动内容"/>
+              <textarea id="adContent"></textarea>
           </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">状态</label>
             <div class="layui-input-block" id="enabled"></div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-inline">
+                <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
+            </div>
         </div>
       <div class="layui-form-item layui-hide">
         <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
@@ -43,6 +49,11 @@
 </div>
 <div th:replace="common/script::footer"></div>
 <script th:inline="javascript">
+  ClassicEditor.create(document.querySelector('#adContent'),{}).then(editor => {
+      window.editor = editor;
+  }).catch(err => {
+      console.error(err.stack);
+  });
   layui.config({
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
@@ -53,7 +64,8 @@
             crud = layui.crud,
             upload = layui.upload;
     form.on('submit(save-submit)', function(data) {
-      $.ajax({
+        data.field.adContent = window.editor.getData();
+        $.ajax({
         type: 'POST',
         url:  ctx + '/app/ad/add',
         data: JSON.stringify(data.field),
