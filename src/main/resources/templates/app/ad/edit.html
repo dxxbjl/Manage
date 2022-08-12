@@ -12,7 +12,7 @@
         <div class="layui-form-item">
           <label class="layui-form-label">标题</label>
           <div class="layui-input-inline">
-            <input type="text" class="layui-input" name="adTitle" placeholder="请输入广告标题"/>
+            <input type="text" lay-verify="required" class="layui-input" name="adTitle" placeholder="请输入广告标题"/>
           </div>
         </div>
         <input type="hidden" id="adUrl" name="adUrl">
@@ -65,12 +65,8 @@
             crud = layui.crud,
             upload = layui.upload,
             ad = [[${ad}]];
-    if (ad.adUrl) {
-      $('#upload-img').attr('src', ad.adUrl); //图片链接（base64）
-    }
-    if (ad.adContent) {
-      window.editor.setData(ad.adContent);
-    }
+    $('#upload-img').attr('src', ad.adUrl);
+    window.editor.setData(ad.adContent);
     form.val('ad_form',ad);
     // 编辑
     form.on('submit(save-submit)', function(data) {

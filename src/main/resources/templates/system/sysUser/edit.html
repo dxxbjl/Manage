@@ -78,9 +78,7 @@
                 crud = layui.crud,
                 form = layui.form,
                 sysUser = [[${sysUser}]];
-        if (sysUser.avatar) {
-          $('#upload-img').attr('src', sysUser.avatar); //图片链接（base64）
-        }
+        $('#upload-img').attr('src', sysUser.avatar); //图片链接（base64）
         form.val('sys-user-form', sysUser);
         form.on('submit(save-submit)', function(data) {
             let roleIds = crud.getXmSelectTreeIds(select);
