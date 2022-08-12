@@ -31,7 +31,8 @@ public class ApiIndexService {
     public IndexVO getIndexData() {
         // 获取轮播图列表
         List<Ad> list = adService.list(new LambdaQueryWrapper<Ad>()
-                .eq(Ad::getEnabled, ConfigConsts.ENABLED_YES));
+                 .select(Ad::getAdTitle,Ad::getAdUrl,Ad::getAdContent)
+                .eq(Ad::getEnabled, ConfigConsts.ENABLED_YES).orderByDesc(Ad::getCreateBy));
         List<IndexVO.AdVO> adVOList = list.stream().map(s -> {
             IndexVO.AdVO adVO = new IndexVO.AdVO();
             BeanUtils.copyProperties(s, adVO);
