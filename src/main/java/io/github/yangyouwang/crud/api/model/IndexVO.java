@@ -31,16 +31,11 @@ public class IndexVO {
          * 广告标题
          */
         @ApiModelProperty("广告标题")
-        private String adTitle;
+        private String title;
         /**
          * 广告宣传图片
          */
         @ApiModelProperty("广告宣传图片")
-        private String adUrl;
-        /**
-         * 活动内容
-         */
-        @ApiModelProperty("活动内容")
-        private String adContent;
+        private String url;
     }
 }

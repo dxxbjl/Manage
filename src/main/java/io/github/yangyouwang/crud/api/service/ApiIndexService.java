@@ -5,7 +5,6 @@ import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.crud.api.model.IndexVO;
 import io.github.yangyouwang.crud.app.entity.Ad;
 import io.github.yangyouwang.crud.app.service.AdService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,11 +30,12 @@ public class ApiIndexService {
     public IndexVO getIndexData() {
         // 获取轮播图列表
         List<Ad> list = adService.list(new LambdaQueryWrapper<Ad>()
-                 .select(Ad::getAdTitle,Ad::getAdUrl,Ad::getAdContent)
+                 .select(Ad::getAdTitle,Ad::getAdUrl)
                 .eq(Ad::getEnabled, ConfigConsts.ENABLED_YES).orderByDesc(Ad::getCreateBy));
         List<IndexVO.AdVO> adVOList = list.stream().map(s -> {
             IndexVO.AdVO adVO = new IndexVO.AdVO();
-            BeanUtils.copyProperties(s, adVO);
+            adVO.setTitle(s.getAdTitle());
+            adVO.setUrl(s.getAdUrl());
             return adVO;
         }).collect(Collectors.toList());
         IndexVO indexVO = new IndexVO();
