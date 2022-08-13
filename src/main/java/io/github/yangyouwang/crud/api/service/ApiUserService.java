@@ -4,15 +4,19 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.constant.ConfigConsts;
+import io.github.yangyouwang.common.enums.ResultStatus;
+import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.core.properties.WeChatProperties;
 import io.github.yangyouwang.core.util.JwtTokenUtil;
 import io.github.yangyouwang.core.util.RestTemplateUtil;
 import io.github.yangyouwang.crud.api.model.UserAuthDTO;
 import io.github.yangyouwang.crud.api.model.UserAuthVO;
+import io.github.yangyouwang.crud.api.model.UserInfoVO;
 import io.github.yangyouwang.crud.app.entity.Oauth;
 import io.github.yangyouwang.crud.app.entity.User;
 import io.github.yangyouwang.crud.app.mapper.OauthMapper;
 import io.github.yangyouwang.crud.app.mapper.UserMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -53,10 +57,10 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
                 openId = jsonObject.getString("openid");
                 userAuthVO.setSessionKey(jsonObject.getString("session_key"));
             } else {
-                throw new RuntimeException("获取openId失败");
+                throw new CrudException(ResultStatus.GET_OPENID_ERROR);
             }
         } else {
-            throw new RuntimeException("授权类型错误");
+            throw new CrudException(ResultStatus.AUTHORIZATION_TYPE_ERROR);
         }
         Oauth oauth = oauthMapper.selectOne(new LambdaQueryWrapper<Oauth>()
                 .eq(Oauth::getOpenId,openId).eq(Oauth::getAppType,userAuthDTO.getAppType()));
@@ -74,10 +78,22 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
                     return userAuthVO;
                 }
             }
-            throw new RuntimeException("登陆失败");
+            throw new CrudException(ResultStatus.LOGIN_ERROR);
         }
         userAuthVO.setToken(JwtTokenUtil.buildJWT(oauth.getUserId().toString()));
         return userAuthVO;
     }
-
+    /**
+     * 根据用户id获取用户详情
+     * @return 响应
+     */
+    public UserInfoVO getUserInfoById(Long userId) {
+        User user = getById(userId);
+        if (Objects.isNull(user)) {
+            throw new CrudException(ResultStatus.USER_NOT_EXIST_ERROR);
+        }
+        UserInfoVO userInfoVO = new UserInfoVO();
+        BeanUtils.copyProperties(user,userInfoVO);
+        return userInfoVO;
+    }
 }

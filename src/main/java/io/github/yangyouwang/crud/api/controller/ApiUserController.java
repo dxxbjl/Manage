@@ -4,17 +4,16 @@ import io.github.yangyouwang.common.annotation.ApiVersion;
 import io.github.yangyouwang.common.annotation.PassToken;
 import io.github.yangyouwang.common.annotation.ResponseResultBody;
 import io.github.yangyouwang.common.constant.ApiVersionConstant;
+import io.github.yangyouwang.core.context.ApiContext;
 import io.github.yangyouwang.crud.api.model.UserAuthDTO;
 import io.github.yangyouwang.crud.api.model.UserAuthVO;
+import io.github.yangyouwang.crud.api.model.UserInfoVO;
 import io.github.yangyouwang.crud.api.service.ApiUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Objects;
@@ -49,5 +48,16 @@ public class ApiUserController {
             throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
         return apiUserService.userAuth(userAuthDTO);
+    }
+    /**
+     * 用户详情
+     * @return 响应
+     */
+    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @GetMapping("/user_info")
+    @ApiOperation(value="用户详情", notes="用户详情")
+    public UserInfoVO userInfo() {
+        Long userId = ApiContext.getUserId();
+        return apiUserService.getUserInfoById(userId);
     }
 }

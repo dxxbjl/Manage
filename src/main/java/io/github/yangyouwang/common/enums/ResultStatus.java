@@ -38,7 +38,14 @@ public enum ResultStatus {
      * 用户名或密码错误
      */
     LOGIN_ERROR(403,"用户名或密码错误"),
-
+    /**
+     * 授权类型错误
+     */
+    AUTHORIZATION_TYPE_ERROR(404,"授权类型错误"),
+    /**
+     * 获取openId失败
+     */
+    GET_OPENID_ERROR(405,"获取openId失败"),
     /**
      * 新增数据出错
      */
@@ -93,9 +100,14 @@ public enum ResultStatus {
      */
     USER_EXIST_ERROR(1001,"用户已存在"),
     /**
+     * 用户不存在
+     */
+    USER_NOT_EXIST_ERROR(1002,"用户不存在"),
+    /**
      * 旧密码输入错误
      */
-    OLD_PASSWORD_ERROR(1002,"旧密码输入错误");
+    OLD_PASSWORD_ERROR(1003,"旧密码输入错误");
+
 
     /**
      * 业务异常码
