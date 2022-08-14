@@ -35,9 +35,15 @@ public interface SysMenuMapper extends CrudBaseMapper<SysMenu> {
     SysMenu findMenuById(Long id);
 
     /**
-     * 根据角色查询菜单
+     * 根据角色查询菜单权限
      * @param roleId 角色
-     * @return 菜单列表
+     * @return 权限列表
      */
-    List<SysMenu> findMenuByRoleId(Long roleId);
+    List<String> findMenuRoleByRoleId(Long roleId);
+
+    /**
+     * 查询所有菜单权限
+     * @return 权限列表
+     */
+    List<String> findMenuRole();
 }

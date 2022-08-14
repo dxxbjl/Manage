@@ -47,18 +47,19 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
 
     /**
      * 根据用户查询菜单
-     * @param userId 用户id
+     * @param userId 用户ID
+     * @param userName 用户名称
      * @return 菜单信息
      */
     @Transactional(readOnly = true)
-    public List<SysMenuDTO> selectMenusByUser(Long userId) {
+    public List<SysMenuDTO> selectMenusByUser(Long userId,String userName) {
         List<SysMenu> menus;
-        if (ConfigConsts.ADMIN_USER.equals(userId)) {
+        if (ConfigConsts.ADMIN_USER.equals(userName)) {
             menus = this.sysMenuMapper.findMenu();
         } else {
             menus = this.sysMenuMapper.findMenuByUserId(userId);
         }
-        if (menus.size() == 0) {
+        if (menus.isEmpty()) {
             throw new AccessDeniedException(ResultStatus.MENU_NULL_ERROR.message);
         }
         List<SysMenuDTO> sysMenuDTOS = menus.stream().map(sysMenu -> {

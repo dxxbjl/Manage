@@ -19,7 +19,7 @@ public interface ConfigConsts {
     /**
      * 超级管理员
      */
-    Long ADMIN_USER = 1L;
+    String ADMIN_USER = "admin";
     /**
      * 是否启用 是
      */

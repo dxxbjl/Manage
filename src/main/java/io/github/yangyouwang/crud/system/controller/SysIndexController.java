@@ -55,7 +55,7 @@ public class SysIndexController extends CrudController {
         SysUser sysUser = sysUserService.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUserName, userName));
         map.put("sysUser",sysUser);
         // 菜单权限
-        List<SysMenuDTO> sysMenus = sysMenuService.selectMenusByUser(sysUser.getId());
+        List<SysMenuDTO> sysMenus = sysMenuService.selectMenusByUser(sysUser.getId(),userName);
         map.put("sysMenus",sysMenus);
         return "index";
     }

@@ -45,11 +45,15 @@
     left join sys_menu p on m.parent_id = p.id
     where m.deleted = 0 and m.id = #{id}
   </select>
-  <!-- 根据角色id查询菜单 -->
-  <select id="findMenuByRoleId" resultMap="BaseResultMap">
-    select m.id as menu_id,m.menu_name, m.icon, m.perms
+  <!-- 根据角色查询菜单权限 -->
+  <select id="findMenuRoleByRoleId" resultType="java.lang.String">
+    select m.perms
     from sys_menu m
     left join sys_role_menu rm on m.id = rm.menu_id
     where m.deleted = 0 and m.visible = 'Y' and m.perms &lt;&gt; '' and rm.role_id = #{roleId}
+  </select>
+  <!-- 查询所有菜单权限 -->
+  <select id="findMenuRole" resultType="java.lang.String">
+    select perms from sys_menu where deleted = 0 and visible = 'Y' and perms &lt;&gt; ''
   </select>
 </mapper>

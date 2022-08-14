@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.enums.ResultStatus;
-import io.github.yangyouwang.crud.system.entity.SysMenu;
 import io.github.yangyouwang.crud.system.entity.SysRole;
 import io.github.yangyouwang.crud.system.entity.SysUser;
 import io.github.yangyouwang.crud.system.entity.SysUserRole;
@@ -17,8 +16,7 @@ import io.github.yangyouwang.crud.system.model.SysUserDTO;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.lang.NonNull;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.User;
@@ -65,16 +63,17 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
         if (ObjectUtil.isNull(user)) {
             throw new UsernameNotFoundException(ResultStatus.LOGIN_ERROR.message);
         }
-        Set<GrantedAuthority> authorities = new LinkedHashSet<>();
-        for (SysRole role : user.getRoles()) {
-            List<SysMenu> menus = sysMenuMapper.findMenuByRoleId(role.getId());
-            for (SysMenu menu : menus) {
-                authorities.add(new SimpleGrantedAuthority(menu.getPerms()));
-            }
-            authorities.add(new SimpleGrantedAuthority(ConfigConsts.ROLE_PREFIX + role.getRoleKey()));
+        if (ConfigConsts.ADMIN_USER.equals(userName)) {
+            List<String> adminMenuRole = sysMenuMapper.findMenuRole();
+            return new User(user.getUserName(), user.getPassWord(), ConfigConsts.ENABLED_YES.equals(user.getEnabled()),
+                    true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList(String.join(",",adminMenuRole)));
         }
+        List<String> userMenuRoleAll = user.getRoles().stream().map(sysRole -> {
+            List<String> userMenuRole = sysMenuMapper.findMenuRoleByRoleId(sysRole.getId());
+            return String.join(",", userMenuRole);
+        }).collect(Collectors.toList());
         return new User(user.getUserName(), user.getPassWord(), ConfigConsts.ENABLED_YES.equals(user.getEnabled()),
-                true, true, true, authorities);
+                true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList(String.join(",",userMenuRoleAll)));
     }
 
     /**
@@ -116,7 +115,8 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void edit(SysUser sysUser) {
         boolean flag = this.updateById(sysUser);
-        if (flag && sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUserId, sysUser.getId())) > 0) {
+        sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUserId, sysUser.getId()));
+        if (flag) {
             SysUserService proxy = (SysUserService) AopContext.currentProxy();
             proxy.insertUserRoleBatch(sysUser.getId(), sysUser.getRoleIds());
         }
