@@ -115,8 +115,9 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void edit(SysUser sysUser) {
         boolean flag = this.updateById(sysUser);
-        sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUserId, sysUser.getId()));
         if (flag) {
+            // 删除用户关联角色
+            sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUserId, sysUser.getId()));
             SysUserService proxy = (SysUserService) AopContext.currentProxy();
             proxy.insertUserRoleBatch(sysUser.getId(), sysUser.getRoleIds());
         }

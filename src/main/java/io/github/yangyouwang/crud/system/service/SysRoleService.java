@@ -80,9 +80,9 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void edit(SysRole sysRole) {
         boolean flag = this.updateById(sysRole);
-        // 关联菜单
-        sysRoleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>().eq(SysRoleMenu::getRoleId, sysRole.getId()));
         if (flag) {
+            // 删除角色菜单
+            sysRoleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>().eq(SysRoleMenu::getRoleId, sysRole.getId()));
             SysRoleService proxy = (SysRoleService) AopContext.currentProxy();
             proxy.insertRoleMenuBatch(sysRole.getId(), sysRole.getMenuIds());
         }

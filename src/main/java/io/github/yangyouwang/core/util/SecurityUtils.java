@@ -16,6 +16,11 @@ import java.util.Objects;
  */
 public class SecurityUtils {
 
+    private static final UserMapper userMapper;
+
+    static {
+        userMapper = SpringUtils.getBean(UserMapper.class);
+    }
     /**
      * 获取当前登录用户名称
      * @return 用户名称
@@ -23,14 +28,14 @@ public class SecurityUtils {
     public static String getUserName() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long userId = ApiContext.getUserId();
-        if (userId == null && authentication == null) {
-            return null;
-        }
         if (Objects.nonNull(authentication)) {
             User user = (User) authentication.getPrincipal();
             return user.getUsername();
         }
-        UserMapper userMapper = SpringUtils.getBean(UserMapper.class);
-        return userMapper.selectById(userId).getNickName();
+        io.github.yangyouwang.crud.app.entity.User user = userMapper.selectById(userId);
+        if(Objects.nonNull((user))) {
+            return user.getNickName();
+        }
+        return null;
     }
 }
