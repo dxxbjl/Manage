@@ -1,6 +1,7 @@
 package io.github.yangyouwang.crud.qrtz.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import io.github.yangyouwang.core.util.StringUtil;
 import io.github.yangyouwang.crud.qrtz.entity.Job;
 import io.github.yangyouwang.crud.qrtz.mapper.JobMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -36,7 +37,18 @@ public class JobService extends ServiceImpl<JobMapper, Job> {
   public List<Job> page(Job param) {
     LambdaQueryWrapper<Job> queryWrapper = new LambdaQueryWrapper<>();
     queryWrapper.like(StringUtils.isNotBlank(param.getJobName()),Job::getJobName,param.getJobName());
-    return list(queryWrapper);
+    List<Job> list = list(queryWrapper);
+    list.forEach(job -> {
+      TriggerKey triggerKey = TriggerKey.triggerKey(job.getJobName());
+      try {
+        Trigger.TriggerState triggerState = scheduler.getTriggerState(triggerKey);
+        String triggerStateCn = StringUtil.getTriggerStateCN(triggerState);
+        job.setTriggerState(triggerStateCn);
+      } catch (SchedulerException e) {
+        e.printStackTrace();
+      }
+    });
+    return list;
   }
 
   /**
@@ -141,4 +153,39 @@ public class JobService extends ServiceImpl<JobMapper, Job> {
   public void removes(List<Long> ids) {
      removeByIds(ids);
    }
+
+
+  /**
+   * 暂停某个定时任务（任务恢复后，暂停时间段内未执行的任务会继续执行，如暂停时间段内有2次，则会执行2次）
+   */
+  public void pauseJob(Long id) {
+    Job job = getById(id);
+    JobKey jobKey = JobKey.jobKey(job.getJobName());
+    try {
+      JobDetail jobDetail = scheduler.getJobDetail(jobKey);
+      if(jobDetail == null){
+        return;
+      }
+      scheduler.pauseJob(jobKey);
+    } catch (SchedulerException e) {
+      throw new RuntimeException(String.format("暂停定时任务出错:%s",e));
+    }
+  }
+
+  /**
+   * 恢复某个定时任务
+   */
+  public void resumeJob(Long id) {
+    Job job = getById(id);
+    JobKey jobKey = JobKey.jobKey(job.getJobName());
+    try {
+      JobDetail jobDetail = scheduler.getJobDetail(jobKey);
+      if(jobDetail == null){
+        return;
+      }
+      scheduler.resumeJob(jobKey);
+    } catch (SchedulerException e) {
+      throw new RuntimeException(String.format("恢复定时任务出错:%s",e));
+    }
+  }
 }

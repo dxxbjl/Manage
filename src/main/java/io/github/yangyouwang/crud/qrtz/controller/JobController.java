@@ -109,4 +109,20 @@ public class JobController extends CrudController {
    public String cronPage(){
         return "qrtz/cron/index";
     }
+
+    @ApiOperation(value = "暂停某个定时任务")
+    @GetMapping(value = "/pause/{id}")
+    @ResponseBody
+    public Result pause(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
+        jobService.pauseJob(id);
+        return Result.success();
+    }
+
+    @ApiOperation(value = "恢复某个定时任务")
+    @GetMapping(value = "/resume/{id}")
+    @ResponseBody
+    public Result resume(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
+        jobService.resumeJob(id);
+        return Result.success();
+    }
 }

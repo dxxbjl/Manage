@@ -1,5 +1,9 @@
 package io.github.yangyouwang.core.util;
 
+import org.quartz.Trigger;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Random;
 /**
  * @author yangyouwang
@@ -27,5 +31,21 @@ public class StringUtil {
             sb.append(c);
         }
         return sb.toString();
+    }
+
+    /**
+     * 获取job的调度状态
+     * @param triggerState job调度状态key
+     * @return job调度状态
+     */
+    public static String getTriggerStateCN(Trigger.TriggerState triggerState) {
+        Map<Trigger.TriggerState, String> map = new LinkedHashMap<>();
+        map.put(Trigger.TriggerState.BLOCKED, "阻塞");
+        map.put(Trigger.TriggerState.COMPLETE, "完成");
+        map.put(Trigger.TriggerState.ERROR, "出错");
+        map.put(Trigger.TriggerState.NONE, "不存在");
+        map.put(Trigger.TriggerState.NORMAL, "正常");
+        map.put(Trigger.TriggerState.PAUSED, "暂停");
+        return map.get(triggerState);
     }
 }

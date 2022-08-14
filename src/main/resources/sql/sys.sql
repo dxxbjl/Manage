@@ -11,7 +11,7 @@
  Target Server Version : 80028
  File Encoding         : 65001
 
- Date: 11/08/2022 19:39:48
+ Date: 14/08/2022 17:47:24
 */
 
 SET NAMES utf8mb4;
@@ -117,7 +117,7 @@ CREATE TABLE `sys_menu`  (
   `deleted` int(0) NULL DEFAULT 0 COMMENT '逻辑删除 0 否、1 是',
   `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3047 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3054 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -164,6 +164,8 @@ INSERT INTO `sys_menu` VALUES (3048, '添加广告表', 3047, 1, '', '#', 'F', '
 INSERT INTO `sys_menu` VALUES (3049, '编辑广告表', 3047, 2, '', '#', 'F', 'Y', 'ad:edit', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3050, '删除广告表', 3047, 3, '', '#', 'F', 'Y', 'ad:del', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3051, 'APP管理', 0, 4, 'layui-icon-cellphone', '#', 'M', 'Y', '', 'admin', '2022-08-11 19:33:57', 'admin', '2022-08-11 19:34:19', 0, '');
+INSERT INTO `sys_menu` VALUES (3052, '暂停某个定时任务', 3043, 4, '', '#', 'F', 'Y', 'job:pause', 'admin', '2022-08-14 17:45:30', '', NULL, 0, '');
+INSERT INTO `sys_menu` VALUES (3053, '恢复某个定时任务', 3043, 5, '', '#', 'F', 'Y', 'job:resume', 'admin', '2022-08-14 17:45:52', 'admin', '2022-08-14 17:46:10', 0, '');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -277,7 +279,7 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 'admin', '$2a$10$u3Re8vB2J3pPAw8RYdpSA.5z/RR/oCg/2/WcSzEe.JZ0DJIz.VacO', 'Y', '616505453@qq.com', '17515087128', '0', 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png', '', NULL, 'admin', '2022-06-18 22:42:30', 0, '超级管理员');
+INSERT INTO `sys_user` VALUES (1, 'admin', '$2a$10$u3Re8vB2J3pPAw8RYdpSA.5z/RR/oCg/2/WcSzEe.JZ0DJIz.VacO', 'Y', '616505453@qq.com', '17515087128', '0', 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png', '', NULL, 'admin', '2022-08-12 15:43:55', 0, '超级管理员');
 INSERT INTO `sys_user` VALUES (24, 'test', '$2a$10$6ppgQN77P8WufCdWftbJGO4D8qRMcoPruIAga2yvm0./K4oBh1Q1C', 'Y', '123', '123', '0', 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png', 'admin', '2021-03-30 20:25:07', 'admin', '2021-12-09 23:14:09', 0, '测试账号');
 
 -- ----------------------------

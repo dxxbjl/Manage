@@ -29,7 +29,7 @@ public class AdService extends ServiceImpl<AdMapper, Ad> {
     QueryWrapper<Ad> queryWrapper = new QueryWrapper<>();
     queryWrapper.lambda()
       // 广告标题
-          .eq(!StringUtils.isEmpty(param.getAdTitle()), Ad::getAdTitle, param.getAdTitle())
+          .like(!StringUtils.isEmpty(param.getAdTitle()), Ad::getAdTitle, param.getAdTitle())
           // 广告宣传图片
           .eq(!StringUtils.isEmpty(param.getAdUrl()), Ad::getAdUrl, param.getAdUrl())
           // 活动内容
