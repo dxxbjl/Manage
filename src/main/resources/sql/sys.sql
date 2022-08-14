@@ -11,7 +11,7 @@
  Target Server Version : 80028
  File Encoding         : 65001
 
- Date: 14/08/2022 17:47:24
+ Date: 14/08/2022 17:57:19
 */
 
 SET NAMES utf8mb4;
@@ -187,7 +187,7 @@ CREATE TABLE `sys_role`  (
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
-INSERT INTO `sys_role` VALUES (1, '超级管理员', 'ADMIN', '', NULL, 'admin', '2022-08-11 19:34:55', 0, '超级管理员');
+INSERT INTO `sys_role` VALUES (1, '超级管理员', 'ADMIN', '', NULL, 'admin', '2022-08-14 17:51:57', 0, '超级管理员');
 INSERT INTO `sys_role` VALUES (2, '基本角色', 'USER', '', NULL, 'admin', '2021-12-07 23:47:37', 0, '基本角色');
 
 -- ----------------------------
@@ -253,6 +253,8 @@ INSERT INTO `sys_role_menu` VALUES (1, 3048);
 INSERT INTO `sys_role_menu` VALUES (1, 3049);
 INSERT INTO `sys_role_menu` VALUES (1, 3050);
 INSERT INTO `sys_role_menu` VALUES (1, 3051);
+INSERT INTO `sys_role_menu` VALUES (1, 3052);
+INSERT INTO `sys_role_menu` VALUES (1, 3053);
 
 -- ----------------------------
 -- Table structure for sys_user
