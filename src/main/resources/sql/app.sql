@@ -56,7 +56,7 @@ DROP TABLE IF EXISTS `app_user`;
 CREATE TABLE `app_user`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `nick_name` varchar(63) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '用户昵称或网络名称',
-  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '用户头像图片',
+  `avatar` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '用户头像图片',
   `gender` int(0) NULL DEFAULT 1 COMMENT '性别：1时是男性，值为2时是女性，值为0时是未知',
   `birthday` date NULL DEFAULT NULL COMMENT '生日',
   `mobile` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '手机号',
