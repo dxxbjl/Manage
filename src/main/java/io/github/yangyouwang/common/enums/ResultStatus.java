@@ -39,10 +39,6 @@ public enum ResultStatus {
      */
     LOGIN_ERROR(403,"用户名或密码错误"),
     /**
-     * 授权类型错误
-     */
-    AUTHORIZATION_TYPE_ERROR(404,"授权类型错误"),
-    /**
      * 获取openId失败
      */
     GET_OPENID_ERROR(405,"获取openId失败"),

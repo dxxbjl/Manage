@@ -13,10 +13,6 @@ public interface ConfigConsts {
      */
     String IMAGE_CODE_SESSION = "IMAGE_CODE";
     /**
-     * 角色权限前缀
-     */
-    String ROLE_PREFIX = "ROLE_";
-    /**
      * 超级管理员
      */
     String ADMIN_USER = "admin";
@@ -24,10 +20,7 @@ public interface ConfigConsts {
      * 是否启用 是
      */
     String ENABLED_YES = "Y";
-    /**
-     * 是否启用 否
-     */
-    String ENABLED_NO = "N";
+
     /**
      * 用户SheetName
      */
@@ -45,19 +38,11 @@ public interface ConfigConsts {
      */
     String WEIXIN_OPENID_API = "https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code";
     /**
-     * 登录类型 1 微信
+     * 登录类型 wx 微信
      */
-    int WX_APP_TYPE = 1;
+    String WX_APP_TYPE = "wx";
     /**
      * 可用状态
      */
     int USER_STATUS_AVAILABLE = 0;
-    /**
-     * 禁用状态
-     */
-    int USER_STATUS_DISABLE = 1;
-    /**
-     * 注销状态
-     */
-    int USER_STATUS_CANCELLATION = 2;
 }

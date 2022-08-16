@@ -1,9 +1,9 @@
 package io.github.yangyouwang.crud.app.controller;
 
 import io.github.yangyouwang.crud.app.entity.Oauth;
+import io.github.yangyouwang.crud.app.service.OauthService;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.TableDataInfo;
-import io.github.yangyouwang.crud.app.service.OauthService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -26,7 +26,7 @@ import java.util.List;
 * 授权表 前端控制器
 * </p>
 * @author yangyouwang
-* @since 2022-08-03
+* @since 2022-08-16
 */
 @Api(tags = "授权表")
 @Controller

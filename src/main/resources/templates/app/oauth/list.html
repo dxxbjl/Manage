@@ -10,15 +10,15 @@
         <form class="layui-form layui-card-header layuiadmin-card-header-auto">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">open_id</label>
+                    <label class="layui-form-label">秘钥</label>
                     <div class="layui-input-block">
-                        <input type="text" name="openId" placeholder="请输入open_id" class="layui-input">
+                        <input type="text" name="appSecret" placeholder="请输入秘钥" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">类型 1 微信</label>
+                    <label class="layui-form-label">类型：wx微信、phone手机、password密码</label>
                     <div class="layui-input-block">
-                        <input type="text" name="appType" placeholder="请输入类型 1 微信" class="layui-input">
+                        <input type="text" name="appType" placeholder="请输入类型：wx微信、phone手机、password密码" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -71,8 +71,8 @@
             ,page: true //开启分页
             ,cols: [[ //表头
                 {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
-                {field: 'openId', title: 'open_id'},
-                {field: 'appType', title: '类型 1 微信'},
+                {field: 'appSecret', title: '秘钥'},
+                {field: 'appType', title: '类型：wx微信、phone手机、password密码'},
                 {field: 'userId', title: '用户id'},
                 {toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
             ]]
@@ -100,7 +100,7 @@
                 form.render();
                 table.reload('oauthTable', {
                     where: {
-                        openId: "",
+                        appSecret: "",
                         appType: "",
                         userId: ""
                     }

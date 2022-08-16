@@ -15,7 +15,7 @@ import java.util.List;
  * </p>
 *
 * @author yangyouwang
-* @since 2022-08-03
+* @since 2022-08-16
 */
 @Service
 public class OauthService extends ServiceImpl<OauthMapper, Oauth> {
@@ -28,10 +28,10 @@ public class OauthService extends ServiceImpl<OauthMapper, Oauth> {
   public List<Oauth> page(Oauth param) {
     QueryWrapper<Oauth> queryWrapper = new QueryWrapper<>();
     queryWrapper.lambda()
-      // open_id
-          .eq(!StringUtils.isEmpty(param.getOpenId()), Oauth::getOpenId, param.getOpenId())
-          // 类型 1 微信
-          .eq(param.getAppType() != null, Oauth::getAppType, param.getAppType())
+      // 秘钥
+          .eq(!StringUtils.isEmpty(param.getAppSecret()), Oauth::getAppSecret, param.getAppSecret())
+          // 类型：wx微信、phone手机、password密码
+          .eq(!StringUtils.isEmpty(param.getAppType()), Oauth::getAppType, param.getAppType())
           // 用户id
           .eq(param.getUserId() != null, Oauth::getUserId, param.getUserId())
     ;

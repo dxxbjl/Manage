@@ -5,7 +5,7 @@ import io.github.yangyouwang.common.annotation.PassToken;
 import io.github.yangyouwang.common.annotation.ResponseResultBody;
 import io.github.yangyouwang.common.constant.ApiVersionConstant;
 import io.github.yangyouwang.core.context.ApiContext;
-import io.github.yangyouwang.crud.api.model.UserAuthDTO;
+import io.github.yangyouwang.crud.api.model.WxAuthDTO;
 import io.github.yangyouwang.crud.api.model.UserAuthVO;
 import io.github.yangyouwang.crud.api.model.UserInfoVO;
 import io.github.yangyouwang.crud.api.service.ApiUserService;
@@ -34,21 +34,21 @@ import java.util.Objects;
 public class ApiUserController {
 
     private final ApiUserService apiUserService;
-
     /**
-     * 用户授权
+     * 微信授权
      * @return 响应
      */
     @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
-    @PostMapping("/user_auth")
-    @ApiOperation(value="用户授权", notes="用户授权")
+    @PostMapping("/wx_auth")
+    @ApiOperation(value="微信授权", notes="微信授权")
     @PassToken
-    public UserAuthVO userAuth(@Valid @RequestBody UserAuthDTO userAuthDTO, BindingResult bindingResult) {
+    public UserAuthVO wxAuth(@Valid @RequestBody WxAuthDTO wxAuthDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        return apiUserService.userAuth(userAuthDTO);
+        return apiUserService.wxAuth(wxAuthDTO);
     }
+
     /**
      * 用户详情
      * @return 响应
