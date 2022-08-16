@@ -5,9 +5,7 @@ import io.github.yangyouwang.common.annotation.PassToken;
 import io.github.yangyouwang.common.annotation.ResponseResultBody;
 import io.github.yangyouwang.common.constant.ApiVersionConstant;
 import io.github.yangyouwang.core.context.ApiContext;
-import io.github.yangyouwang.crud.api.model.WxAuthDTO;
-import io.github.yangyouwang.crud.api.model.UserAuthVO;
-import io.github.yangyouwang.crud.api.model.UserInfoVO;
+import io.github.yangyouwang.crud.api.model.*;
 import io.github.yangyouwang.crud.api.service.ApiUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -42,13 +40,26 @@ public class ApiUserController {
     @PostMapping("/wx_auth")
     @ApiOperation(value="微信授权", notes="微信授权")
     @PassToken
-    public UserAuthVO wxAuth(@Valid @RequestBody WxAuthDTO wxAuthDTO, BindingResult bindingResult) {
+    public WxAuthVO wxAuth(@Valid @RequestBody WxAuthDTO wxAuthDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
         return apiUserService.wxAuth(wxAuthDTO);
     }
-
+    /**
+     * 用户名密码授权
+     * @return 响应
+     */
+    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @PostMapping("/password_auth")
+    @ApiOperation(value="用户名密码授权", notes="用户名密码授权")
+    @PassToken
+    public UserAuthVO passwordAuth(@Valid @RequestBody PasswordAuthDTO passwordAuthDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
+        }
+        return apiUserService.passwordAuth(passwordAuthDTO);
+    }
     /**
      * 用户详情
      * @return 响应

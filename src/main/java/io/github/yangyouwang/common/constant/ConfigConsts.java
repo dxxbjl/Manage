@@ -42,6 +42,10 @@ public interface ConfigConsts {
      */
     String WX_APP_TYPE = "wx";
     /**
+     * 登录类型 password 账号密码
+     */
+    String PASSWORD_APP_TYPE = "password";
+    /**
      * 可用状态
      */
     int USER_STATUS_AVAILABLE = 0;
