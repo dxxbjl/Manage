@@ -85,15 +85,13 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         return wxAuthVO;
     }
     /**
-     * 根据微信密钥创建用户信息
+     * 根据微信密钥获取用户手机号
      * @param sessionKey 加密秘钥
      * @param iv 偏移量
      * @param encryptedData 被加密的数据
-     * @return 响应
+     * @return 用户手机号
      */
-    private User createUser(String sessionKey,String iv,String encryptedData) {
-        User user = new User();
-        user.setStatus(ConfigConsts.USER_STATUS_AVAILABLE);
+    private String getUserPhoneNumber(String sessionKey,String iv,String encryptedData) {
         // 被加密的数据
         byte[] dataByte = Base64.decode(encryptedData);
         // 加密秘钥
@@ -121,16 +119,12 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
             if (null != resultByte && resultByte.length > 0) {
                 String result = new String(resultByte, "UTF-8");
                 JSONObject jsonObject = JSONObject.parseObject(result);
-                user.setAvatar(jsonObject.getString("avatarUrl"));
-                user.setNickName(jsonObject.getString("nickName"));
-                user.setGender(jsonObject.getInteger("gender"));
-                user.setMobile(jsonObject.getString("phoneNumber"));
-                return user;
+                return jsonObject.getString("phoneNumber");
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return user;
+        return null;
     }
     /**
      * 根据用户id获取用户详情
