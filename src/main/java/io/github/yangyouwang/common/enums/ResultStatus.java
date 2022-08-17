@@ -35,9 +35,9 @@ public enum ResultStatus {
      */
     NO_PERMISSION(401,"无权限"),
     /**
-     * 获取openId失败
+     * 微信小程序授权失败
      */
-    GET_OPENID_ERROR(402,"获取openId失败"),
+    WX_LOGIN_ERROR(402,"微信小程序授权失败"),
     /**
      * 用户名或密码错误
      */

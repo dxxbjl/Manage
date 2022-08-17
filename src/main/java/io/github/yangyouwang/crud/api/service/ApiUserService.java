@@ -3,6 +3,7 @@ package io.github.yangyouwang.crud.api.service;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.core.exception.CrudException;
@@ -14,6 +15,7 @@ import io.github.yangyouwang.crud.app.entity.Oauth;
 import io.github.yangyouwang.crud.app.entity.User;
 import io.github.yangyouwang.crud.app.mapper.UserMapper;
 import io.github.yangyouwang.crud.app.service.OauthService;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -21,6 +23,12 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.AlgorithmParameters;
+import java.security.Security;
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -49,30 +57,80 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         String res = RestTemplateUtil.get(api);
         JSONObject jsonObject = JSONObject.parseObject(res);
         if (jsonObject.containsKey("errcode")) {
-            throw new CrudException(ResultStatus.GET_OPENID_ERROR);
+            throw new CrudException(ResultStatus.WX_LOGIN_ERROR);
         }
         WxAuthVO wxAuthVO = new WxAuthVO();
-        String openId = jsonObject.getString("openid");
         String sessionKey = jsonObject.getString("session_key");
-        Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>().eq(Oauth::getAppSecret,openId).eq(Oauth::getAppType,ConfigConsts.WX_APP_TYPE));
+        Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>().eq(Oauth::getAppSecret,sessionKey).eq(Oauth::getAppType,ConfigConsts.WX_APP_TYPE));
         if (Objects.nonNull(oauth)) {
-            // // 登录成功
+            // 登录成功
             wxAuthVO.setSessionKey(sessionKey);
             wxAuthVO.setToken(JwtTokenUtil.buildJWT(oauth.getUserId().toString()));
             return wxAuthVO;
         }
         User user = new User();
+        user.setAvatar(wxAuthDTO.getAvatarUrl());
+        user.setNickName(wxAuthDTO.getNickName());
+        user.setGender(wxAuthDTO.getGender());
         user.setStatus(ConfigConsts.USER_STATUS_AVAILABLE);
         this.save(user);
         Oauth newOauth = new Oauth();
         newOauth.setUserId(user.getId());
-        newOauth.setAppSecret(openId);
+        newOauth.setAppSecret(sessionKey);
         newOauth.setAppType(ConfigConsts.WX_APP_TYPE);
         oauthService.save(newOauth);
         // 登录成功
         wxAuthVO.setSessionKey(sessionKey);
         wxAuthVO.setToken(JwtTokenUtil.buildJWT(newOauth.getUserId().toString()));
         return wxAuthVO;
+    }
+    /**
+     * 根据微信密钥创建用户信息
+     * @param sessionKey 加密秘钥
+     * @param iv 偏移量
+     * @param encryptedData 被加密的数据
+     * @return 响应
+     */
+    private User createUser(String sessionKey,String iv,String encryptedData) {
+        User user = new User();
+        user.setStatus(ConfigConsts.USER_STATUS_AVAILABLE);
+        // 被加密的数据
+        byte[] dataByte = Base64.decode(encryptedData);
+        // 加密秘钥
+        byte[] keyByte = Base64.decode(sessionKey);
+        // 偏移量
+        byte[] ivByte = Base64.decode(iv);
+        try {
+            // 如果密钥不足16位，那么就补足.  这个if 中的内容很重要
+            int base = 16;
+            if (keyByte.length % base != 0) {
+                int groups = keyByte.length / base + (keyByte.length % base != 0 ? 1 : 0);
+                byte[] temp = new byte[groups * base];
+                Arrays.fill(temp, (byte) 0);
+                System.arraycopy(keyByte, 0, temp, 0, keyByte.length);
+                keyByte = temp;
+            }
+            // 初始化
+            Security.addProvider(new BouncyCastleProvider());
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            SecretKeySpec spec = new SecretKeySpec(keyByte, "AES");
+            AlgorithmParameters parameters = AlgorithmParameters.getInstance("AES");
+            parameters.init(new IvParameterSpec(ivByte));
+            cipher.init(Cipher.DECRYPT_MODE, spec, parameters);
+            byte[] resultByte = cipher.doFinal(dataByte);
+            if (null != resultByte && resultByte.length > 0) {
+                String result = new String(resultByte, "UTF-8");
+                JSONObject jsonObject = JSONObject.parseObject(result);
+                user.setAvatar(jsonObject.getString("avatarUrl"));
+                user.setNickName(jsonObject.getString("nickName"));
+                user.setGender(jsonObject.getInteger("gender"));
+                user.setMobile(jsonObject.getString("phoneNumber"));
+                return user;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return user;
     }
     /**
      * 根据用户id获取用户详情

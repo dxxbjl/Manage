@@ -17,9 +17,16 @@ import java.io.Serializable;
 @Data
 @ApiModel("微信授权DTO")
 public class WxAuthDTO implements Serializable {
-    /**
-     * code
-     */
+
     @ApiModelProperty("code")
     private String code;
+
+    @ApiModelProperty("头像")
+    private String avatarUrl;
+
+    @ApiModelProperty("昵称")
+    private String nickName;
+
+    @ApiModelProperty("性别")
+    private Integer gender;
 }
