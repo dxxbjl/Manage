@@ -1,5 +1,4 @@
 package io.github.yangyouwang.core.config;
-import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.core.filter.ValidateCodeFilter;
 import io.github.yangyouwang.core.security.DefaultAuthenticationFailureHandler;
 import io.github.yangyouwang.core.security.DefaultAuthenticationSuccessHandler;

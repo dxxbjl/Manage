@@ -12,6 +12,7 @@ import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.github.yangyouwang.core.util.SecurityUtils;
 import io.github.yangyouwang.crud.system.entity.SysUser;
 import io.github.yangyouwang.crud.system.model.ModifyPassDTO;
+import io.github.yangyouwang.crud.system.model.ResetPassDTO;
 import io.github.yangyouwang.crud.system.model.SysUserDTO;
 import io.github.yangyouwang.crud.system.service.SysUserService;
 import lombok.RequiredArgsConstructor;
@@ -116,17 +117,17 @@ public class SysUserController extends CrudController {
 
     /**
      * 重置密码
-     * @param sysUser 重置用户密码对象
+     * @param resetPassDTO 重置用户密码对象
      * @return 重置密码状态
      */
     @CrudLog
     @PostMapping("/resetPass")
     @ResponseBody
-    public Result resetPass(@RequestBody @Validated SysUser sysUser, BindingResult bindingResult){
+    public Result resetPass(@RequestBody @Validated ResetPassDTO resetPassDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        boolean flag = sysUserService.resetPass(sysUser);
+        boolean flag = sysUserService.resetPass(resetPassDTO);
         return Result.success(flag);
     }
 

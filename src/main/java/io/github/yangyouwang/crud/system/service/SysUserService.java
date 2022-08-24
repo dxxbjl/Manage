@@ -12,6 +12,7 @@ import io.github.yangyouwang.crud.system.mapper.SysMenuMapper;
 import io.github.yangyouwang.crud.system.mapper.SysUserMapper;
 import io.github.yangyouwang.crud.system.mapper.SysUserRoleMapper;
 import io.github.yangyouwang.crud.system.model.ModifyPassDTO;
+import io.github.yangyouwang.crud.system.model.ResetPassDTO;
 import io.github.yangyouwang.crud.system.model.SysUserDTO;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
@@ -183,12 +184,14 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
 
     /**
      * 重置密码
-     * @param sysUser 重置用户密码对象
+     * @param resetPassDTO 重置用户密码对象
      * @return 重置密码
      */
-    public boolean resetPass(SysUser sysUser) {
-        String password = passwordEncoder.encode(sysUser.getPassWord());
-        sysUser.setId(sysUser.getId());
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
+    public boolean resetPass(ResetPassDTO resetPassDTO) {
+        SysUser sysUser = new SysUser();
+        sysUser.setId(resetPassDTO.getId());
+        String password = passwordEncoder.encode(resetPassDTO.getNewPassword());
         sysUser.setPassWord(password);
         return this.updateById(sysUser);
     }
