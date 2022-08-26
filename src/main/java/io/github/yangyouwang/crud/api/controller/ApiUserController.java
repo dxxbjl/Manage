@@ -4,7 +4,7 @@ import io.github.yangyouwang.common.annotation.ApiVersion;
 import io.github.yangyouwang.common.annotation.PassToken;
 import io.github.yangyouwang.common.annotation.ResponseResultBody;
 import io.github.yangyouwang.common.constant.ApiVersionConstant;
-import io.github.yangyouwang.core.context.ApiContext;
+import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.crud.api.model.*;
 import io.github.yangyouwang.crud.api.service.ApiUserService;
 import io.swagger.annotations.Api;
@@ -68,7 +68,22 @@ public class ApiUserController {
     @GetMapping("/user_info")
     @ApiOperation(value="用户详情", notes="用户详情")
     public UserInfoVO userInfo() {
-        Long userId = ApiContext.getUserId();
-        return apiUserService.getUserInfoById(userId);
+        return apiUserService.getUserInfo();
+    }
+
+    /**
+     * 解密微信用户信息、
+     * @param wxUserInfoDTO 加密微信用户信息
+     * @return 响应
+     */
+    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @PostMapping("/decode_user_info")
+    @ApiOperation(value="解密微信用户信息", notes="解密微信用户信息")
+    public Result decodeUserInfo(@Valid @RequestBody WxUserInfoDTO wxUserInfoDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
+        }
+        String userPhoneNumber = apiUserService.decodeUserInfo(wxUserInfoDTO);
+        return Result.success(userPhoneNumber);
     }
 }

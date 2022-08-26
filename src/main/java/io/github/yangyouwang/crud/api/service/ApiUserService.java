@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.enums.ResultStatus;
+import io.github.yangyouwang.core.context.ApiContext;
 import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.core.properties.WeChatProperties;
 import io.github.yangyouwang.core.util.JwtTokenUtil;
@@ -86,6 +87,54 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         return wxAuthVO;
     }
     /**
+     * 根据用户id获取用户详情
+     * @return 响应
+     */
+    public UserInfoVO getUserInfo() {
+        Long userId = ApiContext.getUserId();
+        User user = getById(userId);
+        if (Objects.isNull(user)) {
+            throw new CrudException(ResultStatus.USER_NO_EXIST_ERROR);
+        }
+        UserInfoVO userInfoVO = new UserInfoVO();
+        BeanUtils.copyProperties(user,userInfoVO);
+        return userInfoVO;
+    }
+    /**
+     * 用户名密码授权
+     * @return 响应
+     */
+    public UserAuthVO passwordAuth(PasswordAuthDTO passwordAuthDTO) {
+        User user = this.getOne(new LambdaQueryWrapper<User>().eq(User::getMobile, passwordAuthDTO.getMobile()));
+        if (Objects.isNull(user)) {
+            throw new CrudException(ResultStatus.USER_NO_EXIST_ERROR);
+        }
+        Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>()
+                .eq(Oauth::getUserId, user.getId()).eq(Oauth::getAppType,ConfigConsts.PASSWORD_APP_TYPE));
+        if (!oauth.getAppSecret().equals(passwordAuthDTO.getAppSecret())) {
+            throw new CrudException(ResultStatus.LOGIN_ERROR);
+        }
+        UserAuthVO userAuthVO = new UserAuthVO();
+        userAuthVO.setToken(JwtTokenUtil.buildJWT(oauth.getUserId().toString()));
+        return userAuthVO;
+    }
+
+    /**
+     * 解密微信用户信息
+     * @param wxUserInfoDTO 加密微信用户信息
+     * @return 响应
+     */
+    public String decodeUserInfo(WxUserInfoDTO wxUserInfoDTO) {
+        String userPhoneNumber = this.getUserPhoneNumber(wxUserInfoDTO.getSessionKey(), wxUserInfoDTO.getIv(), wxUserInfoDTO.getEncryptedData());
+        Long userId = ApiContext.getUserId();
+        User user = new User();
+        user.setId(userId);
+        user.setMobile(userPhoneNumber);
+        this.updateById(user);
+        return userPhoneNumber;
+    }
+
+    /**
      * 根据微信密钥获取用户手机号
      * @param sessionKey 加密秘钥
      * @param iv 偏移量
@@ -126,36 +175,5 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
             throw new RuntimeException(e);
         }
         return null;
-    }
-    /**
-     * 根据用户id获取用户详情
-     * @return 响应
-     */
-    public UserInfoVO getUserInfoById(Long userId) {
-        User user = getById(userId);
-        if (Objects.isNull(user)) {
-            throw new CrudException(ResultStatus.USER_NO_EXIST_ERROR);
-        }
-        UserInfoVO userInfoVO = new UserInfoVO();
-        BeanUtils.copyProperties(user,userInfoVO);
-        return userInfoVO;
-    }
-    /**
-     * 用户名密码授权
-     * @return 响应
-     */
-    public UserAuthVO passwordAuth(PasswordAuthDTO passwordAuthDTO) {
-        User user = this.getOne(new LambdaQueryWrapper<User>().eq(User::getMobile, passwordAuthDTO.getMobile()));
-        if (Objects.isNull(user)) {
-            throw new CrudException(ResultStatus.USER_NO_EXIST_ERROR);
-        }
-        Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>()
-                .eq(Oauth::getUserId, user.getId()).eq(Oauth::getAppType,ConfigConsts.PASSWORD_APP_TYPE));
-        if (!oauth.getAppSecret().equals(passwordAuthDTO.getAppSecret())) {
-            throw new CrudException(ResultStatus.LOGIN_ERROR);
-        }
-        UserAuthVO userAuthVO = new UserAuthVO();
-        userAuthVO.setToken(JwtTokenUtil.buildJWT(oauth.getUserId().toString()));
-        return userAuthVO;
     }
 }
