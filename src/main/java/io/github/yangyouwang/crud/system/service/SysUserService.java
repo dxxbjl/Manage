@@ -60,21 +60,21 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
     @Override
     public UserDetails loadUserByUsername(@NonNull String userName) {
         // 通过用户名从数据库获取用户信息
-        SysUser user  = sysUserMapper.findUserByName(userName);
+        SysUser user = sysUserMapper.findUserByName(userName);
         if (ObjectUtil.isNull(user)) {
             throw new UsernameNotFoundException(ResultStatus.LOGIN_ERROR.message);
         }
+        List<String> menuRole;
         if (ConfigConsts.ADMIN_USER.equals(userName)) {
-            List<String> adminMenuRole = sysMenuMapper.findMenuRole();
-            return new User(user.getUserName(), user.getPassWord(), ConfigConsts.ENABLED_YES.equals(user.getEnabled()),
-                    true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList(String.join(",",adminMenuRole)));
+            menuRole = sysMenuMapper.findMenuRole();
+        } else {
+            menuRole = user.getRoles().stream().map(sysRole -> {
+                List<String> userMenuRole = sysMenuMapper.findMenuRoleByRoleId(sysRole.getId());
+                return String.join(",", userMenuRole);
+            }).collect(Collectors.toList());
         }
-        List<String> userMenuRoleAll = user.getRoles().stream().map(sysRole -> {
-            List<String> userMenuRole = sysMenuMapper.findMenuRoleByRoleId(sysRole.getId());
-            return String.join(",", userMenuRole);
-        }).collect(Collectors.toList());
         return new User(user.getUserName(), user.getPassWord(), ConfigConsts.ENABLED_YES.equals(user.getEnabled()),
-                true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList(String.join(",",userMenuRoleAll)));
+                true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList(String.join(",",menuRole)));
     }
 
     /**
