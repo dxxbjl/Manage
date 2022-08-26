@@ -31,9 +31,9 @@
     1、推荐使用IDEA开发工具运行此项目
     2、在mysql中创建crud数据库后，项目启动时候表结构会自动创建
     3、针对各环境修改对应配置文件：application-dev.yml开发环境、application-prod.yml生产环境、application-test.yml测试环境
-    ![配置截图](https://gitee.com/yangyouwang/crud/raw/master/img/13.png "13.png")
+   ![配置截图](https://gitee.com/yangyouwang/crud/raw/master/img/13.png "13.png")
     4、运行项目中CrudApplication.java启动类
-    ![配置截图](https://gitee.com/yangyouwang/crud/raw/master/img/14.png "14.png")
+   ![配置截图](https://gitee.com/yangyouwang/crud/raw/master/img/14.png "14.png")
 ## 使用说明
     
     1.控制层接口版本管理、包装响应Result返回值进行全局处理，使用@ResponseResultBody注解
