@@ -88,6 +88,10 @@ public enum ResultStatus {
      * 字典已存在
      */
     DICT_EXIST_ERROR(702,"字典已存在"),
+    /**
+     * 字典不存在
+     */
+    DICT_NO_EXIST_ERROR(703,"字典不存在"),
 
     /**
      * 菜单存在子节点

@@ -25,7 +25,7 @@ public class UserInfoVO {
     private String avatar;
 
     @ApiModelProperty(value = "性别：1时是男性，值为2时是女性，值为0时是未知")
-    private Integer gender;
+    private String gender;
 
     @ApiModelProperty(value = "生日")
     private Date birthday;

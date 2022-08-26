@@ -16,6 +16,7 @@ import io.github.yangyouwang.crud.app.entity.Oauth;
 import io.github.yangyouwang.crud.app.entity.User;
 import io.github.yangyouwang.crud.app.mapper.UserMapper;
 import io.github.yangyouwang.crud.app.service.OauthService;
+import io.github.yangyouwang.crud.system.service.SysDictValueService;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -48,6 +49,9 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
 
     @Resource
     private OauthService oauthService;
+
+    @Resource
+    private SysDictValueService sysDictValueService;
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED,rollbackFor = Throwable.class)
     public WxAuthVO wxAuth(WxAuthDTO wxAuthDTO) {
@@ -98,6 +102,9 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         }
         UserInfoVO userInfoVO = new UserInfoVO();
         BeanUtils.copyProperties(user,userInfoVO);
+        // 性别
+        String sex = sysDictValueService.getDictValueName(ConfigConsts.DICT_KEY_SEX, user.getGender().toString());
+        userInfoVO.setGender(sex);
         return userInfoVO;
     }
     /**
