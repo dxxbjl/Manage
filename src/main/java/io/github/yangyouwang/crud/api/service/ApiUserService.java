@@ -61,7 +61,8 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         }
         WxAuthVO wxAuthVO = new WxAuthVO();
         String sessionKey = jsonObject.getString("session_key");
-        Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>().eq(Oauth::getAppSecret,sessionKey).eq(Oauth::getAppType,ConfigConsts.WX_APP_TYPE));
+        String openId = jsonObject.getString("openid");
+        Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>().eq(Oauth::getAppSecret,openId).eq(Oauth::getAppType,ConfigConsts.WX_APP_TYPE));
         if (Objects.nonNull(oauth)) {
             // 登录成功
             wxAuthVO.setSessionKey(sessionKey);
@@ -76,7 +77,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         this.save(user);
         Oauth newOauth = new Oauth();
         newOauth.setUserId(user.getId());
-        newOauth.setAppSecret(sessionKey);
+        newOauth.setAppSecret(openId);
         newOauth.setAppType(ConfigConsts.WX_APP_TYPE);
         oauthService.save(newOauth);
         // 登录成功
