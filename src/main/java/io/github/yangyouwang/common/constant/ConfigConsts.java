@@ -49,4 +49,12 @@ public interface ConfigConsts {
      * 可用状态
      */
     int USER_STATUS_AVAILABLE = 0;
+    /**
+     * 有效
+     */
+    int USABLE_EFFECTIVE = 2;
+    /**
+     * 已发送
+     */
+    int SEND_HAS_BEEN_SENT = 2;
 }

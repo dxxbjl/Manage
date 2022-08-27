@@ -55,6 +55,10 @@ public enum ResultStatus {
      */
     OLD_PASSWORD_ERROR(406,"旧密码输入错误"),
     /**
+     * 手机号格式错误
+     */
+    MOBILE_ERROR(407,"手机号格式错误"),
+    /**
      * 新增数据出错
      */
     SAVE_DATA_ERROR(501,"新增数据出错"),

@@ -43,13 +43,13 @@ public class SampleSms {
      * 发送短信
      * @param mobile 手机号
      * @param templateCode 模板号
-     * @param signName 签名
      * @param param 参数
      */
-    public static SendSmsResponse sendSms(String mobile, String templateCode, String signName, String param) {
+    public static SendSmsResponse sendSms(String mobile, String templateCode, String param) {
         try {
             String accessKeyId = smsProperties.getAccessKeyId();
             String accessKeySecret = smsProperties.getAccessKeySecret();
+            String signName = smsProperties.getSignName();
             //可自助调整超时时间
             System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
             System.setProperty("sun.net.client.defaultReadTimeout", "10000");

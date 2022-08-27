@@ -66,12 +66,12 @@ INSERT INTO `app_oauth` VALUES (3, 'ofB8h5Y_jLacnUYkjj_XLI-EEqlg', 'wx', 3);
 DROP TABLE IF EXISTS `app_user`;
 CREATE TABLE `app_user`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `nick_name` varchar(63) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '用户昵称或网络名称',
-  `avatar` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '用户头像图片',
+  `nick_name` varchar(63) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '用户昵称或网络名称',
+  `avatar` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '用户头像图片',
   `gender` int(0) NULL DEFAULT 1 COMMENT '性别：1时是男性，值为2时是女性，值为0时是未知',
   `birthday` date NULL DEFAULT NULL COMMENT '生日',
   `mobile` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '手机号',
-  `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮箱',
+  `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '邮箱',
   `status` int(0) NOT NULL DEFAULT 0 COMMENT '0 可用, 1 禁用, 2 注销',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
@@ -81,5 +81,24 @@ CREATE TABLE `app_user`  (
 -- Records of app_user
 -- ----------------------------
 INSERT INTO `app_user` VALUES (3, '', '', 1, NULL, NULL, NULL, 0, '2022-08-14 23:57:59');
+
+-- ----------------------------
+-- Table structure for app_sms_code
+-- ----------------------------
+DROP TABLE IF EXISTS `app_sms_code`;
+CREATE TABLE `app_sms_code`  (
+    `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `mobile` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '手机号',
+    `code` varchar(10) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '验证码',
+    `dead_line` datetime(0) NULL DEFAULT NULL COMMENT '失效时间',
+    `usable` int DEFAULT '1' COMMENT '是否有效，1-无效，2-有效',
+    `sended` int DEFAULT '1' COMMENT '是否已发送，1-未发送，2-已发送',
+    `create_time` datetime(0) NULL DEFAULT NULL COMMENT '短信创建时间',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '短信验证码表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of app_sms_code
+-- ----------------------------
 
 SET FOREIGN_KEY_CHECKS = 1;

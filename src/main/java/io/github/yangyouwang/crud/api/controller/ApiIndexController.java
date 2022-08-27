@@ -4,14 +4,17 @@ import io.github.yangyouwang.common.annotation.ApiVersion;
 import io.github.yangyouwang.common.annotation.PassToken;
 import io.github.yangyouwang.common.annotation.ResponseResultBody;
 import io.github.yangyouwang.common.constant.ApiVersionConstant;
+import io.github.yangyouwang.common.domain.Result;
+import io.github.yangyouwang.common.enums.ResultStatus;
+import io.github.yangyouwang.core.exception.CrudException;
+import io.github.yangyouwang.core.util.MobileUtil;
 import io.github.yangyouwang.crud.api.model.IndexVO;
 import io.github.yangyouwang.crud.api.service.ApiIndexService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Description: 首页控制层 <br/>
@@ -39,5 +42,20 @@ public class ApiIndexController {
     @PassToken
     public IndexVO index() {
         return apiIndexService.getIndexData();
+    }
+
+    /**
+     * 发送手机验证码
+     */
+    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @PostMapping("/send_mobile_code")
+    @ApiOperation(value="发送手机验证码", notes="发送手机验证码")
+    @PassToken
+    public Result sendMobileCode(@ApiParam(name = "mobile", value = "手机号码", required = true)@RequestBody String mobile) {
+        if (!MobileUtil.checkPhone(mobile)) {
+            throw new CrudException(ResultStatus.MOBILE_ERROR);
+        }
+        boolean flag = apiIndexService.sendMobileCode(mobile);
+        return Result.success(flag);
     }
 }
