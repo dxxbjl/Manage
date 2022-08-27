@@ -1,11 +1,17 @@
 package io.github.yangyouwang.crud.app.service;
 
+import io.github.yangyouwang.common.constant.ConfigConsts;
+import io.github.yangyouwang.crud.api.model.UserInfoVO;
 import io.github.yangyouwang.crud.app.entity.User;
 import io.github.yangyouwang.crud.app.mapper.UserMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import io.github.yangyouwang.crud.system.service.SysDictValueService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.apache.commons.lang3.StringUtils;
+
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -19,6 +25,8 @@ import java.util.List;
 @Service
 public class UserService extends ServiceImpl<UserMapper, User> {
 
+  @Resource
+  private SysDictValueService sysDictValueService;
   /**
   * 用户表分页列表
   * @param param 参数
@@ -50,39 +58,14 @@ public class UserService extends ServiceImpl<UserMapper, User> {
   * @param id 主键
   * @return 结果
   */
-  public User info(Long id) {
-    return getById(id);
-  }
+  public UserInfoVO info(Long id) {
+    User user = getById(id);
+    // 性别
+    String sex = sysDictValueService.getDictValueName(ConfigConsts.DICT_KEY_SEX, user.getGender().toString());
 
-  /**
-  * 用户表新增
-  * @param param 根据需要进行传值
-  */
-  public void add(User param) {
-    save(param);
+    UserInfoVO userInfoVO = new UserInfoVO();
+    BeanUtils.copyProperties(user,userInfoVO);
+    userInfoVO.setGender(sex);
+    return userInfoVO;
   }
-
-  /**
-  * 用户表修改
-  * @param param 根据需要进行传值
-  */
-  public void modify(User param) {
-    updateById(param);
-  }
-
-  /**
-  * 用户表删除(单个条目)
-  * @param id 主键
-  */
-  public void remove(Long id) {
-    removeById(id);
-  }
-
-  /**
-  * 用户表删除(多个条目)
-  * @param ids 主键数组
-  */
-  public void removes(List<Long> ids) {
-     removeByIds(ids);
-   }
 }

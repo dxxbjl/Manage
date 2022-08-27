@@ -18,7 +18,7 @@ layui.define(['jquery','cookie'], function(exports){
         getXmSelectTreeIds: function (select) {
             let value = select.getValue();
             let ids = value.map(x => {return x.id});
-            if (ids === 0) {
+            if (ids == 0) {
                 layer.msg('请选择节点');
                 return ids;
             }
@@ -30,7 +30,7 @@ layui.define(['jquery','cookie'], function(exports){
         getDictValue: function(name,defaultVal) {
             let list = options(name);
             for(let i = 0; i < list.length; i++) {
-                if (list[i].dictValueKey === defaultVal) {
+                if (list[i].dictValueKey == defaultVal) {
                     return list[i].dictValueName;
                 }
             }
@@ -51,7 +51,7 @@ layui.define(['jquery','cookie'], function(exports){
             }
             $.each(list,function(index,item){
                 let option = new Option(item.dictValueName,item.dictValueKey);
-                if(item.dictValueKey === defaultVal) {
+                if(item.dictValueKey == defaultVal) {
                     option.selected=true;
                 }
                 $("#"+id).append(option)
@@ -73,7 +73,7 @@ layui.define(['jquery','cookie'], function(exports){
             }
             $.each(list,function(index,item){
                 let radioHtml = '<input type="radio" name="'+id+'" value="'+item.dictValueKey+'" title="'+item.dictValueName+'" ';
-                if(item.dictValueKey === defaultVal) {
+                if(item.dictValueKey == defaultVal) {
                     radioHtml+='checked';
                 }
                 radioHtml+='>';

@@ -159,13 +159,15 @@ INSERT INTO `sys_menu` VALUES (3043, '任务管理', 1, 6, 'layui-icon-ok-circle
 INSERT INTO `sys_menu` VALUES (3044, '添加任务表', 3043, 1, '', '#', 'F', 'Y', 'job:add', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3045, '编辑任务表', 3043, 2, '', '#', 'F', 'Y', 'job:edit', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3046, '删除任务表', 3043, 3, '', '#', 'F', 'Y', 'job:del', '', NULL, '', NULL, 0, '');
-INSERT INTO `sys_menu` VALUES (3047, '广告表管理', 3051, 1, 'layui-icon-home', '/app/ad/listPage', 'C', 'Y', 'ad:list', '', NULL, 'admin', '2022-08-11 19:34:04', 0, '');
+INSERT INTO `sys_menu` VALUES (3047, '广告管理', 3051, 1, 'layui-icon-home', '/app/ad/listPage', 'C', 'Y', 'ad:list', '', NULL, 'admin', '2022-08-27 08:56:55', 0, '');
 INSERT INTO `sys_menu` VALUES (3048, '添加广告表', 3047, 1, '', '#', 'F', 'Y', 'ad:add', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3049, '编辑广告表', 3047, 2, '', '#', 'F', 'Y', 'ad:edit', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3050, '删除广告表', 3047, 3, '', '#', 'F', 'Y', 'ad:del', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3051, 'APP管理', 0, 4, 'layui-icon-cellphone', '#', 'M', 'Y', '', 'admin', '2022-08-11 19:33:57', 'admin', '2022-08-11 19:34:19', 0, '');
 INSERT INTO `sys_menu` VALUES (3052, '暂停某个定时任务', 3043, 4, '', '#', 'F', 'Y', 'job:pause', 'admin', '2022-08-14 17:45:30', '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3053, '恢复某个定时任务', 3043, 5, '', '#', 'F', 'Y', 'job:resume', 'admin', '2022-08-14 17:45:52', 'admin', '2022-08-14 17:46:10', 0, '');
+INSERT INTO `sys_menu` VALUES (3054, '用户管理', 3051, 1, 'layui-icon-home', '/app/user/listPage', 'C', 'Y', 'user:list', '', NULL, 'admin', '2022-08-27 08:56:40', 0, '');
+INSERT INTO `sys_menu` VALUES (3055, '用户详情', 3054, 1, '', '#', 'M', 'Y', 'user:info', 'admin', '2022-08-27 09:18:24', 'admin', '2022-08-27 09:18:34', 0, '');
 
 -- ----------------------------
 -- Table structure for sys_role
