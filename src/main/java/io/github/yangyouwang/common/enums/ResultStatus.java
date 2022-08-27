@@ -59,6 +59,18 @@ public enum ResultStatus {
      */
     MOBILE_ERROR(407,"手机号格式错误"),
     /**
+     * 验证码不存在
+     */
+    VERIFICATION_CODE_NOT_EXIST(408,"验证码不存在"),
+    /**
+     * 验证码失效
+     */
+    VERIFICATION_CODE_INVALID(409,"验证码失效"),
+    /**
+     * 发送短信失败
+     */
+    SEND_SMS_ERROR(410,"发送短信失败"),
+    /**
      * 新增数据出错
      */
     SAVE_DATA_ERROR(501,"新增数据出错"),

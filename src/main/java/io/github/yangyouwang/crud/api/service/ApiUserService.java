@@ -9,13 +9,16 @@ import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.core.context.ApiContext;
 import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.core.properties.WeChatProperties;
+import io.github.yangyouwang.core.util.DateTimeUtil;
 import io.github.yangyouwang.core.util.JwtTokenUtil;
 import io.github.yangyouwang.core.util.RestTemplateUtil;
 import io.github.yangyouwang.crud.api.model.*;
 import io.github.yangyouwang.crud.app.entity.Oauth;
+import io.github.yangyouwang.crud.app.entity.SmsCode;
 import io.github.yangyouwang.crud.app.entity.User;
 import io.github.yangyouwang.crud.app.mapper.UserMapper;
 import io.github.yangyouwang.crud.app.service.OauthService;
+import io.github.yangyouwang.crud.app.service.SmsCodeService;
 import io.github.yangyouwang.crud.system.service.SysDictValueService;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.beans.BeanUtils;
@@ -31,6 +34,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.AlgorithmParameters;
 import java.security.Security;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -52,6 +56,9 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
 
     @Resource
     private SysDictValueService sysDictValueService;
+
+    @Resource
+    private SmsCodeService smsCodeService;
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED,rollbackFor = Throwable.class)
     public WxAuthVO wxAuth(WxAuthDTO wxAuthDTO) {
@@ -80,14 +87,14 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         user.setGender(wxAuthDTO.getGender());
         user.setStatus(ConfigConsts.USER_STATUS_AVAILABLE);
         this.save(user);
-        Oauth newOauth = new Oauth();
-        newOauth.setUserId(user.getId());
-        newOauth.setAppSecret(openId);
-        newOauth.setAppType(ConfigConsts.WX_APP_TYPE);
-        oauthService.save(newOauth);
+        oauth = new Oauth();
+        oauth.setUserId(user.getId());
+        oauth.setAppSecret(openId);
+        oauth.setAppType(ConfigConsts.WX_APP_TYPE);
+        oauthService.save(oauth);
         // 登录成功
         wxAuthVO.setSessionKey(sessionKey);
-        wxAuthVO.setToken(JwtTokenUtil.buildJWT(newOauth.getUserId().toString()));
+        wxAuthVO.setToken(JwtTokenUtil.buildJWT(oauth.getUserId().toString()));
         return wxAuthVO;
     }
     /**
@@ -132,7 +139,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
      * @return 响应
      */
     public String decodeUserInfo(WxUserInfoDTO wxUserInfoDTO) {
-        String userPhoneNumber = this.getUserPhoneNumber(wxUserInfoDTO.getSessionKey(), wxUserInfoDTO.getIv(), wxUserInfoDTO.getEncryptedData());
+        String userPhoneNumber = getUserPhoneNumber(wxUserInfoDTO.getSessionKey(), wxUserInfoDTO.getIv(), wxUserInfoDTO.getEncryptedData());
         Long userId = ApiContext.getUserId();
         User user = new User();
         user.setId(userId);
@@ -182,5 +189,49 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
             throw new RuntimeException(e);
         }
         return null;
+    }
+    /**
+     * 手机号验证码授权
+     * @return 响应
+     */
+    public UserAuthVO mobileAuth(MobileAuthDTO mobileAuthDTO) {
+        String mobile = mobileAuthDTO.getMobile();
+        SmsCode smsCode = smsCodeService.getOne(new LambdaQueryWrapper<SmsCode>()
+                .eq(SmsCode::getMobile, mobile)
+                .eq(SmsCode::getCode, mobileAuthDTO.getCode())
+                .eq(SmsCode::getUsable, ConfigConsts.USABLE_EFFECTIVE)
+                .eq(SmsCode::getSended, ConfigConsts.SEND_HAS_BEEN_SENT));
+        if(Objects.isNull(smsCode)) {
+            throw new CrudException(ResultStatus.VERIFICATION_CODE_NOT_EXIST);
+        }
+        // 当前时间小于过期时间
+        boolean flag = DateTimeUtil.compare(new Date(),smsCode.getDeadLine());
+        if (!flag) {
+            throw new CrudException(ResultStatus.VERIFICATION_CODE_INVALID);
+        }
+        // 验证码作废
+        smsCode.setUsable(ConfigConsts.USABLE_INVALID);
+        smsCodeService.updateById(smsCode);
+        // 响应
+        UserAuthVO userAuthVO = new UserAuthVO();
+        // 查询用户
+        Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>().eq(Oauth::getAppSecret,mobile).eq(Oauth::getAppType,ConfigConsts.PHONE_APP_TYPE));
+        if (Objects.nonNull(oauth)) {
+            // 登录成功
+            userAuthVO.setToken(JwtTokenUtil.buildJWT(oauth.getUserId().toString()));
+            return userAuthVO;
+        }
+        User user = new User();
+        user.setMobile(mobile);
+        user.setStatus(ConfigConsts.USER_STATUS_AVAILABLE);
+        this.save(user);
+        oauth = new Oauth();
+        oauth.setUserId(user.getId());
+        oauth.setAppSecret(mobile);
+        oauth.setAppType(ConfigConsts.PHONE_APP_TYPE);
+        oauthService.save(oauth);
+        // 登录成功
+        userAuthVO.setToken(JwtTokenUtil.buildJWT(user.getId().toString()));
+        return userAuthVO;
     }
 }

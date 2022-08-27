@@ -46,9 +46,17 @@ public interface ConfigConsts {
      */
     String PASSWORD_APP_TYPE = "password";
     /**
+     * 登录类型 phone 手机号验证码
+     */
+    String PHONE_APP_TYPE = "phone";
+    /**
      * 可用状态
      */
     int USER_STATUS_AVAILABLE = 0;
+    /**
+     * 无效
+     */
+    int USABLE_INVALID = 1;
     /**
      * 有效
      */

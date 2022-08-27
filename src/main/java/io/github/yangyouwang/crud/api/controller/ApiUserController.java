@@ -61,6 +61,20 @@ public class ApiUserController {
         return apiUserService.passwordAuth(passwordAuthDTO);
     }
     /**
+     * 手机号验证码授权
+     * @return 响应
+     */
+    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @PostMapping("/mobile_auth")
+    @ApiOperation(value="手机号验证码授权", notes="手机号验证码授权")
+    @PassToken
+    public UserAuthVO mobileAuth(@Valid @RequestBody MobileAuthDTO mobileAuthDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
+        }
+        return apiUserService.mobileAuth(mobileAuthDTO);
+    }
+    /**
      * 用户详情
      * @return 响应
      */
@@ -72,7 +86,7 @@ public class ApiUserController {
     }
 
     /**
-     * 解密微信用户信息、
+     * 解密微信用户信息
      * @param wxUserInfoDTO 加密微信用户信息
      * @return 响应
      */
