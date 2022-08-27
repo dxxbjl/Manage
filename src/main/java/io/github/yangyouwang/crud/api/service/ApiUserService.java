@@ -241,9 +241,11 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
      */
     public boolean modifyUser(UserInfoDTO userInfoDTO) {
         Long userId = ApiContext.getUserId();
-        User user = new User();
+        User user = getById(userId);
+        if (Objects.isNull(user)) {
+            throw new CrudException(ResultStatus.USER_NO_EXIST_ERROR);
+        }
         BeanUtils.copyProperties(userInfoDTO,user);
-        user.setId(userId);
         return updateById(user);
     }
 }
