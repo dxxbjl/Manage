@@ -234,4 +234,16 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         userAuthVO.setToken(JwtTokenUtil.buildJWT(user.getId().toString()));
         return userAuthVO;
     }
+    /**
+     * 更新用户信息
+     * @param userInfoDTO 用户信息
+     * @return 响应
+     */
+    public boolean modifyUser(UserInfoDTO userInfoDTO) {
+        Long userId = ApiContext.getUserId();
+        User user = new User();
+        BeanUtils.copyProperties(userInfoDTO,user);
+        user.setId(userId);
+        return updateById(user);
+    }
 }

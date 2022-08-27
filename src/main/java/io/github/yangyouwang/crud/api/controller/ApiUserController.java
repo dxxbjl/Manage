@@ -100,4 +100,20 @@ public class ApiUserController {
         String userPhoneNumber = apiUserService.decodeUserInfo(wxUserInfoDTO);
         return Result.success(userPhoneNumber);
     }
+
+    /**
+     * 更新用户信息
+     * @param userInfoDTO 用户信息
+     * @return 响应
+     */
+    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @PostMapping("/modify_user")
+    @ApiOperation(value="更新用户信息", notes="更新用户信息")
+    public Result modifyUser(@Valid @RequestBody UserInfoDTO userInfoDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
+        }
+        boolean flag = apiUserService.modifyUser(userInfoDTO);
+        return Result.success(flag);
+    }
 }
