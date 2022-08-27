@@ -36,19 +36,11 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     QueryWrapper<User> queryWrapper = new QueryWrapper<>();
     queryWrapper.lambda()
       // 用户昵称或网络名称
-          .eq(!StringUtils.isEmpty(param.getNickName()), User::getNickName, param.getNickName())
-          // 用户头像图片
-          .eq(!StringUtils.isEmpty(param.getAvatar()), User::getAvatar, param.getAvatar())
-          // 性别：1时是男性，值为2时是女性，值为0时是未知
-          .eq(param.getGender() != null, User::getGender, param.getGender())
-          // 生日
-          .eq(param.getBirthday() != null, User::getBirthday, param.getBirthday())
+          .like(!StringUtils.isEmpty(param.getNickName()), User::getNickName, param.getNickName())
           // 手机号
           .eq(!StringUtils.isEmpty(param.getMobile()), User::getMobile, param.getMobile())
           // 邮箱
           .eq(!StringUtils.isEmpty(param.getEmail()), User::getEmail, param.getEmail())
-          // 0 可用, 1 禁用, 2 注销
-          .eq(param.getStatus() != null, User::getStatus, param.getStatus())
     ;
     return list(queryWrapper);
   }
