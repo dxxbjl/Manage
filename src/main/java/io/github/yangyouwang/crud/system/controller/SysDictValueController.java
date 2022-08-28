@@ -3,6 +3,7 @@ package io.github.yangyouwang.crud.system.controller;
 import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.base.CrudController;
 import io.github.yangyouwang.common.domain.Result;
+import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.crud.system.entity.SysDictValue;
 import io.github.yangyouwang.crud.system.service.SysDictValueService;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,7 @@ public class SysDictValueController extends CrudController {
      * @param id 字典id
      * @return 删除状态
      */
-    @CrudLog
+    @CrudLog(title = "删除字典值",businessType = BusinessType.DELETE)
     @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
@@ -72,7 +73,7 @@ public class SysDictValueController extends CrudController {
      * @param sysDictValue 添加字典值对象
      * @return 添加状态
      */
-    @CrudLog
+    @CrudLog(title = "添加字典值",businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
     public Result add(@RequestBody @Validated SysDictValue sysDictValue, BindingResult bindingResult){
@@ -88,7 +89,7 @@ public class SysDictValueController extends CrudController {
      * @param sysDictValue 编辑字典值对象
      * @return 编辑状态
      */
-    @CrudLog
+    @CrudLog(title = "更新字典值",businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public Result edit(@RequestBody @Validated SysDictValue sysDictValue, BindingResult bindingResult){
@@ -104,7 +105,7 @@ public class SysDictValueController extends CrudController {
      * @param sysDictValue 修改字典值参数
      * @return 修改状态
      */
-    @CrudLog
+    @CrudLog(title = "更新字典值状态",businessType = BusinessType.UPDATE)
     @PostMapping("/changeDictValue")
     @ResponseBody
     public Result changeDictValue(@RequestBody @Validated SysDictValue sysDictValue, BindingResult bindingResult){

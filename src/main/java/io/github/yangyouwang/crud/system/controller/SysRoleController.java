@@ -6,6 +6,7 @@ import io.github.yangyouwang.common.base.CrudController;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.github.yangyouwang.common.domain.XmSelectNode;
+import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.crud.system.entity.SysRole;
 import io.github.yangyouwang.crud.system.service.SysRoleService;
 import lombok.RequiredArgsConstructor;
@@ -73,6 +74,7 @@ public class SysRoleController extends CrudController {
      * @param sysRole 请求角色列表对象
      * @return 请求列表
      */
+    @CrudLog(title = "查询角色分页列表",businessType = BusinessType.SELECT)
     @GetMapping("/page")
     @ResponseBody
     public TableDataInfo page(@Validated SysRole sysRole) {
@@ -88,7 +90,7 @@ public class SysRoleController extends CrudController {
      * @param sysRole 添加角色对象
      * @return 添加状态
      */
-    @CrudLog
+    @CrudLog(title = "添加角色",businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
     public Result add(@RequestBody @Validated SysRole sysRole, BindingResult bindingResult){
@@ -104,7 +106,7 @@ public class SysRoleController extends CrudController {
      * @param sysRole 编辑角色对象
      * @return 编辑状态
      */
-    @CrudLog
+    @CrudLog(title = "更新角色",businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public Result edit(@RequestBody @Validated SysRole sysRole, BindingResult bindingResult){
@@ -120,7 +122,7 @@ public class SysRoleController extends CrudController {
      * @param id 角色id
      * @return 删除状态
      */
-    @CrudLog
+    @CrudLog(title = "删除角色",businessType = BusinessType.DELETE)
     @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){

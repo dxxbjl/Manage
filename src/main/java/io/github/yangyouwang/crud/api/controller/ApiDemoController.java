@@ -2,6 +2,7 @@ package io.github.yangyouwang.crud.api.controller;
 
 import io.github.yangyouwang.common.annotation.*;
 import io.github.yangyouwang.common.constant.ApiVersionConstant;
+import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.core.context.ApiContext;
 import io.github.yangyouwang.core.util.JwtTokenUtil;
 import io.swagger.annotations.Api;
@@ -51,7 +52,7 @@ public class ApiDemoController {
     @ApiOperation(value="抛异常记录日志接口")
     @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
     @GetMapping("/log")
-    @CrudLog
+    @CrudLog(title = "抛异常",businessType = BusinessType.SELECT)
     @PassToken
     public void log() {
         // 会出现错误

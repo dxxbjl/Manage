@@ -1,6 +1,7 @@
 package io.github.yangyouwang.crud.app.controller;
 
 import io.github.yangyouwang.common.annotation.CrudLog;
+import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.crud.app.entity.Ad;
 import io.github.yangyouwang.crud.app.service.AdService;
 import io.github.yangyouwang.common.domain.Result;
@@ -50,6 +51,7 @@ public class AdController extends CrudController {
   @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer")})
   @GetMapping(value = "/page")
   @ResponseBody
+  @CrudLog(title = "查询广告分页列表",businessType = BusinessType.SELECT)
   public TableDataInfo page(Ad param) {
     startPage();
     List<Ad> data = adService.page(param);
@@ -71,6 +73,7 @@ public class AdController extends CrudController {
   @ApiOperation(value = "广告表新增")
   @PostMapping(value = "/add")
   @ResponseBody
+  @CrudLog(title = "新增广告",businessType = BusinessType.INSERT)
   public Result add(@RequestBody @Validated Ad param,BindingResult bindingResult) {
     if (bindingResult.hasErrors()){
         return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
@@ -82,6 +85,7 @@ public class AdController extends CrudController {
   @ApiOperation(value = "广告表修改")
   @PostMapping(value = "/modify")
   @ResponseBody
+  @CrudLog(title = "修改广告",businessType = BusinessType.UPDATE)
   public Result modify(@RequestBody @Validated Ad param,BindingResult bindingResult) {
     if (bindingResult.hasErrors()){
         return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
@@ -93,6 +97,7 @@ public class AdController extends CrudController {
   @ApiOperation(value = "广告表删除(单个条目)")
   @DeleteMapping(value = "/remove/{id}")
   @ResponseBody
+  @CrudLog(title = "删除广告",businessType = BusinessType.DELETE)
   public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
     adService.remove(id);
     return Result.success();
@@ -101,6 +106,7 @@ public class AdController extends CrudController {
   @ApiOperation(value = "广告表删除(多个条目)")
   @PostMapping(value = "/removes")
   @ResponseBody
+  @CrudLog(title = "删除广告",businessType = BusinessType.DELETE)
   public Result removes(@RequestBody @Valid List<Long> ids) {
      adService.removes(ids);
      return Result.success();
@@ -111,7 +117,7 @@ public class AdController extends CrudController {
      * @param param 修改轮播图参数
      * @return 修改状态
      */
-    @CrudLog
+    @CrudLog(title = "修改广告状态",businessType = BusinessType.UPDATE)
     @PostMapping("/changeAd")
     @ResponseBody
     public Result changeAd(@RequestBody @Validated Ad param, BindingResult bindingResult){

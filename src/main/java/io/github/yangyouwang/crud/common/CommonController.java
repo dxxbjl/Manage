@@ -4,6 +4,7 @@ import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.base.CrudController;
 import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.domain.Result;
+import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.core.aliyun.SampleOSS;
 import io.github.yangyouwang.core.properties.MinioProperties;
 import io.github.yangyouwang.core.util.MinIoUtil;
@@ -45,7 +46,7 @@ public class CommonController extends CrudController {
      */
     @PostMapping("/upload")
     @ResponseBody
-    @CrudLog
+    @CrudLog(title = "上传图片OSS",businessType = BusinessType.INSERT)
     public Result uploadFile(MultipartFile file, @RequestParam(value = "fileDir",required = false,defaultValue = "img/def") String fileDir) {
         // 上传文件路径
         String url = sampleOSS.upload( file, fileDir);
@@ -60,7 +61,7 @@ public class CommonController extends CrudController {
      */
     @PostMapping("/uploadMinIo")
     @ResponseBody
-    @CrudLog
+    @CrudLog(title = "上传图片MinIo",businessType = BusinessType.INSERT)
     public Result uploadMinIoFile(MultipartFile file) throws Exception {
         if(StringUtils.isEmpty(file.getName())){
             return Result.failure("上传文件名称为空",file.getOriginalFilename());

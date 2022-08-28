@@ -1,5 +1,7 @@
 package io.github.yangyouwang.common.annotation;
 
+import io.github.yangyouwang.common.enums.BusinessType;
+
 import java.lang.annotation.*;
 
 /**
@@ -14,6 +16,13 @@ import java.lang.annotation.*;
 @Documented
 @Inherited
 public @interface CrudLog {
+    /**
+     * 描述
+     */
+    String title();
 
-    String value() default "";
+    /**
+     * 业务类型
+     */
+    BusinessType businessType();
 }

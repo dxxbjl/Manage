@@ -26,6 +26,7 @@
               <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
             </button>
             <button type="button" class="layui-btn layui-btn-primary" data-type="resetForm">重置</button>
+            <button type="button" sec:authorize="hasAuthority('log:del')" class="layui-btn layui-btn-danger" data-type="deleteAll">清空全部</button>
           </div>
         </div>
       </form>
@@ -63,6 +64,8 @@
           ,page: true //开启分页,
           ,cols: [[ //表头
               {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
+              {field: 'title', title: '业务标题'},
+              {field: 'businessType', title: '业务类型'},
               {field: 'packageName', title: '包名称'},
               {field: 'className', title: '类名称'},
               {field: 'methodName', title: '方法名称'},
@@ -107,10 +110,29 @@
          */
         del: function(id){
           layer.confirm('真的删除行么', function(index){
-            //向服务端发送删除指令
             $.ajax({
               type: 'DELETE',
               url:  ctx + '/sysLog/del/' + id,
+              contentType:'application/json;charset=UTF-8',
+              dataType: 'json',
+              success: function(result) {
+                layer.msg(result.message);
+                if (result.code === 200) {
+                  layer.close(index);
+                  table.reload('logTable');
+                }
+              }
+            });
+          });
+        },
+        /**
+         * 删除全部日志
+         */
+        deleteAll: function() {
+          layer.confirm('删除全部日志?', function(index){
+            $.ajax({
+              type: 'DELETE',
+              url:  ctx + '/sysLog/delAll',
               contentType:'application/json;charset=UTF-8',
               dataType: 'json',
               success: function(result) {

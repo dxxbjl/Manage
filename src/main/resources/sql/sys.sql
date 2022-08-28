@@ -80,6 +80,8 @@ INSERT INTO `sys_dict_value` VALUES (31, 19, 'N', '禁用', 2, 'Y', '', NULL, 'a
 DROP TABLE IF EXISTS `sys_log`;
 CREATE TABLE `sys_log`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `title` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '标题',
+  `business_type` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '业务类型',
   `package_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '包名称',
   `class_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '类名称',
   `method_name` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '方法名称',
@@ -138,7 +140,7 @@ INSERT INTO `sys_menu` VALUES (2007, '删除', 101, 3, NULL, '#', 'F', 'Y', 'rol
 INSERT INTO `sys_menu` VALUES (3005, '添加', 102, 1, NULL, '#', 'F', 'Y', 'menu:add', 'admin', '2021-03-31 16:55:04', 'admin', '2021-04-10 11:26:45', 0, '添加菜单');
 INSERT INTO `sys_menu` VALUES (3006, '编辑', 102, 2, NULL, '#', 'F', 'Y', 'menu:edit', 'admin', '2021-03-31 17:01:35', 'admin', '2021-04-10 11:27:40', 0, '编辑菜单');
 INSERT INTO `sys_menu` VALUES (3007, '删除', 102, 3, NULL, '#', 'F', 'Y', 'menu:del', 'admin', '2021-03-31 17:01:57', 'admin', '2021-04-10 11:27:49', 0, '删除菜单');
-INSERT INTO `sys_menu` VALUES (3008, '异常日志', 1, 5, 'layui-icon-chart-screen', '/sysLog/listPage', 'C', 'Y', 'log:list', 'admin', '2021-04-01 11:01:52', 'admin', '2021-05-12 11:17:10', 0, '异常日志列表');
+INSERT INTO `sys_menu` VALUES (3008, '日志管理', 1, 5, 'layui-icon-chart-screen', '/sysLog/listPage', 'C', 'Y', 'log:list', 'admin', '2021-04-01 11:01:52', 'admin', '2021-05-12 11:17:10', 0, '异常日志列表');
 INSERT INTO `sys_menu` VALUES (3013, '流程管理', 0, 3, 'layui-icon-release', '#', 'M', 'Y', '', 'admin', '2021-04-10 20:06:40', 'admin', '2021-05-07 12:11:21', 0, '工作流管理');
 INSERT INTO `sys_menu` VALUES (3014, '模型管理', 3013, 1, 'layui-icon-set-fill', '/actReModel/listPage', 'C', 'Y', 'model:list', 'admin', '2021-04-10 20:10:56', 'admin', '2021-05-12 11:19:24', 0, '模型管理');
 INSERT INTO `sys_menu` VALUES (3015, '添加', 3014, 1, NULL, '#', 'F', 'Y', 'model:add', 'admin', '2021-03-31 16:55:04', 'admin', '2021-04-10 11:26:53', 0, '添加模型');

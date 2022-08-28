@@ -26,6 +26,14 @@ public class SysLog implements Serializable {
     @TableId(type = IdType.AUTO)
     private Long id;
     /**
+     * 标题
+     */
+    private String title;
+    /**
+     * 业务类型
+     */
+    private String businessType;
+    /**
      * 包名称
      */
     private String packageName;

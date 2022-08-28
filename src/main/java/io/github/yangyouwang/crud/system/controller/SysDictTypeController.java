@@ -4,6 +4,7 @@ import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.base.CrudController;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.TableDataInfo;
+import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.crud.system.entity.SysDictType;
 import io.github.yangyouwang.crud.system.service.SysDictTypeService;
 import lombok.RequiredArgsConstructor;
@@ -68,6 +69,7 @@ public class SysDictTypeController extends CrudController {
      * @param sysDictType 请求字典列表参数
      * @return 请求列表
      */
+    @CrudLog(title = "查询字典类型分页列表",businessType = BusinessType.SELECT)
     @GetMapping("/page")
     @ResponseBody
     public TableDataInfo page(SysDictType sysDictType) {
@@ -81,7 +83,7 @@ public class SysDictTypeController extends CrudController {
      * @param sysDictType 添加字典参数
      * @return 添加状态
      */
-    @CrudLog
+    @CrudLog(title = "添加字典类型",businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
     public Result add(@RequestBody @Validated SysDictType sysDictType, BindingResult bindingResult){
@@ -97,7 +99,7 @@ public class SysDictTypeController extends CrudController {
      * @param sysDictType 编辑字典参数
      * @return 编辑状态
      */
-    @CrudLog
+    @CrudLog(title = "更新字典类型",businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public Result edit(@RequestBody @Validated SysDictType sysDictType, BindingResult bindingResult){
@@ -113,7 +115,7 @@ public class SysDictTypeController extends CrudController {
      * @param sysDictType 修改字典参数
      * @return 修改状态
      */
-    @CrudLog
+    @CrudLog(title = "更新字典类型状态",businessType = BusinessType.UPDATE)
     @PostMapping("/changeDictType")
     @ResponseBody
     public Result changeDictType(@RequestBody @Validated SysDictType sysDictType, BindingResult bindingResult){
@@ -129,7 +131,7 @@ public class SysDictTypeController extends CrudController {
      * @param id 字典id
      * @return 删除状态
      */
-    @CrudLog
+    @CrudLog(title = "删除字典类型",businessType = BusinessType.DELETE)
     @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result delKey(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){

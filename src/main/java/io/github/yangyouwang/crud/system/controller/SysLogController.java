@@ -5,6 +5,7 @@ import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.base.CrudController;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.TableDataInfo;
+import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.crud.system.entity.SysLog;
 import io.github.yangyouwang.crud.system.service.SysLogService;
 import lombok.RequiredArgsConstructor;
@@ -62,11 +63,23 @@ public class SysLogController extends CrudController {
      * @param id 日志id
      * @return 删除状态
      */
-    @CrudLog
+    @CrudLog(title = "删除日志",businessType = BusinessType.DELETE)
     @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
         boolean flag = sysLogService.removeById(id);
+        return Result.success(flag);
+    }
+
+    /**
+     * 删除全部日志请求
+     * @return 删除状态
+     */
+    @CrudLog(title = "删除全部日志",businessType = BusinessType.DELETE)
+    @DeleteMapping("/delAll")
+    @ResponseBody
+    public Result delAll(){
+        boolean flag = sysLogService.remove(new LambdaQueryWrapper<>());
         return Result.success(flag);
     }
 }

@@ -9,6 +9,7 @@ import io.github.yangyouwang.common.base.CrudController;
 import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.TableDataInfo;
+import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.core.util.SecurityUtils;
 import io.github.yangyouwang.crud.system.entity.SysUser;
 import io.github.yangyouwang.crud.system.model.ModifyPassDTO;
@@ -120,7 +121,7 @@ public class SysUserController extends CrudController {
      * @param resetPassDTO 重置用户密码对象
      * @return 重置密码状态
      */
-    @CrudLog
+    @CrudLog(title = "重置密码",businessType = BusinessType.UPDATE)
     @PostMapping("/resetPass")
     @ResponseBody
     public Result resetPass(@RequestBody @Validated ResetPassDTO resetPassDTO, BindingResult bindingResult){
@@ -136,7 +137,7 @@ public class SysUserController extends CrudController {
      * @param modifyPassDTO 修改密码对象
      * @return 修改状态
      */
-    @CrudLog
+    @CrudLog(title = "修改密码",businessType = BusinessType.UPDATE)
     @PostMapping("/modifyPass")
     @ResponseBody
     public Result modifyPass(@RequestBody @Validated ModifyPassDTO modifyPassDTO, BindingResult bindingResult) {
@@ -152,6 +153,7 @@ public class SysUserController extends CrudController {
      * @param sysUser 用户列表对象
      * @return 请求列表
      */
+    @CrudLog(title = "查询用户分页列表",businessType = BusinessType.SELECT)
     @GetMapping("/page")
     @ResponseBody
     public TableDataInfo page(SysUser sysUser) {
@@ -168,7 +170,7 @@ public class SysUserController extends CrudController {
      * @param sysUser 添加用户对象
      * @return 添加状态
      */
-    @CrudLog
+    @CrudLog(title = "添加用户",businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
     public Result add(@RequestBody @Validated SysUser sysUser, BindingResult bindingResult) {
@@ -184,7 +186,7 @@ public class SysUserController extends CrudController {
      * @param sysUser 编辑用户对象
      * @return 编辑状态
      */
-    @CrudLog
+    @CrudLog(title = "更新用户",businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public Result edit(@RequestBody @Validated SysUser sysUser, BindingResult bindingResult) {
@@ -200,7 +202,7 @@ public class SysUserController extends CrudController {
      * @param sysUser 编辑用户对象
      * @return 编辑状态
      */
-    @CrudLog
+    @CrudLog(title = "更新个人信息",businessType = BusinessType.UPDATE)
     @PostMapping("/editUserInfo")
     @ResponseBody
     public Result editUserInfo(@RequestBody @Validated SysUser sysUser, BindingResult bindingResult) {
@@ -216,7 +218,7 @@ public class SysUserController extends CrudController {
      * @param sysUser 修改用户状态对象
      * @return 修改状态
      */
-    @CrudLog
+    @CrudLog(title = "更新用户状态",businessType = BusinessType.UPDATE)
     @PostMapping("/changeUser")
     @ResponseBody
     public Result changeUser(@RequestBody @Validated SysUser sysUser, BindingResult bindingResult) {
@@ -232,7 +234,7 @@ public class SysUserController extends CrudController {
      * @param id 用户id
      * @return 删除状态
      */
-    @CrudLog
+    @CrudLog(title = "删除用户",businessType = BusinessType.DELETE)
     @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {

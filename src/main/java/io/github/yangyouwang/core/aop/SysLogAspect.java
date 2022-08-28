@@ -5,6 +5,7 @@ import io.github.yangyouwang.crud.system.mapper.SysLogMapper;
 import io.github.yangyouwang.crud.system.entity.SysLog;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -21,12 +22,12 @@ import java.util.Date;
  * @author yangyouwang
  * @title: SysLogAspect
  * @projectName crud
- * @description: 错误日志切面
+ * @description: 日志切面
  * @date 2021/4/18:37 AM
  */
 @Aspect
 @Component
-public class SysErrorLogAspect {
+public class SysLogAspect {
 
     @Resource
     private SysLogMapper sysLogMapper;
@@ -40,11 +41,40 @@ public class SysErrorLogAspect {
     }
 
     /**
+     * 方法返回后的通知
+     */
+    @AfterReturning(value = "logPointCut() && @annotation(crudLog)", returning = "obj")
+    public void doAfterReturning(JoinPoint joinPoint, CrudLog crudLog, Object obj) {
+        SysLog sysLog = handleLog(joinPoint, crudLog);
+        sysLog.setCreateTime(new Date());
+        sysLogMapper.insert(sysLog);
+    }
+
+    /**
      * 抛出异常后的通知
      */
     @AfterThrowing(value = "logPointCut() && @annotation(crudLog)", throwing = "e")
     private void logAfterThrowing(JoinPoint joinPoint, CrudLog crudLog, Exception e) {
+        SysLog sysLog = handleLog(joinPoint,crudLog);
+        StringWriter stackTraceWriter = new StringWriter();
+        //异常堆栈信息
+        e.printStackTrace(new PrintWriter(stackTraceWriter, true));
+        sysLog.setStackTrace(stackTraceWriter.toString());
+        //错误信息
+        String errMsg = e.getMessage();
+        sysLog.setErrMsg(errMsg);
+        //异常类型
+        String exceptionName = e.toString();
+        sysLog.setExceptionName(exceptionName);
+        sysLog.setCreateTime(new Date());
+        sysLogMapper.insert(sysLog);
+    }
+
+    private SysLog handleLog(JoinPoint joinPoint, CrudLog crudLog) {
         SysLog sysLog = new SysLog();
+        // 标题/业务类型
+        sysLog.setTitle(crudLog.title());
+        sysLog.setBusinessType(crudLog.businessType().type);
         // 类名称
         String className = joinPoint.getTarget().getClass().getSimpleName();
         sysLog.setClassName(className);
@@ -60,17 +90,6 @@ public class SysErrorLogAspect {
         // 参数名
         String[] argsNames = ((MethodSignature)joinPoint.getSignature()).getParameterNames();
         sysLog.setArgsName(StringUtils.join(argsNames));
-        StringWriter stackTraceWriter = new StringWriter();
-        //异常堆栈信息
-        e.printStackTrace(new PrintWriter(stackTraceWriter, true));
-        sysLog.setStackTrace(stackTraceWriter.toString());
-        //错误信息
-        String errMsg = e.getMessage();
-        sysLog.setErrMsg(errMsg);
-        //异常类型
-        String exceptionName = e.toString();
-        sysLog.setExceptionName(exceptionName);
-        sysLog.setCreateTime(new Date());
-        sysLogMapper.insert(sysLog);
+        return sysLog;
     }
 }

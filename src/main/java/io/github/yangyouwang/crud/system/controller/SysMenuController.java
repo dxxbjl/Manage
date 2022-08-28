@@ -6,6 +6,7 @@ import io.github.yangyouwang.common.base.CrudController;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.TreeSelectNode;
 import io.github.yangyouwang.common.domain.XmSelectNode;
+import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.crud.system.entity.SysMenu;
 import io.github.yangyouwang.crud.system.service.SysMenuService;
 import lombok.RequiredArgsConstructor;
@@ -75,6 +76,7 @@ public class SysMenuController extends CrudController {
      */
     @GetMapping("/page")
     @ResponseBody
+    @CrudLog(title = "查询菜单分页列表",businessType = BusinessType.SELECT)
     public Result page(SysMenu sysMenu) {
         List<SysMenu> list = sysMenuService.list(new LambdaQueryWrapper<SysMenu>()
                 .like(StringUtils.isNotBlank(sysMenu.getMenuName()), SysMenu::getMenuName , sysMenu.getMenuName()));
@@ -86,7 +88,7 @@ public class SysMenuController extends CrudController {
      * @param sysMenu 添加菜单对象
      * @return 添加状态
      */
-    @CrudLog
+    @CrudLog(title = "添加菜单",businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
     public Result add(@RequestBody @Validated SysMenu sysMenu, BindingResult bindingResult){
@@ -102,7 +104,7 @@ public class SysMenuController extends CrudController {
      * @param sysMenu 编辑菜单对象
      * @return 编辑状态
      */
-    @CrudLog
+    @CrudLog(title = "更新菜单",businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public Result edit(@RequestBody @Validated SysMenu sysMenu, BindingResult bindingResult){
@@ -118,7 +120,7 @@ public class SysMenuController extends CrudController {
      * @param sysMenu 更新菜单对象
      * @return 菜单状态
      */
-    @CrudLog
+    @CrudLog(title = "更新菜单状态",businessType = BusinessType.UPDATE)
     @PostMapping("/changeMenu")
     @ResponseBody
     public Result changeMenu(@RequestBody @Validated SysMenu sysMenu, BindingResult bindingResult){
@@ -134,7 +136,7 @@ public class SysMenuController extends CrudController {
      * @param id 删除id
      * @return 删除状态
      */
-    @CrudLog
+    @CrudLog(title = "删除菜单",businessType = BusinessType.DELETE)
     @DeleteMapping("/del/{id}")
     @ResponseBody
     public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){

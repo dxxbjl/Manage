@@ -9,7 +9,6 @@ import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import io.github.yangyouwang.common.annotation.ApiVersion;
-import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.annotation.PassToken;
 import io.github.yangyouwang.common.base.CrudController;
 import io.github.yangyouwang.common.constant.ApiVersionConstant;
@@ -52,7 +51,6 @@ public class CodeGeneratorController {
     })
     @GetMapping("")
     @PassToken
-    @CrudLog
     public Result codeGenerator(String moduleName,String ... tables) {
         createCode(moduleName,tables);
         // TODO: 2022/7/22 导入sql到菜单中
