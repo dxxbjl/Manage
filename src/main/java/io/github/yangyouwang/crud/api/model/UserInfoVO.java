@@ -1,8 +1,10 @@
 package io.github.yangyouwang.crud.api.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -25,9 +27,14 @@ public class UserInfoVO {
     private String avatar;
 
     @ApiModelProperty(value = "性别：1时是男性，值为2时是女性，值为0时是未知")
-    private String gender;
+    private Integer gender;
+
+    @ApiModelProperty(value = "性别：1时是男性，值为2时是女性，值为0时是未知")
+    private String genderLabel;
 
     @ApiModelProperty(value = "生日")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     private Date birthday;
 
     @ApiModelProperty(value = "手机号")

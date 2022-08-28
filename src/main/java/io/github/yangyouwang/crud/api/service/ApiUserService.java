@@ -101,6 +101,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
      * 根据用户id获取用户详情
      * @return 响应
      */
+    @Transactional(readOnly = true)
     public UserInfoVO getUserInfo() {
         Long userId = ApiContext.getUserId();
         User user = getById(userId);
@@ -111,7 +112,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         BeanUtils.copyProperties(user,userInfoVO);
         // 性别
         String sex = sysDictValueService.getDictValueName(ConfigConsts.DICT_KEY_SEX, user.getGender().toString());
-        userInfoVO.setGender(sex);
+        userInfoVO.setGenderLabel(sex);
         return userInfoVO;
     }
     /**
@@ -239,6 +240,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
      * @param userInfoDTO 用户信息
      * @return 响应
      */
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public boolean modifyUser(UserInfoDTO userInfoDTO) {
         Long userId = ApiContext.getUserId();
         User user = getById(userId);

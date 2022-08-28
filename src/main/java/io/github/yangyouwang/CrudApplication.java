@@ -25,7 +25,7 @@ public class CrudApplication {
 		ServerConfig serverConfig = SpringUtils.getBean(ServerConfig.class);
 		log.info("\n----------------------------------------------------------\n\t" +
 				"Application is running! Access URLs:\n\t" +
-				"Local访问网址:"+ serverConfig.getUrl()+ "\n" +
+				"访问网址:"+ serverConfig.getUrl()+ "\n" +
 				"----------------------------------------------------------");
 	}
 }

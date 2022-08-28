@@ -54,10 +54,9 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     User user = getById(id);
     // 性别
     String sex = sysDictValueService.getDictValueName(ConfigConsts.DICT_KEY_SEX, user.getGender().toString());
-
     UserInfoVO userInfoVO = new UserInfoVO();
     BeanUtils.copyProperties(user,userInfoVO);
-    userInfoVO.setGender(sex);
+    userInfoVO.setGenderLabel(sex);
     return userInfoVO;
   }
 }
