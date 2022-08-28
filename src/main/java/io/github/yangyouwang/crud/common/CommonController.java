@@ -1,4 +1,4 @@
-package io.github.yangyouwang.crud.system.controller;
+package io.github.yangyouwang.crud.common;
 
 import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.base.CrudController;
@@ -28,9 +28,9 @@ import java.util.Objects;
  */
 @Slf4j
 @Controller
-@RequestMapping("/sysCommon")
+@RequestMapping("/common")
 @RequiredArgsConstructor
-public class SysCommonController extends CrudController {
+public class CommonController extends CrudController {
 
     private final SampleOSS sampleOSS;
 
