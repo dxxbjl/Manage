@@ -33,18 +33,14 @@ public class AuthenticationFailureListener  implements ApplicationListener<Abstr
     public void onApplicationEvent(AbstractAuthenticationFailureEvent event) {
         // 登录账号
         String username = event.getAuthentication().getPrincipal().toString();
-        // 登录密码
-        String credentials = event.getAuthentication().getCredentials().toString();
         // 登录失败原因
         String message = StringUtil.getAuthenticationFailureMessage(event);
-        // 备注
-        String remark = String.format("username:%s; pass:%s; message:%s", username, credentials, message);
         // 请求IP
         String ip = ServletUtil.getClientIP(((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest(), "");
         SysLoginLog sysLoginLog = new SysLoginLog();
         sysLoginLog.setAccount(username);
         sysLoginLog.setLoginIp(ip);
-        sysLoginLog.setRemark(remark);
+        sysLoginLog.setRemark(message);
         sysLoginLogService.save(sysLoginLog);
     }
 }

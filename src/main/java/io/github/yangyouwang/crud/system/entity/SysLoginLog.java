@@ -28,7 +28,4 @@ public class SysLoginLog extends BaseEntity {
 
     @ApiModelProperty(value = "登录IP")
     private String loginIp;
-
-    @ApiModelProperty(value = "登录状态 0 失败 1 成功")
-    private Long loginStatus;
 }

@@ -65,8 +65,4 @@ public interface ConfigConsts {
      * 已发送
      */
     int SEND_HAS_BEEN_SENT = 2;
-    /**
-     * 登录成功状态
-     */
-    Long LOGIN_SUCCESS = 1L;
 }

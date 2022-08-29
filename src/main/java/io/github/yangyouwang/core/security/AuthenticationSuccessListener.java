@@ -1,7 +1,6 @@
 package io.github.yangyouwang.core.security;
 
 import cn.hutool.extra.servlet.ServletUtil;
-import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.crud.system.entity.SysLoginLog;
 import io.github.yangyouwang.crud.system.service.SysLoginLogService;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +38,7 @@ public class AuthenticationSuccessListener implements ApplicationListener<Authen
         SysLoginLog sysLoginLog = new SysLoginLog();
         sysLoginLog.setAccount(user.getUsername());
         sysLoginLog.setLoginIp(ip);
-        sysLoginLog.setLoginStatus(ConfigConsts.LOGIN_SUCCESS);
+        sysLoginLog.setRemark("登录成功");
         sysLoginLogService.save(sysLoginLog);
     }
 }

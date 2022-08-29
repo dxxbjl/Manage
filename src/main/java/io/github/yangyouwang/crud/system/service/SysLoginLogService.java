@@ -32,8 +32,6 @@ public class SysLoginLogService extends ServiceImpl<SysLoginLogMapper, SysLoginL
           .eq(!StringUtils.isEmpty(param.getAccount()), SysLoginLog::getAccount, param.getAccount())
           // 登录IP
           .eq(!StringUtils.isEmpty(param.getLoginIp()), SysLoginLog::getLoginIp, param.getLoginIp())
-          // 登录状态 0 失败 1 成功
-          .eq(param.getLoginStatus() != null, SysLoginLog::getLoginStatus, param.getLoginStatus())
     ;
     return list(queryWrapper);
   }
