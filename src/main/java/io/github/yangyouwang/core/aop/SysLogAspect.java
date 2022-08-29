@@ -16,7 +16,6 @@ import javax.annotation.Resource;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
-import java.util.Date;
 
 /**
  * @author yangyouwang
@@ -46,7 +45,6 @@ public class SysLogAspect {
     @AfterReturning(value = "logPointCut() && @annotation(crudLog)", returning = "obj")
     public void doAfterReturning(JoinPoint joinPoint, CrudLog crudLog, Object obj) {
         SysLog sysLog = handleLog(joinPoint, crudLog);
-        sysLog.setCreateTime(new Date());
         sysLogMapper.insert(sysLog);
     }
 
@@ -66,7 +64,6 @@ public class SysLogAspect {
         //异常类型
         String exceptionName = e.toString();
         sysLog.setExceptionName(exceptionName);
-        sysLog.setCreateTime(new Date());
         sysLogMapper.insert(sysLog);
     }
 

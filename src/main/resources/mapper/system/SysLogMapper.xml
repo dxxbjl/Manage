@@ -13,10 +13,11 @@
     <result column="exception_name" jdbcType="VARCHAR" property="exceptionName" />
     <result column="err_msg" jdbcType="VARCHAR" property="errMsg" />
     <result column="stack_trace" jdbcType="VARCHAR" property="stackTrace" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Base_Column_List">
     id, title, business_type, package_name, class_name, method_name, args_name, args_value, exception_name,
-    err_msg, stack_trace, create_time
+    err_msg, stack_trace, create_by, create_time
   </sql>
 </mapper>
