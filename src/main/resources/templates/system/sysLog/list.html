@@ -33,6 +33,7 @@
       <div class="layui-card-body">
         <table id="logTable" lay-filter="logTable"></table>
         <script type="text/html" id="tableBar">
+          <a sec:authorize="hasAuthority('log:info')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="info"><i class="layui-icon layui-icon-edit"></i>详情</a>
           <a sec:authorize="hasAuthority('log:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
         </script>
       </div>
@@ -71,9 +72,6 @@
               {field: 'methodName', title: '方法名称'},
               {field: 'argsName', title: '参数名'},
               {field: 'argsValue', title: '参数值'},
-              {field: 'exceptionName', title: '异常类型'},
-              {field: 'errMsg', title: '错误信息'},
-              {field: 'stackTrace', title: '异常堆栈信息'},
               {field: 'createTime', title: '创建时间'},
               {toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
           ]]
@@ -83,6 +81,8 @@
                 ,layEvent = obj.event;
         if(layEvent === 'del'){
           active.del(data.id);
+        } else if(layEvent === 'info') {
+          active.infoView(data.id);
         }
       });
       $('.layui-btn').on('click', function(){
@@ -106,7 +106,7 @@
         },
         /**
          * 删除
-         * @param id id
+         * @param id 主键
          */
         del: function(id){
           layer.confirm('真的删除行么', function(index){
@@ -143,6 +143,24 @@
                 }
               }
             });
+          });
+        },
+        /**
+         * 日志详情
+         * @param id 主键
+         * */
+        infoView: function(id){
+          layer.open({
+            type: 2
+            ,shade: 0.3
+            ,title: '日志详情'
+            ,content: ctx + '/sysLog/infoPage/' + id
+            ,maxmin: true
+            ,area: ['50%', '80%']
+            ,btn: ['关闭']
+            ,yes: function(index, layero){
+              layer.closeAll();
+            }
           });
         }
       }

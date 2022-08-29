@@ -11,6 +11,7 @@ import io.github.yangyouwang.crud.system.service.SysLogService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -81,5 +82,12 @@ public class SysLogController extends CrudController {
     public Result delAll(){
         boolean flag = sysLogService.remove(new LambdaQueryWrapper<>());
         return Result.success(flag);
+    }
+
+    @GetMapping("/infoPage/{id}")
+    public String infoPage(@Valid @NotNull(message = "id不能为空") @PathVariable Long id, ModelMap map){
+        SysLog sysLog = sysLogService.getById(id);
+        map.put("sysLog",sysLog);
+        return SUFFIX + "/info";
     }
 }

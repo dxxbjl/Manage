@@ -54,7 +54,7 @@ public class SysLogAspect {
      * 抛出异常后的通知
      */
     @AfterThrowing(value = "logPointCut() && @annotation(crudLog)", throwing = "e")
-    private void logAfterThrowing(JoinPoint joinPoint, CrudLog crudLog, Exception e) {
+    private void doAfterThrowing(JoinPoint joinPoint, CrudLog crudLog, Exception e) {
         SysLog sysLog = handleLog(joinPoint,crudLog);
         StringWriter stackTraceWriter = new StringWriter();
         //异常堆栈信息
