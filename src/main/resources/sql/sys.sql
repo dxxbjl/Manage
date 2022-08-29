@@ -100,6 +100,27 @@ CREATE TABLE `sys_log`  (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for sys_login_log
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_login_log`;
+CREATE TABLE `sys_login_log` (
+    `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '日志唯一ID',
+    `account` varchar(50) DEFAULT NULL COMMENT '账号',
+    `login_ip` varchar(20) DEFAULT NULL COMMENT '登录IP',
+    `login_status` bigint DEFAULT '0' COMMENT '登录状态 0 失败 1 成功',
+    `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '创建者',
+    `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+    `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
+    `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+    `deleted` int DEFAULT '0' COMMENT '逻辑删除 0 否、1 是',
+    `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '备注',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户登录日志记录表';
+-- ----------------------------
+-- Records of sys_login_log
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for sys_menu
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_menu`;
@@ -172,6 +193,7 @@ INSERT INTO `sys_menu` VALUES (3052, '暂停某个定时任务', 3043, 4, '', '#
 INSERT INTO `sys_menu` VALUES (3053, '恢复某个定时任务', 3043, 5, '', '#', 'F', 'Y', 'job:resume', 'admin', '2022-08-14 17:45:52', 'admin', '2022-08-14 17:46:10', 0, '');
 INSERT INTO `sys_menu` VALUES (3054, '用户管理', 3051, 1, 'layui-icon-home', '/app/user/listPage', 'C', 'Y', 'user:list', '', NULL, 'admin', '2022-08-27 08:56:40', 0, '');
 INSERT INTO `sys_menu` VALUES (3055, '用户详情', 3054, 1, '', '#', 'M', 'Y', 'user:info', 'admin', '2022-08-27 09:18:24', 'admin', '2022-08-27 09:18:34', 0, '');
+INSERT INTO `sys_menu` VALUES (3056, '登录日志管理', 1, 7, 'layui-icon-location', '/sysLoginLog/listPage', 'C', 'Y', 'sysLoginLog:list', '', NULL, 'admin', '2022-08-29 21:32:50', 0, '');
 
 -- ----------------------------
 -- Table structure for sys_role

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <title>登录日志记录</title>
+    <div th:replace="common/link::header"></div>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <form class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">账号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="account" placeholder="请输入账号" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">登录IP</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="loginIp" placeholder="请输入登录IP" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button type="button" class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                    <button type="button" class="layui-btn layui-btn-primary" data-type="resetForm">重置</button>
+                </div>
+            </div>
+        </form>
+        <div class="layui-card-body">
+            <table id="sysLoginLogTable" lay-filter="sysLoginLogTable"></table>
+            <script type="text/html" id="tableBar">
+                <a sec:authorize="hasAuthority('sysLoginLog:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+            </script>
+        </div>
+    </div>
+</div>
+<div th:replace="common/script::footer"></div>
+<script th:inline="javascript">
+    layui.config({
+        base: '/static/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'useradmin', 'table'], function() {
+        let $ = layui.$,
+            form = layui.form,
+            table = layui.table;
+        //监听搜索
+        form.on('submit(search)', function(data){
+            let field = data.field;
+            //执行重载
+            table.reload('sysLoginLogTable', {
+                where: field
+            });
+        });
+        // 查询列表接口
+        table.render({
+            elem: '#sysLoginLogTable'
+            ,height: 'full-110'
+            ,url:  ctx + '/sysLoginLog/page'
+            ,page: true //开启分页
+            ,cols: [[ //表头
+                {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
+                {field: 'account', title: '账号'},
+                {field: 'loginIp', title: '登录IP'},
+                {field: 'loginStatus', title: '登录状态 0 失败 1 成功'},
+                {toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
+            ]]
+        });
+        table.on('tool(sysLoginLogTable)', function(obj){
+            let data = obj.data //获得当前行数据
+                ,layEvent = obj.event;
+            if(layEvent === 'del'){
+                active.del(data.id);
+            }
+        });
+        $('.layui-btn').on('click', function(){
+            let type = $(this).data('type');
+            active[type] && active[type].call(this);
+        });
+        /* 触发弹层 */
+        let active = {
+            /**
+             * 重置
+             */
+            resetForm: function () {
+                $(".layui-form")[0].reset();
+                form.render();
+                table.reload('sysLoginLogTable', {
+                    where: {
+                        account: "",
+                        loginIp: "",
+                        loginStatus: ""
+                    }
+                });
+            },
+            /**
+             * 删除
+             * @param id id
+             */
+            del: function(id){
+                layer.confirm('真的删除行么', function(index){
+                    //向服务端发送删除指令
+                    $.ajax({
+                        type: 'DELETE',
+                        url:  ctx + '/sysLoginLog/remove/' + id,
+                        contentType:'application/json;charset=UTF-8',
+                        dataType: 'json',
+                        success: function(result) {
+                            layer.msg(result.message);
+                            if (result.code === 200) {
+                                layer.close(index);
+                                table.reload('sysLoginLogTable');
+                            }
+                        }
+                    });
+                });
+            }
+        }
+    });
+</script>
+</body>
+</html>
