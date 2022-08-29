@@ -10,21 +10,17 @@ package io.github.yangyouwang.common.enums;
  */
 public enum BusinessType {
     /**
-     * 新增数据
+     * 新增
      *  */
-    INSERT("新增数据"),
+    INSERT("新增"),
     /**
-     * 更新数据
+     * 更新
      *  */
-    UPDATE("更新数据"),
+    UPDATE("更新"),
     /**
-     * 删除数据
+     * 删除
      *  */
-    DELETE("删除数据"),
-    /**
-     * 查询数据
-     *  */
-    SELECT("查询数据");
+    DELETE("删除");
     /**
      * 业务类型
      *  */

@@ -76,7 +76,6 @@ public class SysMenuController extends CrudController {
      */
     @GetMapping("/page")
     @ResponseBody
-    @CrudLog(title = "查询菜单分页列表",businessType = BusinessType.SELECT)
     public Result page(SysMenu sysMenu) {
         List<SysMenu> list = sysMenuService.list(new LambdaQueryWrapper<SysMenu>()
                 .like(StringUtils.isNotBlank(sysMenu.getMenuName()), SysMenu::getMenuName , sysMenu.getMenuName()));

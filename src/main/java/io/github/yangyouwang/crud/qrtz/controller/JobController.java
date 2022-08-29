@@ -1,7 +1,9 @@
 package io.github.yangyouwang.crud.qrtz.controller;
 
+import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.base.CrudController;
 import io.github.yangyouwang.common.domain.TableDataInfo;
+import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.crud.qrtz.entity.Job;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.crud.qrtz.service.JobService;
@@ -67,7 +69,9 @@ public class JobController extends CrudController {
     return SUFFIX + "/add";
   }
 
-  @ApiOperation(value = "任务表新增")
+
+  @CrudLog(title = "新增任务",businessType = BusinessType.INSERT)
+  @ApiOperation(value = "任务新增")
   @PostMapping(value = "/add")
   @ResponseBody
   public Result add(@RequestBody @Validated Job param, BindingResult bindingResult) {
@@ -77,7 +81,7 @@ public class JobController extends CrudController {
       jobService.add(param);
     return Result.success();
   }
-
+  @CrudLog(title = "修改任务",businessType = BusinessType.UPDATE)
   @ApiOperation(value = "任务表修改")
   @PostMapping(value = "/modify")
   @ResponseBody
@@ -88,7 +92,7 @@ public class JobController extends CrudController {
     jobService.modify(param);
     return Result.success();
   }
-
+  @CrudLog(title = "删除任务",businessType = BusinessType.DELETE)
   @ApiOperation(value = "任务表删除(单个条目)")
   @DeleteMapping(value = "/remove/{id}")
   @ResponseBody
@@ -97,6 +101,7 @@ public class JobController extends CrudController {
     return Result.success();
   }
 
+  @CrudLog(title = "删除任务",businessType = BusinessType.DELETE)
   @ApiOperation(value = "任务表删除(多个条目)")
   @PostMapping(value = "/removes")
   @ResponseBody
@@ -110,6 +115,7 @@ public class JobController extends CrudController {
         return "qrtz/cron/index";
     }
 
+    @CrudLog(title = "暂停任务",businessType = BusinessType.UPDATE)
     @ApiOperation(value = "暂停某个定时任务")
     @GetMapping(value = "/pause/{id}")
     @ResponseBody
@@ -117,7 +123,7 @@ public class JobController extends CrudController {
         jobService.pauseJob(id);
         return Result.success();
     }
-
+    @CrudLog(title = "恢复任务",businessType = BusinessType.UPDATE)
     @ApiOperation(value = "恢复某个定时任务")
     @GetMapping(value = "/resume/{id}")
     @ResponseBody

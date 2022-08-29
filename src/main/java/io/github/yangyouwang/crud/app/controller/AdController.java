@@ -51,7 +51,6 @@ public class AdController extends CrudController {
   @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer")})
   @GetMapping(value = "/page")
   @ResponseBody
-  @CrudLog(title = "查询广告分页列表",businessType = BusinessType.SELECT)
   public TableDataInfo page(Ad param) {
     startPage();
     List<Ad> data = adService.page(param);

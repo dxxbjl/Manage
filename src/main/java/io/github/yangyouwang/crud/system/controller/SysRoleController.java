@@ -74,7 +74,6 @@ public class SysRoleController extends CrudController {
      * @param sysRole 请求角色列表对象
      * @return 请求列表
      */
-    @CrudLog(title = "查询角色分页列表",businessType = BusinessType.SELECT)
     @GetMapping("/page")
     @ResponseBody
     public TableDataInfo page(@Validated SysRole sysRole) {

@@ -69,7 +69,6 @@ public class SysDictTypeController extends CrudController {
      * @param sysDictType 请求字典列表参数
      * @return 请求列表
      */
-    @CrudLog(title = "查询字典类型分页列表",businessType = BusinessType.SELECT)
     @GetMapping("/page")
     @ResponseBody
     public TableDataInfo page(SysDictType sysDictType) {

@@ -153,7 +153,6 @@ public class SysUserController extends CrudController {
      * @param sysUser 用户列表对象
      * @return 请求列表
      */
-    @CrudLog(title = "查询用户分页列表",businessType = BusinessType.SELECT)
     @GetMapping("/page")
     @ResponseBody
     public TableDataInfo page(SysUser sysUser) {
