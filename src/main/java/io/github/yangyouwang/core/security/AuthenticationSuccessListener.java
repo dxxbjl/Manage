@@ -1,11 +1,19 @@
 package io.github.yangyouwang.core.security;
 
+import cn.hutool.extra.servlet.ServletUtil;
+import io.github.yangyouwang.common.constant.ConfigConsts;
+import io.github.yangyouwang.crud.system.entity.SysLoginLog;
 import io.github.yangyouwang.crud.system.service.SysLoginLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import java.util.Objects;
 
 /**
  * Description: 用户登录成功监听器事件<br/>
@@ -24,6 +32,14 @@ public class AuthenticationSuccessListener implements ApplicationListener<Authen
 
     @Override
     public void onApplicationEvent(AuthenticationSuccessEvent event) {
-        System.out.println("success");
+        // 登录账号
+        User user = (User) event.getAuthentication().getPrincipal();
+        // 请求IP
+        String ip = ServletUtil.getClientIP(((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest(), "");
+        SysLoginLog sysLoginLog = new SysLoginLog();
+        sysLoginLog.setAccount(user.getUsername());
+        sysLoginLog.setLoginIp(ip);
+        sysLoginLog.setLoginStatus(ConfigConsts.LOGIN_SUCCESS);
+        sysLoginLogService.save(sysLoginLog);
     }
 }

@@ -42,6 +42,7 @@ CREATE TABLE `sys_dict_type`  (
 INSERT INTO `sys_dict_type` VALUES (17, 'sex', '性别', 1, 'Y', 'admin', '2021-04-16 12:27:04', 'admin', '2022-06-25 21:47:42', 0, '性别字典');
 INSERT INTO `sys_dict_type` VALUES (18, 'menuType', '菜单类型', 2, 'Y', 'admin', '2021-04-16 20:42:06', 'admin', '2022-06-25 22:43:44', 0, '菜单类型');
 INSERT INTO `sys_dict_type` VALUES (19, 'enabled', '是否启用', 3, 'Y', 'admin', '2021-04-29 21:00:41', 'admin', '2021-12-09 23:51:44', 0, '是否启用');
+INSERT INTO `sys_dict_type` VALUES (20, 'loginStatus', '登录状态', 4, 'Y', 'admin', '2022-08-29 22:23:41', 'admin', '2022-08-29 22:24:14', 0, '登录状态');
 
 -- ----------------------------
 -- Table structure for sys_dict_value
@@ -73,6 +74,8 @@ INSERT INTO `sys_dict_value` VALUES (26, 18, 'F', '按钮', 3, 'Y', '', NULL, 'a
 INSERT INTO `sys_dict_value` VALUES (27, 17, '2', '未知', 2, 'Y', '', NULL, 'admin', '2022-06-25 21:26:22', NULL);
 INSERT INTO `sys_dict_value` VALUES (30, 19, 'Y', '启用', 1, 'Y', '', NULL, 'admin', '2022-06-25 21:29:01', NULL);
 INSERT INTO `sys_dict_value` VALUES (31, 19, 'N', '禁用', 2, 'Y', '', NULL, 'admin', '2022-06-25 21:29:13', NULL);
+INSERT INTO `sys_dict_value` VALUES (32, 20, '1', '登录成功', 1, 'Y', '', NULL, '', NULL, '登录成功');
+INSERT INTO `sys_dict_value` VALUES (33, 20, '0', '登录失败', 2, 'Y', '', NULL, '', NULL, '登录失败');
 
 -- ----------------------------
 -- Table structure for sys_log
@@ -104,9 +107,9 @@ CREATE TABLE `sys_log`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_login_log`;
 CREATE TABLE `sys_login_log` (
-    `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '日志唯一ID',
-    `account` varchar(50) DEFAULT NULL COMMENT '账号',
-    `login_ip` varchar(20) DEFAULT NULL COMMENT '登录IP',
+    `id` bigint NOT NULL AUTO_INCREMENT COMMENT '日志唯一ID',
+    `account` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '账号',
+    `login_ip` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '登录IP',
     `login_status` bigint DEFAULT '0' COMMENT '登录状态 0 失败 1 成功',
     `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '创建者',
     `create_time` datetime DEFAULT NULL COMMENT '创建时间',
@@ -115,7 +118,8 @@ CREATE TABLE `sys_login_log` (
     `deleted` int DEFAULT '0' COMMENT '逻辑删除 0 否、1 是',
     `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '备注',
     PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户登录日志记录表';
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT='用户登录日志记录表';
+
 -- ----------------------------
 -- Records of sys_login_log
 -- ----------------------------
@@ -194,6 +198,7 @@ INSERT INTO `sys_menu` VALUES (3053, '恢复某个定时任务', 3043, 5, '', '#
 INSERT INTO `sys_menu` VALUES (3054, '用户管理', 3051, 1, 'layui-icon-home', '/app/user/listPage', 'C', 'Y', 'user:list', '', NULL, 'admin', '2022-08-27 08:56:40', 0, '');
 INSERT INTO `sys_menu` VALUES (3055, '用户详情', 3054, 1, '', '#', 'M', 'Y', 'user:info', 'admin', '2022-08-27 09:18:24', 'admin', '2022-08-27 09:18:34', 0, '');
 INSERT INTO `sys_menu` VALUES (3056, '登录日志管理', 1, 7, 'layui-icon-location', '/sysLoginLog/listPage', 'C', 'Y', 'sysLoginLog:list', '', NULL, 'admin', '2022-08-29 21:32:50', 0, '');
+INSERT INTO `sys_menu` VALUES (3057, '删除登录日志', 3056, 1, '', '#', 'F', 'Y', 'sysLoginLog:del', 'admin', '2022-08-29 22:31:24', '', NULL, 0, '删除登录日志');
 
 -- ----------------------------
 -- Table structure for sys_role

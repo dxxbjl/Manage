@@ -1,12 +1,18 @@
 package io.github.yangyouwang.core.security;
 
+import cn.hutool.extra.servlet.ServletUtil;
 import io.github.yangyouwang.core.util.StringUtil;
+import io.github.yangyouwang.crud.system.entity.SysLoginLog;
 import io.github.yangyouwang.crud.system.service.SysLoginLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.event.*;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import java.util.Objects;
 
 /**
  * Description: 用户登录失败监听器事件<br/>
@@ -25,7 +31,20 @@ public class AuthenticationFailureListener  implements ApplicationListener<Abstr
 
     @Override
     public void onApplicationEvent(AbstractAuthenticationFailureEvent event) {
+        // 登录账号
+        String username = event.getAuthentication().getPrincipal().toString();
+        // 登录密码
+        String credentials = event.getAuthentication().getCredentials().toString();
+        // 登录失败原因
         String message = StringUtil.getAuthenticationFailureMessage(event);
-        System.out.println(message);
+        // 备注
+        String remark = String.format("username:%s; pass:%s; message:%s", username, credentials, message);
+        // 请求IP
+        String ip = ServletUtil.getClientIP(((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest(), "");
+        SysLoginLog sysLoginLog = new SysLoginLog();
+        sysLoginLog.setAccount(username);
+        sysLoginLog.setLoginIp(ip);
+        sysLoginLog.setRemark(remark);
+        sysLoginLogService.save(sysLoginLog);
     }
 }

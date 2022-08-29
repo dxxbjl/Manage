@@ -26,6 +26,7 @@
                         <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
                     </button>
                     <button type="button" class="layui-btn layui-btn-primary" data-type="resetForm">重置</button>
+                    <button type="button" sec:authorize="hasAuthority('sysLoginLog:del')" class="layui-btn layui-btn-danger" data-type="deleteAll">清空全部</button>
                 </div>
             </div>
         </form>
@@ -43,10 +44,11 @@
         base: '/static/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'useradmin', 'table'], function() {
+    }).use(['index', 'useradmin', 'table','crud'], function() {
         let $ = layui.$,
             form = layui.form,
-            table = layui.table;
+            table = layui.table,
+            crud = layui.crud;
         //监听搜索
         form.on('submit(search)', function(data){
             let field = data.field;
@@ -65,8 +67,10 @@
                 {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
                 {field: 'account', title: '账号'},
                 {field: 'loginIp', title: '登录IP'},
-                {field: 'loginStatus', title: '登录状态 0 失败 1 成功'},
-                {toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
+                {field: 'loginStatus', title: '状态', templet: function (d) { return crud.getDictValue('loginStatus',d.loginStatus);}},
+                {field: 'remark', title: '描述'},
+                {field: 'createTime', title: '登录时间'},
+                {toolbar: '#tableBar', title: '操作', width: 200, align:'center',fixed: 'right'}
             ]]
         });
         table.on('tool(sysLoginLogTable)', function(obj){
@@ -91,8 +95,7 @@
                 table.reload('sysLoginLogTable', {
                     where: {
                         account: "",
-                        loginIp: "",
-                        loginStatus: ""
+                        loginIp: ""
                     }
                 });
             },
@@ -105,7 +108,7 @@
                     //向服务端发送删除指令
                     $.ajax({
                         type: 'DELETE',
-                        url:  ctx + '/sysLoginLog/remove/' + id,
+                        url:  ctx + '/sysLoginLog/del/' + id,
                         contentType:'application/json;charset=UTF-8',
                         dataType: 'json',
                         success: function(result) {
@@ -117,7 +120,27 @@
                         }
                     });
                 });
-            }
+            },
+            /**
+             * 删除全部登录日志
+             */
+            deleteAll: function() {
+                layer.confirm('删除全部登录日志?', function(index){
+                    $.ajax({
+                        type: 'DELETE',
+                        url:  ctx + '/sysLoginLog/delAll',
+                        contentType:'application/json;charset=UTF-8',
+                        dataType: 'json',
+                        success: function(result) {
+                            layer.msg(result.message);
+                            if (result.code === 200) {
+                                layer.close(index);
+                                table.reload('sysLoginLogTable');
+                            }
+                        }
+                    });
+                });
+            },
         }
     });
 </script>
