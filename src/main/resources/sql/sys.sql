@@ -195,6 +195,7 @@ INSERT INTO `sys_menu` VALUES (3054, '用户管理', 3051, 1, 'layui-icon-home',
 INSERT INTO `sys_menu` VALUES (3055, '用户详情', 3054, 1, '', '#', 'M', 'Y', 'user:info', 'admin', '2022-08-27 09:18:24', 'admin', '2022-08-27 09:18:34', 0, '');
 INSERT INTO `sys_menu` VALUES (3056, '登录日志管理', 1, 7, 'layui-icon-location', '/sysLoginLog/listPage', 'C', 'Y', 'sysLoginLog:list', '', NULL, 'admin', '2022-08-29 21:32:50', 0, '');
 INSERT INTO `sys_menu` VALUES (3057, '删除登录日志', 3056, 1, '', '#', 'F', 'Y', 'sysLoginLog:del', 'admin', '2022-08-29 22:31:24', '', NULL, 0, '删除登录日志');
+INSERT INTO `sys_menu` VALUES (3058, '代码生成', 1, 8, 'layui-icon-flag', '/sysCodeGenerator/index', 'C', 'Y', '', 'admin', '2022-08-30 23:37:28', 'admin', '2022-08-30 23:39:09', 0, '');
 
 -- ----------------------------
 -- Table structure for sys_role

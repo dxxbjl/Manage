@@ -1,4 +1,4 @@
-package io.github.yangyouwang.crud.api.controller;
+package io.github.yangyouwang.crud.system.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
@@ -8,64 +8,60 @@ import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
-import io.github.yangyouwang.common.annotation.ApiVersion;
-import io.github.yangyouwang.common.annotation.PassToken;
 import io.github.yangyouwang.common.base.CrudController;
-import io.github.yangyouwang.common.constant.ApiVersionConstant;
 import io.github.yangyouwang.common.domain.BaseEntity;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.core.properties.CodeGeneratorProperties;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import io.github.yangyouwang.crud.system.model.CodeGeneratorDTO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
- * Description: 生成代码接口控制层 <br/>
- * date: 2022/6/28 10:30<br/>
+ * Description: 代码生成接口控制层 <br/>
+ * date: 2022/8/30 23:27<br/>
  *
  * @author yangyouwang<br />
  * @version v1.0
  * @since JDK 1.8
  */
-@RestController
-@RequestMapping("/api/{version}/code_generator")
-@Api(tags = "生成代码接口控制层")
-public class CodeGeneratorController {
+@Controller
+@RequestMapping("/sysCodeGenerator")
+@RequiredArgsConstructor
+public class SysCodeGeneratorController extends CrudController {
 
-    @Autowired
-    private CodeGeneratorProperties codeGeneratorProperties;
+    private static final String SUFFIX = "system/codeGenerator";
 
-    @ApiOperation(value="生成代码接口")
-    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType="query", name = "moduleName", value = "模块名", required = true, dataType = "String"),
-            @ApiImplicitParam(paramType="query", name = "tables", value = "表名", required = true, dataType = "String")
-    })
-    @GetMapping("")
-    @PassToken
-    public Result codeGenerator(String moduleName,String ... tables) {
-        createCode(moduleName,tables);
-        // TODO: 2022/7/22 导入sql到菜单中
-        return Result.success("生成代码在项目工程中");
+    private final CodeGeneratorProperties codeGeneratorProperties;
+
+    /**
+     * 跳转代码生成页面
+     * @return 代码生成页面
+     */
+    @GetMapping("/index")
+    public String listPage(){
+        return SUFFIX + "/index";
     }
 
     /**
-     * 代码生成
-     * @param moduleName 模块名
-     * @param tables 表名
+     * 代码生成接口
+     * @param codeGeneratorDTO 代码生成DTO
+     * @return 结果
      */
-    private void createCode(String moduleName, String... tables) {
+    @PostMapping("/create")
+    @ResponseBody
+    public Result codeGenerator(@RequestBody @Validated CodeGeneratorDTO codeGeneratorDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()){
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
+        }
         // 代码生成器
         AutoGenerator mpg = new AutoGenerator();
-
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
         String projectPath = System.getProperty("user.dir");
@@ -81,7 +77,6 @@ public class CodeGeneratorController {
         //定义生成的实体类中日期类型
         gc.setDateType(DateType.ONLY_DATE);
         mpg.setGlobalConfig(gc);
-
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
         dsc.setUrl(codeGeneratorProperties.getUrl());
@@ -89,13 +84,11 @@ public class CodeGeneratorController {
         dsc.setUsername(codeGeneratorProperties.getUsername());
         dsc.setPassword(codeGeneratorProperties.getPassword());
         mpg.setDataSource(dsc);
-
         // 包配置
         PackageConfig pc = new PackageConfig();
-        pc.setModuleName(moduleName);
+        pc.setModuleName(codeGeneratorDTO.getModuleName());
         pc.setParent("io.github.yangyouwang.crud");
         mpg.setPackageInfo(pc);
-
         // 自定义配置
         InjectionConfig cfg = new InjectionConfig() {
             @Override
@@ -103,7 +96,6 @@ public class CodeGeneratorController {
                 // to do nothing
             }
         };
-
         // 自定义输出配置
         List<FileOutConfig> focList = new ArrayList<>();
         // 自定义配置会被优先输出
@@ -156,10 +148,8 @@ public class CodeGeneratorController {
         });
         cfg.setFileOutConfigList(focList);
         mpg.setCfg(cfg);
-
         // 配置模板
         TemplateConfig templateConfig = new TemplateConfig();
-
         // 配置自定义输出模板
         //指定自定义模板路径，注意不要带上.ftl/.vm, 会根据使用的模板引擎自动识别
         templateConfig.setController("templates/ftl/java/controller.java");
@@ -168,7 +158,6 @@ public class CodeGeneratorController {
         templateConfig.setServiceImpl(null);
         templateConfig.setXml(null);
         mpg.setTemplate(templateConfig);
-
         // 策略配置
         StrategyConfig strategy = new StrategyConfig();
         strategy.setNaming(NamingStrategy.underline_to_camel);
@@ -178,6 +167,7 @@ public class CodeGeneratorController {
         strategy.setSuperEntityColumns("id","create_by","create_time","update_by","update_time","deleted","remark");
         strategy.setEntityLombokModel(true);
         strategy.setRestControllerStyle(false);
+        String[] tables = new String[]{codeGeneratorDTO.getTables()};
         strategy.setInclude(tables);
         //url中驼峰转连字符
         strategy.setControllerMappingHyphenStyle(true);
@@ -188,5 +178,6 @@ public class CodeGeneratorController {
         mpg.setStrategy(strategy);
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());
         mpg.execute();
+        return Result.success("生成代码在项目工程中");
     }
 }

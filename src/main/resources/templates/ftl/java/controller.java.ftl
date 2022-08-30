@@ -120,5 +120,5 @@ public class ${table.controllerName} {
      ${table.serviceName?uncap_first}.removes(ids);
      return Result.success();
    }
- }
- </#if>
+}
+</#if>

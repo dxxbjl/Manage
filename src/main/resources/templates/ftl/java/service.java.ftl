@@ -98,4 +98,4 @@ public class ${table.serviceName} extends ${superServiceImplClass}<${table.mappe
      removeByIds(ids);
    }
 }
- </#if>
+</#if>
