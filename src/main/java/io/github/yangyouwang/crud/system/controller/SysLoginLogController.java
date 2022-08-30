@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
  import org.springframework.stereotype.Controller;
@@ -42,6 +43,7 @@ public class SysLoginLogController extends CrudController {
     return SUFFIX + "/list";
   }
 
+  @PreAuthorize("hasAuthority('sysLoginLog:list')")
   @ApiOperation(value = "用户登录日志记录表分页列表", response = SysLoginLog.class)
   @ApiImplicitParams({
   @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer"),

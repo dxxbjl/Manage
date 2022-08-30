@@ -18,6 +18,7 @@ import io.github.yangyouwang.crud.system.model.SysUserDTO;
 import io.github.yangyouwang.crud.system.service.SysUserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -153,6 +154,7 @@ public class SysUserController extends CrudController {
      * @param sysUser 用户列表对象
      * @return 请求列表
      */
+    @PreAuthorize("hasAuthority('user:list')")
     @GetMapping("/page")
     @ResponseBody
     public TableDataInfo page(SysUser sysUser) {

@@ -6,6 +6,7 @@ import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.github.yangyouwang.crud.act.entity.ActReModel;
 import io.github.yangyouwang.crud.act.service.ActReModelService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -66,6 +67,7 @@ public class ActReModelController extends CrudController {
      * @param actReModel 模型列表对象
      * @return 请求列表
      */
+    @PreAuthorize("hasAuthority('model:list')")
     @GetMapping("/page")
     @ResponseBody
     public TableDataInfo page(ActReModel actReModel) {

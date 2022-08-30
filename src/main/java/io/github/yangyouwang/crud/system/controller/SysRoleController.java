@@ -11,6 +11,7 @@ import io.github.yangyouwang.crud.system.entity.SysRole;
 import io.github.yangyouwang.crud.system.service.SysRoleService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -74,6 +75,7 @@ public class SysRoleController extends CrudController {
      * @param sysRole 请求角色列表对象
      * @return 请求列表
      */
+    @PreAuthorize("hasAuthority('role:list')")
     @GetMapping("/page")
     @ResponseBody
     public TableDataInfo page(@Validated SysRole sysRole) {

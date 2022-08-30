@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 import org.springframework.ui.ModelMap;
@@ -40,6 +41,7 @@ public class UserController extends CrudController {
     return SUFFIX + "/list";
   }
 
+  @PreAuthorize("hasAuthority('user:list')")
   @ApiOperation(value = "用户表分页列表", response = User.class)
   @ApiImplicitParams({
   @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer"),

@@ -10,6 +10,7 @@ import io.github.yangyouwang.crud.system.entity.SysLog;
 import io.github.yangyouwang.crud.system.service.SysLogService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -49,6 +50,7 @@ public class SysLogController extends CrudController {
      * @param sysLog 日志列表对象
      * @return 请求列表
      */
+    @PreAuthorize("hasAuthority('log:list')")
     @GetMapping("/page")
     @ResponseBody
     public TableDataInfo page(SysLog sysLog) {

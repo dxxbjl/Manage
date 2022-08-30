@@ -8,6 +8,7 @@ import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.crud.system.entity.SysDictType;
 import io.github.yangyouwang.crud.system.service.SysDictTypeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -69,6 +70,7 @@ public class SysDictTypeController extends CrudController {
      * @param sysDictType 请求字典列表参数
      * @return 请求列表
      */
+    @PreAuthorize("hasAuthority('dictType:list')")
     @GetMapping("/page")
     @ResponseBody
     public TableDataInfo page(SysDictType sysDictType) {
