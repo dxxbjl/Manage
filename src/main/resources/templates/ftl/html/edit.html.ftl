@@ -7,7 +7,7 @@
 <body>
 <div class="layui-fluid">
   <div class="layui-row">
-    <div class="layui-form" lay-filter="${table.entityPath}_form" id="${table.entityPath}_form">
+    <div class="layui-form" lay-filter="${table.entityPath}Form" id="${table.entityPath}Form">
       <input type="hidden" name="id" id="id">
       <#list table.fields as field>
         <div class="layui-form-item">
@@ -34,12 +34,12 @@
             form = layui.form,
             crud = layui.crud,
             ${table.entityPath} = [[${r'${'}${table.entityPath}${r'}'}]];
-    form.val('${table.entityPath}_form',${table.entityPath});
+    form.val('${table.entityPath}Form',${table.entityPath});
     // 编辑
     form.on('submit(save-submit)', function(data) {
       $.ajax({
         type: 'POST',
-        url:  ctx + '<#if package.ModuleName??>/${package.ModuleName}</#if>/<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>/modify',
+        url:  ctx + '<#if package.ModuleName??>/${package.ModuleName}</#if>/${table.entityPath}/modify',
         data: JSON.stringify(data.field),
         contentType:'application/json;charset=UTF-8',
         dataType: 'json',

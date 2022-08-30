@@ -57,7 +57,7 @@
         table.render({
             elem: '#${table.entityPath}Table'
             ,height: 'full-110'
-            ,url:  ctx + '<#if package.ModuleName??>/${package.ModuleName}</#if>/<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>/page'
+            ,url:  ctx + '<#if package.ModuleName??>/${package.ModuleName}</#if>/${table.entityPath}/page'
             ,page: true //开启分页
             ,cols: [[ //表头
                 {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
@@ -104,7 +104,7 @@
                     type: 2
                     ,shade: 0.3
                     ,title: "添加${table.comment!}"
-                    ,content: ctx + '<#if package.ModuleName??>/${package.ModuleName}</#if>/<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>/addPage'
+                    ,content: ctx + '<#if package.ModuleName??>/${package.ModuleName}</#if>/${table.entityPath}/addPage'
                     ,maxmin: true
                     ,area: ['50%', '80%']
                     ,btn: ['确定', '取消']
@@ -123,7 +123,7 @@
                     type: 2
                     ,shade: 0.3
                     ,title: '修改${table.comment!}'
-                    ,content: ctx + '<#if package.ModuleName??>/${package.ModuleName}</#if>/<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>/editPage/' + id
+                    ,content: ctx + '<#if package.ModuleName??>/${package.ModuleName}</#if>/${table.entityPath}/editPage/' + id
                     ,maxmin: true
                     ,area: ['50%', '80%']
                     ,btn: ['确定', '取消']
@@ -142,7 +142,7 @@
                     //向服务端发送删除指令
                     $.ajax({
                         type: 'DELETE',
-                        url:  ctx + '<#if package.ModuleName??>/${package.ModuleName}</#if>/<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>/remove/' + id,
+                        url:  ctx + '<#if package.ModuleName??>/${package.ModuleName}</#if>/${table.entityPath}/remove/' + id,
                         contentType:'application/json;charset=UTF-8',
                         dataType: 'json',
                         success: function(result) {
