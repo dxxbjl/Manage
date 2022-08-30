@@ -29,9 +29,9 @@ public class SysLoginLogService extends ServiceImpl<SysLoginLogMapper, SysLoginL
     QueryWrapper<SysLoginLog> queryWrapper = new QueryWrapper<>();
     queryWrapper.lambda()
       // 账号
-          .eq(!StringUtils.isEmpty(param.getAccount()), SysLoginLog::getAccount, param.getAccount())
+          .like(!StringUtils.isEmpty(param.getAccount()), SysLoginLog::getAccount, param.getAccount())
           // 登录IP
-          .eq(!StringUtils.isEmpty(param.getLoginIp()), SysLoginLog::getLoginIp, param.getLoginIp())
+          .like(!StringUtils.isEmpty(param.getLoginIp()), SysLoginLog::getLoginIp, param.getLoginIp())
     ;
     return list(queryWrapper);
   }
