@@ -56,7 +56,7 @@ public class DateTimeUtil {
      * 日期差天数
      */
     public static Long getDisDay(String startDateStr){
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         try {
             Date startDate = formatter.parse(startDateStr);
             Date endDate = new DateTime();
@@ -119,7 +119,7 @@ public class DateTimeUtil {
      */
     public static Long dateToStamp(String time) {
         //设置时间格式，将该时间格式的时间转换为时间戳
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         try {
             Date date = simpleDateFormat.parse(time);
             return date.getTime();
@@ -137,7 +137,7 @@ public class DateTimeUtil {
      */
     public static String timeStamp2Date(String time) {
         Long timeLong = Long.parseLong(time);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//要转换的时间格式
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");//要转换的时间格式
         Date date;
         try {
             date = sdf.parse(sdf.format(timeLong));

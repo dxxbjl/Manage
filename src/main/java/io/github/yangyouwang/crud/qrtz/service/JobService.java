@@ -94,7 +94,7 @@ public class JobService extends ServiceImpl<JobMapper, Job> {
         /**启动*/
         scheduler.start();
       }
-      System.err.println("--------定时任务启动成功 "+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+" ------------");
+      System.err.println("--------定时任务启动成功 "+new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date())+" ------------");
     } catch (ClassNotFoundException | SchedulerException | InstantiationException | IllegalAccessException e) {
       throw new RuntimeException(String.format("创建定时任务出错:%s",e));
     }

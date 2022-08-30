@@ -42,7 +42,7 @@ public class SmsCode {
     private Integer sended;
 
     /** 创建时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     @TableField(value = "create_time",fill = FieldFill.INSERT)
     private Date createTime;
 }

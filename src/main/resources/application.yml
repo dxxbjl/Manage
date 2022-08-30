@@ -25,7 +25,7 @@ spring:
   # 格式化JSON日期
   jackson:
    time-zone: GMT+8
-   date-format: yyyy-MM-dd HH:mm:ss
+   date-format: yyyy-MM-dd hh:mm:ss
    default-property-inclusion: always
   quartz:
     #相关属性配置

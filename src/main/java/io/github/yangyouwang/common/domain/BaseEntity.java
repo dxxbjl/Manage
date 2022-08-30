@@ -25,7 +25,7 @@ public abstract class BaseEntity implements Serializable {
     private String createBy;
 
     /** 创建时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     @TableField(value = "create_time",fill = FieldFill.INSERT)
     private Date createTime;
 
@@ -34,7 +34,7 @@ public abstract class BaseEntity implements Serializable {
     private String updateBy;
 
     /** 更新时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     @TableField(value = "update_time",fill = FieldFill.UPDATE)
     private Date updateTime;
 
