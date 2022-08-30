@@ -6,7 +6,7 @@ import io.github.yangyouwang.common.enums.ResultStatus;
  * @author yangyouwang
  * @title: CrudException
  * @projectName crud
- * @description: 框架异常
+ * @description: 自定义异常
  * @date 2021/3/3010:10 PM
  */
 public class CrudException extends RuntimeException {

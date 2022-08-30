@@ -2,13 +2,11 @@ package io.github.yangyouwang.core.exception;
 
 import io.github.yangyouwang.common.domain.Result;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -24,18 +22,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
-    /**
-     * 处理权限的异常
-     */
-    @ExceptionHandler(value = AccessDeniedException.class)
-    public ModelAndView exceptionHandler(AccessDeniedException e){
-        log.error("发生权限异常！原因是:",e);
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("/error/500");
-        modelAndView.addObject("message", e.getMessage());
-        return modelAndView;
-    }
 
     /**
      * 参数校验错误
@@ -65,22 +51,22 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 抛出框架异常
+     * 抛出自定义异常
      */
     @ExceptionHandler(value = CrudException.class)
     @ResponseBody
     public Result exceptionHandler(CrudException e){
-        log.error("发生框架异常！原因是:",e);
+        log.error("自定义异常信息！原因是:",e);
         return Result.ok(e.getResultStatus());
     }
 
     /**
-     * 处理其他异常
+     * 处理其他异常信息
      */
-    @ExceptionHandler(value = Exception.class)
+    @ExceptionHandler(value = Throwable.class)
     @ResponseBody
-    public Result exceptionHandler(Exception e){
-        log.error("未知异常！原因是:",e);
+    public Result exceptionHandler(Throwable e){
+        log.error("其他异常信息！原因是:",e);
         return Result.failure(e.getMessage());
     }
 }
