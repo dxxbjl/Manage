@@ -24,7 +24,7 @@ public class ApiVersionCondition implements RequestCondition<ApiVersionCondition
      */
     private final static Pattern VERSION_PREFIX_PATTERN = Pattern.compile("v(\\d+)/");
 
-    private int apiVersion;
+    private final int apiVersion;
 
     public ApiVersionCondition(int apiVersion) {
         log.info("ApiVersionCondition apiVersion ==> " + apiVersion);
@@ -42,7 +42,7 @@ public class ApiVersionCondition implements RequestCondition<ApiVersionCondition
     public ApiVersionCondition getMatchingCondition(HttpServletRequest request) {
         Matcher matcher = VERSION_PREFIX_PATTERN.matcher(request.getRequestURI());
         if (matcher.find()) {
-            Integer version = Integer.valueOf(matcher.group(1));
+            int version = Integer.parseInt(matcher.group(1));
             // 当应用比配置更大的版本号时，它将采取提取
             if (version >= this.apiVersion) {
                 return this;

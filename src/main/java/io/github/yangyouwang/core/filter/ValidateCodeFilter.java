@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Objects;
 
 /**
  * @author yangyouwang
@@ -55,7 +56,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
             throw new CrudException(ResultStatus.VALIDATE_CODE_NULL_ERROR);
         }
         Object checkCode = request.getSession(false).getAttribute(ConfigConsts.IMAGE_CODE_SESSION);
-        if (null == checkCode) {
+        if (Objects.isNull(checkCode)) {
             throw new CrudException(ResultStatus.VALIDATE_CODE_NOT_EXIST_ERROR);
         }
         if (!StringUtils.equalsIgnoreCase(code,checkCode.toString())) {

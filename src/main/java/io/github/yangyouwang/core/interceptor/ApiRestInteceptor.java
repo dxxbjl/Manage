@@ -7,6 +7,7 @@ import io.github.yangyouwang.common.constant.JwtConstants;
 import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.core.util.JwtTokenUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -51,7 +52,8 @@ public class ApiRestInteceptor extends HandlerInterceptorAdapter {
         // 获取 HTTP HEAD 中的 TOKEN
         String authorization = request.getHeader(JwtConstants.AUTH_HEADER);
         // 校验 TOKEN
-        if (null != authorization && authorization.startsWith(JwtConstants.JWT_SEPARATOR)) {
+        if (StringUtils.isNotBlank(authorization) &&
+                authorization.startsWith(JwtConstants.JWT_SEPARATOR)) {
             boolean flag = JwtTokenUtil.checkJWT(authorization);
             if (flag) {
                 JwtTokenUtil.parseJWT(authorization);
