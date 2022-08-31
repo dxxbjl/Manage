@@ -4,9 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-
 /**
- * Description: 代码生成DTO <br/>
+ * Description: 代码配置VO <br/>
  * date: 2022/8/30 23:23<br/>
  *
  * @author yangyouwang<br />
@@ -14,18 +13,9 @@ import lombok.Data;
  * @since JDK 1.8
  */
 @Data
-@ApiModel("代码生成DTO")
-public class CodeGeneratorDTO {
-    /**
-     * 模块名
-     */
-    @ApiModelProperty("模块名")
-    private String moduleName;
-    /**
-     * 表名
-     */
-    @ApiModelProperty("表名")
-    private String tables;
+@ApiModel("代码配置VO")
+public class CodeConfigVO {
+
     /**
      * 数据库连接地址
      */

@@ -12,8 +12,10 @@ import io.github.yangyouwang.common.base.CrudController;
 import io.github.yangyouwang.common.domain.BaseEntity;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.core.properties.CodeGeneratorProperties;
+import io.github.yangyouwang.crud.system.model.CodeConfigVO;
 import io.github.yangyouwang.crud.system.model.CodeGeneratorDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -48,7 +50,11 @@ public class SysCodeGeneratorController extends CrudController {
      */
     @GetMapping("/index")
     public String indexPage(ModelMap map) {
-        map.put("config",codeGeneratorProperties);
+        CodeConfigVO codeConfigVO = new CodeConfigVO();
+        BeanUtils.copyProperties(codeGeneratorProperties,codeConfigVO);
+        String projectPath = System.getProperty("user.dir");
+        codeConfigVO.setProjectPath(projectPath);
+        map.put("codeConfig",codeConfigVO);
         return SUFFIX + "/index";
     }
 
@@ -89,11 +95,11 @@ public class SysCodeGeneratorController extends CrudController {
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
+        String projectPath = codeGeneratorDTO.getProjectPath();
         // 代码生成器
         AutoGenerator mpg = new AutoGenerator();
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
-        String projectPath = System.getProperty("user.dir");
         gc.setOutputDir(projectPath + "/src/main/java");
         gc.setAuthor(codeGeneratorDTO.getAuthor());
         gc.setOpen(false);

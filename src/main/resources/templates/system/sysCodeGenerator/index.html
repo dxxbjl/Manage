@@ -7,7 +7,7 @@
 <body>
 <div class="layui-fluid">
     <div class="layui-row">
-        <div class="layui-form" lay-filter="configForm" id="configForm">
+        <div class="layui-form" lay-filter="codeConfigForm" id="codeConfigForm">
             <div class="layui-form-item">
                 <label class="layui-form-label">数据库地址</label>
                 <div class="layui-input-inline">
@@ -53,6 +53,12 @@
                 </div>
             </div>
             <div class="layui-form-item">
+                <label class="layui-form-label">代码路径</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="projectPath" placeholder="请输入代码路径" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
                 <div class="layui-input-block">
                     <button type="button" class="layui-btn" lay-submit lay-filter="save-submit" id="save-submit">确认</button>
                 </div>
@@ -70,8 +76,8 @@
         let $ = layui.$,
             form = layui.form,
             crud = layui.crud,
-            config = [[${config}]];
-        form.val('configForm', config);
+            codeConfig = [[${codeConfig}]];
+        form.val('codeConfigForm', codeConfig);
         $.ajax({
             url: '/sysCodeGenerator/tableSelect',
             dataType: 'json',
