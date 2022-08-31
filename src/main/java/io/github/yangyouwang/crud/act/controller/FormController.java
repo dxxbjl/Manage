@@ -43,6 +43,11 @@ public class FormController extends CrudController {
     return SUFFIX + "/list";
   }
 
+  @GetMapping("/formBuilder")
+  public String formBuilder(){
+    return SUFFIX + "/formBuilder";
+  }
+
   @ApiOperation(value = "表单分页列表", response = Form.class)
   @ApiImplicitParams({
   @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer"),

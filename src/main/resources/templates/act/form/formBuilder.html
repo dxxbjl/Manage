@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>表单构建</title>
+    <div th:replace="common/link::header"></div>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="build-wrap"></div>
+</div>
+<div th:replace="common/script::footer"></div>
+<script th:src="@{/static/lib/jq/jquery-3.1.1.min.js}"></script>
+<script th:src="@{/static/lib/form-builder/form-builder.min.js}"></script>
+<script th:src="@{/static/lib/form-builder/form-render.min.js}"></script>
+<script th:inline="javascript">
+    layui.config({
+        base: '/static/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index', //主入口模块
+    }).use(['index', 'form','crud'], function(){
+        let $ = layui.$,
+            form = layui.form,
+            crud = layui.crud;
+        $('.build-wrap').formBuilder()
+    });
+</script>
+</body>
+</html>
