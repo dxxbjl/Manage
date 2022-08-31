@@ -287,4 +287,26 @@ CREATE TABLE `sys_user_role`  (
 INSERT INTO `sys_user_role` VALUES (1, 1);
 INSERT INTO `sys_user_role` VALUES (24, 2);
 
+
+-- ----------------------------
+-- Table structure for sys_form
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_form`;
+CREATE TABLE `sys_form`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `form_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '表单名称',
+  `form_data` text CHARACTER SET utf8 COLLATE utf8_bin NULL COMMENT '表单数据',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `deleted` int(11) NULL DEFAULT 0 COMMENT '逻辑删除 0 否、1 是',
+  `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci COMMENT = '表单' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_form
+-- ----------------------------
+
 SET FOREIGN_KEY_CHECKS = 1;

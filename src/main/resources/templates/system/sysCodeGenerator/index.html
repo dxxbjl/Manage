@@ -79,7 +79,7 @@
             codeConfig = [[${codeConfig}]];
         form.val('codeConfigForm', codeConfig);
         $.ajax({
-            url: '/sysCodeGenerator/tableSelect',
+            url: ctx + '/sysCodeGenerator/tableSelect',
             dataType: 'json',
             type: 'get',
             success: function (data) {
