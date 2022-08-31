@@ -20,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -49,6 +50,32 @@ public class SysCodeGeneratorController extends CrudController {
     public String indexPage(ModelMap map) {
         map.put("config",codeGeneratorProperties);
         return SUFFIX + "/index";
+    }
+
+    /**
+     * 查询表
+     * @return 表
+     */
+    @GetMapping("/tableSelect")
+    @ResponseBody
+    public List<String> tableSelect() {
+        List<String> tableNames = new ArrayList<>();
+        try {
+            Class.forName(codeGeneratorProperties.getDriverName());
+            Connection conn = DriverManager.getConnection(codeGeneratorProperties.getUrl(), codeGeneratorProperties.getUsername(), codeGeneratorProperties.getPassword());
+            // 获取数据库元数据
+            DatabaseMetaData databaseMetaData = conn.getMetaData();
+            System.out.println("conn.getCatalog() = " + conn.getCatalog());
+            ResultSet tableRet = databaseMetaData.getTables(conn.getCatalog(), "%", "%", new String[] { "TABLE" });
+            while (tableRet.next()) {
+                String tableName = (String) tableRet.getObject("TABLE_NAME");
+                System.out.println("tableName:" + tableName);
+                tableNames.add(tableName);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("数据库链接错误");
+        }
+        return tableNames;
     }
 
     /**

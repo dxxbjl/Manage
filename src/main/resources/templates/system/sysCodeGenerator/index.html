@@ -47,7 +47,9 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">表名</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="tables" lay-verify="required" placeholder="请输入表名" class="layui-input">
+                    <select name="tables" id="tables" lay-verify="required">
+                        <option value=""></option>
+                    </select>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -70,6 +72,17 @@
             crud = layui.crud,
             config = [[${config}]];
         form.val('configForm', config);
+        $.ajax({
+            url: '/sysCodeGenerator/tableSelect',
+            dataType: 'json',
+            type: 'get',
+            success: function (data) {
+                $.each(data, function (index, value) {
+                    $('#tables').append(new Option(value,value));
+                });
+                layui.form.render("select");
+            }
+        })
         form.on('submit(save-submit)', function(data) {
             $.ajax({
                 type: 'POST',
