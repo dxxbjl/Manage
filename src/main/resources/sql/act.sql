@@ -669,10 +669,10 @@ CREATE TABLE `act_ru_variable`  (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for act_form
+-- Table structure for act_form_data
 -- ----------------------------
-DROP TABLE IF EXISTS `act_form`;
-CREATE TABLE `act_form`  (
+DROP TABLE IF EXISTS `act_form_data`;
+CREATE TABLE `act_form_data`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `form_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '表单名称',
   `form_xml_data` text CHARACTER SET utf8 COLLATE utf8_bin NULL COMMENT '表单xml数据',
@@ -686,7 +686,7 @@ CREATE TABLE `act_form`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci COMMENT = '表单' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of act_form
+-- Records of act_form_data
 -- ----------------------------
 
 SET FOREIGN_KEY_CHECKS = 1;

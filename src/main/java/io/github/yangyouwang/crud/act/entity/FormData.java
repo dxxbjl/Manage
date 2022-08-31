@@ -17,9 +17,9 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("act_form")
+@TableName("act_form_data")
 @ApiModel(value="Form对象", description="表单")
-public class Form extends BaseEntity {
+public class FormData extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 

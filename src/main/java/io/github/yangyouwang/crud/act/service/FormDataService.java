@@ -1,7 +1,7 @@
 package io.github.yangyouwang.crud.act.service;
 
-import io.github.yangyouwang.crud.act.entity.Form;
-import io.github.yangyouwang.crud.act.mapper.FormMapper;
+import io.github.yangyouwang.crud.act.entity.FormData;
+import io.github.yangyouwang.crud.act.mapper.FormDataMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Service;
@@ -18,18 +18,18 @@ import java.util.List;
 * @since 2022-08-31
 */
 @Service
-public class FormService extends ServiceImpl<FormMapper, Form> {
+public class FormDataService extends ServiceImpl<FormDataMapper, FormData> {
 
   /**
   * 表单分页列表
   * @param param 参数
   * @return 结果
   */
-  public List<Form> page(Form param) {
-    QueryWrapper<Form> queryWrapper = new QueryWrapper<>();
+  public List<FormData> page(FormData param) {
+    QueryWrapper<FormData> queryWrapper = new QueryWrapper<>();
     queryWrapper.lambda()
       // 表单名称
-          .eq(!StringUtils.isEmpty(param.getFormName()), Form::getFormName, param.getFormName())
+          .eq(!StringUtils.isEmpty(param.getFormName()), FormData::getFormName, param.getFormName())
     ;
     return list(queryWrapper);
   }
@@ -39,7 +39,7 @@ public class FormService extends ServiceImpl<FormMapper, Form> {
   * @param id 主键
   * @return 结果
   */
-  public Form info(Long id) {
+  public FormData info(Long id) {
     return getById(id);
   }
 
@@ -47,7 +47,7 @@ public class FormService extends ServiceImpl<FormMapper, Form> {
   * 表单新增
   * @param param 根据需要进行传值
   */
-  public void add(Form param) {
+  public void add(FormData param) {
     save(param);
   }
 
@@ -55,7 +55,7 @@ public class FormService extends ServiceImpl<FormMapper, Form> {
   * 表单修改
   * @param param 根据需要进行传值
   */
-  public void modify(Form param) {
+  public void modify(FormData param) {
     updateById(param);
   }
 

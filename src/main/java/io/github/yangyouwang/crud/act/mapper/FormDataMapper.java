@@ -1,6 +1,6 @@
 package io.github.yangyouwang.crud.act.mapper;
 
-import io.github.yangyouwang.crud.act.entity.Form;
+import io.github.yangyouwang.crud.act.entity.FormData;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author yangyouwang
  * @since 2022-08-31
  */
-public interface FormMapper extends BaseMapper<Form> {
+public interface FormDataMapper extends BaseMapper<FormData> {
 
 }

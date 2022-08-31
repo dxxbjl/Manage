@@ -1,7 +1,7 @@
 package io.github.yangyouwang.crud.act.controller;
 
-import io.github.yangyouwang.crud.act.entity.Form;
-import io.github.yangyouwang.crud.act.service.FormService;
+import io.github.yangyouwang.crud.act.entity.FormData;
+import io.github.yangyouwang.crud.act.service.FormDataService;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.swagger.annotations.Api;
@@ -30,34 +30,34 @@ import java.util.List;
 */
 @Api(tags = "表单")
 @Controller
-@RequestMapping("/act/form")
-public class FormController extends CrudController {
+@RequestMapping("/act/formData")
+public class FormDataController extends CrudController {
 
-  private static final String SUFFIX = "/act/form";
+  private static final String SUFFIX = "/act/formData";
 
   @Autowired
-  private FormService formService;
+  private FormDataService formDataService;
 
   @GetMapping("/listPage")
   public String listPage(){
     return SUFFIX + "/list";
   }
 
-  @ApiOperation(value = "表单分页列表", response = Form.class)
+  @ApiOperation(value = "表单分页列表", response = FormData.class)
   @ApiImplicitParams({
   @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer"),
   @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer")})
   @GetMapping(value = "/page")
   @ResponseBody
-  public TableDataInfo page(Form param) {
+  public TableDataInfo page(FormData param) {
     startPage();
-    List<Form> data = formService.page(param);
+    List<FormData> data = formDataService.page(param);
     return getDataTable(data);
   }
 
    @GetMapping("/editPage/{id}")
    public String editPage(@Valid @NotNull(message = "id不能为空") @PathVariable Long id, ModelMap map){
-    Object data = formService.info(id);
+    Object data = formDataService.info(id);
     map.put("formData",data);
     return SUFFIX + "/edit";
   }
@@ -70,22 +70,22 @@ public class FormController extends CrudController {
   @ApiOperation(value = "表单新增")
   @PostMapping(value = "/add")
   @ResponseBody
-  public Result add(@RequestBody @Validated Form param,BindingResult bindingResult) {
+  public Result add(@RequestBody @Validated FormData param, BindingResult bindingResult) {
     if (bindingResult.hasErrors()){
         return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
     }
-    formService.add(param);
+    formDataService.add(param);
     return Result.success();
   }
 
   @ApiOperation(value = "表单修改")
   @PostMapping(value = "/modify")
   @ResponseBody
-  public Result modify(@RequestBody @Validated Form param,BindingResult bindingResult) {
+  public Result modify(@RequestBody @Validated FormData param, BindingResult bindingResult) {
     if (bindingResult.hasErrors()){
         return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
     }
-    formService.modify(param);
+    formDataService.modify(param);
     return Result.success();
   }
 
@@ -93,7 +93,7 @@ public class FormController extends CrudController {
   @DeleteMapping(value = "/remove/{id}")
   @ResponseBody
   public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
-    formService.remove(id);
+    formDataService.remove(id);
     return Result.success();
   }
 
@@ -101,7 +101,7 @@ public class FormController extends CrudController {
   @PostMapping(value = "/removes")
   @ResponseBody
   public Result removes(@RequestBody @Valid List<Long> ids) {
-     formService.removes(ids);
+    formDataService.removes(ids);
      return Result.success();
    }
 }

@@ -12,8 +12,9 @@
 <body>
 <div class="layui-fluid">
   <div class="layui-row">
-    <div class="layui-form" lay-filter="formDataForm" id="formDataForm">
-      <input type="hidden" name="id" id="id">
+    <div class="layui-col-md4">
+      <div class="layui-form" lay-filter="formDataForm" id="formDataForm">
+        <input type="hidden" name="id" id="id">
         <div class="layui-form-item">
           <label class="layui-form-label">表单名称</label>
           <div class="layui-input-inline">
@@ -26,13 +27,16 @@
             <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
           </div>
         </div>
-      <div class="layui-form-item layui-hide">
-        <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
+        <div class="layui-form-item layui-hide">
+          <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
+        </div>
       </div>
+    </div>
+    <div class="layui-col-md8">
+      <div class="build-wrap"></div>
     </div>
   </div>
 </div>
-<div class="build-wrap"></div>
 <div th:replace="common/script::footer"></div>
 <script th:src="@{/static/lib/form-builder/form-builder.min.js}"></script>
 <script th:src="@{/static/lib/form-builder/form-render.min.js}"></script>
@@ -59,7 +63,7 @@
       data.field.formJsonData = formBuilder.actions.getData('json');
       $.ajax({
         type: 'POST',
-        url:  ctx + '/act/form/modify',
+        url:  ctx + '/act/formData/modify',
         data: JSON.stringify(data.field),
         contentType:'application/json;charset=UTF-8',
         dataType: 'json',

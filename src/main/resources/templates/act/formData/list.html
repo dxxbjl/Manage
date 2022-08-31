@@ -20,15 +20,15 @@
                         <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
                     </button>
                     <button type="button" class="layui-btn layui-btn-primary" data-type="resetForm">重置</button>
-                    <button type="button" sec:authorize="hasAuthority('form:add')" class="layui-btn layuiadmin-btn-useradmin" data-type="addView">添加</button>
+                    <button type="button" sec:authorize="hasAuthority('formData:add')" class="layui-btn layuiadmin-btn-useradmin" data-type="addView">添加</button>
                 </div>
             </div>
         </form>
         <div class="layui-card-body">
-            <table id="formTable" lay-filter="formTable"></table>
+            <table id="formDataTable" lay-filter="formDataTable"></table>
             <script type="text/html" id="tableBar">
-                <a sec:authorize="hasAuthority('form:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-                <a sec:authorize="hasAuthority('form:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                <a sec:authorize="hasAuthority('formData:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+                <a sec:authorize="hasAuthority('formData:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
             </script>
         </div>
     </div>
@@ -47,24 +47,25 @@
         form.on('submit(search)', function(data){
             let field = data.field;
             //执行重载
-            table.reload('formTable', {
+            table.reload('formDataTable', {
                 where: field
             });
         });
         // 查询列表接口
         table.render({
-            elem: '#formTable'
+            elem: '#formDataTable'
             ,height: 'full-110'
-            ,url:  ctx + '/act/form/page'
+            ,url:  ctx + '/act/formData/page'
             ,page: true //开启分页
             ,cols: [[ //表头
                 {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
                 {field: 'formName', title: '表单名称'},
                 {field: 'remark', title: '描述'},
+                {field: 'createTime', title: '创建时间'},
                 {toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
             ]]
         });
-        table.on('tool(formTable)', function(obj){
+        table.on('tool(formDataTable)', function(obj){
             let data = obj.data //获得当前行数据
                 ,layEvent = obj.event;
             if(layEvent === 'edit'){
@@ -85,10 +86,9 @@
             resetForm: function () {
                 $(".layui-form")[0].reset();
                 form.render();
-                table.reload('formTable', {
+                table.reload('formDataTable', {
                     where: {
-                        formName: "",
-                        formData: ""
+                        formName: ""
                     }
                 });
             },
@@ -100,7 +100,7 @@
                     type: 2
                     ,shade: 0.3
                     ,title: "表单构建"
-                    ,content: ctx + '/act/form/addPage'
+                    ,content: ctx + '/act/formData/addPage'
                     ,maxmin: true
                     ,area: ['100%', '100%']
                     ,btn: ['确定', '取消']
@@ -119,7 +119,7 @@
                     type: 2
                     ,shade: 0.3
                     ,title: '表单构建'
-                    ,content: ctx + '/act/form/editPage/' + id
+                    ,content: ctx + '/act/formData/editPage/' + id
                     ,maxmin: true
                     ,area: ['100%', '100%']
                     ,btn: ['确定', '取消']
@@ -138,14 +138,14 @@
                     //向服务端发送删除指令
                     $.ajax({
                         type: 'DELETE',
-                        url:  ctx + '/act/form/remove/' + id,
+                        url:  ctx + '/act/formData/remove/' + id,
                         contentType:'application/json;charset=UTF-8',
                         dataType: 'json',
                         success: function(result) {
                             layer.msg(result.message);
                             if (result.code === 200) {
                                 layer.close(index);
-                                table.reload('formTable');
+                                table.reload('formDataTable');
                             }
                         }
                     });

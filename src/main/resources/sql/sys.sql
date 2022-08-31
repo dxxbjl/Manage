@@ -196,10 +196,10 @@ INSERT INTO `sys_menu` VALUES (3055, '用户详情', 3054, 1, '', '#', 'M', 'Y',
 INSERT INTO `sys_menu` VALUES (3056, '登录日志管理', 1, 7, 'layui-icon-location', '/sysLoginLog/listPage', 'C', 'Y', 'sysLoginLog:list', '', NULL, 'admin', '2022-08-29 21:32:50', 0, '');
 INSERT INTO `sys_menu` VALUES (3057, '删除登录日志', 3056, 1, '', '#', 'F', 'Y', 'sysLoginLog:del', 'admin', '2022-08-29 22:31:24', '', NULL, 0, '删除登录日志');
 INSERT INTO `sys_menu` VALUES (3058, '代码生成', 1, 8, 'layui-icon-flag', '/sysCodeGenerator/index', 'C', 'Y', '', 'admin', '2022-08-30 23:37:28', 'admin', '2022-08-30 23:39:09', 0, '');
-INSERT INTO `sys_menu` VALUES (3059, '表单管理', 3013, 1, 'layui-icon-home', '/act/form/listPage', 'C', 'Y', 'form:list', '', NULL, 'admin', '2022-08-31 17:16:14', 0, '');
-INSERT INTO `sys_menu` VALUES (3060, '添加表单', 3059, 1, '', '#', 'F', 'Y', 'form:add', '', NULL, '', NULL, 0, '');
-INSERT INTO `sys_menu` VALUES (3061, '编辑表单', 3059, 2, '', '#', 'F', 'Y', 'form:edit', '', NULL, '', NULL, 0, '');
-INSERT INTO `sys_menu` VALUES (3062, '删除表单', 3059, 3, '', '#', 'F', 'Y', 'form:del', '', NULL, '', NULL, 0, '');
+INSERT INTO `sys_menu` VALUES (3059, '表单管理', 3013, 1, 'layui-icon-home', '/act/formData/listPage', 'C', 'Y', 'formData:list', '', NULL, 'admin', '2022-08-31 17:16:14', 0, '');
+INSERT INTO `sys_menu` VALUES (3060, '添加表单', 3059, 1, '', '#', 'F', 'Y', 'formData:add', '', NULL, '', NULL, 0, '');
+INSERT INTO `sys_menu` VALUES (3061, '编辑表单', 3059, 2, '', '#', 'F', 'Y', 'formData:edit', '', NULL, '', NULL, 0, '');
+INSERT INTO `sys_menu` VALUES (3062, '删除表单', 3059, 3, '', '#', 'F', 'Y', 'formData:del', '', NULL, '', NULL, 0, '');
 
 -- ----------------------------
 -- Table structure for sys_role
