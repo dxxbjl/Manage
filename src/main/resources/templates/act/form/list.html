@@ -100,12 +100,12 @@
                     type: 2
                     ,shade: 0.3
                     ,title: "表单构建"
-                    ,content: ctx + '/act/form/formBuilder'
+                    ,content: ctx + '/act/form/addPage'
                     ,maxmin: true
                     ,area: ['100%', '100%']
                     ,btn: ['确定', '取消']
                     ,yes: function(index, layero){
-                        let submit = layero.find('iframe').contents().find('#save-submit');
+                        var submit = layero.find('iframe').contents().find('#save-submit');
                         submit.trigger('click');
                     }
                 });
@@ -118,13 +118,13 @@
                 layer.open({
                     type: 2
                     ,shade: 0.3
-                    ,title: '修改表单'
+                    ,title: '表单构建'
                     ,content: ctx + '/act/form/editPage/' + id
                     ,maxmin: true
-                    ,area: ['50%', '80%']
+                    ,area: ['100%', '100%']
                     ,btn: ['确定', '取消']
                     ,yes: function(index, layero){
-                        let submit = layero.find('iframe').contents().find('#save-submit');
+                        var submit = layero.find('iframe').contents().find('#save-submit');
                         submit.trigger('click');
                     }
                 });

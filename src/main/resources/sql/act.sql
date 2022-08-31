@@ -675,7 +675,8 @@ DROP TABLE IF EXISTS `act_form`;
 CREATE TABLE `act_form`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `form_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '表单名称',
-  `form_data` text CHARACTER SET utf8 COLLATE utf8_bin NULL COMMENT '表单数据',
+  `form_xml_data` text CHARACTER SET utf8 COLLATE utf8_bin NULL COMMENT '表单xml数据',
+  `form_json_data` text CHARACTER SET utf8 COLLATE utf8_bin NULL COMMENT '表单json数据',
   `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '创建者',
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',                           `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '更新者',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',

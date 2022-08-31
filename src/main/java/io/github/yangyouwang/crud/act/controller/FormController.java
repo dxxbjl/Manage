@@ -43,11 +43,6 @@ public class FormController extends CrudController {
     return SUFFIX + "/list";
   }
 
-  @GetMapping("/formBuilder")
-  public String formBuilder(){
-    return SUFFIX + "/formBuilder";
-  }
-
   @ApiOperation(value = "表单分页列表", response = Form.class)
   @ApiImplicitParams({
   @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer"),
@@ -63,7 +58,7 @@ public class FormController extends CrudController {
    @GetMapping("/editPage/{id}")
    public String editPage(@Valid @NotNull(message = "id不能为空") @PathVariable Long id, ModelMap map){
     Object data = formService.info(id);
-    map.put("form",data);
+    map.put("formData",data);
     return SUFFIX + "/edit";
   }
 

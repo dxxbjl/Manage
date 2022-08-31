@@ -26,8 +26,9 @@ public class Form extends BaseEntity {
     @ApiModelProperty(value = "表单名称")
     private String formName;
 
-    @ApiModelProperty(value = "表单数据")
-    private String formData;
+    @ApiModelProperty(value = "表单XML数据")
+    private String formXmlData;
 
-
+    @ApiModelProperty(value = "表单JSON数据")
+    private String formJsonData;
 }

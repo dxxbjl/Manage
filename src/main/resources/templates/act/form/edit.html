@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>编辑表单</title>
+  <title>表单构建</title>
   <div th:replace="common/link::header"></div>
+  <style>
+    body {
+      background-color: #fff;
+    }
+  </style>
 </head>
 <body>
 <div class="layui-fluid">
   <div class="layui-row">
-    <div class="layui-form" lay-filter="formForm" id="formForm">
+    <div class="layui-form" lay-filter="formDataForm" id="formDataForm">
       <input type="hidden" name="id" id="id">
         <div class="layui-form-item">
           <label class="layui-form-label">表单名称</label>
@@ -27,20 +32,31 @@
     </div>
   </div>
 </div>
+<div class="build-wrap"></div>
 <div th:replace="common/script::footer"></div>
+<script th:src="@{/static/lib/form-builder/form-builder.min.js}"></script>
+<script th:src="@{/static/lib/form-builder/form-render.min.js}"></script>
 <script th:inline="javascript">
   layui.config({
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
      index: 'lib/index', //主入口模块
-  }).use(['index', 'form','crud'], function(){
+  }).use(['index', 'form'], function(){
     let $ = layui.$,
             form = layui.form,
-            crud = layui.crud,
-            form = [[${form}]];
-    form.val('formForm',form);
-    // 编辑
+            formData = [[${formData}]];
+    // 初始化formBuilder
+    let formBuilder = $('.build-wrap').formBuilder();
+    // 通过json数据给formBuilder赋值
+    formBuilder.promise.then(formBuilder => {
+      formBuilder.actions.setData(formData.formJsonData);
+    });
+    // 表单赋值
+    form.val('formDataForm',formData);
+    // 编辑后提交
     form.on('submit(save-submit)', function(data) {
+      data.field.formXmlData = formBuilder.actions.getData('xml');
+      data.field.formJsonData = formBuilder.actions.getData('json');
       $.ajax({
         type: 'POST',
         url:  ctx + '/act/form/modify',
