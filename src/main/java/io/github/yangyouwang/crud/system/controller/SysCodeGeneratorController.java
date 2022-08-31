@@ -15,6 +15,7 @@ import io.github.yangyouwang.core.properties.CodeGeneratorProperties;
 import io.github.yangyouwang.crud.system.model.CodeGeneratorDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class SysCodeGeneratorController extends CrudController {
 
-    private static final String SUFFIX = "system/codeGenerator";
+    private static final String SUFFIX = "system/sysCodeGenerator";
 
     private final CodeGeneratorProperties codeGeneratorProperties;
 
@@ -45,7 +46,8 @@ public class SysCodeGeneratorController extends CrudController {
      * @return 代码生成页面
      */
     @GetMapping("/index")
-    public String listPage(){
+    public String indexPage(ModelMap map) {
+        map.put("config",codeGeneratorProperties);
         return SUFFIX + "/index";
     }
 
@@ -66,7 +68,7 @@ public class SysCodeGeneratorController extends CrudController {
         GlobalConfig gc = new GlobalConfig();
         String projectPath = System.getProperty("user.dir");
         gc.setOutputDir(projectPath + "/src/main/java");
-        gc.setAuthor(codeGeneratorProperties.getAuthor());
+        gc.setAuthor(codeGeneratorDTO.getAuthor());
         gc.setOpen(false);
         //实体属性 Swagger2 注解
         gc.setSwagger2(true);
@@ -79,10 +81,10 @@ public class SysCodeGeneratorController extends CrudController {
         mpg.setGlobalConfig(gc);
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl(codeGeneratorProperties.getUrl());
-        dsc.setDriverName(codeGeneratorProperties.getDriverName());
-        dsc.setUsername(codeGeneratorProperties.getUsername());
-        dsc.setPassword(codeGeneratorProperties.getPassword());
+        dsc.setUrl(codeGeneratorDTO.getUrl());
+        dsc.setDriverName(codeGeneratorDTO.getDriverName());
+        dsc.setUsername(codeGeneratorDTO.getUsername());
+        dsc.setPassword(codeGeneratorDTO.getPassword());
         mpg.setDataSource(dsc);
         // 包配置
         PackageConfig pc = new PackageConfig();

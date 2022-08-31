@@ -7,7 +7,37 @@
 <body>
 <div class="layui-fluid">
     <div class="layui-row">
-        <div class="layui-form" lay-filter="code-generator-form" id="code-generator-form">
+        <div class="layui-form" lay-filter="configForm" id="configForm">
+            <div class="layui-form-item">
+                <label class="layui-form-label">数据库地址</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="url" lay-verify="required" placeholder="请输入数据库地址" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">数据库驱动</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="driverName" lay-verify="required" placeholder="请输入数据库驱动" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">数据库账号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="username" lay-verify="required" placeholder="请输入数据库账号" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">数据库密码</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="password" lay-verify="required" placeholder="请输入数据库密码" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">作者</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="author" lay-verify="required" placeholder="请输入作者" class="layui-input">
+                </div>
+            </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">模块名</label>
                 <div class="layui-input-inline">
@@ -37,7 +67,9 @@
     }).use(['index', 'form','crud'], function(){
         let $ = layui.$,
             form = layui.form,
-            crud = layui.crud;
+            crud = layui.crud,
+            config = [[${config}]];
+        form.val('configForm', config);
         form.on('submit(save-submit)', function(data) {
             $.ajax({
                 type: 'POST',
