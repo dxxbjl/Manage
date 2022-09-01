@@ -40,38 +40,44 @@
     
     2.定义接口版本，在方法中配置@ApiVersion注解
     
-    3.跳过jwt安全认证只需要加入@PassToken注解
+    3.想要实现客户端不需要登录就可以访问后端接口，只需要在控制层的JAVA方法中加入@PassToken注解，然后该接口可以跳过jwt安全认证
     
-    4.使用@CrudLog注解可以将系统错误日志记录到数据库
-    
-    5.security菜单、按钮权限
+    4.在JAVA方法中加入@CrudLog注解可以将用户操作后台管理系统中操作日志记录到数据库sys_log日志表中
 ```
-@PreAuthorize("hasAuthority('权限标识')") // java代码
+// BusinessType.INSERT 新增操作
+// BusinessType.UPDATE 更新操作
+// BusinessType.DELETE 删除操作
+@CrudLog(title = "详细描述",businessType = BusinessType.INSERT) 
+```
+
+    5.代码中设置Security权限
+```
+@PreAuthorize("hasAuthority('权限标识')") // JAVA代码方法上加入注解
 sec:authorize="hasAuthority('权限标识')" // thymeleaf声明
 ```
     
-    6.获取header传入的token中userId
+    6.客户端向header处放入token值后发起请求，后端拦截客户端请求，获取并解析header中token，拿到用户的userId放入Map中，然后通过以下方法可以获取用户ID。
 ```
  Long userId = ApiContext.getUserId();
 ```
-    7.list转化tree结构
+    7.将list转化tree结构方法
 ```
  ListToTree treeBuilder = new ListToTreeImpl();
  treeBuilder.toTree(menus);
 ```
-    8.发送验证码
+    8.调用发送阿里云Email邮件方法
 ```
  SampleEmail.sample(邮件地址,标题,内容);
 ```
-    9.上传文件到oss
+    9.调用上传文件到阿里云oss或minio服务器方法
 ```
  SampleOSS.upload(文件流, 自定义上传路径);
 ```
-    10.发送短信
+    10.调用发送阿里云短信方法
 ```
  SampleSms.sendSms(手机号,模版号,签名); 
 ```   
-    11.字典渲染layui
+    11.前端获取字典值渲染layui表单页面
 ```
    layui.config({
         base: '/static/layuiadmin/' //静态资源所在路径
@@ -119,9 +125,16 @@ sec:authorize="hasAuthority('权限标识')" // thymeleaf声明
     工作流
    ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/9.png "9.png")
    ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/10.png "10.png")
-   
-    日志管理
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/16.png "16.png")
+
+    登录日志管理
    ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/11.png "11.png")
-   
+
+    操作日志管理
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/15.png "15.png")
+
     字典管理
    ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/12.png "12.png")
+
+    代码生成
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/17.png "17.png")
