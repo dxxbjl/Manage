@@ -1,66 +1,73 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>代码生成</title>
+    <title>代码生成器</title>
     <div th:replace="common/link::header"></div>
 </head>
 <body>
 <div class="layui-fluid">
     <div class="layui-row">
-        <div class="layui-form" lay-filter="codeConfigForm" id="codeConfigForm">
-            <div class="layui-form-item">
-                <label class="layui-form-label">数据库地址</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="url" lay-verify="required" placeholder="请输入数据库地址" class="layui-input">
-                </div>
+        <div class="layui-card">
+            <div class="layui-card-header layuiadmin-card-header-auto">
+                <h1>代码生成器</h1>
             </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">数据库驱动</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="driverName" lay-verify="required" placeholder="请输入数据库驱动" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">数据库账号</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="username" lay-verify="required" placeholder="请输入数据库账号" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">数据库密码</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="password" lay-verify="required" placeholder="请输入数据库密码" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">作者</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="author" lay-verify="required" placeholder="请输入作者" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">模块名</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="moduleName" lay-verify="required" placeholder="请输入模块名" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">表名</label>
-                <div class="layui-input-inline">
-                    <select name="tables" id="tables" lay-verify="required">
-                        <option value=""></option>
-                    </select>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">代码路径</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="projectPath" placeholder="请输入代码路径" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <button type="button" class="layui-btn" lay-submit lay-filter="save-submit" id="save-submit">确认</button>
+            <div class="layui-card-body">
+                <div class="layui-form" lay-filter="codeConfigForm" id="codeConfigForm">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">数据库地址</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="url" lay-verify="required" placeholder="请输入数据库地址" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">数据库驱动</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="driverName" lay-verify="required" placeholder="请输入数据库驱动" class="layui-input" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">数据库账号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="username" lay-verify="required" placeholder="请输入数据库账号" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">数据库密码</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="password" lay-verify="required" placeholder="请输入数据库密码" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">作者</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="author" lay-verify="required" placeholder="请输入作者" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">模块名</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="moduleName" lay-verify="required" placeholder="请输入模块名" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">表名</label>
+                        <div class="layui-input-inline">
+                            <select name="tables" id="tables" lay-verify="required">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">代码路径</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="projectPath" placeholder="请输入代码路径" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button type="button" class="layui-btn" lay-submit lay-filter="save-submit" id="save-submit">确认</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
