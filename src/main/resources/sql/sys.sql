@@ -42,6 +42,7 @@ CREATE TABLE `sys_dict_type`  (
 INSERT INTO `sys_dict_type` VALUES (17, 'sex', '性别', 1, 'Y', 'admin', '2021-04-16 12:27:04', 'admin', '2022-06-25 21:47:42', 0, '性别字典');
 INSERT INTO `sys_dict_type` VALUES (18, 'menuType', '菜单类型', 2, 'Y', 'admin', '2021-04-16 20:42:06', 'admin', '2022-06-25 22:43:44', 0, '菜单类型');
 INSERT INTO `sys_dict_type` VALUES (19, 'enabled', '是否启用', 3, 'Y', 'admin', '2021-04-29 21:00:41', 'admin', '2021-12-09 23:51:44', 0, '是否启用');
+INSERT INTO `sys_dict_type` VALUES (20, 'actCategory', '流程分类', 4, 'Y', 'admin', '2022-09-01 19:59:56', 'admin', '2022-09-01 20:09:15', 0, '流程分类');
 
 -- ----------------------------
 -- Table structure for sys_dict_value
@@ -73,6 +74,8 @@ INSERT INTO `sys_dict_value` VALUES (26, 18, 'F', '按钮', 3, 'Y', '', NULL, 'a
 INSERT INTO `sys_dict_value` VALUES (27, 17, '2', '未知', 2, 'Y', '', NULL, 'admin', '2022-06-25 21:26:22', NULL);
 INSERT INTO `sys_dict_value` VALUES (30, 19, 'Y', '启用', 1, 'Y', '', NULL, 'admin', '2022-06-25 21:29:01', NULL);
 INSERT INTO `sys_dict_value` VALUES (31, 19, 'N', '禁用', 2, 'Y', '', NULL, 'admin', '2022-06-25 21:29:13', NULL);
+INSERT INTO `sys_dict_value` VALUES (32, 20, 'leaveProcess', '请假流程', 1, 'Y', '', NULL, '', NULL, '');
+INSERT INTO `sys_dict_value` VALUES (33, 20, 'reimbursementProcess', '报销流程', 2, 'Y', '', NULL, '', NULL, '');
 
 -- ----------------------------
 -- Table structure for sys_log

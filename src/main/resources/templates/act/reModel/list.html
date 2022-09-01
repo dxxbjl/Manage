@@ -47,9 +47,10 @@
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
     index: 'lib/index' //主入口模块
-  }).use(['index', 'useradmin', 'table'], function() {
+  }).use(['index', 'useradmin', 'table','crud'], function() {
       var $ = layui.$,
               form = layui.form,
+              crud = layui.crud,
               table = layui.table;
       //监听搜索
       form.on('submit(search)', function(data){
@@ -67,13 +68,11 @@
           ,page: true //开启分页
           ,cols: [[ //表头
               {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'}
-              ,{field: 'rev', title: '乐观锁'}
               ,{field: 'name', title: '名称'}
               ,{field: 'key', title: 'KEY_'}
+              ,{field: 'category', title: "流程分类", templet: function (d) { return crud.getDictValue('actCategory',d.category);}}
               ,{field: 'createTime', title: '创建时间'}
-              ,{field: 'lastUpdateTime', title: '最新修改时间'}
               ,{field: 'version', title: '版本'}
-              ,{field: 'metaInfo', title: 'META_INFO_'}
               ,{field: 'deploymentId', title: '部署ID'}
               ,{toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
           ]]

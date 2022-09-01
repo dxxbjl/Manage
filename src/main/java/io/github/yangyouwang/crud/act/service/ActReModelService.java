@@ -72,6 +72,7 @@ public class ActReModelService extends ServiceImpl<ActReModelMapper, ActReModel>
             modelData.setMetaInfo(modelObjectNode.toString());
             modelData.setName(actReModel.getName());
             modelData.setKey(StringUtils.defaultString(actReModel.getKey()));
+            modelData.setCategory(actReModel.getCategory());
 
             repositoryService.saveModel(modelData);
             repositoryService.addModelEditorSource(modelData.getId(), editorNode.toString().getBytes("utf-8"));
