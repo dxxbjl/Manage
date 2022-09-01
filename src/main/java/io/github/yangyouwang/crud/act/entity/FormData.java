@@ -26,6 +26,9 @@ public class FormData extends BaseEntity {
     @ApiModelProperty(value = "表单名称")
     private String formName;
 
+    @ApiModelProperty(value = "表单KEY")
+    private String formKey;
+
     @ApiModelProperty(value = "表单XML数据")
     private String formXmlData;
 
