@@ -30,6 +30,8 @@ public class FormDataService extends ServiceImpl<FormDataMapper, FormData> {
     queryWrapper.lambda()
       // 表单名称
           .like(!StringUtils.isEmpty(param.getFormName()), FormData::getFormName, param.getFormName())
+      // 表单KEY
+          .like(!StringUtils.isEmpty(param.getFormKey()), FormData::getFormKey, param.getFormKey())
     ;
     return list(queryWrapper);
   }

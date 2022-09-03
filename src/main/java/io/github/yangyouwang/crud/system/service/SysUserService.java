@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.enums.ResultStatus;
+import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.crud.system.entity.SysRole;
 import io.github.yangyouwang.crud.system.entity.SysUser;
 import io.github.yangyouwang.crud.system.entity.SysUserRole;
@@ -97,16 +98,17 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
      * @param sysUser 添加用户对象
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public void add(SysUser sysUser) {
+    public String add(SysUser sysUser) {
         SysUser old = this.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUserName,sysUser.getUserName()));
         Assert.isNull(old,ResultStatus.USER_EXIST_ERROR.message);
-        String passWord = passwordEncoder.encode(sysUser.getPassWord());
+        String passWord = passwordEncoder.encode(ConfigConsts.DEFAULT_PASSWORD);
         sysUser.setPassWord(passWord);
         boolean flag = this.save(sysUser);
         if (flag) {
             SysUserService proxy = (SysUserService) AopContext.currentProxy();
             proxy.insertUserRoleBatch(sysUser.getId(), sysUser.getRoleIds());
         }
+        return String.format("初始化密码为：%s",ConfigConsts.DEFAULT_PASSWORD);
     }
 
     /**
@@ -185,14 +187,17 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
     /**
      * 重置密码
      * @param resetPassDTO 重置用户密码对象
-     * @return 重置密码
+     * @return 提示
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public boolean resetPass(ResetPassDTO resetPassDTO) {
-        SysUser sysUser = new SysUser();
-        sysUser.setId(resetPassDTO.getId());
-        String password = passwordEncoder.encode(resetPassDTO.getNewPassword());
+    public String resetPass(ResetPassDTO resetPassDTO) {
+        SysUser sysUser = this.getById(resetPassDTO.getId());
+        if (Objects.isNull(sysUser)) {
+            throw new CrudException(ResultStatus.USER_NO_EXIST_ERROR);
+        }
+        String password = passwordEncoder.encode(ConfigConsts.DEFAULT_PASSWORD);
         sysUser.setPassWord(password);
-        return this.updateById(sysUser);
+        this.updateById(sysUser);
+        return String.format("密码重置为：%s",ConfigConsts.DEFAULT_PASSWORD);
     }
 }

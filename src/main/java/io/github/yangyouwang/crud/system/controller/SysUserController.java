@@ -106,21 +106,9 @@ public class SysUserController extends CrudController {
     }
 
     /**
-     * 跳转重置密码
-     * @param id 用户id
-     * @return 重置密码页面
-     */
-    @GetMapping("/resetPassPage/{id}")
-    public String resetPass(@Valid @NotNull(message = "id不能为空") @PathVariable Long id, ModelMap map){
-        SysUser sysUser = sysUserService.detail(id);
-        map.put("sysUser",sysUser);
-        return SUFFIX + "/resetPass";
-    }
-
-    /**
      * 重置密码
      * @param resetPassDTO 重置用户密码对象
-     * @return 重置密码状态
+     * @return 提示
      */
     @CrudLog(title = "重置密码",businessType = BusinessType.UPDATE)
     @PostMapping("/resetPass")
@@ -129,8 +117,8 @@ public class SysUserController extends CrudController {
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        boolean flag = sysUserService.resetPass(resetPassDTO);
-        return Result.success(flag);
+        String msg = sysUserService.resetPass(resetPassDTO);
+        return Result.success(msg);
     }
 
     /**
@@ -178,8 +166,8 @@ public class SysUserController extends CrudController {
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        sysUserService.add(sysUser);
-        return Result.success();
+        String msg = sysUserService.add(sysUser);
+        return Result.success(msg);
     }
 
     /**

@@ -17,12 +17,7 @@ layui.define(['jquery','cookie'], function(exports){
          */
         getXmSelectTreeIds: function (select) {
             let value = select.getValue();
-            let ids = value.map(x => {return x.id});
-            if (ids == 0) {
-                layer.msg('请选择节点');
-                return ids;
-            }
-            return ids;
+            return value.map(x => {return x.id});
         },
         /**
          * 获取字典

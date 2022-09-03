@@ -2,7 +2,6 @@ package io.github.yangyouwang.crud.system.model;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
@@ -24,9 +23,4 @@ public class ResetPassDTO implements Serializable {
      */
     @NotNull(message = "id不能为空")
     private Long id;
-    /**
-     * 新密码
-     */
-    @NotBlank(message = "新密码不能为空")
-    private String newPassword;
 }

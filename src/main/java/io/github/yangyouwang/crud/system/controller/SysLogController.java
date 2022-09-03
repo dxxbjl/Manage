@@ -57,7 +57,8 @@ public class SysLogController extends CrudController {
         startPage();
         List<SysLog> list = sysLogService.list(new LambdaQueryWrapper<SysLog>()
                 .like(StringUtils.isNotBlank(sysLog.getClassName()), SysLog::getClassName , sysLog.getClassName())
-                .like(StringUtils.isNotBlank(sysLog.getMethodName()), SysLog::getMethodName , sysLog.getMethodName()));
+                .like(StringUtils.isNotBlank(sysLog.getMethodName()), SysLog::getMethodName , sysLog.getMethodName())
+                .orderByDesc(SysLog::getCreateTime));
         return getDataTable(list);
     }
 

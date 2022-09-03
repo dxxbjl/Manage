@@ -226,18 +226,23 @@
          * @param id id
          */
         pass: function (id) {
-          layer.open({
-            type: 2
-            ,shade: 0.3
-            ,title: "重置密码"
-            ,content: ctx + '/sysUser/resetPassPage/' + id
-            ,maxmin: true
-            ,area: ['50%', '50%']
-            ,btn: ['确定', '取消']
-            ,yes: function(index, layero){
-              let submit = layero.find('iframe').contents().find('#save-submit');
-              submit.trigger('click');
-            }
+          layer.confirm('确认重置密码么', function(index){
+            $.ajax({
+              type: 'POST',
+              url:  ctx + '/sysUser/resetPass',
+              data: JSON.stringify({
+                id
+              }),
+              contentType:'application/json;charset=UTF-8',
+              dataType: 'json',
+              success: function(result) {
+                layer.msg(result.message);
+                if (result.code === 200) {
+                  layer.close(index);
+                  table.reload('userTable');
+                }
+              }
+            });
           });
         }
       };

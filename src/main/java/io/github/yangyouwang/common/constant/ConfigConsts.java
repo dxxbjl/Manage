@@ -20,7 +20,6 @@ public interface ConfigConsts {
      * 是否启用 是
      */
     String ENABLED_YES = "Y";
-
     /**
      * 用户SheetName
      */
@@ -65,4 +64,8 @@ public interface ConfigConsts {
      * 已发送
      */
     int SEND_HAS_BEEN_SENT = 2;
+    /**
+     * 默认密码
+     */
+    String DEFAULT_PASSWORD = "123456";
 }
