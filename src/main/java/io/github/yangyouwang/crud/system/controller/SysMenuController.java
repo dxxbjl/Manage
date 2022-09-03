@@ -80,10 +80,10 @@ public class SysMenuController extends CrudController {
     @ResponseBody
     public Result page(SysMenu sysMenu) {
         List<SysMenu> list = sysMenuService.list(new LambdaQueryWrapper<SysMenu>()
-                .like(StringUtils.isNotBlank(sysMenu.getMenuName()), SysMenu::getMenuName , sysMenu.getMenuName()));
+                .like(StringUtils.isNotBlank(sysMenu.getMenuName()), SysMenu::getMenuName , sysMenu.getMenuName())
+                .orderByAsc(SysMenu::getParentId,SysMenu::getOrderNum));
         return Result.success(list);
     }
-
     /**
      * 添加请求
      * @param sysMenu 添加菜单对象

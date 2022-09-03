@@ -36,7 +36,8 @@ public class JobService extends ServiceImpl<JobMapper, Job> {
   */
   public List<Job> page(Job param) {
     LambdaQueryWrapper<Job> queryWrapper = new LambdaQueryWrapper<>();
-    queryWrapper.like(StringUtils.isNotBlank(param.getJobName()),Job::getJobName,param.getJobName());
+    queryWrapper.like(StringUtils.isNotBlank(param.getJobName()),Job::getJobName,param.getJobName())
+            .orderByDesc(Job::getCreateTime);
     List<Job> list = list(queryWrapper);
     list.forEach(job -> {
       TriggerKey triggerKey = TriggerKey.triggerKey(job.getJobName());

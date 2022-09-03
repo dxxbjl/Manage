@@ -82,7 +82,8 @@ public class SysRoleController extends CrudController {
         startPage();
         List<SysRole> list = sysRoleService.list(new LambdaQueryWrapper<SysRole>()
                 .like(StringUtils.isNotBlank(sysRole.getRoleName()), SysRole::getRoleName , sysRole.getRoleName())
-                .like(StringUtils.isNotBlank(sysRole.getRoleKey()), SysRole::getRoleKey , sysRole.getRoleKey()));
+                .like(StringUtils.isNotBlank(sysRole.getRoleKey()), SysRole::getRoleKey , sysRole.getRoleKey())
+                .orderByDesc(SysRole::getCreateTime));
         return getDataTable(list);
     }
 

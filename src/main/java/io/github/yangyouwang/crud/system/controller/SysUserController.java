@@ -150,7 +150,8 @@ public class SysUserController extends CrudController {
         List<SysUser> list = sysUserService.list(new LambdaQueryWrapper<SysUser>()
                 .like(StringUtils.isNotBlank(sysUser.getUserName()), SysUser::getUserName , sysUser.getUserName())
                 .like(StringUtils.isNotBlank(sysUser.getEmail()), SysUser::getEmail , sysUser.getEmail())
-                .like(StringUtils.isNotBlank(sysUser.getPhonenumber()), SysUser::getPhonenumber , sysUser.getPhonenumber()));
+                .like(StringUtils.isNotBlank(sysUser.getPhonenumber()), SysUser::getPhonenumber , sysUser.getPhonenumber())
+                .orderByDesc(SysUser::getCreateTime));
         return getDataTable(list);
     }
 
