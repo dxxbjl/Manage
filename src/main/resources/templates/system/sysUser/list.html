@@ -85,10 +85,11 @@
               {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
               {field: 'avatar', title: "头像",
                   templet: function (d) {
+                    let avatar = "/static/img/def_profile.jpg";
                     if (d.avatar) {
-                      return '<div><img alt="" width="50%" height="50%" src='+d.avatar+'></div>'
+                      avatar = d.avatar;
                     }
-                    return '<div><img alt="" width="50%" height="50%" src="/static/img/def_profile.jpg"></div>'
+                    return '<img width="50%" height="50%" src='+avatar+'>';
                   }
               },
               {field: 'userName', title: '账户'},
