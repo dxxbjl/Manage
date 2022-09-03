@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>编辑部门表</title>
+  <div th:replace="common/link::header"></div>
+</head>
+<body>
+<div class="layui-fluid">
+  <div class="layui-row">
+    <div class="layui-form" lay-filter="sysDeptForm" id="sysDeptForm">
+      <input type="hidden" name="id" id="id">
+        <div class="layui-form-item">
+          <label class="layui-form-label">部门名称</label>
+          <div class="layui-input-inline">
+            <input type="text" class="layui-input" name="deptName" placeholder="请输入部门名称"/>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">父级编号</label>
+          <div class="layui-input-inline">
+            <input id="parentId" name="parentId" type="hidden">
+            <div id="parentName" lay-filter="parentName" class="xm-select-demo"></div>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">负责人</label>
+          <div class="layui-input-inline">
+            <input type="text" class="layui-input" name="leader" placeholder="请输入负责人"/>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">手机号</label>
+          <div class="layui-input-inline">
+            <input type="text" lay-verify="required|phone|number" class="layui-input" name="phone" placeholder="请输入手机号"/>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">邮箱</label>
+          <div class="layui-input-inline">
+            <input type="text" lay-verify="required|email" class="layui-input" name="email" placeholder="请输入邮箱"/>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">显示顺序</label>
+          <div class="layui-input-inline">
+            <input type="number" class="layui-input" name="orderNum" placeholder="请输入显示顺序"/>
+          </div>
+        </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-block" id="enabled"></div>
+      </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">备注</label>
+          <div class="layui-input-inline">
+            <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
+          </div>
+        </div>
+      <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
+      </div>
+    </div>
+  </div>
+</div>
+<div th:replace="common/script::footer"></div>
+<script th:inline="javascript">
+  layui.config({
+      base: '/static/layuiadmin/' //静态资源所在路径
+  }).extend({
+     index: 'lib/index', //主入口模块
+  }).use(['index', 'form','crud','treeSelect'], function(){
+    let $ = layui.$,
+            treeSelect= layui.treeSelect,
+            form = layui.form,
+            crud = layui.crud,
+            sysDept = [[${sysDept}]];
+    form.val('sysDeptForm',sysDept);
+    // 编辑
+    form.on('submit(save-submit)', function(data) {
+      $.ajax({
+        type: 'POST',
+        url:  ctx + '/system/sysDept/modify',
+        data: JSON.stringify(data.field),
+        contentType:'application/json;charset=UTF-8',
+        dataType: 'json',
+        success: function(result) {
+          layer.msg(result.message);
+          if (result.code === 200) {
+            let index = parent.layer.getFrameIndex(window.name);
+            // 关闭
+            parent.layer.close(index);
+            // 刷新
+            parent.location.reload();
+          }
+        }
+      });
+    });
+    treeSelect.render({
+      // 选择器
+      elem: '#parentName',
+      // 数据
+      data: ctx + '/system/sysDept/treeSelect',
+      // 异步加载方式：get/post，默认get
+      type: 'get',
+      // 占位符
+      placeholder: '请输入父级编号',
+      // 是否开启搜索功能：true/false，默认false
+      search: true,
+      // 点击回调
+      click: function(d){
+        $("#parentId").val(d.current.id);
+        $("#parentName").val(d.current.name);
+      },
+      // 加载完成后的回调函数
+      success: function (d) {
+        console.log(d);
+        if (sysMenu.parentId !== 0) {
+          treeSelect.checkNode('parentName', sysDept.parentId);
+          treeSelect.refresh('parentName');
+        }
+      }
+    });
+    crud.setRadio("enabled","enabled",sysDept.enabled);
+  });
+</script>
+</body>
+</html>

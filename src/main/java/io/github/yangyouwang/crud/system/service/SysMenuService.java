@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.ArrayUtils;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -107,6 +108,9 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
     public List<TreeSelectNode> treeSelect() {
         List<SysMenu> menus = this.list(new LambdaQueryWrapper<SysMenu>()
                 .eq(SysMenu::getVisible,ConfigConsts.ENABLED_YES));
+        if (menus.isEmpty()) {
+            return Collections.emptyList();
+        }
         List<TreeSelectNode> result = menus.stream().map(sysMenu -> {
             TreeSelectNode treeNode = new TreeSelectNode();
             treeNode.setId(sysMenu.getId());
@@ -128,6 +132,9 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
     public List<XmSelectNode> xmSelect(Long[] ids) {
         List<SysMenu> menus = this.list(new LambdaQueryWrapper<SysMenu>()
                 .eq(SysMenu::getVisible,ConfigConsts.ENABLED_YES));
+        if (menus.isEmpty()) {
+            return Collections.emptyList();
+        }
         List<XmSelectNode> result = menus.stream().map(sysMenu -> {
             XmSelectNode treeNode = new XmSelectNode();
             treeNode.setName(sysMenu.getMenuName());

@@ -173,7 +173,7 @@ INSERT INTO `sys_menu` VALUES (3016, '编辑', 3014, 2, NULL, '#', 'F', 'Y', 'mo
 INSERT INTO `sys_menu` VALUES (3017, '删除', 3014, 3, NULL, '#', 'F', 'Y', 'model:del', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', 0, '删除模型');
 INSERT INTO `sys_menu` VALUES (3018, '设计', 3014, 3, NULL, '#', 'F', 'Y', 'model:design', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', 0, '设计模型');
 INSERT INTO `sys_menu` VALUES (3019, '部署', 3014, 3, NULL, '#', 'F', 'Y', 'model:deploy', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', 0, '部署模型');
-INSERT INTO `sys_menu` VALUES (3020, '字典管理', 1, 5, 'layui-icon-edit', '/sysDictType/listPage', 'C', 'Y', 'dictType:list', 'admin', '2021-04-13 13:35:48', 'admin', '2021-07-01 14:58:37', 0, '字典管理');
+INSERT INTO `sys_menu` VALUES (3020, '字典管理', 1, 4, 'layui-icon-edit', '/sysDictType/listPage', 'C', 'Y', 'dictType:list', 'admin', '2021-04-13 13:35:48', 'admin', '2022-09-03 23:50:38', 0, '字典管理');
 INSERT INTO `sys_menu` VALUES (3021, '添加', 3020, 1, NULL, '#', 'F', 'Y', 'dictType:add', 'admin', '2021-03-31 16:55:04', 'admin', '2021-04-10 11:26:53', 0, '添加字典');
 INSERT INTO `sys_menu` VALUES (3022, '编辑', 3020, 2, NULL, '#', 'F', 'Y', 'dictType:edit', 'admin', '2021-03-31 17:01:35', 'admin', '2021-04-10 11:27:05', 0, '编辑字典');
 INSERT INTO `sys_menu` VALUES (3023, '删除', 3020, 3, NULL, '#', 'F', 'Y', 'dictType:del', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', 0, '删除字典');
@@ -203,6 +203,10 @@ INSERT INTO `sys_menu` VALUES (3059, '表单管理', 3013, 1, 'layui-icon-home',
 INSERT INTO `sys_menu` VALUES (3060, '添加表单', 3059, 1, '', '#', 'F', 'Y', 'formData:add', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3061, '编辑表单', 3059, 2, '', '#', 'F', 'Y', 'formData:edit', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3062, '删除表单', 3059, 3, '', '#', 'F', 'Y', 'formData:del', '', NULL, '', NULL, 0, '');
+INSERT INTO `sys_menu` VALUES (3063, '部门管理', 1, 9, 'layui-icon-home', '/system/sysDept/listPage', 'C', 'Y', 'sysDept:list', '', NULL, 'admin', '2022-09-03 23:50:01', 0, '');
+INSERT INTO `sys_menu` VALUES (3064, '添加部门表', 3063, 1, '', '#', 'F', 'Y', 'sysDept:add', '', NULL, '', NULL, 0, '');
+INSERT INTO `sys_menu` VALUES (3065, '编辑部门表', 3063, 2, '', '#', 'F', 'Y', 'sysDept:edit', '', NULL, '', NULL, 0, '');
+INSERT INTO `sys_menu` VALUES (3066, '删除部门表', 3063, 3, '', '#', 'F', 'Y', 'sysDept:del', '', NULL, '', NULL, 0, '');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -293,5 +297,31 @@ CREATE TABLE `sys_user_role`  (
 -- ----------------------------
 INSERT INTO `sys_user_role` VALUES (1, 1);
 INSERT INTO `sys_user_role` VALUES (24, 2);
+
+-- ----------------------------
+-- Table structure for sys_dept
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_dept`;
+CREATE TABLE `sys_dept`  (
+  `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `dept_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '部门名称',
+  `order_num` int(0) NULL DEFAULT 0 COMMENT '显示顺序',
+  `leader` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '负责人',
+  `phone` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '手机号',
+  `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '邮箱',
+  `parent_id` bigint(0) NULL DEFAULT 0 COMMENT '父部门ID',
+  `enabled` char(1) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '是否启用 Y 启用 N 禁用',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `deleted` int(0) NULL DEFAULT 0 COMMENT '逻辑删除 0 否、1 是',
+  `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '备注',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '部门表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_dept
+-- ----------------------------
 
 SET FOREIGN_KEY_CHECKS = 1;
