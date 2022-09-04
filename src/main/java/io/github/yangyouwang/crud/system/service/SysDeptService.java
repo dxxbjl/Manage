@@ -36,19 +36,11 @@ public class SysDeptService extends ServiceImpl<SysDeptMapper, SysDept> {
     QueryWrapper<SysDept> queryWrapper = new QueryWrapper<>();
     queryWrapper.lambda()
       // 部门名称
-          .eq(!StringUtils.isEmpty(param.getDeptName()), SysDept::getDeptName, param.getDeptName())
-          // 显示顺序
-          .eq(param.getOrderNum() != null, SysDept::getOrderNum, param.getOrderNum())
+          .like(!StringUtils.isEmpty(param.getDeptName()), SysDept::getDeptName, param.getDeptName())
           // 负责人
           .eq(!StringUtils.isEmpty(param.getLeader()), SysDept::getLeader, param.getLeader())
           // 手机号
           .eq(!StringUtils.isEmpty(param.getPhone()), SysDept::getPhone, param.getPhone())
-          // 邮箱
-          .eq(!StringUtils.isEmpty(param.getEmail()), SysDept::getEmail, param.getEmail())
-          // 父部门ID
-          .eq(param.getParentId() != null, SysDept::getParentId, param.getParentId())
-          // 是否启用 Y 启用 N 禁用
-          .eq(!StringUtils.isEmpty(param.getEnabled()), SysDept::getEnabled, param.getEnabled())
           .orderByAsc(SysDept::getParentId,SysDept::getOrderNum)
     ;
     return list(queryWrapper);
