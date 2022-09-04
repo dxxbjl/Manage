@@ -18,6 +18,11 @@ import java.util.List;
 public class SysUser extends BaseEntity {
     private static final long serialVersionUID = 4718572152888798906L;
     /**
+     * 部门外键
+     */
+    private Long deptId;
+
+    /**
      * 账号
      */
     private String userName;

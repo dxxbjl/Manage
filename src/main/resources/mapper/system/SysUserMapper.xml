@@ -3,6 +3,7 @@
 <mapper namespace="io.github.yangyouwang.crud.system.mapper.SysUserMapper">
   <resultMap id="BaseResultMap" type="io.github.yangyouwang.crud.system.entity.SysUser">
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="dept_id" jdbcType="BIGINT" property="deptId" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="pass_word" jdbcType="VARCHAR" property="passWord" />
     <result column="enabled" jdbcType="CHAR" property="enabled" />
@@ -18,6 +19,7 @@
   </resultMap>
   <resultMap id="UserResultMap" type="io.github.yangyouwang.crud.system.entity.SysUser">
     <id column="user_id" jdbcType="BIGINT" property="id" />
+    <result column="dept_id" jdbcType="BIGINT" property="deptId" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="pass_word" jdbcType="VARCHAR" property="passWord" />
     <result column="enabled" jdbcType="CHAR" property="enabled" />
@@ -37,7 +39,7 @@
     </collection>
   </resultMap>
   <sql id="Base_Column_List">
-    id, user_name, pass_word, enabled, email, phonenumber, sex, avatar, create_by, create_time, 
+    id, dept_id, user_name, pass_word, enabled, email, phonenumber, sex, avatar, create_by, create_time,
     update_by, update_time, remark
   </sql>
    <select id="findUserByName" resultMap="UserResultMap">
