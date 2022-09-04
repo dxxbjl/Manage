@@ -1,12 +1,8 @@
 package io.github.yangyouwang.crud.system.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.github.yangyouwang.common.domain.BaseEntity;
 import lombok.Data;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author yangyouwang
@@ -51,13 +47,4 @@ public class SysMenu extends BaseEntity {
      * 权限标识
      */
     private String perms;
-
-    /** 子菜单 */
-    @TableField(exist = false)
-    private List<SysMenu> children = new ArrayList<>();
-    /**
-     * 父菜单名称
-     */
-    @TableField(exist = false)
-    private String parentName;
 }

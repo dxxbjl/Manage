@@ -73,16 +73,6 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
     }
 
     /**
-     * 跳转编辑
-     * @param id 菜单id
-     * @return 编辑页面
-     */
-    @Transactional(readOnly = true)
-    public SysMenu detail(Long id) {
-        return sysMenuMapper.findMenuById(id);
-    }
-
-    /**
      * 删除请求
      * @param id 菜单id
      */

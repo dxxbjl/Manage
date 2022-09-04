@@ -114,7 +114,7 @@
       // 加载完成后的回调函数
       success: function (d) {
         console.log(d);
-        if (sysMenu.parentId !== 0) {
+        if (sysDept.parentId !== 0) {
           treeSelect.checkNode('parentName', sysDept.parentId);
           treeSelect.refresh('parentName');
         }

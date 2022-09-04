@@ -1,15 +1,10 @@
 package io.github.yangyouwang.crud.system.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import io.github.yangyouwang.common.domain.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * <p>
  * 部门表
@@ -45,13 +40,4 @@ public class SysDept extends BaseEntity {
 
     @ApiModelProperty(value = "是否启用 Y 启用 N 禁用")
     private String enabled;
-
-    /** 子部门 */
-    @TableField(exist = false)
-    private List<SysDept> children = new ArrayList<>();
-    /**
-     * 父部门名称
-     */
-    @TableField(exist = false)
-    private String parentName;
 }
