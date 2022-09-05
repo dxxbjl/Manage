@@ -34,7 +34,7 @@
                     <button type="button" class="layui-btn layui-btn-primary" data-type="resetForm">重置</button>
                     <button type="button" class="layui-btn layuiadmin-btn-useradmin" data-type="expand">全部展开</button>
                     <button type="button" class="layui-btn layuiadmin-btn-useradmin" data-type="fold">全部折叠</button>
-                    <button type="button" sec:authorize="hasAuthority('sysDept:add')" class="layui-btn layuiadmin-btn-useradmin" data-type="addViewDef">添加</button>
+                    <button type="button" sec:authorize="hasAuthority('sysDept:add')" class="layui-btn layuiadmin-btn-useradmin" data-type="addView">添加</button>
                 </div>
             </div>
         </form>
@@ -140,18 +140,16 @@
             /**
              * 添加
              * */
-            addViewDef: function() {
-                active.addView(0);
-            },
-            /**
-             * 添加
-             * */
-            addView: function(id){
+            addView: function(id) {
+                let url = ctx + '/system/sysDept/addPage';
+                if (id) {
+                    url = url + '?id=' + id;
+                }
                 layer.open({
                     type: 2
                     ,shade: 0.3
                     ,title: "添加部门表"
-                    ,content: ctx + '/system/sysDept/addPage?id='+id
+                    ,content: url
                     ,maxmin: true
                     ,area: ['50%', '80%']
                     ,btn: ['确定', '取消']

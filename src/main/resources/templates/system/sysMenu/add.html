@@ -118,9 +118,8 @@
       },
       // 加载完成后的回调函数
       success: function (d) {
-        console.log(d);
-        $("#parentId").val(parentId);
-        if (parentId !== 0) {
+        if (parentId) {
+          $("#parentId").val(parentId);
           treeSelect.checkNode('parentName', parentId);
           treeSelect.refresh('parentName');
         }

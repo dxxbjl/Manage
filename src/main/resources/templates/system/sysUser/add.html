@@ -192,11 +192,6 @@
         click: function(d){
           $("#deptId").val(d.current.id);
           $("#deptName").val(d.current.name);
-        },
-        // 加载完成后的回调函数
-        success: function (d) {
-          console.log(d);
-          $("#deptId").val(d.current.id);
         }
       });
       crud.setRadio("enabled","enabled","Y");
