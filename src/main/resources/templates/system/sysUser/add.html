@@ -52,6 +52,13 @@
         </div>
       </div>
       <div class="layui-form-item">
+        <label class="layui-form-label">部门</label>
+        <div class="layui-input-inline">
+          <input id="deptId" name="deptId" type="hidden">
+          <div id="deptName" lay-filter="deptName" class="xm-select-demo"></div>
+        </div>
+      </div>
+      <div class="layui-form-item">
         <label class="layui-form-label">备注</label>
         <div class="layui-input-inline">
           <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
@@ -70,9 +77,10 @@
   }).extend({
      index: 'lib/index', //主入口模块
      xmSelect: 'xm-select'
-  }).use(['index', 'form','xmSelect','upload','crud'], function(){
+  }).use(['index', 'form','xmSelect','upload','crud','treeSelect'], function(){
     let $ = layui.$,
             xmSelect = layui.xmSelect,
+            treeSelect = layui.treeSelect,
             upload = layui.upload,
             crud = layui.crud,
             form = layui.form;
@@ -168,6 +176,28 @@
                   uploadInst.upload();
               });
           }
+      });
+      treeSelect.render({
+        // 选择器
+        elem: '#deptName',
+        // 数据
+        data: ctx + '/system/sysDept/treeSelect',
+        // 异步加载方式：get/post，默认get
+        type: 'get',
+        // 占位符
+        placeholder: '请输入部门',
+        // 是否开启搜索功能：true/false，默认false
+        search: true,
+        // 点击回调
+        click: function(d){
+          $("#deptId").val(d.current.id);
+          $("#deptName").val(d.current.name);
+        },
+        // 加载完成后的回调函数
+        success: function (d) {
+          console.log(d);
+          $("#deptId").val(d.current.id);
+        }
       });
       crud.setRadio("enabled","enabled","Y");
       crud.setRadio("sex","sex","0");

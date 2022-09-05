@@ -53,6 +53,13 @@
         </div>
       </div>
       <div class="layui-form-item">
+        <label class="layui-form-label">部门</label>
+        <div class="layui-input-inline">
+          <input id="deptId" name="deptId" type="hidden">
+          <div id="deptName" lay-filter="deptName" class="xm-select-demo"></div>
+        </div>
+      </div>
+      <div class="layui-form-item">
         <label class="layui-form-label">备注</label>
         <div class="layui-input-inline">
           <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
@@ -71,9 +78,10 @@
     }).extend({
         index: 'lib/index', //主入口模块
         xmSelect: 'xm-select'
-    }).use(['index', 'form','xmSelect','upload','crud'], function(){
+    }).use(['index', 'form','xmSelect','upload','crud','treeSelect'], function(){
         let $ = layui.$,
                 xmSelect = layui.xmSelect,
+                treeSelect = layui.treeSelect,
                 upload = layui.upload,
                 crud = layui.crud,
                 form = layui.form,
@@ -163,7 +171,7 @@
                     return layer.msg('上传成功');
                 }
             }
-            ,error: function(){
+            ,error: function() {
                 //演示失败状态，并实现重传
                 let uploadText = $('#upload-text');
                 uploadText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
@@ -171,6 +179,31 @@
                     uploadInst.upload();
                 });
             }
+        });
+        treeSelect.render({
+          // 选择器
+          elem: '#deptName',
+          // 数据
+          data: ctx + '/system/sysDept/treeSelect',
+          // 异步加载方式：get/post，默认get
+          type: 'get',
+          // 占位符
+          placeholder: '请输入部门',
+          // 是否开启搜索功能：true/false，默认false
+          search: true,
+          // 点击回调
+          click: function(d){
+            $("#deptId").val(d.current.id);
+            $("#deptName").val(d.current.name);
+          },
+          // 加载完成后的回调函数
+          success: function (d) {
+            console.log(d);
+            if (sysUser.deptId !== 0) {
+              treeSelect.checkNode('deptName', sysUser.deptId);
+              treeSelect.refresh('deptName');
+            }
+          }
         });
         crud.setRadio("enabled","enabled",sysUser.enabled);
         crud.setRadio("sex","sex",sysUser.sex);
