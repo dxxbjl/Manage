@@ -110,6 +110,7 @@
           },
           // 加载完成后的回调函数
           success: function (d) {
+              console.log(parentId);
               if (parentId) {
                   $("#parentId").val(parentId);
                   treeSelect.checkNode('parentName', parentId);

@@ -33,11 +33,11 @@ public class TreeSelectNode implements Treeable {
     /**
      * 是否选中
      */
-    private Boolean checked = false;
+    private Boolean checked = true;
     /**
      * 是否打开
      */
-    private Boolean open = false;
+    private Boolean open = true;
     /**
      * 节点
      */

@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="io.github.yangyouwang.crud.system.mapper.SysDeptMapper">
-
+    <resultMap id="deptTree" type="io.github.yangyouwang.common.domain.TreeSelectNode">
+        <id column="id" property="id"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="name" property="name"/>
+        <collection column="id" property="children" select="getDeptTreeByParentId"/>
+    </resultMap>
+    <select id="getDeptTreeByParentId" resultMap="deptTree">
+        select id,parent_id, dept_name as name from sys_dept where enabled = 'Y' and parent_id = #{id}
+    </select>
+    <select id="getDeptTree" resultMap="deptTree">
+        select id,parent_id,dept_name as name from sys_dept where enabled = 'Y' and parent_id = 0
+    </select>
 </mapper>
