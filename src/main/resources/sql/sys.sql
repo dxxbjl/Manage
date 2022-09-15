@@ -350,4 +350,18 @@ CREATE TABLE `sys_post`  (
 -- Records of sys_post
 -- ----------------------------
 
+-- ----------------------------
+-- Table structure for sys_user_post
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_user_post`;
+CREATE TABLE `sys_user_post`  (
+  `user_id` bigint(20) NOT NULL COMMENT '用户外键',
+  `post_id` bigint(20) NOT NULL COMMENT '岗位外键',
+  PRIMARY KEY (`user_id`, `post_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '用户岗位关联表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_user_post
+-- ----------------------------
+
 SET FOREIGN_KEY_CHECKS = 1;
