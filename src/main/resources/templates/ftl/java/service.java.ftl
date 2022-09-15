@@ -53,7 +53,7 @@ public class ${table.serviceName} extends ${superServiceImplClass}<${table.mappe
           .eq(param.get${field.capitalName}() != null, ${entity}::get${field.capitalName}, param.get${field.capitalName}())
         </#if>
       </#if>
-    </#list>;
+    </#list>.orderByDesc(${entity}::getCreateTime);
     return list(queryWrapper);
   }
 
