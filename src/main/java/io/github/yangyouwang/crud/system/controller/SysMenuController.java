@@ -149,8 +149,8 @@ public class SysMenuController extends CrudController {
     }
 
     /**
-     * 查询菜单列表
-     * @return 菜单列表
+     * 查询菜单树结构
+     * @return 菜单树结构
      */
     @GetMapping("/treeSelect")
     @ResponseBody

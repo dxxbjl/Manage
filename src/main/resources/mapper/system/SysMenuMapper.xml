@@ -49,4 +49,17 @@
   <select id="findMenuRole" resultType="java.lang.String">
     select perms from sys_menu where deleted = 0 and visible = 'Y' and perms &lt;&gt; ''
   </select>
+  <!--菜单树结构-->
+  <resultMap id="menuTree" type="io.github.yangyouwang.common.domain.TreeSelectNode">
+    <id column="id" property="id"/>
+    <result column="parent_id" property="parentId"/>
+    <result column="name" property="name"/>
+    <collection column="id" property="children" select="getMenuTreeByParentId"/>
+  </resultMap>
+  <select id="getMenuTreeByParentId" resultMap="menuTree">
+    select id,parent_id, menu_name as name from sys_menu where visible = 'Y' and parent_id = #{id}
+  </select>
+  <select id="getMenuTree" resultMap="menuTree">
+    select id,parent_id,menu_name as name from sys_menu where visible = 'Y' and parent_id = 0
+  </select>
 </mapper>

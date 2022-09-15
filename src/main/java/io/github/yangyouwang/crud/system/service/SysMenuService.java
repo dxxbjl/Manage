@@ -56,9 +56,9 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
     public List<SysMenuDTO> selectMenusByUser(Long userId,String userName) {
         List<SysMenu> menus;
         if (ConfigConsts.ADMIN_USER.equals(userName)) {
-            menus = this.sysMenuMapper.findMenu();
+            menus = sysMenuMapper.findMenu();
         } else {
-            menus = this.sysMenuMapper.findMenuByUserId(userId);
+            menus = sysMenuMapper.findMenuByUserId(userId);
         }
         if (menus.isEmpty()) {
             throw new AccessDeniedException(ResultStatus.MENU_NULL_ERROR.message);
@@ -91,25 +91,17 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
     }
 
     /**
-     * 查询菜单列表
-     * @return 菜单列表
+     * 查询菜单树结构
+     * @return 菜单树结构
      */
     @Transactional(readOnly = true)
     public List<TreeSelectNode> treeSelect() {
-        List<SysMenu> menus = this.list(new LambdaQueryWrapper<SysMenu>()
-                .eq(SysMenu::getVisible,ConfigConsts.ENABLED_YES));
+        List<TreeSelectNode> menus = sysMenuMapper.getMenuTree();
         if (menus.isEmpty()) {
             return Collections.emptyList();
         }
-        List<TreeSelectNode> result = menus.stream().map(sysMenu -> {
-            TreeSelectNode treeNode = new TreeSelectNode();
-            treeNode.setId(sysMenu.getId());
-            treeNode.setParentId(sysMenu.getParentId());
-            treeNode.setName(sysMenu.getMenuName());
-            return treeNode;
-        }).collect(Collectors.toList());
         ListToTree treeBuilder = new ListToTreeImpl();
-        return treeBuilder.toTree(result);
+        return treeBuilder.toTree(menus);
     }
 
 
