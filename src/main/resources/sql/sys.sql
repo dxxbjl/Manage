@@ -327,4 +327,27 @@ CREATE TABLE `sys_dept`  (
 INSERT INTO `sys_dept` VALUES (25, '济南微本地', 1, '杨先生', '17515087128', '616505453@qq.com', 0, 'Y', 'admin', '2022-09-11 00:21:08', 'admin', '2022-09-11 11:02:41', 0, '');
 INSERT INTO `sys_dept` VALUES (26, '研发部门', 1, '杨先生', '17515087128', '616505453@qq.com', 25, 'Y', 'admin', '2022-09-11 00:21:25', 'admin', '2022-09-11 11:02:37', 0, '');
 
+-- ----------------------------
+-- Table structure for sys_post
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_post`;
+CREATE TABLE `sys_post`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `post_code` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '岗位编码',
+  `post_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '岗位名称',
+  `order_num` int(11) NULL DEFAULT 0 COMMENT '显示顺序',
+  `enabled` char(1) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '是否启用 Y 启用 N 禁用',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `deleted` int(11) NULL DEFAULT 0 COMMENT '逻辑删除 0 否、1 是',
+  `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '备注',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '岗位表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_post
+-- ----------------------------
+
 SET FOREIGN_KEY_CHECKS = 1;
