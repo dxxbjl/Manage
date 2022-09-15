@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>编辑岗位表</title>
+  <div th:replace="common/link::header"></div>
+</head>
+<body>
+<div class="layui-fluid">
+  <div class="layui-row">
+    <div class="layui-form" lay-filter="sysPostForm" id="sysPostForm">
+      <input type="hidden" name="id" id="id">
+        <div class="layui-form-item">
+          <label class="layui-form-label">岗位编码</label>
+          <div class="layui-input-inline">
+            <input type="text" class="layui-input" name="postCode" placeholder="请输入岗位编码"/>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">岗位名称</label>
+          <div class="layui-input-inline">
+            <input type="text" class="layui-input" name="postName" placeholder="请输入岗位名称"/>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">显示顺序</label>
+          <div class="layui-input-inline">
+            <input type="number" class="layui-input" name="orderNum" placeholder="请输入显示顺序"/>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">状态</label>
+          <div class="layui-input-block" id="enabled"></div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">备注</label>
+          <div class="layui-input-inline">
+            <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
+          </div>
+        </div>
+      <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
+      </div>
+    </div>
+  </div>
+</div>
+<div th:replace="common/script::footer"></div>
+<script th:inline="javascript">
+  layui.config({
+      base: '/static/layuiadmin/' //静态资源所在路径
+  }).extend({
+     index: 'lib/index', //主入口模块
+  }).use(['index', 'form','crud'], function(){
+    let $ = layui.$,
+            form = layui.form,
+            crud = layui.crud,
+            sysPost = [[${sysPost}]];
+    form.val('sysPostForm',sysPost);
+    // 编辑
+    form.on('submit(save-submit)', function(data) {
+      $.ajax({
+        type: 'POST',
+        url:  ctx + '/system/sysPost/modify',
+        data: JSON.stringify(data.field),
+        contentType:'application/json;charset=UTF-8',
+        dataType: 'json',
+        success: function(result) {
+          layer.msg(result.message);
+          if (result.code === 200) {
+            let index = parent.layer.getFrameIndex(window.name);
+            // 关闭
+            parent.layer.close(index);
+            // 刷新
+            parent.location.reload();
+          }
+        }
+      });
+    });
+    crud.setRadio("enabled","enabled",sysPost.enabled);
+  });
+</script>
+</body>
+</html>

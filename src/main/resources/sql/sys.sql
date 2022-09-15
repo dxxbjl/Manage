@@ -153,7 +153,7 @@ INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, 1, 'layui-icon-set', '#', '
 INSERT INTO `sys_menu` VALUES (3, '系统工具', 0, 2, 'layui-icon-util', '#', 'M', 'Y', '', '1', '2018-03-16 11:33:00', 'admin', '2021-05-07 12:10:46', 0, '系统工具目录');
 INSERT INTO `sys_menu` VALUES (100, '用户管理', 1, 1, 'layui-icon-username', '/sysUser/listPage', 'C', 'Y', 'user:list', '1', '2018-03-16 11:33:00', 'admin', '2021-05-12 11:14:38', 0, '用户管理菜单');
 INSERT INTO `sys_menu` VALUES (101, '角色管理', 1, 2, 'layui-icon-group', '/sysRole/listPage', 'C', 'Y', 'role:list', '1', '2018-03-16 11:33:00', 'admin', '2021-05-12 11:15:08', 0, '角色管理菜单');
-INSERT INTO `sys_menu` VALUES (102, '菜单管理', 1, 3, 'layui-icon-theme', '/sysMenu/listPage', 'C', 'Y', 'menu:list', '1', '2018-03-16 11:33:00', 'admin', '2021-05-12 11:15:26', 0, '菜单管理菜单');
+INSERT INTO `sys_menu` VALUES (102, '菜单管理', 1, 5, 'layui-icon-theme', '/sysMenu/listPage', 'C', 'Y', 'menu:list', '1', '2018-03-16 11:33:00', 'admin', '2021-05-12 11:15:26', 0, '菜单管理菜单');
 INSERT INTO `sys_menu` VALUES (115, '系统接口', 3, 3, 'layui-icon-rate', '/sysTool/swagger', 'C', 'Y', '', '1', '2018-03-16 11:33:00', 'admin', '2021-05-12 11:17:25', 0, '系统接口菜单');
 INSERT INTO `sys_menu` VALUES (116, '数据库监控', 3, 3, 'layui-icon-video', '/sysTool/druid', 'C', 'Y', '', '1', '2018-03-16 11:33:00', 'admin', '2021-05-12 11:17:40', 0, '系统接口菜单');
 INSERT INTO `sys_menu` VALUES (1005, '添加', 100, 1, NULL, '#', 'F', 'Y', 'user:add', 'admin', '2021-03-31 16:55:04', 'admin', '2021-04-29 21:30:49', 0, '添加用户');
@@ -165,7 +165,7 @@ INSERT INTO `sys_menu` VALUES (2007, '删除', 101, 3, NULL, '#', 'F', 'Y', 'rol
 INSERT INTO `sys_menu` VALUES (3005, '添加', 102, 1, NULL, '#', 'F', 'Y', 'menu:add', 'admin', '2021-03-31 16:55:04', 'admin', '2021-04-10 11:26:45', 0, '添加菜单');
 INSERT INTO `sys_menu` VALUES (3006, '编辑', 102, 2, NULL, '#', 'F', 'Y', 'menu:edit', 'admin', '2021-03-31 17:01:35', 'admin', '2021-04-10 11:27:40', 0, '编辑菜单');
 INSERT INTO `sys_menu` VALUES (3007, '删除', 102, 3, NULL, '#', 'F', 'Y', 'menu:del', 'admin', '2021-03-31 17:01:57', 'admin', '2021-04-10 11:27:49', 0, '删除菜单');
-INSERT INTO `sys_menu` VALUES (3008, '日志管理', 1, 5, 'layui-icon-chart-screen', '/sysLog/listPage', 'C', 'Y', 'log:list', 'admin', '2021-04-01 11:01:52', 'admin', '2021-05-12 11:17:10', 0, '异常日志列表');
+INSERT INTO `sys_menu` VALUES (3008, '日志管理', 1, 8, 'layui-icon-chart-screen', '/sysLog/listPage', 'C', 'Y', 'log:list', 'admin', '2021-04-01 11:01:52', 'admin', '2022-09-15 22:10:39', 0, '异常日志列表');
 INSERT INTO `sys_menu` VALUES (3013, '流程管理', 0, 3, 'layui-icon-release', '#', 'M', 'Y', '', 'admin', '2021-04-10 20:06:40', 'admin', '2021-05-07 12:11:21', 0, '工作流管理');
 INSERT INTO `sys_menu` VALUES (3014, '模型管理', 3013, 1, 'layui-icon-set-fill', '/actReModel/listPage', 'C', 'Y', 'model:list', 'admin', '2021-04-10 20:10:56', 'admin', '2021-05-12 11:19:24', 0, '模型管理');
 INSERT INTO `sys_menu` VALUES (3015, '添加', 3014, 1, NULL, '#', 'F', 'Y', 'model:add', 'admin', '2021-03-31 16:55:04', 'admin', '2021-04-10 11:26:53', 0, '添加模型');
@@ -173,7 +173,7 @@ INSERT INTO `sys_menu` VALUES (3016, '编辑', 3014, 2, NULL, '#', 'F', 'Y', 'mo
 INSERT INTO `sys_menu` VALUES (3017, '删除', 3014, 3, NULL, '#', 'F', 'Y', 'model:del', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', 0, '删除模型');
 INSERT INTO `sys_menu` VALUES (3018, '设计', 3014, 3, NULL, '#', 'F', 'Y', 'model:design', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', 0, '设计模型');
 INSERT INTO `sys_menu` VALUES (3019, '部署', 3014, 3, NULL, '#', 'F', 'Y', 'model:deploy', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', 0, '部署模型');
-INSERT INTO `sys_menu` VALUES (3020, '字典管理', 1, 4, 'layui-icon-edit', '/sysDictType/listPage', 'C', 'Y', 'dictType:list', 'admin', '2021-04-13 13:35:48', 'admin', '2022-09-03 23:50:38', 0, '字典管理');
+INSERT INTO `sys_menu` VALUES (3020, '字典管理', 1, 6, 'layui-icon-edit', '/sysDictType/listPage', 'C', 'Y', 'dictType:list', 'admin', '2021-04-13 13:35:48', 'admin', '2022-09-03 23:50:38', 0, '字典管理');
 INSERT INTO `sys_menu` VALUES (3021, '添加', 3020, 1, NULL, '#', 'F', 'Y', 'dictType:add', 'admin', '2021-03-31 16:55:04', 'admin', '2021-04-10 11:26:53', 0, '添加字典');
 INSERT INTO `sys_menu` VALUES (3022, '编辑', 3020, 2, NULL, '#', 'F', 'Y', 'dictType:edit', 'admin', '2021-03-31 17:01:35', 'admin', '2021-04-10 11:27:05', 0, '编辑字典');
 INSERT INTO `sys_menu` VALUES (3023, '删除', 3020, 3, NULL, '#', 'F', 'Y', 'dictType:del', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', 0, '删除字典');
@@ -183,7 +183,7 @@ INSERT INTO `sys_menu` VALUES (3029, '修改字典项', 3020, 5, '', '#', 'F', '
 INSERT INTO `sys_menu` VALUES (3030, '删除字典项', 3020, 6, '', '#', 'F', 'Y', 'dictValue:del', 'admin', '2021-12-08 23:42:39', 'admin', '2021-12-08 23:43:09', 0, '删除字典项');
 INSERT INTO `sys_menu` VALUES (3038, '删除日志', 3008, 1, '', '#', 'F', 'Y', 'log:del', 'admin', '2021-12-18 21:59:23', '', NULL, 0, '删除日志');
 INSERT INTO `sys_menu` VALUES (3039, '日志详情', 3008, 2, '', '#', 'F', 'Y', 'log:info', 'admin', '2021-12-18 21:59:23', '', NULL, 0, '日志详情');
-INSERT INTO `sys_menu` VALUES (3043, '任务管理', 1, 6, 'layui-icon-ok-circle', '/qrtz/job/listPage', 'C', 'Y', 'job:list', '', NULL, 'admin', '2022-07-30 22:12:46', 0, '');
+INSERT INTO `sys_menu` VALUES (3043, '任务管理', 1, 7, 'layui-icon-ok-circle', '/qrtz/job/listPage', 'C', 'Y', 'job:list', '', NULL, 'admin', '2022-09-15 22:10:59', 0, '');
 INSERT INTO `sys_menu` VALUES (3044, '添加任务表', 3043, 1, '', '#', 'F', 'Y', 'job:add', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3045, '编辑任务表', 3043, 2, '', '#', 'F', 'Y', 'job:edit', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3046, '删除任务表', 3043, 3, '', '#', 'F', 'Y', 'job:del', '', NULL, '', NULL, 0, '');
@@ -196,17 +196,21 @@ INSERT INTO `sys_menu` VALUES (3052, '暂停某个定时任务', 3043, 4, '', '#
 INSERT INTO `sys_menu` VALUES (3053, '恢复某个定时任务', 3043, 5, '', '#', 'F', 'Y', 'job:resume', 'admin', '2022-08-14 17:45:52', 'admin', '2022-08-14 17:46:10', 0, '');
 INSERT INTO `sys_menu` VALUES (3054, '用户管理', 3051, 1, 'layui-icon-home', '/app/user/listPage', 'C', 'Y', 'user:list', '', NULL, 'admin', '2022-08-27 08:56:40', 0, '');
 INSERT INTO `sys_menu` VALUES (3055, '用户详情', 3054, 1, '', '#', 'M', 'Y', 'user:info', 'admin', '2022-08-27 09:18:24', 'admin', '2022-08-27 09:18:34', 0, '');
-INSERT INTO `sys_menu` VALUES (3056, '登录日志管理', 1, 7, 'layui-icon-location', '/sysLoginLog/listPage', 'C', 'Y', 'sysLoginLog:list', '', NULL, 'admin', '2022-08-29 21:32:50', 0, '');
+INSERT INTO `sys_menu` VALUES (3056, '登录日志管理', 1, 9, 'layui-icon-location', '/sysLoginLog/listPage', 'C', 'Y', 'sysLoginLog:list', '', NULL, 'admin', '2022-09-15 22:10:11', 0, '');
 INSERT INTO `sys_menu` VALUES (3057, '删除登录日志', 3056, 1, '', '#', 'F', 'Y', 'sysLoginLog:del', 'admin', '2022-08-29 22:31:24', '', NULL, 0, '删除登录日志');
-INSERT INTO `sys_menu` VALUES (3058, '代码生成', 1, 8, 'layui-icon-flag', '/sysCodeGenerator/index', 'C', 'Y', '', 'admin', '2022-08-30 23:37:28', 'admin', '2022-08-30 23:39:09', 0, '');
+INSERT INTO `sys_menu` VALUES (3058, '代码生成', 1, 10, 'layui-icon-flag', '/sysCodeGenerator/index', 'C', 'Y', '', 'admin', '2022-08-30 23:37:28', 'admin', '2022-08-30 23:39:09', 0, '');
 INSERT INTO `sys_menu` VALUES (3059, '表单管理', 3013, 1, 'layui-icon-home', '/act/formData/listPage', 'C', 'Y', 'formData:list', '', NULL, 'admin', '2022-08-31 17:16:14', 0, '');
 INSERT INTO `sys_menu` VALUES (3060, '添加表单', 3059, 1, '', '#', 'F', 'Y', 'formData:add', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3061, '编辑表单', 3059, 2, '', '#', 'F', 'Y', 'formData:edit', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3062, '删除表单', 3059, 3, '', '#', 'F', 'Y', 'formData:del', '', NULL, '', NULL, 0, '');
-INSERT INTO `sys_menu` VALUES (3063, '部门管理', 1, 9, 'layui-icon-home', '/system/sysDept/listPage', 'C', 'Y', 'sysDept:list', '', NULL, 'admin', '2022-09-03 23:50:01', 0, '');
+INSERT INTO `sys_menu` VALUES (3063, '部门管理', 1, 3, 'layui-icon-home', '/system/sysDept/listPage', 'C', 'Y', 'sysDept:list', '', NULL, 'admin', '2022-09-15 22:11:13', 0, '');
 INSERT INTO `sys_menu` VALUES (3064, '添加部门表', 3063, 1, '', '#', 'F', 'Y', 'sysDept:add', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3065, '编辑部门表', 3063, 2, '', '#', 'F', 'Y', 'sysDept:edit', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3066, '删除部门表', 3063, 3, '', '#', 'F', 'Y', 'sysDept:del', '', NULL, '', NULL, 0, '');
+INSERT INTO `sys_menu` VALUES (3067, '岗位管理', 1, 4, 'layui-icon-home', '/system/sysPost/listPage', 'C', 'Y', 'sysPost:list', '', NULL, 'admin', '2022-09-15 22:11:31', 0, '');
+INSERT INTO `sys_menu` VALUES (3068, '添加岗位表', 3067, 1, '', '#', 'F', 'Y', 'sysPost:add', '', NULL, '', NULL, 0, '');
+INSERT INTO `sys_menu` VALUES (3069, '编辑岗位表', 3067, 2, '', '#', 'F', 'Y', 'sysPost:edit', '', NULL, '', NULL, 0, '');
+INSERT INTO `sys_menu` VALUES (3070, '删除岗位表', 3067, 3, '', '#', 'F', 'Y', 'sysPost:del', '', NULL, '', NULL, 0, '');
 
 -- ----------------------------
 -- Table structure for sys_role
