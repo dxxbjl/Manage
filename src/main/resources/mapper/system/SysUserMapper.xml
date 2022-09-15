@@ -37,6 +37,10 @@
       <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
       <result column="role_key" jdbcType="VARCHAR" property="roleKey"/>
     </collection>
+    <collection property="posts" javaType="java.util.ArrayList" ofType="io.github.yangyouwang.crud.system.entity.SysPost">
+      <id column="post_id" jdbcType="BIGINT" property="id" />
+      <result column="post_name" jdbcType="VARCHAR" property="postName"/>
+    </collection>
   </resultMap>
   <sql id="Base_Column_List">
     id, dept_id, user_name, pass_word, enabled, email, phonenumber, sex, avatar, create_by, create_time,
@@ -52,10 +56,13 @@
   </select>
   <select id="findUserByUserId" resultMap="UserResultMap">
      select
-        u.id as user_id,u.dept_id,u.user_name,u.pass_word,u.enabled,u.email,u.phonenumber,u.sex,u.avatar,u.remark,r.id as role_id,r.role_key,r.role_name
+        u.id as user_id,u.dept_id,u.user_name,u.pass_word,u.enabled,u.email,u.phonenumber,u.sex,u.avatar,u.remark,
+            r.id as role_id,r.role_key,r.role_name,p.id as post_id,p.post_name
     from sys_user u
     left join sys_user_role ur on u.id = ur.user_id
     left join sys_role r on ur.role_id = r.id
+    left join sys_user_post up on u.id = up.user_id
+    left join sys_post p on up.post_id = p.id
     where u.deleted = 0 and u.id = #{id}
   </select>
 </mapper>

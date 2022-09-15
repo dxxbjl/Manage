@@ -57,8 +57,18 @@ public class SysUser extends BaseEntity {
     @TableField(exist = false)
     private List<SysRole> roles;
     /**
+     * 多个用户对应多个岗位
+     */
+    @TableField(exist = false)
+    private List<SysPost> posts;
+    /**
      * 角色ID数组
      */
     @TableField(exist = false)
     private Long[] roleIds;
+    /**
+     * 岗位ID数组
+     */
+    @TableField(exist = false)
+    private Long[] postIds;
 }

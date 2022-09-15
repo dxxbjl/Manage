@@ -1,13 +1,20 @@
 package io.github.yangyouwang.crud.system.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import io.github.yangyouwang.common.domain.XmSelectNode;
 import io.github.yangyouwang.crud.system.entity.SysPost;
 import io.github.yangyouwang.crud.system.mapper.SysPostMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Service;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.ArrayUtils;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.Optional.ofNullable;
 
 /**
 * <p>
@@ -76,4 +83,22 @@ public class SysPostService extends ServiceImpl<SysPostMapper, SysPost> {
   public void removes(List<Long> ids) {
      removeByIds(ids);
    }
+
+  /**
+   * 查询岗位列表
+   * @param ids 岗位ids
+   * @return 岗位列表
+   */
+  @Transactional(readOnly = true)
+  public List<XmSelectNode> xmSelect(Long[] ids) {
+    List<SysPost> sysPosts = this.list(new LambdaQueryWrapper<>());
+    return sysPosts.stream().map(sysPost -> {
+      XmSelectNode treeNode = new XmSelectNode();
+      treeNode.setName(sysPost.getPostName());
+      treeNode.setValue(sysPost.getId());
+      treeNode.setId(sysPost.getId());
+      ofNullable(ids).ifPresent(optIds -> treeNode.setSelected(ArrayUtils.contains(optIds,sysPost.getId())));
+      return treeNode;
+    }).collect(Collectors.toList());
+  }
 }

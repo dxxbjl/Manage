@@ -60,6 +60,12 @@
         </div>
       </div>
       <div class="layui-form-item">
+        <label class="layui-form-label">岗位</label>
+        <div class="layui-input-inline">
+          <div id="postName" class="xm-select-demo"></div>
+        </div>
+      </div>
+      <div class="layui-form-item">
         <label class="layui-form-label">备注</label>
         <div class="layui-input-inline">
           <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
@@ -89,8 +95,8 @@
         $('#upload-img').attr('src', sysUser.avatar); //图片链接（base64）
         form.val('sys-user-form', sysUser);
         form.on('submit(save-submit)', function(data) {
-            let roleIds = crud.getXmSelectTreeIds(select);
-            data.field.roleIds = roleIds;
+            data.field.roleIds = crud.getXmSelectTreeIds(roleSelect);
+            data.field.postIds = crud.getXmSelectTreeIds(postSelect);
             $.ajax({
                 type: 'POST',
                 url:  ctx + '/sysUser/edit',
@@ -110,7 +116,7 @@
             });
         });
 
-        let select = xmSelect.render({
+        let roleSelect = xmSelect.render({
             el: '#roleName',
             tips:"选择角色",
             filterable: true,
@@ -149,11 +155,56 @@
             type: 'get',
             url: ctx + '/sysRole/xmSelect?ids=' + sysUser.roleIds,
             success: function(res) {
-                select.update({
+              roleSelect.update({
                     data: res
-                })
+              })
             }
         });
+
+      let postSelect = xmSelect.render({
+        el: '#postName',
+        tips:"选择岗位",
+        filterable: true,
+        tree: {
+          //是否显示树状结构
+          show: true,
+          //是否展示三角图标
+          showFolderIcon: true,
+          //是否显示虚线
+          showLine: true,
+          //间距
+          indent: 20,
+          //默认展开节点的数组, 为 true 时, 展开所有节点
+          expandedKeys: [ -3 ],
+          //是否严格遵守父子模式
+          strict: false,
+          //是否开启极简模式
+          simple: false,
+          //点击节点是否展开
+          clickExpand: true,
+          //点击节点是否选中
+          clickCheck: true
+        },
+        toolbar: {
+          show: false
+        },
+        height: 'auto',
+        data: [],
+        //分页
+        paging: true,
+        //每页条数
+        pageSize: 10,
+      });
+
+      $.ajax({
+        type: 'get',
+        url: ctx + '/system/sysPost/xmSelect?ids=' + sysUser.postIds,
+        success: function(res) {
+          postSelect.update({
+            data: res
+          })
+        }
+      });
 
         //普通图片上传
         let uploadInst = upload.render({

@@ -6,11 +6,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.core.exception.CrudException;
-import io.github.yangyouwang.crud.system.entity.SysRole;
-import io.github.yangyouwang.crud.system.entity.SysUser;
-import io.github.yangyouwang.crud.system.entity.SysUserRole;
+import io.github.yangyouwang.crud.system.entity.*;
 import io.github.yangyouwang.crud.system.mapper.SysMenuMapper;
 import io.github.yangyouwang.crud.system.mapper.SysUserMapper;
+import io.github.yangyouwang.crud.system.mapper.SysUserPostMapper;
 import io.github.yangyouwang.crud.system.mapper.SysUserRoleMapper;
 import io.github.yangyouwang.crud.system.model.ModifyPassDTO;
 import io.github.yangyouwang.crud.system.model.ResetPassDTO;
@@ -56,6 +55,9 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
     private SysUserRoleMapper sysUserRoleMapper;
 
     @Resource
+    private SysUserPostMapper sysUserPostMapper;
+
+    @Resource
     private BCryptPasswordEncoder passwordEncoder;
 
     @Override
@@ -90,6 +92,10 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
             Long[] roleIds = sysRoles.stream().map(SysRole::getId).toArray(Long[]::new);
             sysUser.setRoleIds(roleIds);
         });
+        ofNullable(sysUser.getPosts()).ifPresent(sysPosts -> {
+            Long[] postIds = sysPosts.stream().map(SysPost::getId).toArray(Long[]::new);
+            sysUser.setPostIds(postIds);
+        });
         return sysUser;
     }
 
@@ -107,6 +113,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
         if (flag) {
             SysUserService proxy = (SysUserService) AopContext.currentProxy();
             proxy.insertUserRoleBatch(sysUser.getId(), sysUser.getRoleIds());
+            proxy.insertUserPostBatch(sysUser.getId(), sysUser.getPostIds());
         }
         return String.format("初始化密码为：%s",ConfigConsts.DEFAULT_PASSWORD);
     }
@@ -119,10 +126,13 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
     public void edit(SysUser sysUser) {
         boolean flag = this.updateById(sysUser);
         if (flag) {
+            SysUserService proxy = (SysUserService) AopContext.currentProxy();
             // 删除用户关联角色
             sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUserId, sysUser.getId()));
-            SysUserService proxy = (SysUserService) AopContext.currentProxy();
             proxy.insertUserRoleBatch(sysUser.getId(), sysUser.getRoleIds());
+            // 删除用户关联岗位
+            sysUserPostMapper.delete(new LambdaQueryWrapper<SysUserPost>().eq(SysUserPost::getUserId, sysUser.getId()));
+            proxy.insertUserPostBatch(sysUser.getId(), sysUser.getPostIds());
         }
     }
 
@@ -145,6 +155,24 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
     }
 
     /**
+     * 批量新增修改用户关联岗位
+     * @param userId 用户id
+     * @param postIds 岗位id
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
+    public void insertUserPostBatch(Long userId, Long[] postIds) {
+        if (postIds.length > 0) {
+            List<SysUserPost> userPosts = Arrays.stream(postIds).map(s -> {
+                SysUserPost userPost = new SysUserPost();
+                userPost.setUserId(userId);
+                userPost.setPostId(s);
+                return userPost;
+            }).collect(Collectors.toList());
+            sysUserPostMapper.insertBatchSomeColumn(userPosts);
+        }
+    }
+
+    /**
      * 删除请求
      * @param id 用户id
      */
@@ -153,6 +181,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
         boolean flag = this.removeById(id);
         if (flag) {
             sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUserId,id));
+            sysUserPostMapper.delete(new LambdaQueryWrapper<SysUserPost>().eq(SysUserPost::getUserId,id));
         }
     }
     /**

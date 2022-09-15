@@ -1,6 +1,7 @@
 package io.github.yangyouwang.crud.system.controller;
 
 import io.github.yangyouwang.common.annotation.CrudLog;
+import io.github.yangyouwang.common.domain.XmSelectNode;
 import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.crud.system.entity.SysPost;
 import io.github.yangyouwang.crud.system.service.SysPostService;
@@ -69,6 +70,7 @@ public class SysPostController extends CrudController {
     return SUFFIX + "/add";
   }
 
+  @CrudLog(title = "新增岗位",businessType = BusinessType.INSERT)
   @ApiOperation(value = "岗位新增")
   @PostMapping(value = "/add")
   @ResponseBody
@@ -80,6 +82,7 @@ public class SysPostController extends CrudController {
     return Result.success();
   }
 
+  @CrudLog(title = "修改岗位",businessType = BusinessType.UPDATE)
   @ApiOperation(value = "岗位修改")
   @PostMapping(value = "/modify")
   @ResponseBody
@@ -91,6 +94,7 @@ public class SysPostController extends CrudController {
     return Result.success();
   }
 
+  @CrudLog(title = "删除岗位",businessType = BusinessType.DELETE)
   @ApiOperation(value = "岗位删除(单个条目)")
   @DeleteMapping(value = "/remove/{id}")
   @ResponseBody
@@ -99,6 +103,7 @@ public class SysPostController extends CrudController {
     return Result.success();
   }
 
+  @CrudLog(title = "删除岗位",businessType = BusinessType.DELETE)
   @ApiOperation(value = "岗位删除(多个条目)")
   @PostMapping(value = "/removes")
   @ResponseBody
@@ -121,5 +126,16 @@ public class SysPostController extends CrudController {
     }
     boolean flag = sysPostService.updateById(param);
     return Result.success(flag);
+  }
+
+  /**
+   * 查询岗位列表
+   * @param ids 岗位ids
+   * @return 岗位列表
+   */
+  @GetMapping("/xmSelect")
+  @ResponseBody
+  public List<XmSelectNode> xmSelect(@RequestParam(value = "ids",required = false) Long[] ids) {
+    return sysPostService.xmSelect(ids);
   }
 }
