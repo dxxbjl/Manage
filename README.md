@@ -6,9 +6,9 @@
     3.项目特点：此项目代码清晰、界面简洁、springboot + layuiadmin 构建的单体后台管理系统。
 
 ## 在线体验
-- 演示地址：[平台预览](http://www.wbd.plus/) 
+- 平台演示地址：[预览](http://www.wbd.plus/) 
 - 账号：admin
-- 密码：admin123  
+- 密码：123456  
 
 ## 软件架构
 - 核心框架：Spring Boot
