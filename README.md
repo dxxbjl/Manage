@@ -5,6 +5,11 @@
     2.产品定位: 简约后台管理系统
     3.项目特点：此项目代码清晰、界面简洁、springboot + layuiadmin 构建的单体后台管理系统。
 
+## 在线体验
+- 演示地址：[平台预览](http://www.wbd.plus/) 
+- 账号：admin
+- 密码：admin123  
+
 ## 软件架构
 - 核心框架：Spring Boot
 - 权限框架：SpringSecurity
@@ -94,7 +99,7 @@ sec:authorize="hasAuthority('权限标识')" // thymeleaf声明
   })
 ```   
     
-## 项目运行截图
+## 部分截图
     
     登陆功能
     账号：admin 密码：123456
@@ -108,7 +113,13 @@ sec:authorize="hasAuthority('权限标识')" // thymeleaf声明
    
     角色管理模块
    ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/3.png "3.png")
-   
+
+    部门管理
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/18.png "18.png")
+
+    岗位管理
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/19.png "19.png")
+
     菜单管理模块
    ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/4.png "4.png")
    
@@ -122,6 +133,12 @@ sec:authorize="hasAuthority('权限标识')" // thymeleaf声明
     定时任务
    ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/8.png "8.png")
    
+    字典管理
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/12.png "12.png")
+
+    代码生成
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/17.png "17.png")
+
     工作流
    ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/9.png "9.png")
    ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/10.png "10.png")
@@ -132,9 +149,3 @@ sec:authorize="hasAuthority('权限标识')" // thymeleaf声明
 
     操作日志管理
    ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/15.png "15.png")
-
-    字典管理
-   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/12.png "12.png")
-
-    代码生成
-   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/17.png "17.png")
