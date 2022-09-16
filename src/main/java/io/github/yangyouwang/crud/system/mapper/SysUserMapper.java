@@ -3,6 +3,8 @@ package io.github.yangyouwang.crud.system.mapper;
 import io.github.yangyouwang.common.base.CrudBaseMapper;
 import io.github.yangyouwang.crud.system.entity.SysUser;
 
+import java.util.List;
+
 /**
  * @author yangyouwang
  * @title: SysUserMapper
@@ -25,4 +27,10 @@ public interface SysUserMapper extends CrudBaseMapper<SysUser> {
      * @return 用户详情
      */
     SysUser findUserByUserId(Long id);
+
+    /**
+     * 获取全部用户
+     * @return 用户列表
+     */
+    List<SysUser> findUserList();
 }

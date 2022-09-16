@@ -190,11 +190,18 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
      */
     @Transactional(readOnly = true)
     public List<SysUserDTO> exportSysUserList() {
-        List<SysUser> sysUsers = this.list(new LambdaQueryWrapper<SysUser>()
-                .eq(SysUser::getEnabled, ConfigConsts.ENABLED_YES));
+        List<SysUser> sysUsers = sysUserMapper.findUserList();
         return sysUsers.stream().map(sysUser -> {
             SysUserDTO sysUserDTO = new SysUserDTO();
             BeanUtils.copyProperties(sysUser, sysUserDTO);
+            // 角色列表拼接角色字符串
+            String roleName = sysUser.getRoles().stream().map(SysRole::getRoleName).collect(Collectors.joining(","));
+            sysUserDTO.setRoleName(roleName);
+            // 部门
+            sysUserDTO.setDeptName(sysUser.getDept().getDeptName());
+            // 岗位列表拼接岗位字符串
+            String postName = sysUser.getPosts().stream().map(SysPost::getPostName).collect(Collectors.joining(","));
+            sysUserDTO.setPostName(postName);
             return sysUserDTO;
         }).collect(Collectors.toList());
     }

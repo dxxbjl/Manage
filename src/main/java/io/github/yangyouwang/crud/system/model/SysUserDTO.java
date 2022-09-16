@@ -1,7 +1,7 @@
 package io.github.yangyouwang.crud.system.model;
 
-import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import com.alibaba.excel.metadata.BaseRowModel;
 import io.github.yangyouwang.core.converter.SexConverter;
 import lombok.Data;
@@ -21,43 +21,57 @@ public class SysUserDTO extends BaseRowModel implements Serializable {
 
     private static final long serialVersionUID = -4440639783323640070L;
     /**
-     * 主键id
+     * 编号
      */
-    @ExcelIgnore
+    @ColumnWidth(30)
+    @ExcelProperty(value = {"编号"}, index = 0)
     private Long id;
     /**
      * 账号
      */
-    @ExcelProperty(value = {"账号"}, index = 0)
+    @ColumnWidth(30)
+    @ExcelProperty(value = {"账号"}, index = 1)
     private String userName;
-    /**
-     * 启用
-     */
-    @ExcelIgnore
-    private String enabled;
     /**
      * 邮箱
      */
-    @ExcelProperty(value = {"邮箱"}, index = 1)
+    @ColumnWidth(30)
+    @ExcelProperty(value = {"邮箱"}, index = 2)
     private String email;
     /**
      * 手机号码
      */
-    @ExcelProperty(value = {"手机号码"}, index = 2)
+    @ColumnWidth(30)
+    @ExcelProperty(value = {"手机号码"}, index = 3)
     private String phonenumber;
     /**
      * 用户性别（0男 1女 2未知）
      */
-    @ExcelProperty(value = {"用户性别"}, index = 3, converter = SexConverter.class)
+    @ColumnWidth(30)
+    @ExcelProperty(value = {"用户性别"}, index = 4, converter = SexConverter.class)
     private String sex;
     /**
-     * 头像
+     * 角色
      */
-    @ExcelIgnore
-    private String avatar;
+    @ColumnWidth(50)
+    @ExcelProperty(value = {"角色"}, index = 5)
+    private String roleName;
+    /**
+     * 部门
+     */
+    @ColumnWidth(30)
+    @ExcelProperty(value = {"部门"}, index = 6)
+    private String deptName;
+    /**
+     * 岗位
+     */
+    @ColumnWidth(50)
+    @ExcelProperty(value = {"岗位"}, index = 7)
+    private String postName;
     /**
      * 备注
      * */
-    @ExcelProperty(value = {"备注"}, index = 4)
+    @ColumnWidth(30)
+    @ExcelProperty(value = {"备注"}, index = 8)
     private String remark;
 }

@@ -32,6 +32,9 @@
     <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <association property="dept" javaType="io.github.yangyouwang.crud.system.entity.SysDept">
+      <result column="dept_name" jdbcType="VARCHAR" property="deptName"/>
+    </association>
     <collection property="roles" javaType="java.util.ArrayList" ofType="io.github.yangyouwang.crud.system.entity.SysRole">
       <id column="role_id" jdbcType="BIGINT" property="id" />
       <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
@@ -48,7 +51,8 @@
   </sql>
    <select id="findUserByName" resultMap="UserResultMap">
     select
-        u.id as user_id,u.dept_id,u.user_name,u.pass_word,u.enabled,r.id as role_id,r.role_key,r.role_name
+        u.id as user_id,u.dept_id,u.user_name,u.pass_word,u.enabled,
+           r.id as role_id,r.role_key,r.role_name
     from sys_user u
     left join sys_user_role ur on u.id = ur.user_id
     left join sys_role r on ur.role_id = r.id
@@ -57,12 +61,25 @@
   <select id="findUserByUserId" resultMap="UserResultMap">
      select
         u.id as user_id,u.dept_id,u.user_name,u.pass_word,u.enabled,u.email,u.phonenumber,u.sex,u.avatar,u.remark,
-            r.id as role_id,r.role_key,r.role_name,p.id as post_id,p.post_name
+            d.dept_name,r.id as role_id,r.role_key,r.role_name,p.id as post_id,p.post_name
     from sys_user u
+    left join sys_dept d on u.dept_id = d.id
     left join sys_user_role ur on u.id = ur.user_id
     left join sys_role r on ur.role_id = r.id
     left join sys_user_post up on u.id = up.user_id
     left join sys_post p on up.post_id = p.id
     where u.deleted = 0 and u.id = #{id}
+  </select>
+  <select id="findUserList" resultMap="UserResultMap">
+    select
+      u.id as user_id,u.dept_id,u.user_name,u.pass_word,u.enabled,u.email,u.phonenumber,u.sex,u.avatar,u.remark,
+           d.dept_name,r.role_name,p.post_name
+    from sys_user u
+           left join sys_dept d on u.dept_id = d.id
+           left join sys_user_role ur on u.id = ur.user_id
+           left join sys_role r on ur.role_id = r.id
+           left join sys_user_post up on u.id = up.user_id
+           left join sys_post p on up.post_id = p.id
+    where u.deleted = 0 and u.enabled = 'Y'
   </select>
 </mapper>
