@@ -33,7 +33,7 @@ import java.util.List;
 @RequestMapping("/sysLoginLog")
 public class SysLoginLogController extends CrudController {
 
-  private static final String SUFFIX = "/system/sysLoginLog";
+  private static final String SUFFIX = "system/sysLoginLog";
 
   @Autowired
   private SysLoginLogService sysLoginLogService;

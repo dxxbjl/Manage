@@ -36,7 +36,7 @@ import java.util.List;
 @RequestMapping("/system/sysDept")
 public class SysDeptController extends CrudController {
 
-  private static final String SUFFIX = "/system/sysDept";
+  private static final String SUFFIX = "system/sysDept";
 
   @Autowired
   private SysDeptService sysDeptService;

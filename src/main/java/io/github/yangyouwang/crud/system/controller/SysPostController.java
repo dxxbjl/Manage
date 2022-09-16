@@ -36,7 +36,7 @@ import java.util.List;
 @RequestMapping("/system/sysPost")
 public class SysPostController extends CrudController {
 
-  private static final String SUFFIX = "/system/sysPost";
+  private static final String SUFFIX = "system/sysPost";
 
   @Autowired
   private SysPostService sysPostService;

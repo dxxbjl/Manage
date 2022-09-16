@@ -37,7 +37,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class JobController extends CrudController {
 
-  private static final String SUFFIX = "/qrtz/job";
+  private static final String SUFFIX = "qrtz/job";
 
   private final JobService jobService;
 

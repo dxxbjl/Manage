@@ -31,7 +31,7 @@ import java.util.List;
 @RequestMapping("/app/user")
 public class UserController extends CrudController {
 
-  private static final String SUFFIX = "/app/user";
+  private static final String SUFFIX = "app/user";
 
   @Autowired
   private UserService userService;

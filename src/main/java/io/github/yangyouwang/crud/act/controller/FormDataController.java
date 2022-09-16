@@ -33,7 +33,7 @@ import java.util.List;
 @RequestMapping("/act/formData")
 public class FormDataController extends CrudController {
 
-  private static final String SUFFIX = "/act/formData";
+  private static final String SUFFIX = "act/formData";
 
   @Autowired
   private FormDataService formDataService;

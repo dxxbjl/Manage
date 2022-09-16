@@ -36,7 +36,7 @@ import java.util.List;
 @RequestMapping("/app/ad")
 public class AdController extends CrudController {
 
-  private static final String SUFFIX = "/app/ad";
+  private static final String SUFFIX = "app/ad";
 
   @Autowired
   private AdService adService;
