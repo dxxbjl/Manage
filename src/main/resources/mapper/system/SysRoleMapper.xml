@@ -10,33 +10,19 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
-  <resultMap id="RoleResultMap" type="io.github.yangyouwang.crud.system.entity.SysRole">
-    <id column="role_id" jdbcType="BIGINT" property="id" />
-    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
-    <result column="role_key" jdbcType="VARCHAR" property="roleKey" />
-    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="remark" jdbcType="VARCHAR" property="remark" />
-    <collection property="menus" javaType="java.util.ArrayList" ofType="io.github.yangyouwang.crud.system.entity.SysMenu">
-      <id column="menu_id" jdbcType="BIGINT" property="id" />
-      <result column="menu_name" jdbcType="VARCHAR" property="menuName"/>
-      <result column="menu_type" jdbcType="VARCHAR" property="menuType"/>
-      <result column="perms" jdbcType="VARCHAR" property="perms"/>
-    </collection>
+    <result column="menu_id" jdbcType="VARCHAR" property="menuIds" />
   </resultMap>
   <sql id="Base_Column_List">
     id, role_name, role_key, remark, create_by, create_time, update_by, update_time
   </sql>
-    <select id="findRoleById" resultMap="RoleResultMap">
+    <select id="findRoleById" resultMap="BaseResultMap">
     select
         r.id as role_id, r.role_name, r.role_key, r.remark, r.create_by, r.create_time, r.update_by, r.update_time,
-        m.id as menu_id,m.menu_name,m.menu_type,perms
+        group_concat(m.id) as menu_id
     from sys_role r
     left join sys_role_menu rm on r.id = rm.role_id
     left join sys_menu m on rm.menu_id = m.id
     where r.deleted = 0 and r.id = #{id}
+    group by r.id
     </select>
 </mapper>

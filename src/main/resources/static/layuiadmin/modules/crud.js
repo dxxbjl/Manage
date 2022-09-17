@@ -17,7 +17,7 @@ layui.define(['jquery','cookie'], function(exports){
          */
         getXmSelectTreeIds: function (select) {
             let value = select.getValue();
-            return value.map(x => {return x.id});
+            return value.map(x => {return x.id}).join(",");
         },
         /**
          * 获取字典

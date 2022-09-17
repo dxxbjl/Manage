@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.domain.XmSelectNode;
 import io.github.yangyouwang.common.enums.ResultStatus;
+import io.github.yangyouwang.core.util.StringUtil;
 import io.github.yangyouwang.crud.system.mapper.SysRoleMapper;
 import io.github.yangyouwang.crud.system.mapper.SysRoleMenuMapper;
-import io.github.yangyouwang.crud.system.entity.SysMenu;
 import io.github.yangyouwang.crud.system.entity.SysRole;
 import io.github.yangyouwang.crud.system.entity.SysRoleMenu;
 import org.springframework.aop.framework.AopContext;
@@ -48,12 +48,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
      */
     @Transactional(readOnly = true)
     public SysRole detail(Long id) {
-        SysRole sysRole = sysRoleMapper.findRoleById(id);
-        ofNullable(sysRole.getMenus()).ifPresent(menus -> {
-            Long[] menuIds = menus.stream().map(SysMenu::getId).toArray(Long[]::new);
-            sysRole.setMenuIds(menuIds);
-        });
-        return sysRole;
+        return sysRoleMapper.findRoleById(id);
     }
 
     /**
@@ -69,7 +64,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
         if (flag) {
             // 关联菜单
             SysRoleService proxy = (SysRoleService) AopContext.currentProxy();
-            proxy.insertRoleMenuBatch(sysRole.getId(), sysRole.getMenuIds());
+            proxy.insertRoleMenuBatch(sysRole.getId(), StringUtil.getId(sysRole.getMenuIds()));
         }
     }
 
@@ -84,7 +79,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
             // 删除角色菜单
             sysRoleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>().eq(SysRoleMenu::getRoleId, sysRole.getId()));
             SysRoleService proxy = (SysRoleService) AopContext.currentProxy();
-            proxy.insertRoleMenuBatch(sysRole.getId(), sysRole.getMenuIds());
+            proxy.insertRoleMenuBatch(sysRole.getId(), StringUtil.getId(sysRole.getMenuIds()));
         }
     }
 

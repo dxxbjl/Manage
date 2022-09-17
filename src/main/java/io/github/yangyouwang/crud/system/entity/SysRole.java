@@ -5,8 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.github.yangyouwang.common.domain.BaseEntity;
 import lombok.Data;
 
-import java.util.List;
-
 /**
  * @author yangyouwang
  * @title: SysRole
@@ -28,13 +26,8 @@ public class SysRole extends BaseEntity {
      */
     private String roleKey;
     /**
-     * 多个角色对应多个菜单
-     */
-    @TableField(exist = false)
-    private List<SysMenu> menus;
-    /**
      * 菜单ID数组
      */
     @TableField(exist = false)
-    private Long[] menuIds;
+    private String menuIds;
 }

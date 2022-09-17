@@ -31,7 +31,7 @@
                 left join sys_user_role ur on u.id = ur.user_id
                 left join sys_role r on ur.role_id = r.id
        where u.deleted = 0 and u.user_name = #{userName}
-       group by id
+       group by u.id
   </select>
   <select id="findUserByUserId" resultMap="BaseResultMap">
       select
@@ -43,7 +43,7 @@
                left join sys_user_post up on u.id = up.user_id
                left join sys_post p on up.post_id = p.id
       where u.deleted = 0 and u.id = #{id}
-      group by id
+      group by u.id
   </select>
   <select id="findUserList" resultType="io.github.yangyouwang.crud.system.model.SysUserDTO">
       select
@@ -56,6 +56,6 @@
                left join sys_user_post up on u.id = up.user_id
                left join sys_post p on up.post_id = p.id
       where u.deleted = 0 and u.enabled = 'Y'
-      group by id
+      group by u.id
   </select>
 </mapper>
