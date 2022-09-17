@@ -108,10 +108,10 @@
             //每页条数
             pageSize: 10,
         });
-
+        let menuParams = sysRole.menuIds ? '?ids=' + sysRole.menuIds : '';
         $.ajax({
             type: 'get',
-            url: ctx + '/sysMenu/xmSelect?ids=' + sysRole.menuIds,
+            url: ctx + '/sysMenu/xmSelect' + menuParams,
             success: function(res) {
                 select.update({
                     data: res
