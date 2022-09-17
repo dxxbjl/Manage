@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.github.yangyouwang.common.domain.BaseEntity;
 import lombok.Data;
-import java.util.List;
 
 /**
  * @author yangyouwang
@@ -17,6 +16,10 @@ import java.util.List;
 @TableName("sys_user")
 public class SysUser extends BaseEntity {
     private static final long serialVersionUID = 4718572152888798906L;
+    /**
+     * 部门外键
+     */
+    private Long deptId;
     /**
      * 账号
      */
@@ -46,32 +49,13 @@ public class SysUser extends BaseEntity {
      */
     private String avatar;
     /**
-     * 部门外键
-     */
-    private Long deptId;
-    /**
-     * 部门
-     */
-    @TableField(exist = false)
-    private SysDept dept;
-    /**
-     * 多个用户对应多个角色
-     */
-    @TableField(exist = false)
-    private List<SysRole> roles;
-    /**
-     * 多个用户对应多个岗位
-     */
-    @TableField(exist = false)
-    private List<SysPost> posts;
-    /**
      * 角色ID数组
      */
     @TableField(exist = false)
-    private Long[] roleIds;
+    private String roleIds;
     /**
      * 岗位ID数组
      */
     @TableField(exist = false)
-    private Long[] postIds;
+    private String postIds;
 }

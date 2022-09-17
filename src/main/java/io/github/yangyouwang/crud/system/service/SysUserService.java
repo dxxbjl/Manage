@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.core.exception.CrudException;
+import io.github.yangyouwang.core.util.StringUtil;
 import io.github.yangyouwang.crud.system.entity.*;
 import io.github.yangyouwang.crud.system.mapper.SysMenuMapper;
 import io.github.yangyouwang.crud.system.mapper.SysUserMapper;
@@ -15,7 +16,6 @@ import io.github.yangyouwang.crud.system.model.ModifyPassDTO;
 import io.github.yangyouwang.crud.system.model.ResetPassDTO;
 import io.github.yangyouwang.crud.system.model.SysUserDTO;
 import org.springframework.aop.framework.AopContext;
-import org.springframework.beans.BeanUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,8 +32,8 @@ import org.springframework.util.Assert;
 import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static java.util.Optional.*;
 
 /**
  * @author yangyouwang
@@ -71,8 +71,8 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
         if (ConfigConsts.ADMIN_USER.equals(userName)) {
             menuRole = sysMenuMapper.findMenuRole();
         } else {
-            menuRole = user.getRoles().stream().map(sysRole -> {
-                List<String> userMenuRole = sysMenuMapper.findMenuRoleByRoleId(sysRole.getId());
+            menuRole = Stream.of(StringUtil.getId(user.getRoleIds())).map(roleId -> {
+                List<String> userMenuRole = sysMenuMapper.findMenuRoleByRoleId(roleId);
                 return String.join(",", userMenuRole);
             }).collect(Collectors.toList());
         }
@@ -87,16 +87,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
      */
     @Transactional(readOnly = true)
     public SysUser detail(Long id) {
-        SysUser sysUser = sysUserMapper.findUserByUserId(id);
-        ofNullable(sysUser.getRoles()).ifPresent(sysRoles -> {
-            Long[] roleIds = sysRoles.stream().map(SysRole::getId).toArray(Long[]::new);
-            sysUser.setRoleIds(roleIds);
-        });
-        ofNullable(sysUser.getPosts()).ifPresent(sysPosts -> {
-            Long[] postIds = sysPosts.stream().map(SysPost::getId).toArray(Long[]::new);
-            sysUser.setPostIds(postIds);
-        });
-        return sysUser;
+        return sysUserMapper.findUserByUserId(id);
     }
 
     /**
@@ -112,8 +103,8 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
         boolean flag = this.save(sysUser);
         if (flag) {
             SysUserService proxy = (SysUserService) AopContext.currentProxy();
-            proxy.insertUserRoleBatch(sysUser.getId(), sysUser.getRoleIds());
-            proxy.insertUserPostBatch(sysUser.getId(), sysUser.getPostIds());
+            proxy.insertUserRoleBatch(sysUser.getId(), StringUtil.getId(sysUser.getRoleIds()));
+            proxy.insertUserPostBatch(sysUser.getId(), StringUtil.getId(sysUser.getPostIds()));
         }
         return String.format("初始化密码为：%s",ConfigConsts.DEFAULT_PASSWORD);
     }
@@ -129,10 +120,10 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
             SysUserService proxy = (SysUserService) AopContext.currentProxy();
             // 删除用户关联角色
             sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUserId, sysUser.getId()));
-            proxy.insertUserRoleBatch(sysUser.getId(), sysUser.getRoleIds());
+            proxy.insertUserRoleBatch(sysUser.getId(), StringUtil.getId(sysUser.getRoleIds()));
             // 删除用户关联岗位
             sysUserPostMapper.delete(new LambdaQueryWrapper<SysUserPost>().eq(SysUserPost::getUserId, sysUser.getId()));
-            proxy.insertUserPostBatch(sysUser.getId(), sysUser.getPostIds());
+            proxy.insertUserPostBatch(sysUser.getId(), StringUtil.getId(sysUser.getPostIds()));
         }
     }
 
@@ -190,20 +181,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
      */
     @Transactional(readOnly = true)
     public List<SysUserDTO> exportSysUserList() {
-        List<SysUser> sysUsers = sysUserMapper.findUserList();
-        return sysUsers.stream().map(sysUser -> {
-            SysUserDTO sysUserDTO = new SysUserDTO();
-            BeanUtils.copyProperties(sysUser, sysUserDTO);
-            // 角色列表拼接角色字符串
-            String roleName = sysUser.getRoles().stream().map(SysRole::getRoleName).collect(Collectors.joining(","));
-            sysUserDTO.setRoleName(roleName);
-            // 部门
-            sysUserDTO.setDeptName(sysUser.getDept().getDeptName());
-            // 岗位列表拼接岗位字符串
-            String postName = sysUser.getPosts().stream().map(SysPost::getPostName).collect(Collectors.joining(","));
-            sysUserDTO.setPostName(postName);
-            return sysUserDTO;
-        }).collect(Collectors.toList());
+        return sysUserMapper.findUserList();
     }
     /**
      * 修改密码

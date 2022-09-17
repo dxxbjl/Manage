@@ -1,5 +1,6 @@
 package io.github.yangyouwang.core.util;
 
+import org.apache.commons.beanutils.ConvertUtils;
 import org.quartz.Trigger;
 import org.springframework.security.authentication.event.*;
 
@@ -15,6 +16,17 @@ import java.util.Random;
  */
 public class StringUtil {
 
+    /**
+     * 获取字符串中id数组
+     * @param ids ids字符串
+     * @return ids 数组
+     */
+    public static Long[] getId(String ids) {
+        //截取字符串
+        String[] idsArr = ids.split(",");
+        //转换long类型的数组
+        return (Long[]) ConvertUtils.convert(idsArr,Long.class);
+    }
     /**
      * 产生4位随机字符串
      */

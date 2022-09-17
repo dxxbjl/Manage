@@ -45,6 +45,7 @@
 		<minio.version>7.1.4</minio.version>
 		<pagehelper.version>1.3.0</pagehelper.version>
 		<bcprov-jdk15on.version>1.65</bcprov-jdk15on.version>
+		<commons-beanutils.version>1.9.4</commons-beanutils.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -334,6 +335,12 @@
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcprov-jdk15on</artifactId>
 			<version>${bcprov-jdk15on.version}</version>
+		</dependency>
+		<!-- BeanUtils的依赖 -->
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>${commons-beanutils.version}</version>
 		</dependency>
 	</dependencies>
 	<build>

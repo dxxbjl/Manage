@@ -16,70 +16,46 @@
     <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
-  </resultMap>
-  <resultMap id="UserResultMap" type="io.github.yangyouwang.crud.system.entity.SysUser">
-    <id column="user_id" jdbcType="BIGINT" property="id" />
-    <result column="dept_id" jdbcType="BIGINT" property="deptId" />
-    <result column="user_name" jdbcType="VARCHAR" property="userName" />
-    <result column="pass_word" jdbcType="VARCHAR" property="passWord" />
-    <result column="enabled" jdbcType="CHAR" property="enabled" />
-    <result column="email" jdbcType="VARCHAR" property="email" />
-    <result column="phonenumber" jdbcType="VARCHAR" property="phonenumber" />
-    <result column="sex" jdbcType="CHAR" property="sex" />
-    <result column="avatar" jdbcType="VARCHAR" property="avatar" />
-    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="remark" jdbcType="VARCHAR" property="remark" />
-    <association property="dept" javaType="io.github.yangyouwang.crud.system.entity.SysDept">
-      <result column="dept_name" jdbcType="VARCHAR" property="deptName"/>
-    </association>
-    <collection property="roles" javaType="java.util.ArrayList" ofType="io.github.yangyouwang.crud.system.entity.SysRole">
-      <id column="role_id" jdbcType="BIGINT" property="id" />
-      <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
-      <result column="role_key" jdbcType="VARCHAR" property="roleKey"/>
-    </collection>
-    <collection property="posts" javaType="java.util.ArrayList" ofType="io.github.yangyouwang.crud.system.entity.SysPost">
-      <id column="post_id" jdbcType="BIGINT" property="id" />
-      <result column="post_name" jdbcType="VARCHAR" property="postName"/>
-    </collection>
+    <result column="role_id" jdbcType="VARCHAR" property="roleIds" />
+    <result column="post_id" jdbcType="VARCHAR" property="postIds" />
   </resultMap>
   <sql id="Base_Column_List">
     id, dept_id, user_name, pass_word, enabled, email, phonenumber, sex, avatar, create_by, create_time,
     update_by, update_time, remark
   </sql>
-   <select id="findUserByName" resultMap="UserResultMap">
-    select
-        u.id as user_id,u.dept_id,u.user_name,u.pass_word,u.enabled,
-           r.id as role_id,r.role_key,r.role_name
-    from sys_user u
-    left join sys_user_role ur on u.id = ur.user_id
-    left join sys_role r on ur.role_id = r.id
-    where u.deleted = 0 and u.user_name = #{userName}
+   <select id="findUserByName" resultMap="BaseResultMap">
+       select
+           u.id,u.dept_id,u.user_name,u.pass_word,u.enabled,
+           group_concat(r.id) as role_id
+       from sys_user u
+                left join sys_user_role ur on u.id = ur.user_id
+                left join sys_role r on ur.role_id = r.id
+       where u.deleted = 0 and u.user_name = #{userName}
+       group by id
   </select>
-  <select id="findUserByUserId" resultMap="UserResultMap">
-     select
-        u.id as user_id,u.dept_id,u.user_name,u.pass_word,u.enabled,u.email,u.phonenumber,u.sex,u.avatar,u.remark,
-            d.dept_name,r.id as role_id,r.role_key,r.role_name,p.id as post_id,p.post_name
-    from sys_user u
-    left join sys_dept d on u.dept_id = d.id
-    left join sys_user_role ur on u.id = ur.user_id
-    left join sys_role r on ur.role_id = r.id
-    left join sys_user_post up on u.id = up.user_id
-    left join sys_post p on up.post_id = p.id
-    where u.deleted = 0 and u.id = #{id}
+  <select id="findUserByUserId" resultMap="BaseResultMap">
+      select
+          u.id,u.dept_id,u.user_name,u.enabled,u.email,u.phonenumber,u.sex,u.avatar,u.remark,
+          group_concat(r.id) as role_id,group_concat(p.id) as post_id
+      from sys_user u
+               left join sys_user_role ur on u.id = ur.user_id
+               left join sys_role r on ur.role_id = r.id
+               left join sys_user_post up on u.id = up.user_id
+               left join sys_post p on up.post_id = p.id
+      where u.deleted = 0 and u.id = #{id}
+      group by id
   </select>
-  <select id="findUserList" resultMap="UserResultMap">
-    select
-      u.id as user_id,u.dept_id,u.user_name,u.pass_word,u.enabled,u.email,u.phonenumber,u.sex,u.avatar,u.remark,
-           d.dept_name,r.role_name,p.post_name
-    from sys_user u
-           left join sys_dept d on u.dept_id = d.id
-           left join sys_user_role ur on u.id = ur.user_id
-           left join sys_role r on ur.role_id = r.id
-           left join sys_user_post up on u.id = up.user_id
-           left join sys_post p on up.post_id = p.id
-    where u.deleted = 0 and u.enabled = 'Y'
+  <select id="findUserList" resultType="io.github.yangyouwang.crud.system.model.SysUserDTO">
+      select
+          u.id,u.user_name,u.email,u.phonenumber,u.sex,u.avatar,u.remark,
+          d.dept_name,group_concat(r.role_name) as role_name,group_concat(p.post_name) as post_name
+      from sys_user u
+               left join sys_dept d on u.dept_id = d.id
+               left join sys_user_role ur on u.id = ur.user_id
+               left join sys_role r on ur.role_id = r.id
+               left join sys_user_post up on u.id = up.user_id
+               left join sys_post p on up.post_id = p.id
+      where u.deleted = 0 and u.enabled = 'Y'
+      group by id
   </select>
 </mapper>
