@@ -5,7 +5,6 @@ import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.base.CrudController;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.TreeSelectNode;
-import io.github.yangyouwang.common.domain.XmSelectNode;
 import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.crud.system.entity.SysMenu;
 import io.github.yangyouwang.crud.system.service.SysMenuService;
@@ -165,7 +164,7 @@ public class SysMenuController extends CrudController {
      */
     @GetMapping("/xmSelect")
     @ResponseBody
-    public List<XmSelectNode> xmSelect(@RequestParam(value = "ids",required = false) Long[] ids) {
+    public List<TreeSelectNode> xmSelect(@RequestParam(value = "ids",required = false) String ids) {
         return sysMenuService.xmSelect(ids);
     }
 }

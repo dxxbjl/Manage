@@ -17,7 +17,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TreeSelectNode implements Treeable {
+public class TreeSelectNode extends XmSelectNode implements Treeable {
     /**
      * id
      */

@@ -17,7 +17,7 @@
   </sql>
     <select id="findRoleById" resultMap="BaseResultMap">
     select
-        r.id as role_id, r.role_name, r.role_key, r.remark, r.create_by, r.create_time, r.update_by, r.update_time,
+        r.id, r.role_name, r.role_key, r.remark, r.create_by, r.create_time, r.update_by, r.update_time,
         group_concat(m.id) as menu_id
     from sys_role r
     left join sys_role_menu rm on r.id = rm.role_id

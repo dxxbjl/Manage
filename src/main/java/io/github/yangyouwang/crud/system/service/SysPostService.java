@@ -2,6 +2,7 @@ package io.github.yangyouwang.crud.system.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.github.yangyouwang.common.domain.XmSelectNode;
+import io.github.yangyouwang.core.util.StringUtil;
 import io.github.yangyouwang.crud.system.entity.SysPost;
 import io.github.yangyouwang.crud.system.mapper.SysPostMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -90,14 +91,14 @@ public class SysPostService extends ServiceImpl<SysPostMapper, SysPost> {
    * @return 岗位列表
    */
   @Transactional(readOnly = true)
-  public List<XmSelectNode> xmSelect(Long[] ids) {
+  public List<XmSelectNode> xmSelect(String ids) {
     List<SysPost> sysPosts = this.list(new LambdaQueryWrapper<>());
     return sysPosts.stream().map(sysPost -> {
       XmSelectNode treeNode = new XmSelectNode();
       treeNode.setName(sysPost.getPostName());
       treeNode.setValue(sysPost.getId());
       treeNode.setId(sysPost.getId());
-      ofNullable(ids).ifPresent(optIds -> treeNode.setSelected(ArrayUtils.contains(optIds,sysPost.getId())));
+      ofNullable(ids).ifPresent(optIds -> treeNode.setSelected(ArrayUtils.contains(StringUtil.getId(optIds),sysPost.getId())));
       return treeNode;
     }).collect(Collectors.toList());
   }

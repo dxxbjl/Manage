@@ -119,14 +119,14 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
      * @return 角色列表
      */
     @Transactional(readOnly = true)
-    public List<XmSelectNode> xmSelect(Long[] ids) {
+    public List<XmSelectNode> xmSelect(String ids) {
         List<SysRole> sysRoles = this.list(new LambdaQueryWrapper<>());
         return sysRoles.stream().map(sysRole -> {
             XmSelectNode treeNode = new XmSelectNode();
             treeNode.setName(sysRole.getRoleName());
             treeNode.setValue(sysRole.getId());
             treeNode.setId(sysRole.getId());
-            ofNullable(ids).ifPresent(optIds -> treeNode.setSelected(ArrayUtils.contains(optIds,sysRole.getId())));
+            ofNullable(ids).ifPresent(optIds -> treeNode.setSelected(ArrayUtils.contains(StringUtil.getId(optIds),sysRole.getId())));
             return treeNode;
         }).collect(Collectors.toList());
     }

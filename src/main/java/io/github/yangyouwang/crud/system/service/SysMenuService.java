@@ -6,11 +6,11 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.domain.TreeSelectNode;
-import io.github.yangyouwang.common.domain.XmSelectNode;
 import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.core.converter.ListToTree;
 import io.github.yangyouwang.core.converter.impl.ListToTreeImpl;
 import io.github.yangyouwang.core.exception.CrudException;
+import io.github.yangyouwang.core.util.StringUtil;
 import io.github.yangyouwang.crud.system.mapper.SysMenuMapper;
 import io.github.yangyouwang.crud.system.mapper.SysRoleMenuMapper;
 import io.github.yangyouwang.crud.system.entity.SysMenu;
@@ -28,7 +28,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static java.util.Optional.*;
+import static java.util.Optional.ofNullable;
+
 
 /**
  * @author yangyouwang
@@ -111,22 +112,16 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
      * @return 菜单列表
      */
     @Transactional(readOnly = true)
-    public List<XmSelectNode> xmSelect(Long[] ids) {
-        List<SysMenu> menus = this.list(new LambdaQueryWrapper<SysMenu>()
-                .eq(SysMenu::getVisible,ConfigConsts.ENABLED_YES));
+    public List<TreeSelectNode> xmSelect(String ids) {
+        List<TreeSelectNode> menus = sysMenuMapper.getMenuTree();
         if (menus.isEmpty()) {
             return Collections.emptyList();
         }
-        List<XmSelectNode> result = menus.stream().map(sysMenu -> {
-            XmSelectNode treeNode = new XmSelectNode();
-            treeNode.setName(sysMenu.getMenuName());
-            treeNode.setValue(sysMenu.getId());
-            treeNode.setId(sysMenu.getId());
-            treeNode.setParentId(sysMenu.getParentId());
-            ofNullable(ids).ifPresent(optIds -> treeNode.setSelected(ArrayUtils.contains(optIds,sysMenu.getId())));
-            return treeNode;
-        }).collect(Collectors.toList());
+        for (TreeSelectNode menu : menus) {
+            menu.setValue(menu.getId());
+            ofNullable(ids).ifPresent(optIds -> menu.setSelected(ArrayUtils.contains(StringUtil.getId(optIds),menu.getId())));
+        }
         ListToTree treeBuilder = new ListToTreeImpl();
-        return treeBuilder.toTree(result);
+        return treeBuilder.toTree(menus);
     }
 }

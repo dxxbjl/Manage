@@ -135,7 +135,7 @@ public class SysPostController extends CrudController {
    */
   @GetMapping("/xmSelect")
   @ResponseBody
-  public List<XmSelectNode> xmSelect(@RequestParam(value = "ids",required = false) Long[] ids) {
+  public List<XmSelectNode> xmSelect(@RequestParam(value = "ids",required = false) String ids) {
     return sysPostService.xmSelect(ids);
   }
 }
