@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-  <title>角色列表</title>
+  <title>模型列表</title>
   <div th:replace="common/link::header"></div>
 </head>
 <body>
@@ -72,7 +72,14 @@
               ,{field: 'key', title: 'KEY_'}
               ,{field: 'category', title: "流程分类", templet: function (d) { return crud.getDictValue('actCategory',d.category);}}
               ,{field: 'version', title: '版本'}
-              ,{field: 'deploymentId', title: '部署ID'}
+              ,{field: 'deploymentId', title: '部署ID', templet: function (d) {
+                if(d.deploymentId) {
+                  return "部署ID：" + d.deploymentId;
+                } else {
+                  return "未发布";
+                }
+              }}
+              ,{field: 'metaInfo', title: '元数据'}
               ,{field: 'createTime', title: '创建时间'}
               ,{toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
           ]]

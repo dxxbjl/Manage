@@ -1,5 +1,6 @@
 package io.github.yangyouwang.crud.act.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import io.github.yangyouwang.common.base.CrudController;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.TableDataInfo;
@@ -58,6 +59,8 @@ public class ActReModelController extends CrudController {
     @GetMapping("/editPage/{id}")
     public String editPage(@Valid @NotNull(message = "id不能为空")  @PathVariable String id, ModelMap map){
         ActReModel actReModel = actReModelService.getById(id);
+        JSONObject jsonObject = JSONObject.parseObject(actReModel.getMetaInfo());
+        actReModel.setDescription(jsonObject.getString("description"));
         map.put("actReModel",actReModel);
         return SUFFIX + "/edit";
     }
@@ -124,8 +127,8 @@ public class ActReModelController extends CrudController {
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        boolean flag = actReModelService.updateById(actReModel);
-        return Result.success(flag);
+        actReModelService.edit(actReModel);
+        return Result.success();
     }
 
     /**

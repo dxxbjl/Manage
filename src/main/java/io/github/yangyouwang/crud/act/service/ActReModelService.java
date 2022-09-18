@@ -2,6 +2,7 @@ package io.github.yangyouwang.crud.act.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.yangyouwang.crud.act.mapper.ActReModelMapper;
@@ -9,7 +10,6 @@ import io.github.yangyouwang.crud.act.entity.ActReModel;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
-import org.activiti.editor.constants.ModelDataJsonConstants;
 import org.activiti.editor.language.json.converter.BpmnJsonConverter;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.List;
+
+import static org.activiti.editor.constants.ModelDataJsonConstants.*;
 
 /**
  * @author yangyouwang
@@ -37,6 +39,8 @@ public class ActReModelService extends ServiceImpl<ActReModelMapper, ActReModel>
     @Resource
     private RepositoryService repositoryService;
 
+    @Resource
+    private ObjectMapper objectMapper;
     /**
      * 获取列表
      * @param actReModel 模型列表对象
@@ -44,8 +48,8 @@ public class ActReModelService extends ServiceImpl<ActReModelMapper, ActReModel>
      */
     public List<ActReModel> list(ActReModel actReModel) {
         return this.list(new LambdaQueryWrapper<ActReModel>()
-                        .like(StringUtils.isNotBlank(actReModel.getName()),ActReModel::getName,actReModel.getName())
-                        .like(StringUtils.isNotBlank(actReModel.getKey()),ActReModel::getKey,actReModel.getKey()));
+                .like(StringUtils.isNotBlank(actReModel.getName()), ActReModel::getName, actReModel.getName())
+                .like(StringUtils.isNotBlank(actReModel.getKey()), ActReModel::getKey, actReModel.getKey()));
     }
 
     /**
@@ -65,10 +69,10 @@ public class ActReModelService extends ServiceImpl<ActReModelMapper, ActReModel>
             Model modelData = repositoryService.newModel();
 
             ObjectNode modelObjectNode = objectMapper.createObjectNode();
-            modelObjectNode.put(ModelDataJsonConstants.MODEL_NAME, actReModel.getName());
-            modelObjectNode.put(ModelDataJsonConstants.MODEL_REVISION, 1);
+            modelObjectNode.put(MODEL_NAME, actReModel.getName());
+            modelObjectNode.put(MODEL_REVISION, 1);
             String description = StringUtils.defaultString(actReModel.getDescription());
-            modelObjectNode.put(ModelDataJsonConstants.MODEL_DESCRIPTION, description);
+            modelObjectNode.put(MODEL_DESCRIPTION, description);
             modelData.setMetaInfo(modelObjectNode.toString());
             modelData.setName(actReModel.getName());
             modelData.setKey(StringUtils.defaultString(actReModel.getKey()));
@@ -111,5 +115,21 @@ public class ActReModelService extends ServiceImpl<ActReModelMapper, ActReModel>
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void edit(ActReModel actReModel) {
+        Model model = repositoryService.getModel(actReModel.getId());
+        try {
+            ObjectNode  modelJson = (ObjectNode) objectMapper.readTree(model.getMetaInfo());
+            modelJson.put(MODEL_NAME, actReModel.getName());
+            modelJson.put(MODEL_DESCRIPTION, actReModel.getDescription());
+            model.setMetaInfo(modelJson.toString());
+            model.setName(actReModel.getName());
+            model.setKey(StringUtils.defaultString(actReModel.getKey()));
+            model.setCategory(actReModel.getCategory());
+            repositoryService.saveModel(model);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 }
