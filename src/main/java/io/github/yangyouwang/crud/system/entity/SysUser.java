@@ -21,6 +21,10 @@ public class SysUser extends BaseEntity {
      */
     private Long deptId;
     /**
+     * 昵称
+     */
+    private String nickName;
+    /**
      * 账号
      */
     private String userName;

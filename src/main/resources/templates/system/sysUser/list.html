@@ -10,6 +10,12 @@
       <form class="layui-form layui-card-header layuiadmin-card-header-auto">
         <div class="layui-form-item">
           <div class="layui-inline">
+            <label class="layui-form-label">昵称</label>
+            <div class="layui-input-block">
+              <input type="text" name="nickName" placeholder="请输入昵称" class="layui-input">
+            </div>
+          </div>
+          <div class="layui-inline">
             <label class="layui-form-label">用户名</label>
             <div class="layui-input-block">
               <input type="text" name="userName" placeholder="请输入用户名" class="layui-input">
@@ -83,6 +89,7 @@
           ,page: true //开启分页
           ,cols: [[ //表头
               {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
+              {field: 'nickName', title: '昵称'},
               {field: 'avatar', title: "头像",
                   templet: function (d) {
                     let avatar = "/static/img/def_profile.jpg";
