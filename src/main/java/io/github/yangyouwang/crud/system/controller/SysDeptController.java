@@ -111,8 +111,8 @@ public class SysDeptController extends CrudController {
    }
 
   /**
-   * 查询部门列表
-   * @return 部门列表
+   * 查询部门树结构
+   * @return 部门树结构
    */
   @GetMapping("/treeSelect")
   @ResponseBody

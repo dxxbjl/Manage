@@ -86,7 +86,7 @@ public class SysPostService extends ServiceImpl<SysPostMapper, SysPost> {
    }
 
   /**
-   * 查询岗位列表
+   * 根据岗位ids查询选中岗位列表
    * @param ids 岗位ids
    * @return 岗位列表
    */

@@ -158,9 +158,9 @@ public class SysMenuController extends CrudController {
     }
 
     /**
-     * 查询菜单列表
+     * 根据菜单ids查询选中菜单树结构
      * @param ids 菜单id列表
-     * @return 菜单列表
+     * @return 菜单树结构
      */
     @GetMapping("/xmSelect")
     @ResponseBody

@@ -85,8 +85,8 @@ public class SysDeptService extends ServiceImpl<SysDeptMapper, SysDept> {
      removeByIds(ids);
    }
   /**
-   * 查询部门列表
-   * @return 部门列表
+   * 查询部门树结构
+   * @return 部门树结构
    */
   public List<TreeSelectNode> treeSelect() {
     List<SysDept> depts = this.list(new LambdaQueryWrapper<SysDept>()

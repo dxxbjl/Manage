@@ -129,9 +129,9 @@ public class SysPostController extends CrudController {
   }
 
   /**
-   * 查询岗位列表
+   * 根据岗位ids查询选中岗位列表
    * @param ids 岗位ids
-   * @return 岗位列表
+   * @return 岗位下拉列表
    */
   @GetMapping("/xmSelect")
   @ResponseBody

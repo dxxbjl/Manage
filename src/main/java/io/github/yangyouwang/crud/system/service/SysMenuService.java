@@ -113,9 +113,9 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
     }
 
     /**
-     * 查询菜单列表
+     * 根据菜单ids查询选中菜单树结构
      * @param ids 菜单ids
-     * @return 菜单列表
+     * @return 菜单树结构
      */
     @Transactional(readOnly = true)
     public List<TreeSelectNode> xmSelect(String ids) {

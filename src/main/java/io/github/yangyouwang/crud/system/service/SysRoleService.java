@@ -114,7 +114,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
     }
 
     /**
-     * 查询角色列表
+     * 根据角色ids查询选中角色列表
      * @param ids 角色ids
      * @return 角色列表
      */
