@@ -1,7 +1,6 @@
 package io.github.yangyouwang.crud.system.mapper;
 
 import io.github.yangyouwang.common.base.CrudBaseMapper;
-import io.github.yangyouwang.common.domain.TreeSelectNode;
 import io.github.yangyouwang.crud.system.entity.SysMenu;
 
 import java.util.List;
@@ -38,9 +37,4 @@ public interface SysMenuMapper extends CrudBaseMapper<SysMenu> {
      * @return 权限列表
      */
     List<String> findMenuRole();
-    /**
-     * 查询菜单树结构
-     * @return 菜单树结构
-     */
-    List<TreeSelectNode> getMenuTree();
 }

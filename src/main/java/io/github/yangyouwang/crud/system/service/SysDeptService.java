@@ -1,5 +1,7 @@
 package io.github.yangyouwang.crud.system.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.domain.TreeSelectNode;
 import io.github.yangyouwang.core.converter.ListToTree;
 import io.github.yangyouwang.core.converter.impl.ListToTreeImpl;
@@ -9,11 +11,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Service;
 import org.apache.commons.lang3.StringUtils;
-
-import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.List;
-
+import java.util.stream.Collectors;
 /**
 * <p>
  * 部门表 服务实现类
@@ -24,9 +24,6 @@ import java.util.List;
 */
 @Service
 public class SysDeptService extends ServiceImpl<SysDeptMapper, SysDept> {
-
-  @Resource
-  private SysDeptMapper sysDeptMapper;
 
   /**
   * 部门表分页列表
@@ -92,11 +89,19 @@ public class SysDeptService extends ServiceImpl<SysDeptMapper, SysDept> {
    * @return 部门列表
    */
   public List<TreeSelectNode> treeSelect() {
-    List<TreeSelectNode> depts = sysDeptMapper.getDeptTree();
+    List<SysDept> depts = this.list(new LambdaQueryWrapper<SysDept>()
+            .eq(SysDept::getEnabled, ConfigConsts.ENABLED_YES));
     if (depts.isEmpty()) {
       return Collections.emptyList();
     }
+    List<TreeSelectNode> result = depts.stream().map(sysMenu -> {
+      TreeSelectNode treeNode = new TreeSelectNode();
+      treeNode.setId(sysMenu.getId());
+      treeNode.setParentId(sysMenu.getParentId());
+      treeNode.setName(sysMenu.getDeptName());
+      return treeNode;
+    }).collect(Collectors.toList());
     ListToTree treeBuilder = new ListToTreeImpl();
-    return treeBuilder.toTree(depts);
+    return treeBuilder.toTree(result);
   }
 }

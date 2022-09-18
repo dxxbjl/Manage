@@ -90,21 +90,27 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
         sysRoleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>()
                 .eq(SysRoleMenu::getMenuId, id));
     }
-
     /**
-     * 查询菜单树结构
-     * @return 菜单树结构
+     * 查询菜单列表
+     * @return 菜单列表
      */
     @Transactional(readOnly = true)
     public List<TreeSelectNode> treeSelect() {
-        List<TreeSelectNode> menus = sysMenuMapper.getMenuTree();
+        List<SysMenu> menus = this.list(new LambdaQueryWrapper<SysMenu>()
+                .eq(SysMenu::getVisible,ConfigConsts.ENABLED_YES));
         if (menus.isEmpty()) {
             return Collections.emptyList();
         }
+        List<TreeSelectNode> result = menus.stream().map(sysMenu -> {
+            TreeSelectNode treeNode = new TreeSelectNode();
+            treeNode.setId(sysMenu.getId());
+            treeNode.setParentId(sysMenu.getParentId());
+            treeNode.setName(sysMenu.getMenuName());
+            return treeNode;
+        }).collect(Collectors.toList());
         ListToTree treeBuilder = new ListToTreeImpl();
-        return treeBuilder.toTree(menus);
+        return treeBuilder.toTree(result);
     }
-
 
     /**
      * 查询菜单列表
@@ -113,15 +119,21 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
      */
     @Transactional(readOnly = true)
     public List<TreeSelectNode> xmSelect(String ids) {
-        List<TreeSelectNode> menus = sysMenuMapper.getMenuTree();
+        List<SysMenu> menus = this.list(new LambdaQueryWrapper<SysMenu>()
+                .eq(SysMenu::getVisible,ConfigConsts.ENABLED_YES));
         if (menus.isEmpty()) {
             return Collections.emptyList();
         }
-        for (TreeSelectNode menu : menus) {
-            menu.setValue(menu.getId());
-            ofNullable(ids).ifPresent(optIds -> menu.setSelected(ArrayUtils.contains(StringUtil.getId(optIds),menu.getId())));
-        }
+        List<TreeSelectNode> result = menus.stream().map(sysMenu -> {
+            TreeSelectNode treeNode = new TreeSelectNode();
+            treeNode.setName(sysMenu.getMenuName());
+            treeNode.setValue(sysMenu.getId());
+            treeNode.setId(sysMenu.getId());
+            treeNode.setParentId(sysMenu.getParentId());
+            ofNullable(ids).ifPresent(optIds -> treeNode.setSelected(ArrayUtils.contains(StringUtil.getId(optIds),sysMenu.getId())));
+            return treeNode;
+        }).collect(Collectors.toList());
         ListToTree treeBuilder = new ListToTreeImpl();
-        return treeBuilder.toTree(menus);
+        return treeBuilder.toTree(result);
     }
 }

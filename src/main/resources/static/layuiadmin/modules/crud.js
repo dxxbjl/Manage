@@ -1,7 +1,7 @@
 layui.define(['jquery','cookie'], function(exports){
     let $ = layui.jquery,
         cookie = layui.cookie;
-    function options(name) {
+    let options = function(name) {
         let list = [];
         if (name) {
             // 获取字典
@@ -17,7 +17,7 @@ layui.define(['jquery','cookie'], function(exports){
          */
         getXmSelectTreeIds: function (select) {
             let value = select.getValue();
-            return value.map(x => {return x.id}).join(",");
+            return value.map(x => {return x.id}).toString();
         },
         /**
          * 获取字典
