@@ -21,10 +21,6 @@ public interface ConfigConsts {
      */
     String ENABLED_YES = "Y";
     /**
-     * 用户SheetName
-     */
-    String SYS_USER_SHEET_NAME = "用户信息";
-    /**
      * 字典性别key
      */
     String DICT_KEY_SEX = "sex";

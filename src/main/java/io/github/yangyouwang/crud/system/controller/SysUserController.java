@@ -1,12 +1,12 @@
 package io.github.yangyouwang.crud.system.controller;
 
 import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.metadata.Sheet;
 import com.alibaba.excel.support.ExcelTypeEnum;
+import com.alibaba.excel.write.builder.ExcelWriterBuilder;
+import com.alibaba.excel.write.metadata.WriteSheet;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.base.CrudController;
-import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.github.yangyouwang.common.enums.BusinessType;
@@ -24,12 +24,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -231,25 +229,20 @@ public class SysUserController extends CrudController {
      * 导出用户信息
      */
     @RequestMapping("/exportExcel")
-    public void export(HttpServletRequest request, HttpServletResponse response) {
-       try {
-           List<SysUserDTO> sysUsers= sysUserService.exportSysUserList();
-           ServletOutputStream out = response.getOutputStream();
-           ExcelWriter writer = new ExcelWriter(out, ExcelTypeEnum.XLSX, true);
-           Sheet sheet = new Sheet(1, 0, SysUserDTO.class);
-           //设置自适应宽度
-           sheet.setAutoWidth(Boolean.TRUE);
-           // 第一个 sheet 名称
-           sheet.setSheetName(ConfigConsts.SYS_USER_SHEET_NAME);
-           writer.write(sysUsers, sheet);
-           //通知浏览器以附件的形式下载处理，设置返回头要注意文件名有中文
-           response.setHeader("Content-disposition", "attachment;filename=" + new String(ConfigConsts.SYS_USER_SHEET_NAME.getBytes("gb2312"), "ISO8859-1" ) + ".xlsx");
-           writer.finish();
-           response.setContentType("multipart/form-data");
-           response.setCharacterEncoding("utf-8");
-           out.flush();
-       } catch (IOException e) {
-           throw new RuntimeException(e);
-       }
+    public void export(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String fileName = "用户信息" + System.currentTimeMillis();
+        response.setContentType("application/force-download");
+        response.setHeader("Content-disposition", "attachment;filename=" + new String(fileName.getBytes("gb2312"), "ISO8859-1" ) + ".xlsx");
+        List<SysUserDTO> sysUsers= sysUserService.exportSysUserList();
+        ExcelWriter writer = new ExcelWriterBuilder()
+                .autoCloseStream(true)
+                .excelType(ExcelTypeEnum.XLSX)
+                .file(response.getOutputStream())
+                .head(SysUserDTO.class)
+                .build();
+        WriteSheet writeSheet = new WriteSheet();
+        writeSheet.setSheetName(fileName);
+        writer.write(sysUsers, writeSheet);
+        writer.finish();
     }
 }
