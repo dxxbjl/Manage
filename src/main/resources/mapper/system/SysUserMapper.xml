@@ -19,6 +19,9 @@
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="role_id" jdbcType="VARCHAR" property="roleIds" />
     <result column="post_id" jdbcType="VARCHAR" property="postIds" />
+    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+    <result column="post_name" jdbcType="VARCHAR" property="postName" />
   </resultMap>
   <sql id="Base_Column_List">
     id, dept_id, nick_name, user_name, pass_word, enabled, email, phonenumber, sex, avatar, create_by, create_time,
@@ -46,17 +49,19 @@
       where u.deleted = 0 and u.id = #{id}
       group by u.id
   </select>
-  <select id="findUserList" resultType="io.github.yangyouwang.crud.system.model.SysUserDTO">
+  <select id="findUserList" resultMap="BaseResultMap">
       select
-          u.id,u.nick_name,u.user_name,u.email,u.phonenumber,u.sex,u.avatar,u.remark,
-          d.dept_name,group_concat(r.role_name) as role_name,group_concat(p.post_name) as post_name
+          u.id,u.nick_name,u.avatar,u.user_name,u.email,u.phonenumber,u.sex,group_concat(r.role_name) as role_name,
+          d.dept_name,group_concat(p.post_name) as post_name,u.enabled,u.remark,u.create_by,u.create_time
       from sys_user u
                left join sys_dept d on u.dept_id = d.id
                left join sys_user_role ur on u.id = ur.user_id
                left join sys_role r on ur.role_id = r.id
                left join sys_user_post up on u.id = up.user_id
                left join sys_post p on up.post_id = p.id
-      where u.deleted = 0 and u.enabled = 'Y'
+      where u.deleted = 0
+      ${ew.customSqlSegment}
       group by u.id
+      order by u.create_time desc
   </select>
 </mapper>

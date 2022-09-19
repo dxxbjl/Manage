@@ -17,7 +17,6 @@ import io.github.yangyouwang.crud.system.model.ResetPassDTO;
 import io.github.yangyouwang.crud.system.model.SysUserDTO;
 import io.github.yangyouwang.crud.system.service.SysUserService;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -147,12 +146,7 @@ public class SysUserController extends CrudController {
     @ResponseBody
     public TableDataInfo page(SysUser sysUser) {
         startPage();
-        List<SysUser> list = sysUserService.list(new LambdaQueryWrapper<SysUser>()
-                .like(StringUtils.isNotBlank(sysUser.getNickName()), SysUser::getNickName , sysUser.getNickName())
-                .like(StringUtils.isNotBlank(sysUser.getUserName()), SysUser::getUserName , sysUser.getUserName())
-                .like(StringUtils.isNotBlank(sysUser.getEmail()), SysUser::getEmail , sysUser.getEmail())
-                .like(StringUtils.isNotBlank(sysUser.getPhonenumber()), SysUser::getPhonenumber , sysUser.getPhonenumber())
-                .orderByDesc(SysUser::getCreateTime));
+        List<SysUser> list = sysUserService.list(sysUser);
         return getDataTable(list);
     }
 

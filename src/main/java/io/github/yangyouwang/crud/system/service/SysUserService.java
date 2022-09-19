@@ -15,7 +15,9 @@ import io.github.yangyouwang.crud.system.mapper.SysUserRoleMapper;
 import io.github.yangyouwang.crud.system.model.ModifyPassDTO;
 import io.github.yangyouwang.crud.system.model.ResetPassDTO;
 import io.github.yangyouwang.crud.system.model.SysUserDTO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.framework.AopContext;
+import org.springframework.beans.BeanUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -59,6 +61,18 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
 
     @Resource
     private BCryptPasswordEncoder passwordEncoder;
+
+    /**
+     * 查询用户列表
+     * @param sysUser 请求参数
+     * @return 用户列表
+     */
+    public List<SysUser> list(SysUser sysUser) {
+        return sysUserMapper.findUserList(new LambdaQueryWrapper<SysUser>()
+                .like(StringUtils.isNotBlank(sysUser.getNickName()),SysUser::getNickName, sysUser.getNickName())
+                .like(StringUtils.isNotBlank(sysUser.getUserName()),SysUser::getUserName, sysUser.getUserName())
+                .like(StringUtils.isNotBlank(sysUser.getPhonenumber()), SysUser::getPhonenumber, sysUser.getPhonenumber()));
+    }
 
     @Override
     public UserDetails loadUserByUsername(@NonNull String userName) {
@@ -181,7 +195,12 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
      */
     @Transactional(readOnly = true)
     public List<SysUserDTO> exportSysUserList() {
-        return sysUserMapper.findUserList();
+        List<SysUser> list = sysUserMapper.findUserList(new LambdaQueryWrapper());
+        return list.stream().map(sysUser -> {
+            SysUserDTO sysUserDTO = new SysUserDTO();
+            BeanUtils.copyProperties(sysUser,sysUserDTO);
+            return sysUserDTO;
+        }).collect(Collectors.toList());
     }
     /**
      * 修改密码

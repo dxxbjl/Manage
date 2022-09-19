@@ -22,12 +22,6 @@
             </div>
           </div>
           <div class="layui-inline">
-            <label class="layui-form-label">邮箱</label>
-            <div class="layui-input-block">
-              <input type="text" name="email" placeholder="请输入邮箱" class="layui-input">
-            </div>
-          </div>
-          <div class="layui-inline">
             <label class="layui-form-label">手机号</label>
             <div class="layui-input-block">
               <input type="text" name="phonenumber" placeholder="请输入手机号" class="layui-input">
@@ -89,7 +83,6 @@
           ,page: true //开启分页
           ,cols: [[ //表头
               {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
-              {field: 'nickName', title: '昵称'},
               {field: 'avatar', title: "头像",
                   templet: function (d) {
                     if (d.avatar) {
@@ -98,11 +91,13 @@
                     return '无';
                   }
               },
+              {field: 'nickName', title: '昵称'},
               {field: 'userName', title: '账户'},
-              {field: 'email', title: '邮箱',width: 180},
-              {field: 'phonenumber', title: '手机号码',width: 180},
-              {field: 'sex', title: "性别",templet: function (d) { return crud.getDictValue('sex',d.sex);}},
-              {field: 'enabled', align: "center", sort: true, templet: '#enabledTpl', title: '状态'},
+              {field: 'sex', title: "性别",width: 60, templet: function (d) { return crud.getDictValue('sex',d.sex);}},
+              {field: 'phonenumber', title: '手机号',width: 120},
+              {field: 'enabled', align: "center", width: 100, templet: '#enabledTpl', title: '状态'},
+              {field: 'deptName', title: '部门名称'},
+              {field: 'postName', title: '岗位名称'},
               {toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
           ]]
       });

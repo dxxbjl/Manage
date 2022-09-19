@@ -29,6 +29,10 @@ public interface ConfigConsts {
      */
     String DICT_KEY_SEX = "sex";
     /**
+     * 字典状态key
+     */
+    String DICT_KEY_ENABLED= "enabled";
+    /**
      * 上传文件类型
      */
     List<String> IMG_TYPE = Arrays.asList("PNG","JPG","JPEG","BMP","GIF","SVG");

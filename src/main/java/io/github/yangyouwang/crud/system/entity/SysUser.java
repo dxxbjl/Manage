@@ -62,4 +62,19 @@ public class SysUser extends BaseEntity {
      */
     @TableField(exist = false)
     private String postIds;
+    /**
+     * 角色名称
+     */
+    @TableField(exist = false)
+    private String roleName;
+    /**
+     * 部门名称
+     */
+    @TableField(exist = false)
+    private String deptName;
+    /**
+     * 岗位名称
+     */
+    @TableField(exist = false)
+    private String postName;
 }

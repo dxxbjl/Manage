@@ -1,11 +1,11 @@
 package io.github.yangyouwang.crud.system.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
 import io.github.yangyouwang.common.base.CrudBaseMapper;
 import io.github.yangyouwang.crud.system.entity.SysUser;
-import io.github.yangyouwang.crud.system.model.SysUserDTO;
-
+import org.apache.ibatis.annotations.Param;
 import java.util.List;
-
 
 /**
  * @author yangyouwang
@@ -32,7 +32,8 @@ public interface SysUserMapper extends CrudBaseMapper<SysUser> {
 
     /**
      * 获取全部用户
+     * @param wrapper 参数
      * @return 用户列表
      */
-    List<SysUserDTO> findUserList();
+    List<SysUser> findUserList(@Param(Constants.WRAPPER) Wrapper wrapper);
 }
