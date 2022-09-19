@@ -92,11 +92,10 @@
               {field: 'nickName', title: '昵称'},
               {field: 'avatar', title: "头像",
                   templet: function (d) {
-                    let avatar = "/static/img/def_profile.jpg";
                     if (d.avatar) {
-                      avatar = d.avatar;
+                      return '<img onclick="preview(this)" width="100%" height="100%" src='+d.avatar+'>'
                     }
-                    return '<img width="100%" height="100%" src='+avatar+'>';
+                    return '无';
                   }
               },
               {field: 'userName', title: '账户'},

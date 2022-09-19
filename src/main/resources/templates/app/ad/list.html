@@ -72,7 +72,7 @@
                 {field: 'adUrl', title: "宣传图片",
                     templet: function (d) {
                         if (d.adUrl) {
-                            return '<img alt="" width="100%" height="100%" src='+d.adUrl+'>'
+                            return '<img onclick="preview(this)" width="100%" height="100%" src='+d.adUrl+'>'
                         }
                         return '无';
                     }
