@@ -67,46 +67,40 @@ public class SysUserDTO extends BaseRowModel implements Serializable {
     @ExcelProperty(value = {"用户性别"}, index = 6, converter = SexConverter.class)
     private String sex;
     /**
-     * 角色
-     */
-    @ColumnWidth(50)
-    @ExcelProperty(value = {"角色"}, index = 7)
-    private String roleName;
-    /**
      * 部门
      */
     @ColumnWidth(30)
-    @ExcelProperty(value = {"部门"}, index = 8)
+    @ExcelProperty(value = {"部门"}, index = 7)
     private String deptName;
     /**
      * 岗位
      */
     @ColumnWidth(50)
-    @ExcelProperty(value = {"岗位"}, index = 9)
+    @ExcelProperty(value = {"岗位"}, index = 8)
     private String postName;
     /**
      * 状态
      * */
     @ColumnWidth(30)
-    @ExcelProperty(value = {"状态"}, index = 10,converter = EnabledConverter.class)
+    @ExcelProperty(value = {"状态"}, index = 9,converter = EnabledConverter.class)
     private String enabled;
     /**
      * 备注
      * */
     @ColumnWidth(30)
-    @ExcelProperty(value = {"备注"}, index = 11)
+    @ExcelProperty(value = {"备注"}, index = 10)
     private String remark;
 
     /**
      * 创建人
      *  */
     @ColumnWidth(30)
-    @ExcelProperty(value = {"创建人"}, index = 12)
+    @ExcelProperty(value = {"创建人"}, index = 11)
     private String createBy;
     /**
      * 创建时间
      *  */
     @ColumnWidth(30)
-    @ExcelProperty(value = {"创建时间"}, index = 13, converter = DateConverter.class)
+    @ExcelProperty(value = {"创建时间"}, index = 12, converter = DateConverter.class)
     private Date createTime;
 }
