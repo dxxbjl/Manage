@@ -106,7 +106,7 @@
                     ,title: "添加${table.comment!}"
                     ,content: ctx + '<#if package.ModuleName??>/${package.ModuleName}</#if>/${table.entityPath}/addPage'
                     ,maxmin: true
-                    ,area: ['50%', '80%']
+                    ,area: ['80%', '80%']
                     ,btn: ['确定', '取消']
                     ,yes: function(index, layero){
                         let submit = layero.find('iframe').contents().find('#save-submit');
@@ -125,7 +125,7 @@
                     ,title: '修改${table.comment!}'
                     ,content: ctx + '<#if package.ModuleName??>/${package.ModuleName}</#if>/${table.entityPath}/editPage/' + id
                     ,maxmin: true
-                    ,area: ['50%', '80%']
+                    ,area: ['80%', '80%']
                     ,btn: ['确定', '取消']
                     ,yes: function(index, layero){
                         let submit = layero.find('iframe').contents().find('#save-submit');
