@@ -71,15 +71,13 @@
         dv.remark as dictValueRemark
     from sys_dict_type dt
     left join sys_dict_value dv on dt.id = dv.dict_type_id
-    <where>
-        <if test="dictKey != null and dictKey != ''">
-            AND dt.dict_key like CONCAT('%',#{dictKey},'%')
-        </if>
-        <if test="dictName != null and dictName != ''">
-            AND dt.dict_key like CONCAT('%',#{dictName},'%')
-        </if>
-      dt.deleted = 0
-    </where>
+    where dt.deleted = 0
+    <if test="ew != null">
+       <if test="ew.nonEmptyOfWhere">
+           AND
+       </if>
+       ${ew.sqlSegment}
+    </if>
     order by dv.order_num asc
     </select>
     <select id="selectDictList"  resultMap="DictResultMap">

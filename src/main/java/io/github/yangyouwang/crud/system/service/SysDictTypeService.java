@@ -9,6 +9,7 @@ import io.github.yangyouwang.crud.system.mapper.SysDictTypeMapper;
 import io.github.yangyouwang.crud.system.mapper.SysDictValueMapper;
 import io.github.yangyouwang.crud.system.entity.SysDictType;
 import io.github.yangyouwang.crud.system.entity.SysDictValue;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -42,12 +43,14 @@ public class SysDictTypeService extends ServiceImpl<SysDictTypeMapper, SysDictTy
 
     /**
      * 列表请求
-     * @param sysDictType 请求字典列表参数
+     * @param param 请求字典列表参数
      * @return 请求列表
      */
     @Transactional(readOnly = true)
-    public List<SysDictType> list(SysDictType sysDictType) {
-         return sysDictTypeMapper.selectDictPage(sysDictType.getDictKey(),sysDictType.getDictName());
+    public List<SysDictType> list(SysDictType param) {
+         return sysDictTypeMapper.selectDictPage(new LambdaQueryWrapper<SysDictType>()
+                 .like(!StringUtils.isEmpty(param.getDictKey()), SysDictType::getDictKey,param.getDictKey())
+                 .like(!StringUtils.isEmpty(param.getDictName()), SysDictType::getDictName,param.getDictKey()));
     }
 
     /**

@@ -1,5 +1,7 @@
 package io.github.yangyouwang.crud.system.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
 import io.github.yangyouwang.common.base.CrudBaseMapper;
 import io.github.yangyouwang.crud.system.entity.SysDictType;
 import org.apache.ibatis.annotations.Param;
@@ -27,9 +29,8 @@ public interface SysDictTypeMapper extends CrudBaseMapper<SysDictType> {
     List<SysDictType> selectDictList();
     /**
      * 自定义sql分页
-     * @param dictKey 类型key
-     * @param dictName 类型名称
+     * @param wrapper 参数
      * @return 数据字典列表
      */
-    List<SysDictType> selectDictPage(@Param("dictKey") String dictKey,@Param("dictName") String dictName);
+    List<SysDictType> selectDictPage(@Param(Constants.WRAPPER) Wrapper wrapper);
 }
