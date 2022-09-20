@@ -29,17 +29,21 @@
                 </div>
                 <div class="layui-inline">
                     <button type="button" class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
-                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>搜索
                     </button>
-                    <button type="button" class="layui-btn layui-btn-primary" data-type="resetForm">重置</button>
-                    <button type="button" class="layui-btn layuiadmin-btn-useradmin" data-type="expand">全部展开</button>
-                    <button type="button" class="layui-btn layuiadmin-btn-useradmin" data-type="fold">全部折叠</button>
-                    <button type="button" sec:authorize="hasAuthority('sysDept:add')" class="layui-btn layuiadmin-btn-useradmin" data-type="addView">添加</button>
                 </div>
             </div>
         </form>
         <div class="layui-card-body">
             <table id="sysDeptTable" lay-filter="sysDeptTable"></table>
+            <script type="text/html" id="toolbar">
+                <div class="layui-btn-container">
+                    <a class="layui-btn layui-btn-xs" lay-event="expand">全部展开</a>
+                    <a class="layui-btn layui-btn-xs" lay-event="fold">全部折叠</a>
+                    <a class="layui-btn layui-btn-xs" lay-event="reset"><i class="layui-icon layui-icon-refresh"></i>重置</a>
+                    <a sec:authorize="hasAuthority('sysDept:add')" class="layui-btn layui-btn-xs" lay-event="add"><i class="layui-icon layui-icon-add-1"></i>添加</a>
+                </div>
+            </script>
             <script type="text/html" id="enabledTpl">
                 <input type="checkbox" lay-filter="enabled" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" {{d.enabled==='Y'?'checked':''}} />
             </script>
@@ -78,10 +82,11 @@
                 treePidName: 'parentId',     // 父级节点字段
                 treeDefaultClose: true,   // 是否默认折叠
                 treeLinkage: true,        // 父级展开时是否自动展开所有子级
-                elem: '#sysDeptTable'
-                ,url:  ctx + '/system/sysDept/page'
-                ,where: data
-                ,cols: [[ //表头
+                elem: '#sysDeptTable',
+                toolbar: '#toolbar',
+                url:  ctx + '/system/sysDept/page',
+                where: data,
+                cols: [[ //表头
                     {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
                     {field: 'deptName', title: '部门名称'},
                     {field: 'leader', title: '负责人'},
@@ -93,7 +98,24 @@
             });
         }
         initTable();
-
+        //头工具栏事件
+        table.on('toolbar(sysDeptTable)', function(obj){
+            switch(obj.event){
+                case 'expand':
+                    active.expand();
+                    break;
+                case 'fold':
+                    active.fold();
+                    break;
+                case 'reset':
+                    active.resetForm();
+                    break;
+                case 'add':
+                    active.addView();
+                    break;
+            };
+        });
+        //监听行工具事件
         table.on('tool(sysDeptTable)', function(obj){
             let data = obj.data //获得当前行数据
                 ,layEvent = obj.event;
@@ -104,10 +126,6 @@
             } else if(layEvent === 'add'){
                 active.addView(data.id);
             }
-        });
-        $('.layui-btn').on('click', function(){
-            let type = $(this).data('type');
-            active[type] && active[type].call(this);
         });
         // 修改部门状态
         form.on('switch(enabled)', function (obj) {

@@ -21,13 +21,17 @@
                     <button type="button" class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
                         <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
                     </button>
-                    <button type="button" class="layui-btn layui-btn-primary" data-type="resetForm">重置</button>
-                    <button type="button" sec:authorize="hasAuthority('${table.entityPath}:add')" class="layui-btn layuiadmin-btn-useradmin" data-type="addView">添加</button>
                 </div>
             </div>
         </form>
         <div class="layui-card-body">
             <table id="${table.entityPath}Table" lay-filter="${table.entityPath}Table"></table>
+            <script type="text/html" id="toolbar">
+                <div class="layui-btn-container">
+                    <a class="layui-btn layui-btn-xs" lay-event="reset"><i class="layui-icon layui-icon-refresh"></i>重置</a>
+                    <a sec:authorize="hasAuthority('${table.entityPath}:add')" class="layui-btn layui-btn-xs" lay-event="add"><i class="layui-icon layui-icon-add-1"></i>添加</a>
+                </div>
+            </script>
             <script type="text/html" id="tableBar">
                 <a sec:authorize="hasAuthority('${table.entityPath}:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
                 <a sec:authorize="hasAuthority('${table.entityPath}:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
@@ -56,6 +60,7 @@
         // 查询列表接口
         table.render({
             elem: '#${table.entityPath}Table'
+            ,toolbar: '#toolbar'
             ,height: 'full-110'
             ,url:  ctx + '<#if package.ModuleName??>/${package.ModuleName}</#if>/${table.entityPath}/page'
             ,page: true //开启分页
@@ -67,6 +72,18 @@
                 {toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
             ]]
         });
+        //头工具栏事件
+        table.on('toolbar(${table.entityPath}Table)', function(obj){
+            switch(obj.event){
+                case 'reset':
+                    active.resetForm();
+                    break;
+                case 'add':
+                    active.addView();
+                    break;
+            };
+        });
+        //监听行工具事件
         table.on('tool(${table.entityPath}Table)', function(obj){
             let data = obj.data //获得当前行数据
                 ,layEvent = obj.event;
@@ -75,10 +92,6 @@
             } else if(layEvent === 'del'){
                 active.del(data.id);
             }
-        });
-        $('.layui-btn').on('click', function(){
-            let type = $(this).data('type');
-            active[type] && active[type].call(this);
         });
         /* 触发弹层 */
         let active = {
