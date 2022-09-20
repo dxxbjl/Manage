@@ -1,6 +1,10 @@
 package io.github.yangyouwang.crud.system.service;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.support.ExcelTypeEnum;
+import com.alibaba.excel.write.builder.ExcelWriterBuilder;
+import com.alibaba.excel.write.metadata.WriteSheet;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.constant.ConfigConsts;
@@ -19,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.lang.NonNull;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -32,6 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -193,14 +199,32 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
      * 导出用户列表
      * @return 用户列表
      */
+    @Async
     @Transactional(readOnly = true)
-    public List<SysUserDTO> exportSysUserList() {
-        List<SysUser> list = sysUserMapper.findUserList(new LambdaQueryWrapper());
-        return list.stream().map(sysUser -> {
-            SysUserDTO sysUserDTO = new SysUserDTO();
-            BeanUtils.copyProperties(sysUser,sysUserDTO);
-            return sysUserDTO;
-        }).collect(Collectors.toList());
+    public void exportSysUser(HttpServletResponse response) {
+        try {
+            String fileName = "用户信息" + System.currentTimeMillis();
+            response.setContentType("application/force-download");
+            response.setHeader("Content-disposition", "attachment;filename=" + new String(fileName.getBytes("gb2312"), "ISO8859-1" ) + ".xlsx");
+            List<SysUser> list = sysUserMapper.findUserList(new LambdaQueryWrapper());
+            List<SysUserDTO> sysUsers = list.stream().map(sysUser -> {
+                SysUserDTO sysUserDTO = new SysUserDTO();
+                BeanUtils.copyProperties(sysUser,sysUserDTO);
+                return sysUserDTO;
+            }).collect(Collectors.toList());
+            ExcelWriter writer = new ExcelWriterBuilder()
+                    .autoCloseStream(true)
+                    .excelType(ExcelTypeEnum.XLSX)
+                    .file(response.getOutputStream())
+                    .head(SysUserDTO.class)
+                    .build();
+            WriteSheet writeSheet = new WriteSheet();
+            writeSheet.setSheetName(fileName);
+            writer.write(sysUsers, writeSheet);
+            writer.finish();
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
     /**
      * 修改密码

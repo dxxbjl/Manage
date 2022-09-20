@@ -1,9 +1,5 @@
 package io.github.yangyouwang.crud.system.controller;
 
-import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.support.ExcelTypeEnum;
-import com.alibaba.excel.write.builder.ExcelWriterBuilder;
-import com.alibaba.excel.write.metadata.WriteSheet;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.base.CrudController;
@@ -14,7 +10,6 @@ import io.github.yangyouwang.core.util.SecurityUtils;
 import io.github.yangyouwang.crud.system.entity.SysUser;
 import io.github.yangyouwang.crud.system.model.ModifyPassDTO;
 import io.github.yangyouwang.crud.system.model.ResetPassDTO;
-import io.github.yangyouwang.crud.system.model.SysUserDTO;
 import io.github.yangyouwang.crud.system.service.SysUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -229,20 +224,7 @@ public class SysUserController extends CrudController {
      * 导出用户信息
      */
     @RequestMapping("/exportExcel")
-    public void export(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String fileName = "用户信息" + System.currentTimeMillis();
-        response.setContentType("application/force-download");
-        response.setHeader("Content-disposition", "attachment;filename=" + new String(fileName.getBytes("gb2312"), "ISO8859-1" ) + ".xlsx");
-        List<SysUserDTO> sysUsers= sysUserService.exportSysUserList();
-        ExcelWriter writer = new ExcelWriterBuilder()
-                .autoCloseStream(true)
-                .excelType(ExcelTypeEnum.XLSX)
-                .file(response.getOutputStream())
-                .head(SysUserDTO.class)
-                .build();
-        WriteSheet writeSheet = new WriteSheet();
-        writeSheet.setSheetName(fileName);
-        writer.write(sysUsers, writeSheet);
-        writer.finish();
+    public void export(HttpServletRequest request, HttpServletResponse response) {
+        sysUserService.exportSysUser(response);
     }
 }
