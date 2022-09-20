@@ -57,7 +57,12 @@
                left join sys_user_post up on u.id = up.user_id
                left join sys_post p on up.post_id = p.id
       where u.deleted = 0
-      ${ew.customSqlSegment}
+      <if test="ew != null">
+          <if test="ew.nonEmptyOfWhere">
+              AND
+          </if>
+          ${ew.sqlSegment}
+      </if>
       group by u.id
       order by u.create_time desc
   </select>
