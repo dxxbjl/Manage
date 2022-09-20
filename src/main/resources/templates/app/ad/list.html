@@ -19,6 +19,7 @@
                     <button type="button" class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
                         <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
                     </button>
+                    <button type="reset" class="layui-btn layui-btn-primary" lay-submit lay-filter="reset">重置</button>
                 </div>
             </div>
         </form>
@@ -26,7 +27,6 @@
             <table id="adTable" lay-filter="adTable"></table>
             <script type="text/html" id="toolbar">
                 <div class="layui-btn-container">
-                    <a class="layui-btn layui-btn-xs" lay-event="reset"><i class="layui-icon layui-icon-refresh"></i>重置</a>
                     <a sec:authorize="hasAuthority('ad:add')" class="layui-btn layui-btn-xs" lay-event="add"><i class="layui-icon layui-icon-add-1"></i>添加</a>
                 </div>
             </script>
@@ -51,11 +51,18 @@
             form = layui.form,
             table = layui.table;
         //监听搜索
-        form.on('submit(search)', function(data){
+        form.on('submit(search)', function(data) {
             let field = data.field;
             //执行重载
             table.reload('adTable', {
                 where: field
+            });
+        });
+        //监听重置
+        form.on('submit(reset)', function(data) {
+            Object.keys(data.field).forEach(key => (data.field[key] = ''));
+            table.reload('adTable', {
+                where: data.field
             });
         });
         // 监听轮播图状态
@@ -89,13 +96,10 @@
         //头工具栏事件
         table.on('toolbar(adTable)', function(obj){
             switch(obj.event){
-                case 'reset':
-                    active.resetForm();
-                    break;
                 case 'add':
                     active.addView();
                     break;
-            };
+            }
         });
         //监听行工具事件
         table.on('tool(adTable)', function(obj){
@@ -109,21 +113,6 @@
         });
         /* 触发弹层 */
         let active = {
-            /**
-             * 重置
-             */
-            resetForm: function () {
-                $(".layui-form")[0].reset();
-                form.render();
-                table.reload('adTable', {
-                    where: {
-                        adTitle: "",
-                        adUrl: "",
-                        adContent: "",
-                        enabled: ""
-                    }
-                });
-            },
             /**
              * 添加
              * */

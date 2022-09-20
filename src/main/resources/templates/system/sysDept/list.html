@@ -31,6 +31,7 @@
                     <button type="button" class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
                         <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
                     </button>
+                    <button type="reset" class="layui-btn layui-btn-primary" lay-submit lay-filter="reset">重置</button>
                 </div>
             </div>
         </form>
@@ -40,7 +41,6 @@
                 <div class="layui-btn-container">
                     <a class="layui-btn layui-btn-xs" lay-event="expand"><i class="layui-icon layui-icon-down"></i>全部展开</a>
                     <a class="layui-btn layui-btn-xs" lay-event="fold"><i class="layui-icon layui-icon-up"></i>全部折叠</a>
-                    <a class="layui-btn layui-btn-xs" lay-event="reset"><i class="layui-icon layui-icon-refresh"></i>重置</a>
                     <a sec:authorize="hasAuthority('sysDept:add')" class="layui-btn layui-btn-xs" lay-event="add"><i class="layui-icon layui-icon-add-1"></i>添加</a>
                 </div>
             </script>
@@ -72,6 +72,12 @@
             let field = data.field;
             //执行重载
             initTable(field);
+        });
+        //监听重置
+        form.on('submit(reset)', function(data) {
+            Object.keys(data.field).forEach(key => (data.field[key] = ''));
+            //执行重载
+            initTable();
         });
         // 查询列表接口
         let initTable = function (data) {
@@ -107,13 +113,10 @@
                 case 'fold':
                     active.fold();
                     break;
-                case 'reset':
-                    active.resetForm();
-                    break;
                 case 'add':
                     active.addView();
                     break;
-            };
+            }
         });
         //监听行工具事件
         table.on('tool(sysDeptTable)', function(obj){
@@ -135,14 +138,6 @@
         });
         /* 触发弹层 */
         let active = {
-            /**
-             * 重置
-             */
-            resetForm: function () {
-                $(".layui-form")[0].reset();
-                form.render();
-                initTable();
-            },
             /**
              * 展开所有
              */

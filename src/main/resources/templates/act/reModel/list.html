@@ -25,6 +25,7 @@
             <button type="button" class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
               <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
             </button>
+            <button type="reset" class="layui-btn layui-btn-primary" lay-submit lay-filter="reset">重置</button>
           </div>
         </div>
       </form>
@@ -32,7 +33,6 @@
         <table id="modelTable" lay-filter="modelTable"></table>
         <script type="text/html" id="toolbar">
           <div class="layui-btn-container">
-            <a class="layui-btn layui-btn-xs" lay-event="reset"><i class="layui-icon layui-icon-refresh"></i>重置</a>
             <a sec:authorize="hasAuthority('model:add')" class="layui-btn layui-btn-xs" lay-event="add"><i class="layui-icon layui-icon-add-1"></i>添加</a>
           </div>
         </script>
@@ -58,11 +58,18 @@
               table = layui.table;
       //监听搜索
       form.on('submit(search)', function(data){
-          var field = data.field;
+          let field = data.field;
           //执行重载
           table.reload('modelTable', {
               where: field
           });
+      });
+      //监听重置
+      form.on('submit(reset)', function(data) {
+        Object.keys(data.field).forEach(key => (data.field[key] = ''));
+        table.reload('modelTable', {
+          where: data.field
+        });
       });
       // 查询列表接口
       table.render({
@@ -92,13 +99,10 @@
       //头工具栏事件
       table.on('toolbar(modelTable)', function(obj){
         switch(obj.event){
-          case 'reset':
-            active.resetForm();
-            break;
           case 'add':
             active.addView();
             break;
-        };
+        }
       });
       //监听行工具事件
       table.on('tool(modelTable)', function(obj){
@@ -117,20 +121,7 @@
           }
       });
       /* 触发弹层 */
-      var active = {
-          /**
-           * 重置
-           */
-          resetForm:function () {
-            $(".layui-form")[0].reset();
-            form.render();
-            table.reload('modelTable', {
-              where: {
-                name: "",
-                key: ""
-              }
-            });
-          },
+      let active = {
           /**
            * 添加
            * */

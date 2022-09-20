@@ -25,6 +25,7 @@
             <button type="button" class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
               <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
             </button>
+            <button type="reset" class="layui-btn layui-btn-primary" lay-submit lay-filter="reset">重置</button>
           </div>
         </div>
       </form>
@@ -32,7 +33,6 @@
         <table id="logTable" lay-filter="logTable"></table>
         <script type="text/html" id="toolbar">
           <div class="layui-btn-container">
-            <a class="layui-btn layui-btn-xs" lay-event="reset"><i class="layui-icon layui-icon-refresh"></i>重置</a>
             <a sec:authorize="hasAuthority('log:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><i class="layui-icon layui-icon-delete"></i>清空</a>
           </div>
         </script>
@@ -61,6 +61,13 @@
               where: field
           });
       });
+      //监听重置
+      form.on('submit(reset)', function(data) {
+        Object.keys(data.field).forEach(key => (data.field[key] = ''));
+        table.reload('logTable', {
+          where: data.field
+        });
+      });
       // 查询列表接口
       table.render({
           elem: '#logTable'
@@ -82,13 +89,10 @@
       //头工具栏事件
       table.on('toolbar(logTable)', function(obj){
         switch(obj.event){
-          case 'reset':
-            active.resetForm();
-            break;
           case 'delete':
             active.deleteAll();
             break;
-        };
+        }
       });
       //监听行工具事件
       table.on('tool(logTable)', function(obj){
@@ -102,19 +106,6 @@
       });
       /* 触发弹层 */
       let active = {
-        /**
-         * 重置
-         */
-        resetForm: function () {
-          $(".layui-form")[0].reset();
-          form.render();
-          table.reload('logTable', {
-            where: {
-              className: "",
-              methodName: ""
-            }
-          });
-        },
         /**
          * 删除
          * @param id 主键
