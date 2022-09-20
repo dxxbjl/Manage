@@ -50,7 +50,7 @@ public class SysDictTypeService extends ServiceImpl<SysDictTypeMapper, SysDictTy
     public List<SysDictType> list(SysDictType param) {
          return sysDictTypeMapper.selectDictPage(new LambdaQueryWrapper<SysDictType>()
                  .like(!StringUtils.isEmpty(param.getDictKey()), SysDictType::getDictKey,param.getDictKey())
-                 .like(!StringUtils.isEmpty(param.getDictName()), SysDictType::getDictName,param.getDictKey()));
+                 .like(!StringUtils.isEmpty(param.getDictName()), SysDictType::getDictName,param.getDictName()));
     }
 
     /**
