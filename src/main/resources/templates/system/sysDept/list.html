@@ -29,7 +29,7 @@
                 </div>
                 <div class="layui-inline">
                     <button type="button" class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
-                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>搜索
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
                     </button>
                 </div>
             </div>
@@ -38,8 +38,8 @@
             <table id="sysDeptTable" lay-filter="sysDeptTable"></table>
             <script type="text/html" id="toolbar">
                 <div class="layui-btn-container">
-                    <a class="layui-btn layui-btn-xs" lay-event="expand">全部展开</a>
-                    <a class="layui-btn layui-btn-xs" lay-event="fold">全部折叠</a>
+                    <a class="layui-btn layui-btn-xs" lay-event="expand"><i class="layui-icon layui-icon-down"></i>全部展开</a>
+                    <a class="layui-btn layui-btn-xs" lay-event="fold"><i class="layui-icon layui-icon-up"></i>全部折叠</a>
                     <a class="layui-btn layui-btn-xs" lay-event="reset"><i class="layui-icon layui-icon-refresh"></i>重置</a>
                     <a sec:authorize="hasAuthority('sysDept:add')" class="layui-btn layui-btn-xs" lay-event="add"><i class="layui-icon layui-icon-add-1"></i>添加</a>
                 </div>
