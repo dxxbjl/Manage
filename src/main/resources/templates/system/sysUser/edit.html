@@ -14,7 +14,7 @@
         <label class="layui-form-label"></label>
         <div class="layui-input-inline layui-upload">
           <div class="layui-upload-list">
-            <img class="layui-upload-img" onclick="preview(this)" id="upload-img" width="100px" height="100px" src="/static/img/def_profile.jpg">
+            <img class="layui-upload-img" onclick="fun.preview(this)" id="upload-img" width="100px" height="100px" src="/static/img/def_profile.jpg">
             <p id="upload-text"></p>
           </div>
           <button type="button" class="layui-btn" id="upload-btn">上传</button>
@@ -101,8 +101,8 @@
         $('#upload-img').attr('src', sysUser.avatar); //图片链接（base64）
         form.val('sys-user-form', sysUser);
         form.on('submit(save-submit)', function(data) {
-            data.field.roleIds = crud.getXmSelectTreeIds(roleSelect);
-            data.field.postIds = crud.getXmSelectTreeIds(postSelect);
+            data.field.roleIds = fun.objToStrIds(roleSelect.getValue());
+            data.field.postIds = fun.objToStrIds(postSelect.getValue());
             $.ajax({
                 type: 'POST',
                 url:  ctx + '/sysUser/edit',

@@ -54,8 +54,7 @@
                 sysRole = [[${sysRole}]];
         form.val('sys-role-form', sysRole);
         form.on('submit(save-submit)', function(data){
-            let menuIds = crud.getXmSelectTreeIds(select);
-            data.field.menuIds = menuIds;
+            data.field.menuIds = fun.objToStrIds(select.getValue());
             $.ajax({
                 type: 'POST',
                 url:  ctx + '/sysRole/edit',

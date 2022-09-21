@@ -100,7 +100,7 @@
               {field: 'avatar', title: "头像",
                   templet: function (d) {
                     if (d.avatar) {
-                      return '<img onclick="preview(this)" width="100%" height="100%" src='+d.avatar+'>'
+                      return '<img onclick="fun.preview(this)" width="100%" height="100%" src='+d.avatar+'>'
                     }
                     return '无';
                   }
@@ -130,8 +130,7 @@
             if (data.length === 0) {
               layer.msg('请选择需要删除的行')
             } else {
-              let ids = data.map(x => {return x.id});
-              active.removes(ids);
+              active.removes(data);
             }
             break;
         }
@@ -217,9 +216,10 @@
         },
         /**
          * 批量删除
-         * @param ids 数组
+         * @param obj 对象
          */
-        removes: function(ids) {
+        removes: function(obj) {
+          let ids = fun.objToArrIds(obj);
           layer.confirm('真的删除行么', function(index){
             //向服务端发送删除指令
             $.ajax({

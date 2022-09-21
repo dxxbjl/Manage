@@ -11,15 +11,6 @@ layui.define(['jquery','cookie'], function(exports){
     }
     let crud = {
         /**
-         * 获取XmSelectTree id列表
-         * @param select XmSelect
-         * @returns {*} id列表
-         */
-        getXmSelectTreeIds: function (select) {
-            let value = select.getValue();
-            return value.map(x => {return x.id}).toString();
-        },
-        /**
          * 获取字典
          */
         getDictValue: function(name,defaultVal) {
