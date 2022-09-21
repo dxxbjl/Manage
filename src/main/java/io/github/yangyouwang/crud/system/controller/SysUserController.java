@@ -11,6 +11,7 @@ import io.github.yangyouwang.crud.system.entity.SysUser;
 import io.github.yangyouwang.crud.system.model.ModifyPassDTO;
 import io.github.yangyouwang.crud.system.model.ResetPassDTO;
 import io.github.yangyouwang.crud.system.service.SysUserService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -207,16 +208,12 @@ public class SysUserController extends CrudController {
         return Result.success(flag);
     }
 
-    /**
-     * 删除请求
-     * @param id 用户id
-     * @return 删除状态
-     */
-    @CrudLog(title = "删除用户",businessType = BusinessType.DELETE)
-    @DeleteMapping("/del/{id}")
+    @ApiOperation(value = "用户删除(多个条目)")
+    @PostMapping(value = "/removes")
     @ResponseBody
-    public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
-        sysUserService.del(id);
+    @CrudLog(title = "删除用户",businessType = BusinessType.DELETE)
+    public Result removes(@RequestBody @Valid List<Long> ids) {
+        sysUserService.removeByIds(ids);
         return Result.success();
     }
 

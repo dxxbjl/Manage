@@ -41,6 +41,7 @@
           <div class="layui-btn-container">
             <a class="layui-btn layui-btn-xs" lay-event="export"><i class="layui-icon layui-icon-file"></i>导出</a>
             <a sec:authorize="hasAuthority('user:add')" class="layui-btn layui-btn-xs" lay-event="add"><i class="layui-icon layui-icon-add-1"></i>添加</a>
+            <a sec:authorize="hasAuthority('user:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="removes"><i class="layui-icon layui-icon-delete"></i>删除</a>
           </div>
         </script>
         <script type="text/html" id="enabledTpl">
@@ -49,7 +50,7 @@
         <script type="text/html" id="tableBar">
           <a sec:authorize="hasAuthority('user:pass')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="pass"><i class="layui-icon layui-icon-password"></i>重置</a>
           <a sec:authorize="hasAuthority('user:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-          <a sec:authorize="hasAuthority('user:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+          <a sec:authorize="hasAuthority('user:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="removes"><i class="layui-icon layui-icon-delete"></i>删除</a>
         </script>
       </div>
     </div>
@@ -94,6 +95,7 @@
           ,url:  ctx + '/sysUser/page'
           ,page: true //开启分页
           ,cols: [[ //表头
+              {type: 'checkbox', fixed: 'left'},
               {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
               {field: 'avatar', title: "头像",
                   templet: function (d) {
@@ -114,13 +116,23 @@
           ]]
       });
       //头工具栏事件
-      table.on('toolbar(userTable)', function(obj){
+      table.on('toolbar(userTable)', function(obj) {
+        let checkStatus = table.checkStatus(obj.config.id)
+                ,data = checkStatus.data;
         switch(obj.event){
           case 'export':
             active.exportExcel();
             break;
           case 'add':
             active.addView();
+            break;
+          case 'removes':
+            if (data.length === 0) {
+              layer.msg('请选择需要删除的行')
+            } else {
+              let ids = data.map(x => {return x.id});
+              active.removes(ids);
+            }
             break;
         }
       });
@@ -130,8 +142,9 @@
               ,layEvent = obj.event;
           if(layEvent === 'edit'){
             active.editView(data.id);
-          } else if(layEvent === 'del'){
-            active.del(data.id);
+          } else if(layEvent === 'removes'){
+            let ids = [data.id];
+            active.removes(ids);
           } else if(layEvent === 'pass'){
             active.pass(data.id);
           }
@@ -185,12 +198,13 @@
          * 删除
          * @param id id
          */
-        del: function(id){
+        removes: function(ids) {
           layer.confirm('真的删除行么', function(index){
             //向服务端发送删除指令
             $.ajax({
-              type: 'DELETE',
-              url:  ctx + '/sysUser/del/' + id,
+              type: 'POST',
+              url:  ctx + '/sysUser/removes',
+              data: JSON.stringify(ids),
               contentType:'application/json;charset=UTF-8',
               dataType: 'json',
               success: function(result) {
