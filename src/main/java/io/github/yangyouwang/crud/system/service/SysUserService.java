@@ -1,6 +1,7 @@
 package io.github.yangyouwang.crud.system.service;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import com.alibaba.excel.write.builder.ExcelWriterBuilder;
@@ -10,6 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.core.exception.CrudException;
+import io.github.yangyouwang.core.util.EasyExcelUtil;
 import io.github.yangyouwang.core.util.StringUtil;
 import io.github.yangyouwang.crud.system.entity.*;
 import io.github.yangyouwang.crud.system.mapper.SysMenuMapper;
@@ -196,32 +198,33 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
         }
     }
     /**
-     * 导出用户列表
-     * @return 用户列表
+     * 导出用户信息
      */
-    @Async
     @Transactional(readOnly = true)
     public void exportSysUser(HttpServletResponse response) {
         try {
             String fileName = "用户信息" + System.currentTimeMillis();
-            response.setContentType("application/force-download");
-            response.setHeader("Content-disposition", "attachment;filename=" + new String(fileName.getBytes("gb2312"), "ISO8859-1" ) + ".xlsx");
+            EasyExcelUtil.setResponse(response,fileName);
             List<SysUser> list = sysUserMapper.findUserList(new LambdaQueryWrapper());
-            List<SysUserDTO> sysUsers = list.stream().map(sysUser -> {
+            List<SysUserDTO> datas = list.stream().map(sysUser -> {
                 SysUserDTO sysUserDTO = new SysUserDTO();
                 BeanUtils.copyProperties(sysUser,sysUserDTO);
                 return sysUserDTO;
             }).collect(Collectors.toList());
-            ExcelWriter writer = new ExcelWriterBuilder()
-                    .autoCloseStream(true)
+            //导出excel
+            EasyExcel.write(response.getOutputStream())
+                    //自动关闭流
+                    .autoCloseStream(Boolean.FALSE)
+                    //指定excel文件的type
                     .excelType(ExcelTypeEnum.XLSX)
-                    .file(response.getOutputStream())
+                    // 标题头
                     .head(SysUserDTO.class)
-                    .build();
-            WriteSheet writeSheet = new WriteSheet();
-            writeSheet.setSheetName(fileName);
-            writer.write(sysUsers, writeSheet);
-            writer.finish();
+                    //给定工作表名称
+                    .sheet(fileName)
+                    //给定样式
+                    .registerWriteHandler(EasyExcelUtil.getStyleStrategy())
+                    //给定导出数据
+                    .doWrite(datas);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
