@@ -101,8 +101,6 @@
         $('#upload-img').attr('src', sysUser.avatar); //图片链接（base64）
         form.val('sys-user-form', sysUser);
         form.on('submit(save-submit)', function(data) {
-            data.field.roleIds = fun.objToStrIds(roleSelect.getValue());
-            data.field.postIds = fun.objToStrIds(postSelect.getValue());
             $.ajax({
                 type: 'POST',
                 url:  ctx + '/sysUser/edit',
@@ -121,11 +119,11 @@
                 }
             });
         });
-
         let roleSelect = xmSelect.render({
             el: '#roleName',
             tips:"选择角色",
             filterable: true,
+            name: "roleIds",
             tree: {
               //是否显示树状结构
               show: true,
@@ -170,6 +168,7 @@
         let postSelect = xmSelect.render({
           el: '#postName',
           tips:"选择岗位",
+          name: "postIds",
           filterable: true,
           tree: {
             //是否显示树状结构

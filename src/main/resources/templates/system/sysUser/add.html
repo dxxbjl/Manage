@@ -97,8 +97,6 @@
             crud = layui.crud,
             form = layui.form;
       form.on('submit(save-submit)', function(data) {
-          data.field.roleIds = fun.objToStrIds(roleSelect.getValue());
-          data.field.postIds = fun.objToStrIds(postSelect.getValue());
           $.ajax({
               type: 'POST',
               url:  ctx + '/sysUser/add',
@@ -124,6 +122,7 @@
       let roleSelect = xmSelect.render({
           el: '#roleName',
           tips:"选择角色",
+          name: "roleIds",
           filterable: true,
           tree: {
             //是否显示树状结构
@@ -167,6 +166,7 @@
     let postSelect = xmSelect.render({
       el: '#postName',
       tips:"选择岗位",
+      name: "postIds",
       filterable: true,
       tree: {
         //是否显示树状结构

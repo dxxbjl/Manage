@@ -51,7 +51,6 @@
             crud = layui.crud,
             form = layui.form;
     form.on('submit(save-submit)', function(data){
-          data.field.menuIds = fun.objToStrIds(select.getValue());
           $.ajax({
               type: 'POST',
               url:  ctx + '/sysRole/add',
@@ -73,6 +72,7 @@
     let select = xmSelect.render({
         el: '#menuName',
         filterable: true,
+        name: "menuIds",
         tree: {
           //是否显示树状结构
           show: true,
