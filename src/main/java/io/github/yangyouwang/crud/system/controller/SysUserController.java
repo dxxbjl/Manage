@@ -208,6 +208,15 @@ public class SysUserController extends CrudController {
         return Result.success(flag);
     }
 
+    @ApiOperation(value = "用户删除(单个条目)")
+    @DeleteMapping(value = "/remove/{id}")
+    @ResponseBody
+    @CrudLog(title = "删除用户",businessType = BusinessType.DELETE)
+    public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
+        sysUserService.removeById(id);
+        return Result.success();
+    }
+
     @ApiOperation(value = "用户删除(多个条目)")
     @PostMapping(value = "/removes")
     @ResponseBody
