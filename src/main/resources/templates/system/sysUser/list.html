@@ -97,14 +97,7 @@
           ,cols: [[ //表头
               {type: 'checkbox', fixed: 'left'},
               {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
-              {field: 'avatar', title: "头像",
-                  templet: function (d) {
-                    if (d.avatar) {
-                      return '<img onclick="fun.preview(this)" width="100%" height="100%" src='+d.avatar+'>'
-                    }
-                    return '无';
-                  }
-              },
+              {field: 'avatar', title: "头像", templet: function (d) { return fun.showImg(d.avatar); }},
               {field: 'nickName', title: '昵称'},
               {field: 'userName', title: '账户'},
               {field: 'sex', title: "性别",width: 60, templet: function (d) { return crud.getDictValue('sex',d.sex);}},

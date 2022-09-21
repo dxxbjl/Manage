@@ -84,14 +84,7 @@
             ,cols: [[ //表头
                 {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
                 {field: 'nickName', title: '用户昵称'},
-                {field: 'avatar', title: "用户头像图片",
-                    templet: function (d) {
-                        if (d.avatar) {
-                            return '<img onclick="fun.preview(this)" width="100%" height="100%" src='+d.avatar+'>'
-                        }
-                        return '无';
-                    }
-                },
+                {field: 'avatar', title: "用户头像图片", templet: function (d) { return fun.showImg(d.avatar); }},
                 {field: 'gender', title: "性别",templet: function (d) { return crud.getDictValue('sex',d.gender);}},
                 {field: 'birthday', title: '生日'},
                 {field: 'mobile', title: '手机号'},

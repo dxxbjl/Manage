@@ -83,13 +83,7 @@
                 {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
                 {field: 'adTitle', title: '标题'},
                 {field: 'adUrl', title: "宣传图片",
-                    templet: function (d) {
-                        if (d.adUrl) {
-                            return '<img onclick="fun.preview(this)" width="100%" height="100%" src='+d.adUrl+'>'
-                        }
-                        return '无';
-                    }
-                },
+                    templet: function (d) { return fun.showImg(d.adUrl); }},
                 {field: 'enabled', align: "center", sort: true, templet: '#enabledTpl', title: '状态'},
                 {toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
             ]]

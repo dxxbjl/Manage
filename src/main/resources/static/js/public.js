@@ -1,10 +1,12 @@
 let fun = {
     /**
-     * 对象转字符串ids
-     * @param obj
+     * 显示图片
      */
-    objToStrIds: function (obj) {
-        return this.objToArrIds(obj).toString();
+    showImg: function (img) {
+        if (img) {
+            return `<img onclick="fun.preview(this)" width="100%" height="100%" src="${img}">`
+        }
+        return '暂无';
     },
     /**
      * 对象转数组ids
