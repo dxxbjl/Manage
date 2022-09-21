@@ -34,7 +34,7 @@
             </script>
             <script type="text/html" id="tableBar">
                 <a sec:authorize="hasAuthority('${table.entityPath}:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-                <a sec:authorize="hasAuthority('${table.entityPath}:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                <a sec:authorize="hasAuthority('${table.entityPath}:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="remove"><i class="layui-icon layui-icon-delete"></i>删除</a>
             </script>
         </div>
     </div>
@@ -94,8 +94,8 @@
                 ,layEvent = obj.event;
             if(layEvent === 'edit'){
                 active.editView(data.id);
-            } else if(layEvent === 'del'){
-                active.del(data.id);
+            } else if(layEvent === 'remove'){
+                active.remove(data.id);
             }
         });
         /* 触发弹层 */
@@ -138,10 +138,10 @@
                 });
             },
             /**
-             * 删除
+             * 删除单个条目
              * @param id id
              */
-            del: function(id){
+            remove: function(id){
                 layer.confirm('真的删除行么', function(index){
                     //向服务端发送删除指令
                     $.ajax({
