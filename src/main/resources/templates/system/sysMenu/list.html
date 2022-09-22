@@ -101,6 +101,8 @@
       initTable();
       //头工具栏事件
       table.on('toolbar(menuTable)', function(obj){
+        let checkStatus = table.checkStatus(obj.config.id)
+                ,data = checkStatus.data;
         switch(obj.event){
           case 'expand':
             active.expand();

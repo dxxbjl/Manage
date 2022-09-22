@@ -94,6 +94,8 @@
       });
       //头工具栏事件
       table.on('toolbar(logTable)', function(obj){
+        let checkStatus = table.checkStatus(obj.config.id)
+                ,data = checkStatus.data;
         switch(obj.event){
           case 'delete':
             active.deleteAll();

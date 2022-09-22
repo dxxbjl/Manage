@@ -45,7 +45,7 @@
         base: '/static/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'useradmin', 'table'], function() {
+    }).use(['index', 'useradmin', 'table'], function(){
         let $ = layui.$,
             form = layui.form,
             table = layui.table;
@@ -53,14 +53,14 @@
         form.on('submit(search)', function(data){
             let field = data.field;
             //执行重载
-            table.reload('${table.entityPath}Table', {
+            table.reload('${table.entityPath}Table',{
                 where: field
             });
         });
         //监听重置
         form.on('submit(reset)', function(data) {
             Object.keys(data.field).forEach(key => (data.field[key] = ''));
-            table.reload('${table.entityPath}Table', {
+            table.reload('${table.entityPath}Table',{
                 where: data.field
             });
         });
@@ -82,6 +82,8 @@
         });
         //头工具栏事件
         table.on('toolbar(${table.entityPath}Table)', function(obj){
+            let checkStatus = table.checkStatus(obj.config.id)
+                ,data = checkStatus.data;
             switch(obj.event){
                 case 'add':
                     active.addView();

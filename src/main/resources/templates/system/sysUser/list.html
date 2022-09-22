@@ -61,7 +61,7 @@
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
     index: 'lib/index', //主入口模块
-  }).use(['index', 'useradmin', 'table','crud'], function() {
+  }).use(['index', 'useradmin', 'table','crud'], function(){
       let $ = layui.$,
               form = layui.form,
               crud = layui.crud,
@@ -75,14 +75,14 @@
         });
       });
       //监听重置
-      form.on('submit(reset)', function(data) {
+      form.on('submit(reset)', function(data){
         Object.keys(data.field).forEach(key => (data.field[key] = ''));
         table.reload('userTable', {
           where: data.field
         });
       });
       // 修改user状态
-      form.on('switch(enabled)', function (obj) {
+      form.on('switch(enabled)', function (obj){
         let userId = obj.elem.value;
         let checked = obj.elem.checked ? 'Y' : 'N';
         active.changeUserEnabled(userId,checked);
@@ -109,7 +109,7 @@
           ]]
       });
       //头工具栏事件
-      table.on('toolbar(userTable)', function(obj) {
+      table.on('toolbar(userTable)', function(obj){
         let checkStatus = table.checkStatus(obj.config.id)
                 ,data = checkStatus.data;
         switch(obj.event){
@@ -236,7 +236,7 @@
          * @param userId 用户id
          * @param checked 状态
          */
-        changeUserEnabled: function (userId,checked) {
+        changeUserEnabled: function (userId,checked){
           $.ajax({
             type: 'POST',
             url:  ctx + '/sysUser/changeUser',
@@ -258,7 +258,7 @@
          * 重置密码
          * @param id id
          */
-        pass: function (id) {
+        pass: function (id){
           layer.confirm('确认重置密码么', function(index){
             $.ajax({
               type: 'POST',

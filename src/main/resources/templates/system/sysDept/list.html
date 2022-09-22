@@ -61,7 +61,7 @@
         base: '/static/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'useradmin','treetable','table','crud'], function() {
+    }).use(['index', 'useradmin','treetable','table','crud'], function(){
         let $ = layui.$,
             form = layui.form,
             table = layui.table,
@@ -74,7 +74,7 @@
             initTable(field);
         });
         //监听重置
-        form.on('submit(reset)', function(data) {
+        form.on('submit(reset)', function(data){
             Object.keys(data.field).forEach(key => (data.field[key] = ''));
             //执行重载
             initTable();
@@ -106,6 +106,8 @@
         initTable();
         //头工具栏事件
         table.on('toolbar(sysDeptTable)', function(obj){
+            let checkStatus = table.checkStatus(obj.config.id)
+                ,data = checkStatus.data;
             switch(obj.event){
                 case 'expand':
                     active.expand();
@@ -131,7 +133,7 @@
             }
         });
         // 修改部门状态
-        form.on('switch(enabled)', function (obj) {
+        form.on('switch(enabled)', function (obj){
             let deptId = obj.elem.value;
             let checked = obj.elem.checked ? 'Y' : 'N';
             active.changeDeptEnabled(deptId,checked);
@@ -141,19 +143,19 @@
             /**
              * 展开所有
              */
-            expand: function() {
+            expand: function(){
                 treetable.expandAll('#sysDeptTable');
             },
             /**
              * 折叠所有
              */
-            fold: function() {
+            fold: function(){
                 treetable.foldAll('#sysDeptTable');
             },
             /**
              * 添加
              * */
-            addView: function(id) {
+            addView: function(id){
                 let url = ctx + '/system/sysDept/addPage';
                 if (id) {
                     url = url + '?id=' + id;
