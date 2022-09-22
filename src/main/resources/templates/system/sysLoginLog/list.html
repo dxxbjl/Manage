@@ -54,7 +54,7 @@
             table = layui.table,
             crud = layui.crud;
         //监听搜索
-        form.on('submit(search)', function(data){
+        form.on('submit(search)', function(data) {
             let field = data.field;
             //执行重载
             table.reload('sysLoginLogTable', {
@@ -85,20 +85,20 @@
             ]]
         });
         //头工具栏事件
-        table.on('toolbar(sysLoginLogTable)', function(obj){
+        table.on('toolbar(sysLoginLogTable)', function(obj) {
             let checkStatus = table.checkStatus(obj.config.id)
                 ,data = checkStatus.data;
-            switch(obj.event){
+            switch(obj.event) {
                 case 'delete':
                     active.deleteAll();
                     break;
             }
         });
         //监听行工具事件
-        table.on('tool(sysLoginLogTable)', function(obj){
+        table.on('tool(sysLoginLogTable)', function(obj) {
             let data = obj.data //获得当前行数据
                 ,layEvent = obj.event;
-            if(layEvent === 'del'){
+            if(layEvent === 'del') {
                 active.del(data.id);
             }
         });
@@ -108,8 +108,8 @@
              * 删除
              * @param id id
              */
-            del: function(id){
-                layer.confirm('真的删除行么', function(index){
+            del: function(id) {
+                layer.confirm('真的删除行么', function(index) {
                     //向服务端发送删除指令
                     $.ajax({
                         type: 'DELETE',
@@ -130,7 +130,7 @@
              * 删除全部登录日志
              */
             deleteAll: function() {
-                layer.confirm('删除全部登录日志?', function(index){
+                layer.confirm('删除全部登录日志?', function(index) {
                     $.ajax({
                         type: 'DELETE',
                         url:  ctx + '/sysLoginLog/delAll',

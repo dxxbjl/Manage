@@ -57,7 +57,7 @@
             form = layui.form,
             table = layui.table;
         //监听搜索
-        form.on('submit(search)', function(data){
+        form.on('submit(search)', function(data) {
             let field = data.field;
             //执行重载
             table.reload('sysPostTable', {
@@ -94,7 +94,7 @@
             ]]
         });
         //头工具栏事件
-        table.on('toolbar(sysPostTable)', function(obj){
+        table.on('toolbar(sysPostTable)', function(obj) {
             let checkStatus = table.checkStatus(obj.config.id)
                 ,data = checkStatus.data;
             switch(obj.event){
@@ -104,7 +104,7 @@
             }
         });
         //监听行工具事件
-        table.on('tool(sysPostTable)', function(obj){
+        table.on('tool(sysPostTable)', function(obj) {
             let data = obj.data //获得当前行数据
                 ,layEvent = obj.event;
             if(layEvent === 'edit'){
@@ -118,7 +118,7 @@
             /**
              * 添加
              * */
-            addView: function(){
+            addView: function() {
                 layer.open({
                     type: 2
                     ,shade: 0.3
@@ -137,7 +137,7 @@
              * 编辑
              * @param id id
              * */
-            editView: function(id){
+            editView: function(id) {
                 layer.open({
                     type: 2
                     ,shade: 0.3
@@ -156,8 +156,8 @@
              * 删除
              * @param id id
              */
-            del: function(id){
-                layer.confirm('真的删除行么', function(index){
+            del: function(id) {
+                layer.confirm('真的删除行么', function(index) {
                     //向服务端发送删除指令
                     $.ajax({
                         type: 'DELETE',

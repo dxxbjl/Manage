@@ -45,12 +45,12 @@
         base: '/static/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'useradmin', 'table'], function(){
+    }).use(['index', 'useradmin', 'table'], function() {
         let $ = layui.$,
             form = layui.form,
             table = layui.table;
         //监听搜索
-        form.on('submit(search)', function(data){
+        form.on('submit(search)', function(data) {
             let field = data.field;
             //执行重载
             table.reload('jobTable', {
@@ -58,7 +58,7 @@
             });
         });
         //监听重置
-        form.on('submit(reset)', function(data){
+        form.on('submit(reset)', function(data) {
             Object.keys(data.field).forEach(key => (data.field[key] = ''));
             table.reload('jobTable', {
                 where: data.field
@@ -82,26 +82,26 @@
             ]]
         });
         //头工具栏事件
-        table.on('toolbar(jobTable)', function(obj){
+        table.on('toolbar(jobTable)', function(obj) {
             let checkStatus = table.checkStatus(obj.config.id)
                 ,data = checkStatus.data;
-            switch(obj.event){
+            switch(obj.event) {
                 case 'add':
                     active.addView();
                     break;
             }
         });
         //监听行工具事件
-        table.on('tool(jobTable)', function(obj){
+        table.on('tool(jobTable)', function(obj) {
             let data = obj.data //获得当前行数据
                 ,layEvent = obj.event;
-            if(layEvent === 'edit'){
+            if(layEvent === 'edit') {
                 active.editView(data.id);
-            } else if(layEvent === 'del'){
+            } else if(layEvent === 'del') {
                 active.del(data.id);
-            } else if(layEvent === 'pause'){
+            } else if(layEvent === 'pause') {
                 active.pause(data.id);
-            } else if(layEvent === 'resume'){
+            } else if(layEvent === 'resume') {
                 active.resume(data.id);
             }
         });
@@ -110,7 +110,7 @@
             /**
              * 添加
              * */
-            addView: function(){
+            addView: function() {
                 layer.open({
                     type: 2
                     ,shade: 0.3
@@ -119,7 +119,7 @@
                     ,maxmin: true
                     ,area: ['80%', '80%']
                     ,btn: ['确定', '取消']
-                    ,yes: function(index, layero){
+                    ,yes: function(index, layero) {
                         let submit = layero.find('iframe').contents().find('#save-submit');
                         submit.trigger('click');
                     }
@@ -129,7 +129,7 @@
              * 编辑
              * @param id id
              * */
-            editView: function(id){
+            editView: function(id) {
                 layer.open({
                     type: 2
                     ,shade: 0.3
@@ -138,7 +138,7 @@
                     ,maxmin: true
                     ,area: ['80%', '80%']
                     ,btn: ['确定', '取消']
-                    ,yes: function(index, layero){
+                    ,yes: function(index, layero) {
                         let submit = layero.find('iframe').contents().find('#save-submit');
                         submit.trigger('click');
                     }
@@ -148,8 +148,8 @@
              * 删除
              * @param id id
              */
-            del: function(id){
-                layer.confirm('真的删除行么', function(index){
+            del: function(id) {
+                layer.confirm('真的删除行么', function(index) {
                     //向服务端发送删除指令
                     $.ajax({
                         type: 'DELETE',
@@ -170,8 +170,8 @@
              * 暂停某个定时任务
              * @param id id
              */
-            pause: function(id){
-                layer.confirm('是否暂停定时任务？', function(index){
+            pause: function(id) {
+                layer.confirm('是否暂停定时任务？', function(index) {
                     $.ajax({
                         type: 'GET',
                         url:  ctx + '/qrtz/job/pause/' + id,
@@ -191,8 +191,8 @@
              * 恢复某个定时任务
              * @param id id
              */
-            resume: function(id){
-                layer.confirm('是否恢复定时任务？', function(index){
+            resume: function(id) {
+                layer.confirm('是否恢复定时任务？', function(index) {
                     $.ajax({
                         type: 'GET',
                         url:  ctx + '/qrtz/job/resume/' + id,

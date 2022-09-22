@@ -61,13 +61,13 @@
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
     index: 'lib/index', //主入口模块
-  }).use(['index', 'useradmin', 'table','crud'], function(){
+  }).use(['index', 'useradmin', 'table','crud'], function() {
       let $ = layui.$,
               form = layui.form,
               crud = layui.crud,
               table = layui.table;
       //监听搜索
-      form.on('submit(search)', function(data){
+      form.on('submit(search)', function(data) {
         let field = data.field;
         //执行重载
         table.reload('userTable', {
@@ -75,14 +75,14 @@
         });
       });
       //监听重置
-      form.on('submit(reset)', function(data){
+      form.on('submit(reset)', function(data) {
         Object.keys(data.field).forEach(key => (data.field[key] = ''));
         table.reload('userTable', {
           where: data.field
         });
       });
       // 修改user状态
-      form.on('switch(enabled)', function (obj){
+      form.on('switch(enabled)', function (obj) {
         let userId = obj.elem.value;
         let checked = obj.elem.checked ? 'Y' : 'N';
         active.changeUserEnabled(userId,checked);
@@ -109,7 +109,7 @@
           ]]
       });
       //头工具栏事件
-      table.on('toolbar(userTable)', function(obj){
+      table.on('toolbar(userTable)', function(obj) {
         let checkStatus = table.checkStatus(obj.config.id)
                 ,data = checkStatus.data;
         switch(obj.event){
@@ -129,7 +129,7 @@
         }
       });
       //监听行工具事件
-      table.on('tool(userTable)', function(obj){
+      table.on('tool(userTable)', function(obj) {
           let data = obj.data //获得当前行数据
               ,layEvent = obj.event;
           if(layEvent === 'edit'){
@@ -151,7 +151,7 @@
         /**
          * 添加
          * */
-        addView: function(){
+        addView: function() {
           layer.open({
             type: 2
             ,shade: 0.3
@@ -170,7 +170,7 @@
          * 编辑
          * @param id id
          * */
-        editView: function(id){
+        editView: function(id) {
           layer.open({
             type: 2
             ,shade: 0.3
@@ -189,8 +189,8 @@
          * 删除单个条目
          * @param id id
          */
-        remove: function(id){
-          layer.confirm('真的删除行么', function(index){
+        remove: function(id) {
+          layer.confirm('真的删除行么', function(index) {
             //向服务端发送删除指令
             $.ajax({
               type: 'DELETE',
@@ -213,7 +213,7 @@
          */
         removes: function(obj) {
           let ids = fun.objToArrIds(obj);
-          layer.confirm('真的删除行么', function(index){
+          layer.confirm('真的删除行么', function(index) {
             //向服务端发送删除指令
             $.ajax({
               type: 'POST',
@@ -236,7 +236,7 @@
          * @param userId 用户id
          * @param checked 状态
          */
-        changeUserEnabled: function (userId,checked){
+        changeUserEnabled: function (userId,checked) {
           $.ajax({
             type: 'POST',
             url:  ctx + '/sysUser/changeUser',
@@ -258,8 +258,8 @@
          * 重置密码
          * @param id id
          */
-        pass: function (id){
-          layer.confirm('确认重置密码么', function(index){
+        pass: function (id) {
+          layer.confirm('确认重置密码么', function(index) {
             $.ajax({
               type: 'POST',
               url:  ctx + '/sysUser/resetPass',

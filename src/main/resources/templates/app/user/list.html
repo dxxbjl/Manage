@@ -60,7 +60,7 @@
             table = layui.table,
             crud = layui.crud;
         //监听搜索
-        form.on('submit(search)', function(data){
+        form.on('submit(search)', function(data) {
             let field = data.field;
             //执行重载
             table.reload('userTable', {
@@ -93,15 +93,15 @@
             ]]
         });
         //头工具栏事件
-        table.on('toolbar(userTable)', function(obj){
+        table.on('toolbar(userTable)', function(obj) {
             let checkStatus = table.checkStatus(obj.config.id)
                 ,data = checkStatus.data;
         });
         //监听行工具事件
-        table.on('tool(userTable)', function(obj){
+        table.on('tool(userTable)', function(obj) {
             let data = obj.data //获得当前行数据
                 ,layEvent = obj.event;
-            if(layEvent === 'info'){
+            if(layEvent === 'info') {
                 active.infoView(data.id);
             }
         });
@@ -111,7 +111,7 @@
              * 用户详情
              * @param id id
              * */
-            infoView: function(id){
+            infoView: function(id) {
                 layer.open({
                     type: 2
                     ,shade: 0.3

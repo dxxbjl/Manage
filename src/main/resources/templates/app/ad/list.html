@@ -89,22 +89,22 @@
             ]]
         });
         //头工具栏事件
-        table.on('toolbar(adTable)', function(obj){
+        table.on('toolbar(adTable)', function(obj) {
             let checkStatus = table.checkStatus(obj.config.id)
                 ,data = checkStatus.data;
-            switch(obj.event){
+            switch(obj.event) {
                 case 'add':
                     active.addView();
                     break;
             }
         });
         //监听行工具事件
-        table.on('tool(adTable)', function(obj){
+        table.on('tool(adTable)', function(obj) {
             let data = obj.data //获得当前行数据
                 ,layEvent = obj.event;
-            if(layEvent === 'edit'){
+            if(layEvent === 'edit') {
                 active.editView(data.id);
-            } else if(layEvent === 'del'){
+            } else if(layEvent === 'del') {
                 active.del(data.id);
             }
         });
@@ -113,7 +113,7 @@
             /**
              * 添加
              * */
-            addView: function(){
+            addView: function() {
                 layer.open({
                     type: 2
                     ,shade: 0.3
@@ -132,7 +132,7 @@
              * 编辑
              * @param id id
              * */
-            editView: function(id){
+            editView: function(id) {
                 layer.open({
                     type: 2
                     ,shade: 0.3
@@ -151,7 +151,7 @@
              * 删除
              * @param id id
              */
-            del: function(id){
+            del: function(id) {
                 layer.confirm('真的删除行么', function(index){
                     //向服务端发送删除指令
                     $.ajax({
@@ -174,7 +174,7 @@
              * @param id 轮播图id
              * @param checked 状态
              */
-            changeAdEnabled: function (id,checked) {
+            changeAdEnabled: function(id,checked) {
                 $.ajax({
                     type: 'POST',
                     url:  ctx + '/app/ad/changeAd',

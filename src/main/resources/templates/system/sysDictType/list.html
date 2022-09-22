@@ -83,7 +83,7 @@
             form = layui.form,
             table = layui.table;
         //监听搜索
-        form.on('submit(dictKeySearch)', function(data){
+        form.on('submit(dictKeySearch)', function(data) {
             let field = data.field;
             //执行重载
             table.reload('dictTypeTable', {
@@ -158,33 +158,33 @@
             obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
         });
         //头工具栏事件
-        table.on('toolbar(dictTypeTable)', function(obj){
+        table.on('toolbar(dictTypeTable)', function(obj) {
             let checkStatus = table.checkStatus(obj.config.id)
                 ,data = checkStatus.data;
-            switch(obj.event){
+            switch(obj.event) {
                 case 'dictTypeAddView':
                     active.dictTypeAddView();
                     break;
             }
         });
         //监听行工具事件
-        table.on('tool(dictTypeTable)', function(obj){
+        table.on('tool(dictTypeTable)', function(obj) {
             let data = obj.data //获得当前行数据
                 ,layEvent = obj.event;
-            if(layEvent === 'dictTypeEdit'){
+            if(layEvent === 'dictTypeEdit') {
                 active.dictTypeEditView(data.id);
-            } else if(layEvent === 'dictTypeDel'){
+            } else if(layEvent === 'dictTypeDel') {
                 active.dictTypeDel(data.id);
-            } else if(layEvent === 'dictValueAdd'){
+            } else if(layEvent === 'dictValueAdd') {
                 active.dictValueAdd(data.id);
             }
         });
-        table.on('tool(dictValueTable)', function(obj){
+        table.on('tool(dictValueTable)', function(obj) {
             let data = obj.data //获得当前行数据
                 ,layEvent = obj.event;
             if(layEvent === 'dictValueEdit'){
                 active.dictValueEdit(data.id);
-            } else if(layEvent === 'dictValueDel'){
+            } else if(layEvent === 'dictValueDel') {
                 active.dictValueDel(data.id);
             }
         });
@@ -193,7 +193,7 @@
             /**
              * 添加
              * */
-            dictTypeAddView: function(){
+            dictTypeAddView: function() {
                 layer.open({
                     type: 2,
                     shade: 0.3,
@@ -212,7 +212,7 @@
              * 编辑
              * @param id id
              * */
-            dictTypeEditView: function(id){
+            dictTypeEditView: function(id) {
                 layer.open({
                     type: 2
                     ,shade: 0.3
@@ -231,8 +231,8 @@
              * 删除
              * @param id id
              */
-            dictTypeDel: function(id){
-                layer.confirm('真的删除行么', function(index){
+            dictTypeDel: function(id) {
+                layer.confirm('真的删除行么', function(index) {
                     //向服务端发送删除指令
                     $.ajax({
                         type: 'DELETE',
@@ -341,7 +341,7 @@
              * @param id 字典id
              */
             dictValueDel(id) {
-                layer.confirm('真的删除行么', function(index){
+                layer.confirm('真的删除行么', function(index) {
                     //向服务端发送删除指令
                     $.ajax({
                         type: 'DELETE',

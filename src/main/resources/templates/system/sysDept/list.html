@@ -61,20 +61,20 @@
         base: '/static/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'useradmin','treetable','table','crud'], function(){
+    }).use(['index', 'useradmin','treetable','table','crud'], function() {
         let $ = layui.$,
             form = layui.form,
             table = layui.table,
             crud = layui.crud,
             treetable = layui.treetable;
         //监听搜索
-        form.on('submit(search)', function(data){
+        form.on('submit(search)', function(data) {
             let field = data.field;
             //执行重载
             initTable(field);
         });
         //监听重置
-        form.on('submit(reset)', function(data){
+        form.on('submit(reset)', function(data) {
             Object.keys(data.field).forEach(key => (data.field[key] = ''));
             //执行重载
             initTable();
@@ -105,10 +105,10 @@
         }
         initTable();
         //头工具栏事件
-        table.on('toolbar(sysDeptTable)', function(obj){
+        table.on('toolbar(sysDeptTable)', function(obj) {
             let checkStatus = table.checkStatus(obj.config.id)
                 ,data = checkStatus.data;
-            switch(obj.event){
+            switch(obj.event) {
                 case 'expand':
                     active.expand();
                     break;
@@ -121,19 +121,19 @@
             }
         });
         //监听行工具事件
-        table.on('tool(sysDeptTable)', function(obj){
+        table.on('tool(sysDeptTable)', function(obj) {
             let data = obj.data //获得当前行数据
                 ,layEvent = obj.event;
-            if(layEvent === 'edit'){
+            if(layEvent === 'edit') {
                 active.editView(data.id);
-            } else if(layEvent === 'del'){
+            } else if(layEvent === 'del') {
                 active.del(data.id);
-            } else if(layEvent === 'add'){
+            } else if(layEvent === 'add') {
                 active.addView(data.id);
             }
         });
         // 修改部门状态
-        form.on('switch(enabled)', function (obj){
+        form.on('switch(enabled)', function (obj) {
             let deptId = obj.elem.value;
             let checked = obj.elem.checked ? 'Y' : 'N';
             active.changeDeptEnabled(deptId,checked);
@@ -143,19 +143,19 @@
             /**
              * 展开所有
              */
-            expand: function(){
+            expand: function() {
                 treetable.expandAll('#sysDeptTable');
             },
             /**
              * 折叠所有
              */
-            fold: function(){
+            fold: function() {
                 treetable.foldAll('#sysDeptTable');
             },
             /**
              * 添加
              * */
-            addView: function(id){
+            addView: function(id) {
                 let url = ctx + '/system/sysDept/addPage';
                 if (id) {
                     url = url + '?id=' + id;
@@ -178,7 +178,7 @@
              * 编辑
              * @param id id
              * */
-            editView: function(id){
+            editView: function(id) {
                 layer.open({
                     type: 2
                     ,shade: 0.3
@@ -197,8 +197,8 @@
              * 删除
              * @param id id
              */
-            del: function(id){
-                layer.confirm('真的删除行么', function(index){
+            del: function(id) {
+                layer.confirm('真的删除行么', function(index) {
                     //向服务端发送删除指令
                     $.ajax({
                         type: 'DELETE',
@@ -220,7 +220,7 @@
              * @param deptId 主键
              * @param checked 状态
              */
-            changeDeptEnabled: function(deptId,checked){
+            changeDeptEnabled: function(deptId,checked) {
                 $.ajax({
                     type: 'POST',
                     url:  ctx + '/system/sysDept/changeDept',

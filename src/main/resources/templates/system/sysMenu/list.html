@@ -56,7 +56,7 @@
               crud = layui.crud,
               treetable = layui.treetable;
       //监听搜索
-      form.on('submit(search)', function(data){
+      form.on('submit(search)', function(data) {
           let field = data.field;
           //执行重载
           initTable(field);
@@ -73,7 +73,7 @@
         let checked = obj.elem.checked ? 'Y' : 'N';
         active.changeMenuVisible(id,checked);
       });
-      let initTable = function (data){
+      let initTable = function (data) {
           return treetable.render({
               treeColIndex: 1,          // 树形图标显示在第几列
               treeSpid: 0,            // 最上级的父级id
@@ -100,7 +100,7 @@
 
       initTable();
       //头工具栏事件
-      table.on('toolbar(menuTable)', function(obj){
+      table.on('toolbar(menuTable)', function(obj) {
         let checkStatus = table.checkStatus(obj.config.id)
                 ,data = checkStatus.data;
         switch(obj.event){
@@ -116,7 +116,7 @@
         }
       });
       //监听行工具事件
-      table.on('tool(menuTable)', function(obj){
+      table.on('tool(menuTable)', function(obj) {
           let data = obj.data //获得当前行数据
               ,layEvent = obj.event;
           if(layEvent === 'edit'){
@@ -187,7 +187,7 @@
            * 删除
            * @param id id
            */
-          del: function(id){
+          del: function(id) {
               layer.confirm('真的删除行么', function(index){
                   //向服务端发送删除指令
                   $.ajax({

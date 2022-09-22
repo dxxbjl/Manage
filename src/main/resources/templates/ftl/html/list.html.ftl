@@ -45,12 +45,12 @@
         base: '/static/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'useradmin', 'table'], function(){
+    }).use(['index', 'useradmin', 'table'], function() {
         let $ = layui.$,
             form = layui.form,
             table = layui.table;
         //监听搜索
-        form.on('submit(search)', function(data){
+        form.on('submit(search)', function(data) {
             let field = data.field;
             //执行重载
             table.reload('${table.entityPath}Table',{
@@ -81,22 +81,22 @@
             ]]
         });
         //头工具栏事件
-        table.on('toolbar(${table.entityPath}Table)', function(obj){
+        table.on('toolbar(${table.entityPath}Table)', function(obj) {
             let checkStatus = table.checkStatus(obj.config.id)
                 ,data = checkStatus.data;
-            switch(obj.event){
+            switch(obj.event) {
                 case 'add':
                     active.addView();
                     break;
             }
         });
         //监听行工具事件
-        table.on('tool(${table.entityPath}Table)', function(obj){
+        table.on('tool(${table.entityPath}Table)', function(obj) {
             let data = obj.data //获得当前行数据
                 ,layEvent = obj.event;
-            if(layEvent === 'edit'){
+            if(layEvent === 'edit') {
                 active.editView(data.id);
-            } else if(layEvent === 'remove'){
+            } else if(layEvent === 'remove') {
                 active.remove(data.id);
             }
         });
@@ -105,7 +105,7 @@
             /**
              * 添加
              * */
-            addView: function(){
+            addView: function() {
                 layer.open({
                     type: 2
                     ,shade: 0.3
@@ -114,7 +114,7 @@
                     ,maxmin: true
                     ,area: ['80%', '80%']
                     ,btn: ['确定', '取消']
-                    ,yes: function(index, layero){
+                    ,yes: function(index, layero) {
                         let submit = layero.find('iframe').contents().find('#save-submit');
                         submit.trigger('click');
                     }
@@ -124,7 +124,7 @@
              * 编辑
              * @param id id
              * */
-            editView: function(id){
+            editView: function(id) {
                 layer.open({
                     type: 2
                     ,shade: 0.3
@@ -133,7 +133,7 @@
                     ,maxmin: true
                     ,area: ['80%', '80%']
                     ,btn: ['确定', '取消']
-                    ,yes: function(index, layero){
+                    ,yes: function(index, layero) {
                         let submit = layero.find('iframe').contents().find('#save-submit');
                         submit.trigger('click');
                     }
@@ -143,8 +143,8 @@
              * 删除单个条目
              * @param id id
              */
-            remove: function(id){
-                layer.confirm('真的删除行么', function(index){
+            remove: function(id) {
+                layer.confirm('真的删除行么', function(index) {
                     //向服务端发送删除指令
                     $.ajax({
                         type: 'DELETE',

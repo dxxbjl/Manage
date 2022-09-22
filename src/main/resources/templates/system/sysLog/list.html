@@ -60,7 +60,7 @@
             form = layui.form,
             table = layui.table;
       //监听搜索
-      form.on('submit(search)', function(data){
+      form.on('submit(search)', function(data) {
         let field = data.field;
           //执行重载
           table.reload('logTable', {
@@ -93,17 +93,17 @@
           ]]
       });
       //头工具栏事件
-      table.on('toolbar(logTable)', function(obj){
+      table.on('toolbar(logTable)', function(obj) {
         let checkStatus = table.checkStatus(obj.config.id)
                 ,data = checkStatus.data;
-        switch(obj.event){
+        switch(obj.event) {
           case 'delete':
             active.deleteAll();
             break;
         }
       });
       //监听行工具事件
-      table.on('tool(logTable)', function(obj){
+      table.on('tool(logTable)', function(obj) {
         let data = obj.data //获得当前行数据
                 ,layEvent = obj.event;
         if(layEvent === 'del'){
@@ -118,8 +118,8 @@
          * 删除
          * @param id 主键
          */
-        del: function(id){
-          layer.confirm('真的删除行么', function(index){
+        del: function(id) {
+          layer.confirm('真的删除行么', function(index) {
             $.ajax({
               type: 'DELETE',
               url:  ctx + '/sysLog/del/' + id,
@@ -139,7 +139,7 @@
          * 删除全部日志
          */
         deleteAll: function() {
-          layer.confirm('删除全部日志?', function(index){
+          layer.confirm('删除全部日志?', function(index) {
             $.ajax({
               type: 'DELETE',
               url:  ctx + '/sysLog/delAll',
@@ -159,7 +159,7 @@
          * 日志详情
          * @param id 主键
          * */
-        infoView: function(id){
+        infoView: function(id) {
           layer.open({
             type: 2
             ,shade: 0.3
@@ -168,7 +168,7 @@
             ,maxmin: true
             ,area: ['80%', '80%']
             ,btn: ['关闭']
-            ,yes: function(index, layero){
+            ,yes: function(index, layero) {
               layer.closeAll();
             }
           });
