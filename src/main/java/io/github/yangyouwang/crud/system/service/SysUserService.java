@@ -22,6 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.lang.NonNull;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -38,7 +39,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 /**
@@ -89,10 +89,12 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
         if (ConfigConsts.ADMIN_USER.equals(userName)) {
             menuRole = sysMenuMapper.findMenuRole();
         } else {
-            menuRole = Stream.of(StringUtil.getId(user.getRoleIds())).map(roleId -> {
-                List<String> userMenuRole = sysMenuMapper.findMenuRoleByRoleId(roleId);
-                return String.join(",", userMenuRole);
-            }).collect(Collectors.toList());
+            String roleIds = user.getRoleIds();
+            if (StringUtils.isBlank(roleIds)) {
+                throw new AccessDeniedException(ResultStatus.MENU_NULL_ERROR.message);
+            }
+            Long[] ids = StringUtil.getId(roleIds);
+            menuRole = sysMenuMapper.findMenuRoleByRoleIds(ids);
         }
         return new User(user.getUserName(), user.getPassWord(), ConfigConsts.ENABLED_YES.equals(user.getEnabled()),
                 true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList(String.join(",",menuRole)));

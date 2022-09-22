@@ -2,13 +2,11 @@ package io.github.yangyouwang.core.exception;
 
 import io.github.yangyouwang.common.domain.Result;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -24,17 +22,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    /**
-     * 处理权限的异常
-     */
-    @ExceptionHandler(value = AccessDeniedException.class)
-    public ModelAndView exceptionHandler(AccessDeniedException e){
-        log.error("发生权限异常！原因是:",e);
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("/error/500");
-        modelAndView.addObject("message", e.getMessage());
-        return modelAndView;
-    }
     /**
      * 参数校验错误
      */
