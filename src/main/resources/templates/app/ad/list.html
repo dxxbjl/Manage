@@ -46,10 +46,11 @@
         base: '/static/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'useradmin', 'table'], function() {
+    }).use(['index', 'useradmin', 'table','crud'], function() {
         let $ = layui.$,
             form = layui.form,
-            table = layui.table;
+            table = layui.table,
+            crud = layui.crud;
         //监听搜索
         form.on('submit(search)', function(data) {
             let field = data.field;
@@ -82,8 +83,7 @@
                 {type: 'checkbox', fixed: 'left'},
                 {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
                 {field: 'adTitle', title: '标题'},
-                {field: 'adUrl', title: "宣传图片",
-                    templet: function (d) { return fun.showImg(d.adUrl); }},
+                {field: 'adUrl', title: "宣传图片", templet: function (d) { return crud.showImg(d.adUrl); }},
                 {field: 'enabled', align: "center", sort: true, templet: '#enabledTpl', title: '状态'},
                 {toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
             ]]

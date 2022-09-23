@@ -1,14 +1,5 @@
 let fun = {
     /**
-     * 显示图片
-     */
-    showImg: function (img) {
-        if (img) {
-            return `<img onclick="fun.preview(this)" width="100%" height="100%" src="${img}">`
-        }
-        return '暂无';
-    },
-    /**
      * 对象转数组ids
      * @param obj
      */
@@ -19,7 +10,7 @@ let fun = {
      * 预览图片
      * @param that 图片对象
      */
-    preview : function(that){
+    preview : function(that) {
         layer.photos({ photos: {"data": [{"src": that.src}]} ,closeBtn:true});
     },
     //#region 数组操作
