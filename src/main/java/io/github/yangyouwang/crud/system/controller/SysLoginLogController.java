@@ -14,10 +14,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
- import org.springframework.stereotype.Controller;
- import io.github.yangyouwang.common.base.CrudController;
-
+import org.springframework.stereotype.Controller;
+import io.github.yangyouwang.common.base.CrudController;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -56,27 +54,28 @@ public class SysLoginLogController extends CrudController {
     return getDataTable(data);
   }
 
-  /**
-   * 删除请求
-   * @param id 登录日志id
-   * @return 删除状态
-   */
   @CrudLog(title = "删除登录日志",businessType = BusinessType.DELETE)
-  @DeleteMapping("/del/{id}")
+  @ApiOperation(value = "删除登录日志(单个条目)")
+  @DeleteMapping(value = "/remove/{id}")
   @ResponseBody
-  public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
+  public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
     boolean flag = sysLoginLogService.removeById(id);
     return Result.success(flag);
   }
 
-  /**
-   * 删除全部日志请求
-   * @return 删除状态
-   */
-  @CrudLog(title = "删除全部登录日志",businessType = BusinessType.DELETE)
-  @DeleteMapping("/delAll")
+  @CrudLog(title = "删除登录日志",businessType = BusinessType.DELETE)
+  @ApiOperation(value = "删除登录日志(多个条目)")
+  @PostMapping(value = "/removes")
   @ResponseBody
-  public Result delAll(){
+  public Result removes(@RequestBody @Valid List<Long> ids) {
+    boolean flag = sysLoginLogService.removeByIds(ids);
+    return Result.success(flag);
+  }
+
+  @CrudLog(title = "删除全部登录日志",businessType = BusinessType.DELETE)
+  @DeleteMapping("/removeAll")
+  @ResponseBody
+  public Result removeAll(){
     boolean flag = sysLoginLogService.remove(new LambdaQueryWrapper<>());
     return Result.success(flag);
   }

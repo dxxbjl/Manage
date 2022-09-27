@@ -17,10 +17,10 @@ import org.springframework.ui.ModelMap;
 
 <#if restControllerStyle>
 <#else>
- import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Controller;
 </#if>
 <#if superControllerClassPackage??>
- import ${superControllerClassPackage};
+import ${superControllerClassPackage};
 </#if>
 
 import javax.validation.Valid;
