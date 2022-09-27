@@ -6,6 +6,7 @@ import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.github.yangyouwang.crud.act.entity.ActReModel;
 import io.github.yangyouwang.crud.act.service.ActReModelService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -132,13 +133,14 @@ public class ActReModelController extends CrudController {
     }
 
     /**
-     * 删除请求
+     * 模型删除
      * @param id 模型id
      * @return 删除状态
      */
-    @DeleteMapping("/del/{id}")
+    @ApiOperation(value = "模型删除(单个条目)")
+    @DeleteMapping(value = "/remove/{id}")
     @ResponseBody
-    public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable String id){
+    public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
         boolean flag = actReModelService.removeById(id);
         return Result.success(flag);
     }

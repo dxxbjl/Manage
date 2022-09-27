@@ -40,7 +40,7 @@
           <a sec:authorize="hasAuthority('model:design')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="design"><i class="layui-icon layui-icon-edit"></i>设计</a>
           <a sec:authorize="hasAuthority('model:deploy')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="deploy"><i class="layui-icon layui-icon-edit"></i>部署</a>
           <a sec:authorize="hasAuthority('model:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-          <a sec:authorize="hasAuthority('model:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+          <a sec:authorize="hasAuthority('model:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="remove"><i class="layui-icon layui-icon-delete"></i>删除</a>
         </script>
       </div>
     </div>
@@ -113,8 +113,8 @@
               ,layEvent = obj.event;
           if(layEvent === 'edit'){
               active.editView(data.id);
-          } else if(layEvent === 'del'){
-              active.del(data.id);
+          } else if(layEvent === 'remove'){
+              active.remove(data.id);
           } else if(layEvent === 'design'){
             // 设计
             active.design(data.id);
@@ -166,12 +166,12 @@
            * 删除
            * @param id id
            */
-          del: function(id){
+          remove: function(id){
               layer.confirm('真的删除行么', function(index){
                   //向服务端发送删除指令
                   $.ajax({
                       type: 'DELETE',
-                      url:  ctx + '/actReModel/del/' + id,
+                      url:  ctx + '/actReModel/remove/' + id,
                       contentType:'application/json;charset=UTF-8',
                       dataType: 'json',
                       success: function(result) {
