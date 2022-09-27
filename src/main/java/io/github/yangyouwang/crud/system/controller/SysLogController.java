@@ -8,6 +8,7 @@ import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.crud.system.entity.SysLog;
 import io.github.yangyouwang.crud.system.service.SysLogService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -63,27 +64,29 @@ public class SysLogController extends CrudController {
         return getDataTable(list);
     }
 
-    /**
-     * 删除请求
-     * @param id 日志id
-     * @return 删除状态
-     */
     @CrudLog(title = "删除日志",businessType = BusinessType.DELETE)
-    @DeleteMapping("/del/{id}")
+    @ApiOperation(value = "删除日志(单个条目)")
+    @DeleteMapping(value = "/remove/{id}")
     @ResponseBody
-    public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
+    public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
         boolean flag = sysLogService.removeById(id);
         return Result.success(flag);
     }
 
-    /**
-     * 删除全部日志请求
-     * @return 删除状态
-     */
-    @CrudLog(title = "删除全部日志",businessType = BusinessType.DELETE)
-    @DeleteMapping("/delAll")
+    @CrudLog(title = "删除日志",businessType = BusinessType.DELETE)
+    @ApiOperation(value = "删除日志(多个条目)")
+    @PostMapping(value = "/removes")
     @ResponseBody
-    public Result delAll(){
+    public Result removes(@RequestBody @Valid List<Long> ids) {
+        boolean flag = sysLogService.removeByIds(ids);
+        return Result.success(flag);
+    }
+
+    @CrudLog(title = "删除全部日志",businessType = BusinessType.DELETE)
+    @ApiOperation(value = "删除全部日志")
+    @DeleteMapping("/removeAll")
+    @ResponseBody
+    public Result removeAll() {
         boolean flag = sysLogService.remove(new LambdaQueryWrapper<>());
         return Result.success(flag);
     }

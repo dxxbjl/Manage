@@ -39,12 +39,13 @@
         <table id="logTable" lay-filter="logTable"></table>
         <script type="text/html" id="toolbar">
           <div class="layui-btn-container">
-            <a sec:authorize="hasAuthority('log:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><i class="layui-icon layui-icon-delete"></i>清空</a>
+            <a sec:authorize="hasAuthority('log:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="removeAll"><i class="layui-icon layui-icon-delete"></i>清空</a>
+            <a sec:authorize="hasAuthority('log:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="removes"><i class="layui-icon layui-icon-delete"></i>删除</a>
           </div>
         </script>
         <script type="text/html" id="tableBar">
           <a sec:authorize="hasAuthority('log:info')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="info"><i class="layui-icon layui-icon-edit"></i>详情</a>
-          <a sec:authorize="hasAuthority('log:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+          <a sec:authorize="hasAuthority('log:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="remove"><i class="layui-icon layui-icon-delete"></i>删除</a>
         </script>
       </div>
     </div>
@@ -82,6 +83,7 @@
           ,url:  ctx + '/sysLog/page'
           ,page: true //开启分页,
           ,cols: [[ //表头
+              {type: 'checkbox', fixed: 'left'},
               {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
               {field: 'title', title: '业务标题'},
               {field: 'businessType', title: '业务类型'},
@@ -97,8 +99,15 @@
         let checkStatus = table.checkStatus(obj.config.id)
                 ,data = checkStatus.data;
         switch(obj.event) {
-          case 'delete':
-            active.deleteAll();
+          case 'removeAll':
+            active.removeAll();
+            break;
+          case 'removes':
+            if (data.length === 0) {
+              layer.msg('请选择需要删除的行')
+            } else {
+              active.removes(data);
+            }
             break;
         }
       });
@@ -106,8 +115,8 @@
       table.on('tool(logTable)', function(obj) {
         let data = obj.data //获得当前行数据
                 ,layEvent = obj.event;
-        if(layEvent === 'del'){
-          active.del(data.id);
+        if(layEvent === 'remove'){
+          active.remove(data.id);
         } else if(layEvent === 'info') {
           active.infoView(data.id);
         }
@@ -118,11 +127,11 @@
          * 删除
          * @param id 主键
          */
-        del: function(id) {
+        remove: function(id) {
           layer.confirm('真的删除行么', function(index) {
             $.ajax({
               type: 'DELETE',
-              url:  ctx + '/sysLog/del/' + id,
+              url:  ctx + '/sysLog/remove/' + id,
               contentType:'application/json;charset=UTF-8',
               dataType: 'json',
               success: function(result) {
@@ -138,11 +147,35 @@
         /**
          * 删除全部日志
          */
-        deleteAll: function() {
+        removeAll: function() {
           layer.confirm('删除全部日志?', function(index) {
             $.ajax({
               type: 'DELETE',
-              url:  ctx + '/sysLog/delAll',
+              url:  ctx + '/sysLog/removeAll',
+              contentType:'application/json;charset=UTF-8',
+              dataType: 'json',
+              success: function(result) {
+                layer.msg(result.message);
+                if (result.code === 200) {
+                  layer.close(index);
+                  table.reload('logTable');
+                }
+              }
+            });
+          });
+        },
+        /**
+         * 批量删除
+         * @param obj 对象
+         */
+        removes: function(obj) {
+          let ids = fun.objToArrIds(obj);
+          layer.confirm('真的删除行么', function(index) {
+            //向服务端发送删除指令
+            $.ajax({
+              type: 'POST',
+              url:  ctx + '/sysLog/removes',
+              data: JSON.stringify(ids),
               contentType:'application/json;charset=UTF-8',
               dataType: 'json',
               success: function(result) {
