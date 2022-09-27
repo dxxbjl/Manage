@@ -9,6 +9,7 @@ import io.github.yangyouwang.common.domain.XmSelectNode;
 import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.crud.system.entity.SysRole;
 import io.github.yangyouwang.crud.system.service.SysRoleService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -120,15 +121,30 @@ public class SysRoleController extends CrudController {
     }
 
     /**
-     * 删除请求
+     * 删除角色
      * @param id 角色id
      * @return 删除状态
      */
+    @ApiOperation(value = "删除角色(单个条目)")
     @CrudLog(title = "删除角色",businessType = BusinessType.DELETE)
-    @DeleteMapping("/del/{id}")
+    @DeleteMapping("/remove/{id}")
     @ResponseBody
-    public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
-        sysRoleService.del(id);
+    public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
+        sysRoleService.remove(id);
+        return Result.success();
+    }
+
+    /**
+     * 删除角色(多个条目)
+     * @param ids 角色ids
+     * @return 删除状态
+     */
+    @ApiOperation(value = "删除角色(多个条目)")
+    @PostMapping(value = "/removes")
+    @ResponseBody
+    @CrudLog(title = "删除角色",businessType = BusinessType.DELETE)
+    public Result removes(@RequestBody @Valid List<Long> ids) {
+        sysRoleService.removeByIds(ids);
         return Result.success();
     }
 

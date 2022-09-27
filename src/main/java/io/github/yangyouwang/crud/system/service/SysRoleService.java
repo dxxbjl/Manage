@@ -106,7 +106,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
      * @param id 角色id
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public void del(Long id) {
+    public void remove(Long id) {
         this.removeById(id);
         // 删除角色关联菜单
         sysRoleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>()
