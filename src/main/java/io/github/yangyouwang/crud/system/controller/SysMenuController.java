@@ -8,6 +8,7 @@ import io.github.yangyouwang.common.domain.TreeSelectNode;
 import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.crud.system.entity.SysMenu;
 import io.github.yangyouwang.crud.system.service.SysMenuService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.util.Strings;
@@ -140,10 +141,11 @@ public class SysMenuController extends CrudController {
      * @return 删除状态
      */
     @CrudLog(title = "删除菜单",businessType = BusinessType.DELETE)
-    @DeleteMapping("/del/{id}")
+    @ApiOperation(value = "删除菜单(单个条目)")
+    @DeleteMapping(value = "/remove/{id}")
     @ResponseBody
-    public Result del(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
-        sysMenuService.del(id);
+    public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
+        sysMenuService.remove(id);
         return Result.success();
     }
 

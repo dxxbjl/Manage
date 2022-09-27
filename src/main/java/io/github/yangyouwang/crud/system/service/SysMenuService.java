@@ -78,7 +78,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
      * @param id 菜单id
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public void del(Long id) {
+    public void remove(Long id) {
         // 删除子菜单
         int count = this.count(new LambdaQueryWrapper<SysMenu>()
                 .eq(SysMenu::getParentId, id));
