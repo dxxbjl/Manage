@@ -40,8 +40,6 @@ CREATE TABLE `app_ad`  (
 -- ----------------------------
 -- Records of app_ad
 -- ----------------------------
-INSERT INTO `app_ad` VALUES (18, '测试轮播图', 'http://127.0.0.1:9000/crud/jflM9PZAnU.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=minioadmin%2F20220814%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220814T153015Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=49218512c3d4676e5b03e61f6099f160c86458f3167002de1f0deb5f6996b001', '', 'Y', 'admin', '2022-08-14 23:26:30', 'admin', '2022-08-14 23:30:16', 0, '');
-INSERT INTO `app_ad` VALUES (19, '测试轮播图', 'http://127.0.0.1:9000/crud/DdXfdqoCqC.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=minioadmin%2F20220814%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220814T153019Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=556153ec74386c22774a040f29da2e383e90c26555bc41ee738be2b97acd2aef', '', 'Y', 'admin', '2022-08-14 23:26:33', 'admin', '2022-08-14 23:30:20', 0, '');
 
 -- ----------------------------
 -- Table structure for app_oauth
@@ -58,7 +56,6 @@ CREATE TABLE `app_oauth`  (
 -- ----------------------------
 -- Records of app_oauth
 -- ----------------------------
-INSERT INTO `app_oauth` VALUES (3, 'ofB8h5Y_jLacnUYkjj_XLI-EEqlg', 'wx', 3);
 
 -- ----------------------------
 -- Table structure for app_user
@@ -80,7 +77,6 @@ CREATE TABLE `app_user`  (
 -- ----------------------------
 -- Records of app_user
 -- ----------------------------
-INSERT INTO `app_user` VALUES (3, '', '', 1, NULL, NULL, NULL, 0, '2022-08-14 23:57:59');
 
 -- ----------------------------
 -- Table structure for app_sms_code

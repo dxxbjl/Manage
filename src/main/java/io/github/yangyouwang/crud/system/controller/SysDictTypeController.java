@@ -7,6 +7,7 @@ import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.crud.system.entity.SysDictType;
 import io.github.yangyouwang.crud.system.service.SysDictTypeService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -133,10 +134,11 @@ public class SysDictTypeController extends CrudController {
      * @return 删除状态
      */
     @CrudLog(title = "删除字典类型",businessType = BusinessType.DELETE)
-    @DeleteMapping("/del/{id}")
+    @ApiOperation(value = "删除字典类型(单个条目)")
+    @DeleteMapping(value = "/remove/{id}")
     @ResponseBody
-    public Result delKey(@Valid @NotNull(message = "id不能为空") @PathVariable Long id){
-        sysDictTypeService.del(id);
+    public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
+        sysDictTypeService.remove(id);
         return Result.success();
     }
 }

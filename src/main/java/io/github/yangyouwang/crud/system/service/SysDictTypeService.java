@@ -70,7 +70,7 @@ public class SysDictTypeService extends ServiceImpl<SysDictTypeMapper, SysDictTy
      * @param id 字典id
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public void del(Long id) {
+    public void remove(Long id) {
         boolean flag = this.removeById(id);
         if (flag) {
             sysDictValueMapper.delete(new LambdaQueryWrapper<SysDictValue>()
