@@ -35,11 +35,7 @@ public class SampleSms {
      */
     static final String DOMAIN = "dysmsapi.aliyuncs.com";
 
-    private static SmsProperties smsProperties;
-
-    static {
-        smsProperties = SpringUtils.getBean(SmsProperties.class);
-    }
+    private static SmsProperties smsProperties = SpringUtils.getBean(SmsProperties.class);
 
     /**
      * 发送短信

@@ -3,10 +3,9 @@ package io.github.yangyouwang.crud.system.model;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import com.alibaba.excel.metadata.BaseRowModel;
-import io.github.yangyouwang.core.converter.DateConverter;
-import io.github.yangyouwang.core.converter.EnabledConverter;
-import io.github.yangyouwang.core.converter.SexConverter;
-import io.github.yangyouwang.core.converter.MyStringImageConverter;
+import io.github.yangyouwang.common.annotation.DictType;
+import io.github.yangyouwang.common.constant.ConfigConsts;
+import io.github.yangyouwang.core.excel.converter.*;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -64,7 +63,8 @@ public class SysUserDTO extends BaseRowModel implements Serializable {
      * 用户性别（0男 1女 2未知）
      */
     @ColumnWidth(30)
-    @ExcelProperty(value = {"用户性别"}, index = 6, converter = SexConverter.class)
+    @ExcelProperty(value = {"用户性别"}, index = 6, converter = BaseDictDataConverter.class)
+    @DictType(key = ConfigConsts.DICT_KEY_SEX)
     private String sex;
     /**
      * 部门
@@ -82,7 +82,8 @@ public class SysUserDTO extends BaseRowModel implements Serializable {
      * 状态
      * */
     @ColumnWidth(30)
-    @ExcelProperty(value = {"状态"}, index = 9,converter = EnabledConverter.class)
+    @ExcelProperty(value = {"状态"}, index = 9,converter = BaseDictDataConverter.class)
+    @DictType(key = ConfigConsts.DICT_KEY_ENABLED)
     private String enabled;
     /**
      * 备注
