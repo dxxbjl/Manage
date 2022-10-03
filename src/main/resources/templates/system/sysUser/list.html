@@ -6,54 +6,61 @@
 </head>
 <body>
   <div class="layui-fluid">
-    <div class="layui-card">
-      <form class="layui-form layui-card-header layuiadmin-card-header-auto">
-        <div class="layui-form-item">
-          <div class="layui-inline">
-            <label class="layui-form-label">昵称</label>
-            <div class="layui-input-block">
-              <input type="text" name="nickName" placeholder="请输入昵称" class="layui-input">
-            </div>
-          </div>
-          <div class="layui-inline">
-            <label class="layui-form-label">用户名</label>
-            <div class="layui-input-block">
-              <input type="text" name="userName" placeholder="请输入用户名" class="layui-input">
-            </div>
-          </div>
-          <div class="layui-inline">
-            <label class="layui-form-label">手机号</label>
-            <div class="layui-input-block">
-              <input type="text" name="phonenumber" placeholder="请输入手机号" class="layui-input">
-            </div>
-          </div>
-          <div class="layui-inline">
-            <button type="button" class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
-              <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
-            </button>
-            <button type="reset" class="layui-btn layui-btn-primary" lay-submit lay-filter="reset">重置</button>
+    <div class="layui-row layui-col-space15">
+      <!-- 左树 -->
+      <div class="layui-col-sm12 layui-col-md4 layui-col-lg3">
+        <div class="layui-card">
+          <div class="layui-card-body mini-bar">
+            <div id="deptTree" class="ztree"></div>
           </div>
         </div>
-      </form>
-      <div class="layui-card-body">
-        <table id="userTable" lay-filter="userTable"></table>
-        <script type="text/html" id="toolbar">
-          <div class="layui-btn-container">
-            <a class="layui-btn layui-btn-xs" lay-event="export"><i class="layui-icon layui-icon-file"></i>导出</a>
-            <a sec:authorize="hasAuthority('user:add')" class="layui-btn layui-btn-xs" lay-event="add"><i class="layui-icon layui-icon-add-1"></i>添加</a>
-            <a sec:authorize="hasAuthority('user:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="removes"><i class="layui-icon layui-icon-delete"></i>删除</a>
-          </div>
-        </script>
-        <script type="text/html" id="enabledTpl">
-          <input type="checkbox" lay-filter="enabled" value="{{d.id}}" lay-skin="switch" lay-text="激活|冻结" {{d.enabled==='Y'?'checked':''}} />
-        </script>
-        <script type="text/html" id="tableBar">
-          <a sec:authorize="hasAuthority('user:pass')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="pass"><i class="layui-icon layui-icon-password"></i>重置</a>
-          <a sec:authorize="hasAuthority('user:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-          <a sec:authorize="hasAuthority('user:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="remove"><i class="layui-icon layui-icon-delete"></i>删除</a>
-        </script>
       </div>
-    </div>
+      <!-- 右表 -->
+      <div class="layui-col-sm12 layui-col-md8 layui-col-lg9">
+        <div class="layui-card">
+          <form class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <input type="hidden" name="deptId" id="deptId">
+            <div class="layui-form-item">
+              <div class="layui-inline">
+                <label class="layui-form-label">昵称</label>
+                <div class="layui-input-block">
+                  <input type="text" name="nickName" placeholder="请输入昵称" class="layui-input">
+                </div>
+              </div>
+              <div class="layui-inline">
+                <label class="layui-form-label">手机号</label>
+                <div class="layui-input-block">
+                  <input type="text" name="phonenumber" placeholder="请输入手机号" class="layui-input">
+                </div>
+              </div>
+              <div class="layui-inline">
+                <button type="button" class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                  <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                </button>
+                <button type="reset" class="layui-btn layui-btn-primary" lay-submit lay-filter="reset">重置</button>
+              </div>
+            </div>
+          </form>
+          <div class="layui-card-body">
+            <table id="userTable" lay-filter="userTable"></table>
+            <script type="text/html" id="toolbar">
+              <div class="layui-btn-container">
+                <a class="layui-btn layui-btn-xs" lay-event="export"><i class="layui-icon layui-icon-file"></i>导出</a>
+                <a sec:authorize="hasAuthority('user:add')" class="layui-btn layui-btn-xs" lay-event="add"><i class="layui-icon layui-icon-add-1"></i>添加</a>
+                <a sec:authorize="hasAuthority('user:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="removes"><i class="layui-icon layui-icon-delete"></i>删除</a>
+              </div>
+            </script>
+            <script type="text/html" id="enabledTpl">
+              <input type="checkbox" lay-filter="enabled" value="{{d.id}}" lay-skin="switch" lay-text="激活|冻结" {{d.enabled==='Y'?'checked':''}} />
+            </script>
+            <script type="text/html" id="tableBar">
+              <a sec:authorize="hasAuthority('user:pass')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="pass"><i class="layui-icon layui-icon-password"></i>重置</a>
+              <a sec:authorize="hasAuthority('user:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+              <a sec:authorize="hasAuthority('user:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="remove"><i class="layui-icon layui-icon-delete"></i>删除</a>
+            </script>
+          </div>
+        </div>
+      </div>
   </div>
 <div th:replace="common/script::footer"></div>
 <script th:inline="javascript">
@@ -66,6 +73,22 @@
               form = layui.form,
               crud = layui.crud,
               table = layui.table;
+       // 左侧树结构
+       $.ajax({
+        type: "get",
+        url:  ctx + '/system/sysDept/treeSelect',
+        success: function(data) {
+          let zTree = $.fn.zTree.init($("#deptTree"), fun.setting(function (event,treeId,treeNode) {
+            //执行重载
+            table.reload('userTable', {
+              where: {
+                deptId: treeNode.id
+              }
+            });
+          }), data);
+          zTree.expandAll(true);
+        }
+      });
       //监听搜索
       form.on('submit(search)', function(data) {
         let field = data.field;
@@ -98,14 +121,14 @@
               {type: 'checkbox', fixed: 'left'},
               {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
               {field: 'avatar', title: "头像", templet: function (d) { return crud.showImg(d.avatar); }},
-              {field: 'nickName', title: '昵称'},
-              {field: 'userName', title: '账户'},
+              {field: 'nickName', width: 100, title: '昵称'},
+              {field: 'userName', width: 100, title: '账户'},
               {field: 'sex', title: "性别",width: 60, templet: function (d) { return crud.getDictValue('sex',d.sex);}},
               {field: 'phonenumber', title: '手机号',width: 120},
               {field: 'enabled', align: "center", width: 100, templet: '#enabledTpl', title: '状态'},
-              {field: 'deptName', title: '部门名称'},
-              {field: 'postName', title: '岗位名称'},
-              {toolbar: '#tableBar', title: '操作', width: 210, align:'center',fixed: 'right'}
+              {field: 'deptName', width: 100, title: '部门名称'},
+              {field: 'postName', width: 200, title: '岗位名称'},
+              {toolbar: '#tableBar', title: '操作', width: 220, align:'center',fixed: 'right'}
           ]]
       });
       //头工具栏事件

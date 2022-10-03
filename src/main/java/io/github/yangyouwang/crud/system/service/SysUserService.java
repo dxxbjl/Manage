@@ -73,8 +73,8 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
      */
     public List<SysUser> list(SysUser sysUser) {
         return sysUserMapper.findUserList(new LambdaQueryWrapper<SysUser>()
+                .eq(null != sysUser.getDeptId(),SysUser::getDeptId, sysUser.getDeptId())
                 .like(StringUtils.isNotBlank(sysUser.getNickName()),SysUser::getNickName, sysUser.getNickName())
-                .like(StringUtils.isNotBlank(sysUser.getUserName()),SysUser::getUserName, sysUser.getUserName())
                 .like(StringUtils.isNotBlank(sysUser.getPhonenumber()), SysUser::getPhonenumber, sysUser.getPhonenumber()));
     }
 

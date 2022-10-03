@@ -1,4 +1,21 @@
 let fun = {
+     setting : function(zTreeOnClick) {
+       return {
+             data: {
+                 simpleData: {
+                     enable: true,
+                     idKey: "id",
+                     pIdKey: "parentId"
+                 }
+             },
+             view:{
+               showLine:false,
+             },
+             callback: {
+                 onClick: zTreeOnClick
+             }
+         };
+    },
     /**
      * 对象转数组ids
      * @param obj
