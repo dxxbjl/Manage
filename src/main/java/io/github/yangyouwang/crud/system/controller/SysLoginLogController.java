@@ -1,6 +1,5 @@
 package io.github.yangyouwang.crud.system.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.enums.BusinessType;
@@ -69,14 +68,6 @@ public class SysLoginLogController extends CrudController {
   @ResponseBody
   public Result removes(@RequestBody @Valid List<Long> ids) {
     boolean flag = sysLoginLogService.removeByIds(ids);
-    return Result.success(flag);
-  }
-
-  @CrudLog(title = "删除全部登录日志",businessType = BusinessType.DELETE)
-  @DeleteMapping("/removeAll")
-  @ResponseBody
-  public Result removeAll(){
-    boolean flag = sysLoginLogService.remove(new LambdaQueryWrapper<>());
     return Result.success(flag);
   }
 }

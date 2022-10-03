@@ -79,7 +79,7 @@
               treeSpid: 0,            // 最上级的父级id
               treeIdName: 'id',       // id字段的名称
               treePidName: 'parentId',     // 父级节点字段
-              treeDefaultClose: true,   // 是否默认折叠
+              treeDefaultClose: false,   // 是否默认折叠
               treeLinkage: true,        // 父级展开时是否自动展开所有子级
               elem: '#menuTable',
               toolbar: '#toolbar',
@@ -89,7 +89,7 @@
                   {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
                   {field: 'menuName', title: '菜单名称', width: 200},
                   {field: 'menuType', title: "菜单类型", templet: function (d) { return crud.getDictValue('menuType',d.menuType);}},
-                  {field: 'url', title: '请求地址'},
+                  {field: 'url', width: 200, title: '请求地址'},
                   {field: 'perms', title: '权限标识'},
                   {field: 'icon', title: '图标', templet: function (d) { return  `<i class="layui-icon ${d.icon}"></i>`;}},
                   {field: 'visible', align: "center", sort: true, templet: '#visibleTpl', title: '状态'},

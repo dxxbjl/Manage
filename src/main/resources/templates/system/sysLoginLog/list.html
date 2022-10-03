@@ -33,7 +33,6 @@
             <table id="sysLoginLogTable" lay-filter="sysLoginLogTable"></table>
             <script type="text/html" id="toolbar">
                 <div class="layui-btn-container">
-                    <a sec:authorize="hasAuthority('sysLoginLog:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="removeAll"><i class="layui-icon layui-icon-delete"></i>清空</a>
                     <a sec:authorize="hasAuthority('sysLoginLog:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="removes"><i class="layui-icon layui-icon-delete"></i>删除</a>
                 </div>
             </script>
@@ -91,9 +90,6 @@
             let checkStatus = table.checkStatus(obj.config.id)
                 ,data = checkStatus.data;
             switch(obj.event) {
-                case 'removeAll':
-                    active.removeAll();
-                    break;
                 case 'removes':
                     if (data.length === 0) {
                         layer.msg('请选择需要删除的行')
@@ -123,26 +119,6 @@
                     $.ajax({
                         type: 'DELETE',
                         url:  ctx + '/sysLoginLog/remove/' + id,
-                        contentType:'application/json;charset=UTF-8',
-                        dataType: 'json',
-                        success: function(result) {
-                            layer.msg(result.message);
-                            if (result.code === 200) {
-                                layer.close(index);
-                                table.reload('sysLoginLogTable');
-                            }
-                        }
-                    });
-                });
-            },
-            /**
-             * 删除全部登录日志
-             */
-            removeAll: function() {
-                layer.confirm('删除全部登录日志?', function(index) {
-                    $.ajax({
-                        type: 'DELETE',
-                        url:  ctx + '/sysLoginLog/removeAll',
                         contentType:'application/json;charset=UTF-8',
                         dataType: 'json',
                         success: function(result) {

@@ -82,15 +82,6 @@ public class SysLogController extends CrudController {
         return Result.success(flag);
     }
 
-    @CrudLog(title = "删除全部日志",businessType = BusinessType.DELETE)
-    @ApiOperation(value = "删除全部日志")
-    @DeleteMapping("/removeAll")
-    @ResponseBody
-    public Result removeAll() {
-        boolean flag = sysLogService.remove(new LambdaQueryWrapper<>());
-        return Result.success(flag);
-    }
-
     @GetMapping("/infoPage/{id}")
     public String infoPage(@Valid @NotNull(message = "id不能为空") @PathVariable Long id, ModelMap map){
         SysLog sysLog = sysLogService.getById(id);

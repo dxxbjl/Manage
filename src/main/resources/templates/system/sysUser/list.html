@@ -79,10 +79,11 @@
         url:  ctx + '/system/sysDept/treeSelect',
         success: function(data) {
           let zTree = $.fn.zTree.init($("#deptTree"), fun.setting(function (event,treeId,treeNode) {
+            let deptId = treeNode.id;
             //执行重载
             table.reload('userTable', {
               where: {
-                deptId: treeNode.id
+                deptId
               }
             });
           }), data);
