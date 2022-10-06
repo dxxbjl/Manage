@@ -3,8 +3,8 @@
 <mapper namespace="io.github.yangyouwang.crud.system.mapper.SysDictTypeMapper">
   <resultMap id="BaseResultMap" type="io.github.yangyouwang.crud.system.entity.SysDictType">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="dictKey" jdbcType="VARCHAR" property="dictKey" />
-    <result column="dictName" jdbcType="VARCHAR" property="dictName" />
+    <result column="dict_key" jdbcType="VARCHAR" property="dictKey" />
+    <result column="dict_name" jdbcType="VARCHAR" property="dictName" />
     <result column="order_num" jdbcType="INTEGER" property="orderNum" />
     <result column="enabled" jdbcType="VARCHAR" property="enabled" />
     <result column="create_by" jdbcType="VARCHAR" property="createBy" />
@@ -12,91 +12,39 @@
     <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
-  </resultMap>
-  <resultMap id="DictResultMap" type="io.github.yangyouwang.crud.system.entity.SysDictType">
-    <id column="dictId" jdbcType="BIGINT" property="id" />
-    <result column="dictKey" jdbcType="VARCHAR" property="dictKey" />
-    <result column="dictName" jdbcType="VARCHAR" property="dictName" />
-    <result column="dictEnabled" jdbcType="VARCHAR" property="enabled" />
-    <result column="dictNum" jdbcType="VARCHAR" property="orderNum" />
-    <result column="dictRemark" jdbcType="VARCHAR" property="remark" />
-    <collection property="dictValues" javaType="java.util.ArrayList" ofType="io.github.yangyouwang.crud.system.entity.SysDictValue">
-      <id column="dictValueId" jdbcType="BIGINT" property="id" />
-      <result column="dictTypeId" jdbcType="BIGINT" property="dictTypeId"/>
-      <result column="dictValueKey" jdbcType="VARCHAR" property="dictValueKey"/>
-      <result column="dictValueName" jdbcType="VARCHAR" property="dictValueName"/>
-      <result column="dictValueNum" jdbcType="BIGINT" property="orderNum"/>
-      <result column="dictValueEnabled" jdbcType="VARCHAR" property="enabled"/>
-      <result column="dictValueRemark" jdbcType="VARCHAR" property="remark"/>
+    <collection column="{dictTypeId=id}" property="dictValues" select="io.github.yangyouwang.crud.system.mapper.SysDictValueMapper.findSysDictValueByDictTypeId">
     </collection>
   </resultMap>
   <sql id="Base_Column_List">
-    id, dict_key, dict_name, order_num, enabled, create_by, create_time, update_by, update_time, 
-    remark
+    id, dict_key, dict_name, order_num, enabled, create_by, create_time, update_by, update_time, remark
   </sql>
   <!-- 根据字典类型key查询字典 -->
-  <select id="findDictByKey" parameterType="string" resultMap="DictResultMap">
-      select dt.id as dictId,
-             dt.dict_key as dictKey,
-             dt.dict_name as dictName,
-             dt.enabled as dictEnabled,
-             dt.order_num as dictNum,
-             dt.remark as dictRemark,
-             dv.id as dictValueId,
-             dv.dict_type_id as dictTypeId,
-             dv.dict_value_key as dictValueKey,
-             dv.dict_value_name as dictValueName,
-             dv.enabled as dictValueEnabled,
-             dv.order_num as dictValueNum,
-             dv.remark as dictValueRemark
-    from sys_dict_type dt
-    left join sys_dict_value dv on dt.id = dv.dict_type_id
-    where dt.deleted = 0 and dt.enabled = 'Y' and dv.enabled = 'Y'  and dt.dict_key = #{dictKey}
-    order by dv.order_num asc
+  <select id="findDictByKey" parameterType="string" resultMap="BaseResultMap">
+        select id,dict_key,dict_name,enabled,order_num,remark
+        from sys_dict_type
+        where deleted = 0
+        and enabled = 'Y'
+        and dict_key = #{dictKey}
+        order by order_num asc
   </select>
     <!-- 自定义字典列表查询-->
-    <select id="selectDictPage"  resultMap="DictResultMap">
-     select dt.id as dictId,
-        dt.dict_key as dictKey,
-        dt.dict_name as dictName,
-        dt.enabled as dictEnabled,
-        dt.order_num as dictNum,
-        dt.remark as dictRemark,
-        dv.id as dictValueId,
-        dv.dict_type_id as dictTypeId,
-        dv.dict_value_key as dictValueKey,
-        dv.dict_value_name as dictValueName,
-        dv.enabled as dictValueEnabled,
-        dv.order_num as dictValueNum,
-        dv.remark as dictValueRemark
-    from sys_dict_type dt
-    left join sys_dict_value dv on dt.id = dv.dict_type_id
-    where dt.deleted = 0
-    <if test="ew != null">
-       <if test="ew.nonEmptyOfWhere">
-           AND
-       </if>
-       ${ew.sqlSegment}
-    </if>
-    order by dv.order_num asc
+    <select id="selectDictPage"  resultMap="BaseResultMap">
+        select id,dict_key,dict_name,enabled,order_num,remark
+        from sys_dict_type
+        where deleted = 0
+        <if test="ew != null">
+           <if test="ew.nonEmptyOfWhere">
+               and
+           </if>
+           ${ew.sqlSegment}
+        </if>
+        order by order_num asc
     </select>
-    <select id="selectDictList"  resultMap="DictResultMap">
-        select dt.id as dictId,
-               dt.dict_key as dictKey,
-               dt.dict_name as dictName,
-               dt.enabled as dictEnabled,
-               dt.order_num as dictNum,
-               dt.remark as dictRemark,
-               dv.id as dictValueId,
-               dv.dict_type_id as dictTypeId,
-               dv.dict_value_key as dictValueKey,
-               dv.dict_value_name as dictValueName,
-               dv.enabled as dictValueEnabled,
-               dv.order_num as dictValueNum,
-               dv.remark as dictValueRemark
-        from sys_dict_type dt
-        left join sys_dict_value dv on dt.id = dv.dict_type_id
-        where dt.deleted = 0 and dt.enabled = 'Y' and dv.enabled = 'Y'
-        order by dv.order_num asc
+    <select id="selectDictList"  resultMap="BaseResultMap">
+        select id,dict_key,dict_name,enabled,order_num,remark
+        from sys_dict_type
+        where deleted = 0
+        and enabled = 'Y'
+        order by order_num asc
     </select>
 </mapper>

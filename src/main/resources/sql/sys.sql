@@ -43,6 +43,8 @@ INSERT INTO `sys_dict_type` VALUES (17, 'sex', '性别', 1, 'Y', 'admin', '2021-
 INSERT INTO `sys_dict_type` VALUES (18, 'menuType', '菜单类型', 2, 'Y', 'admin', '2021-04-16 20:42:06', 'admin', '2022-06-25 22:43:44', 0, '菜单类型');
 INSERT INTO `sys_dict_type` VALUES (19, 'enabled', '是否启用', 3, 'Y', 'admin', '2021-04-29 21:00:41', 'admin', '2021-12-09 23:51:44', 0, '是否启用');
 INSERT INTO `sys_dict_type` VALUES (20, 'actCategory', '流程分类', 4, 'Y', 'admin', '2022-09-01 19:59:56', 'admin', '2022-09-01 20:09:15', 0, '流程分类');
+INSERT INTO `sys_dict_type` VALUES (21, 'notice_type', '公告类型', 5, 'Y', 'admin', '2022-10-04 20:46:07', 'admin', '2022-10-04 22:18:42', 0, '公告类型');
+INSERT INTO `sys_dict_type` VALUES (22, 'notice_status', '公告状态', 6, 'Y', 'admin', '2022-10-04 22:15:20', 'admin', '2022-10-04 22:18:47', 0, '公告状态');
 
 -- ----------------------------
 -- Table structure for sys_dict_value
@@ -74,8 +76,12 @@ INSERT INTO `sys_dict_value` VALUES (26, 18, 'F', '按钮', 3, 'Y', '', NULL, 'a
 INSERT INTO `sys_dict_value` VALUES (27, 17, '2', '未知', 2, 'Y', '', NULL, 'admin', '2022-06-25 21:26:22', NULL);
 INSERT INTO `sys_dict_value` VALUES (30, 19, 'Y', '启用', 1, 'Y', '', NULL, 'admin', '2022-06-25 21:29:01', NULL);
 INSERT INTO `sys_dict_value` VALUES (31, 19, 'N', '禁用', 2, 'Y', '', NULL, 'admin', '2022-06-25 21:29:13', NULL);
-INSERT INTO `sys_dict_value` VALUES (32, 20, 'leaveProcess', '请假流程', 1, 'Y', '', NULL, '', NULL, '');
-INSERT INTO `sys_dict_value` VALUES (33, 20, 'reimbursementProcess', '报销流程', 2, 'Y', '', NULL, '', NULL, '');
+INSERT INTO `sys_dict_value` VALUES (32, 20, 'leaveProcess', '请假流程', 1, 'Y', '', NULL, 'admin', '2022-06-25 21:29:01', '');
+INSERT INTO `sys_dict_value` VALUES (33, 20, 'reimbursementProcess', '报销流程', 2, 'Y', '', NULL, 'admin', '2022-06-25 21:29:01', '');
+INSERT INTO `sys_dict_value` VALUES (34, 21, '1', '通知', 1, 'Y', '', NULL, 'admin', '2022-06-25 21:29:01', '');
+INSERT INTO `sys_dict_value` VALUES (35, 21, '2', '公告', 2, 'Y', '', NULL, 'admin', '2022-06-25 21:29:01', '');
+INSERT INTO `sys_dict_value` VALUES (38, 22, '0', '正常', 1, 'Y', '', NULL, '', NULL, '');
+INSERT INTO `sys_dict_value` VALUES (39, 22, '1', '关闭', 2, 'Y', '', NULL, '', NULL, '');
 
 -- ----------------------------
 -- Table structure for sys_log
@@ -211,6 +217,10 @@ INSERT INTO `sys_menu` VALUES (3067, '岗位管理', 1, 4, 'layui-icon-home', '/
 INSERT INTO `sys_menu` VALUES (3068, '添加岗位表', 3067, 1, '', '#', 'F', 'Y', 'sysPost:add', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3069, '编辑岗位表', 3067, 2, '', '#', 'F', 'Y', 'sysPost:edit', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3070, '删除岗位表', 3067, 3, '', '#', 'F', 'Y', 'sysPost:del', '', NULL, '', NULL, 0, '');
+INSERT INTO `sys_menu` VALUES (3071, '通知公告管理', 3051, 3, 'layui-icon-home', '/app/notice/listPage', 'C', 'Y', 'notice:list', '', NULL, 'admin', '2022-10-04 18:45:38', 0, '');
+INSERT INTO `sys_menu` VALUES (3072, '添加通知公告表', 3071, 1, '', '#', 'F', 'Y', 'notice:add', '', NULL, '', NULL, 0, '');
+INSERT INTO `sys_menu` VALUES (3073, '编辑通知公告表', 3071, 2, '', '#', 'F', 'Y', 'notice:edit', '', NULL, '', NULL, 0, '');
+INSERT INTO `sys_menu` VALUES (3074, '删除通知公告表', 3071, 3, '', '#', 'F', 'Y', 'notice:del', '', NULL, '', NULL, 0, '');
 
 -- ----------------------------
 -- Table structure for sys_role

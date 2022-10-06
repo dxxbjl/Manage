@@ -97,4 +97,27 @@ CREATE TABLE `app_sms_code`  (
 -- Records of app_sms_code
 -- ----------------------------
 
+-- ----------------------------
+-- Table structure for app_notice
+-- ----------------------------
+DROP TABLE IF EXISTS `app_notice`;
+CREATE TABLE `app_notice`  (
+    `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `notice_title` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '标题',
+    `notice_type` char(1) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '公告类型（1通知 2公告）',
+    `notice_status` char(1) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '公告状态（0正常 1关闭）',
+    `notice_content` text CHARACTER SET utf8 COLLATE utf8_bin NULL COMMENT '内容',
+    `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '创建者',
+    `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+    `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '更新者',
+    `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+    `deleted` int(0) NULL DEFAULT 0 COMMENT '逻辑删除 0 否、1 是',
+    `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '备注',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '通知公告表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of app_notice
+-- ----------------------------
+
 SET FOREIGN_KEY_CHECKS = 1;
