@@ -76,7 +76,6 @@
                 {field: 'noticeTitle', title: '标题'},
                 {field: 'noticeType', title: '公告类型',templet: function (d) { return crud.getDictValue('noticeType',d.noticeType);}},
                 {field: 'noticeStatus', title: '公告状态',templet: function (d) { return crud.getDictValue('noticeStatus',d.noticeStatus);}},
-                {field: 'noticeContent', title: '内容'},
                 {toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
             ]]
         });

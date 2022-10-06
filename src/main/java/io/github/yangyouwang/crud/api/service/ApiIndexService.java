@@ -6,8 +6,10 @@ import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.core.aliyun.SampleSms;
 import io.github.yangyouwang.crud.api.model.IndexVO;
 import io.github.yangyouwang.crud.app.entity.Ad;
+import io.github.yangyouwang.crud.app.entity.Notice;
 import io.github.yangyouwang.crud.app.entity.SmsCode;
 import io.github.yangyouwang.crud.app.service.AdService;
+import io.github.yangyouwang.crud.app.service.NoticeService;
 import io.github.yangyouwang.crud.app.service.SmsCodeService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,22 +36,35 @@ public class ApiIndexService {
     @Autowired
     private SmsCodeService smsCodeService;
 
+    @Autowired
+    private NoticeService noticeService;
+
+
     /**
      * 获取首页数据
      */
     public IndexVO getIndexData() {
         // 获取轮播图列表
-        List<Ad> list = adService.list(new LambdaQueryWrapper<Ad>()
+        List<Ad> adList = adService.list(new LambdaQueryWrapper<Ad>()
                  .select(Ad::getAdTitle,Ad::getAdUrl)
                 .eq(Ad::getEnabled, ConfigConsts.ENABLED_YES).orderByDesc(Ad::getCreateBy));
-        List<IndexVO.AdVO> adVOList = list.stream().map(s -> {
+        List<IndexVO.AdVO> adVOList = adList.stream().map(s -> {
             IndexVO.AdVO adVO = new IndexVO.AdVO();
             adVO.setTitle(s.getAdTitle());
             adVO.setUrl(s.getAdUrl());
             return adVO;
         }).collect(Collectors.toList());
+        // 通知公告
+        List<Notice> noticeList = noticeService.list(new LambdaQueryWrapper<Notice>()
+                .eq(Notice::getNoticeStatus, ConfigConsts.ENABLED_YES));
+        List<IndexVO.NoticeVO> noticeVOList = noticeList.stream().map(s -> {
+            IndexVO.NoticeVO noticeVO = new IndexVO.NoticeVO();
+            noticeVO.setNoticeTitle(s.getNoticeTitle());
+            return noticeVO;
+        }).collect(Collectors.toList());
         IndexVO indexVO = new IndexVO();
         indexVO.setAdVOList(adVOList);
+        indexVO.setNoticeList(noticeVOList);
         return indexVO;
     }
 
