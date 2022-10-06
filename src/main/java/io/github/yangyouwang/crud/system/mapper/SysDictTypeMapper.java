@@ -23,11 +23,6 @@ public interface SysDictTypeMapper extends CrudBaseMapper<SysDictType> {
      */
     SysDictType findDictByKey(String dictKey);
     /**
-     * 查询所有字典
-     * @return 数据字典列表
-     */
-    List<SysDictType> selectDictList();
-    /**
      * 自定义sql分页
      * @param wrapper 参数
      * @return 数据字典列表

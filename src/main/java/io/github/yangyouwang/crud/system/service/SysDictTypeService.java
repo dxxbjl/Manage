@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.crud.system.mapper.SysDictTypeMapper;
 import io.github.yangyouwang.crud.system.mapper.SysDictValueMapper;
@@ -81,7 +82,8 @@ public class SysDictTypeService extends ServiceImpl<SysDictTypeMapper, SysDictTy
      * 缓存字典
      */
     public void cacheDict() {
-        List<SysDictType> sysDictTypes = sysDictTypeMapper.selectDictList();
+        List<SysDictType> sysDictTypes = sysDictTypeMapper.selectDictPage(new LambdaQueryWrapper<SysDictType>()
+                .eq(SysDictType::getEnabled, ConfigConsts.ENABLED_YES));
         sysDictTypes.forEach(sysDictType -> {
             List<SysDictValue> dictValues = sysDictType.getDictValues();
             String dictValue = JSONArray.parseArray(JSON.toJSONString(dictValues)).toJSONString();

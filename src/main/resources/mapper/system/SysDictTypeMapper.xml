@@ -40,11 +40,4 @@
         </if>
         order by order_num asc
     </select>
-    <select id="selectDictList"  resultMap="BaseResultMap">
-        select id,dict_key,dict_name,enabled,order_num,remark
-        from sys_dict_type
-        where deleted = 0
-        and enabled = 'Y'
-        order by order_num asc
-    </select>
 </mapper>
