@@ -43,8 +43,8 @@ INSERT INTO `sys_dict_type` VALUES (17, 'sex', '性别', 1, 'Y', 'admin', '2021-
 INSERT INTO `sys_dict_type` VALUES (18, 'menuType', '菜单类型', 2, 'Y', 'admin', '2021-04-16 20:42:06', 'admin', '2022-06-25 22:43:44', 0, '菜单类型');
 INSERT INTO `sys_dict_type` VALUES (19, 'enabled', '是否启用', 3, 'Y', 'admin', '2021-04-29 21:00:41', 'admin', '2021-12-09 23:51:44', 0, '是否启用');
 INSERT INTO `sys_dict_type` VALUES (20, 'actCategory', '流程分类', 4, 'Y', 'admin', '2022-09-01 19:59:56', 'admin', '2022-09-01 20:09:15', 0, '流程分类');
-INSERT INTO `sys_dict_type` VALUES (21, 'notice_type', '公告类型', 5, 'Y', 'admin', '2022-10-04 20:46:07', 'admin', '2022-10-04 22:18:42', 0, '公告类型');
-INSERT INTO `sys_dict_type` VALUES (22, 'notice_status', '公告状态', 6, 'Y', 'admin', '2022-10-04 22:15:20', 'admin', '2022-10-04 22:18:47', 0, '公告状态');
+INSERT INTO `sys_dict_type` VALUES (21, 'noticeType', '公告类型', 5, 'Y', 'admin', '2022-10-04 20:46:07', 'admin', '2022-10-04 22:18:42', 0, '公告类型');
+INSERT INTO `sys_dict_type` VALUES (22, 'noticeStatus', '公告状态', 6, 'Y', 'admin', '2022-10-04 22:15:20', 'admin', '2022-10-04 22:18:47', 0, '公告状态');
 
 -- ----------------------------
 -- Table structure for sys_dict_value

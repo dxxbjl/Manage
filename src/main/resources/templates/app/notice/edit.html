@@ -9,30 +9,32 @@
   <div class="layui-row">
     <div class="layui-form" lay-filter="noticeForm" id="noticeForm">
       <input type="hidden" name="id" id="id">
-        <div class="layui-form-item">
-          <label class="layui-form-label">标题</label>
-          <div class="layui-input-inline">
-            <input type="text" class="layui-input" name="noticeTitle" placeholder="请输入标题"/>
-          </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">标题</label>
+        <div class="layui-input-inline">
+          <input type="text" class="layui-input" name="noticeTitle" placeholder="请输入标题"/>
         </div>
-        <div class="layui-form-item">
-          <label class="layui-form-label">公告类型（1通知 2公告）</label>
-          <div class="layui-input-inline">
-            <input type="text" class="layui-input" name="noticeType" placeholder="请输入公告类型（1通知 2公告）"/>
-          </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">公告类型</label>
+        <div class="layui-input-block" id="noticeType"></div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">公告状态</label>
+        <div class="layui-input-block" id="noticeStatus"></div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">内容</label>
+        <div class="layui-input-inline">
+          <textarea id="noticeContent"></textarea>
         </div>
-        <div class="layui-form-item">
-          <label class="layui-form-label">公告状态（0正常 1关闭）</label>
-          <div class="layui-input-inline">
-            <input type="text" class="layui-input" name="noticeStatus" placeholder="请输入公告状态（0正常 1关闭）"/>
-          </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-inline">
+          <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
         </div>
-        <div class="layui-form-item">
-          <label class="layui-form-label">内容</label>
-          <div class="layui-input-inline">
-            <input type="text" class="layui-input" name="noticeContent" placeholder="请输入内容"/>
-          </div>
-        </div>
+      </div>
       <div class="layui-form-item layui-hide">
         <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
       </div>
@@ -51,8 +53,15 @@
             crud = layui.crud,
             notice = [[${notice}]];
     form.val('noticeForm',notice);
+    ClassicEditor.create(document.querySelector('#noticeContent'),{}).then(editor => {
+      window.editor = editor;
+      window.editor.setData(notice.noticeContent);
+    }).catch(err => {
+      console.error(err.stack);
+    });
     // 编辑
     form.on('submit(save-submit)', function(data) {
+      data.field.noticeContent = window.editor.getData();
       $.ajax({
         type: 'POST',
         url:  ctx + '/app/notice/modify',
@@ -71,6 +80,8 @@
         }
       });
     });
+    crud.setRadio("noticeType","noticeType",notice.noticeType);
+    crud.setRadio("noticeStatus","noticeStatus",notice.noticeStatus);
   });
 </script>
 </body>

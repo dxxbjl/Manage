@@ -21,7 +21,7 @@ public interface SysDictTypeMapper extends CrudBaseMapper<SysDictType> {
      * @param dictKey 字典key
      * @return 字典
      */
-    SysDictType findDictByKey(String dictKey);
+    SysDictType findDictByKey(@Param("dictKey") String dictKey);
     /**
      * 自定义sql分页
      * @param wrapper 参数

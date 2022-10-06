@@ -29,13 +29,7 @@ public class NoticeService extends ServiceImpl<NoticeMapper, Notice> {
     QueryWrapper<Notice> queryWrapper = new QueryWrapper<>();
     queryWrapper.lambda()
       // 标题
-          .eq(!StringUtils.isEmpty(param.getNoticeTitle()), Notice::getNoticeTitle, param.getNoticeTitle())
-          // 公告类型（1通知 2公告）
-          .eq(!StringUtils.isEmpty(param.getNoticeType()), Notice::getNoticeType, param.getNoticeType())
-          // 公告状态（0正常 1关闭）
-          .eq(!StringUtils.isEmpty(param.getNoticeStatus()), Notice::getNoticeStatus, param.getNoticeStatus())
-          // 内容
-          .eq(!StringUtils.isEmpty(param.getNoticeContent()), Notice::getNoticeContent, param.getNoticeContent())
+          .like(!StringUtils.isEmpty(param.getNoticeTitle()), Notice::getNoticeTitle, param.getNoticeTitle())
     .orderByDesc(Notice::getCreateTime);
     return list(queryWrapper);
   }
