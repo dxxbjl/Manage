@@ -69,10 +69,11 @@
             ,toolbar: '#toolbar'
             ,height: 'full-110'
             ,url:  ctx + '/app/notice/page'
+            ,cellMinWidth: 80
             ,page: true //开启分页
             ,cols: [[ //表头
                 {type: 'checkbox', fixed: 'left'},
-                {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
+                {field: 'id', title: 'ID', hide:true},
                 {field: 'noticeTitle', title: '标题'},
                 {field: 'noticeType', title: '公告类型',templet: function (d) { return crud.getDictValue('noticeType',d.noticeType);}},
                 {field: 'noticeStatus', title: '公告状态',templet: function (d) { return crud.getDictValue('noticeStatus',d.noticeStatus);}},

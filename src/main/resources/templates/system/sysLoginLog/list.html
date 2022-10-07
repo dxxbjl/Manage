@@ -74,15 +74,16 @@
             ,toolbar: '#toolbar'
             ,height: 'full-110'
             ,url:  ctx + '/sysLoginLog/page'
+            ,cellMinWidth: 80
             ,page: true //开启分页
             ,cols: [[ //表头
                 {type: 'checkbox', fixed: 'left'},
-                {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
+                {field: 'id', title: 'ID', hide:true},
                 {field: 'account', title: '账号'},
                 {field: 'loginIp', title: '登录IP'},
                 {field: 'remark', title: '登录状态'},
                 {field: 'createTime', title: '登录时间'},
-                {toolbar: '#tableBar', title: '操作', width: 200, align:'center',fixed: 'right'}
+                {toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
             ]]
         });
         //头工具栏事件

@@ -121,13 +121,14 @@
             ,toolbar: '#dictTypeToolbar'
             ,height: 'full-110'
             ,url:  ctx + '/sysDictType/page'
+            ,cellMinWidth: 80
             ,page: true //开启分页
             ,cols: [[ //表头
-                {field: 'id', title: 'ID', sort: true, width: 60, fixed: 'left'}
+                {field: 'id', title: 'ID', hide:true}
                 ,{field: 'dictName', title: '字典名称'}
                 ,{field: 'dictKey', title: '字典别名'}
                 ,{field: 'enabled', align: "center", sort: true, templet: '#dictTypeEnabledTpl', title: '状态'}
-                ,{toolbar: '#dictTypeTableBar', title: '操作', width: 250, align:'center',fixed: 'right'}
+                ,{toolbar: '#dictTypeTableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
             ]]
         });
         /**
@@ -139,11 +140,11 @@
             ,cellMinWidth: 80
             ,cols: [
                 [
-                    {field: 'id', title: 'ID', sort: true, width: 60, fixed: 'left'},
+                    {field: 'id', title: 'ID', hide:true},
                     {field: 'dictValueName', title: '字典项名称'},
                     {field: 'dictValueKey', title: '字典项别名'},
                     {field: 'enabled', align: "center", sort: true, templet: '#dictValueEnabledTpl', title: '状态'},
-                    {toolbar: '#dictValueTableBar', title: '操作', width: 150, align:'center',fixed: 'right'}
+                    {toolbar: '#dictValueTableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
                 ]
             ]
             ,data: []

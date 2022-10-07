@@ -91,9 +91,10 @@
                 elem: '#sysDeptTable',
                 toolbar: '#toolbar',
                 url:  ctx + '/system/sysDept/page',
+                cellMinWidth: 80,
                 where: data,
                 cols: [[ //表头
-                    {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
+                    {field: 'id', title: 'ID', hide:true},
                     {field: 'deptName', title: '部门名称'},
                     {field: 'leader', title: '负责人'},
                     {field: 'phone', title: '手机号'},

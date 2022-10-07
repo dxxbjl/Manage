@@ -80,9 +80,10 @@
             ,toolbar: '#toolbar'
             ,height: 'full-110'
             ,url:  ctx + '/app/user/page'
+            ,cellMinWidth: 80
             ,page: true //开启分页
             ,cols: [[ //表头
-                {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
+                {field: 'id', title: 'ID', hide:true},
                 {field: 'nickName', title: '用户昵称'},
                 {field: 'avatar', title: "用户头像图片", templet: function (d) { return crud.showImg(d.avatar); }},
                 {field: 'gender', title: "性别",templet: function (d) { return crud.getDictValue('sex',d.gender);}},

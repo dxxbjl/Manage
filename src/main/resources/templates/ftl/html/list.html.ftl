@@ -70,10 +70,11 @@
             ,toolbar: '#toolbar'
             ,height: 'full-110'
             ,url:  ctx + '<#if package.ModuleName??>/${package.ModuleName}</#if>/${table.entityPath}/page'
+            ,cellMinWidth: 80
             ,page: true //开启分页
             ,cols: [[ //表头
                 {type: 'checkbox', fixed: 'left'},
-                {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
+                {field: 'id', title: 'ID', hide:true},
             <#list table.fields as field>
                 {field: '${field.propertyName}', title: '${field.comment}'},
             </#list>

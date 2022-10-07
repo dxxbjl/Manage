@@ -75,10 +75,11 @@
           ,toolbar: '#toolbar'
           ,height: 'full-110'
           ,url:  ctx + '/sysRole/page'
+          ,cellMinWidth: 80
           ,page: true //开启分页
           ,cols: [[ //表头
               {type: 'checkbox', fixed: 'left'},
-              {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
+              {field: 'id', title: 'ID', hide:true},
               {field: 'roleName', title: '角色名称'},
               {field: 'roleKey', title: '角色别名'},
               {toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}

@@ -117,19 +117,20 @@
           ,toolbar: '#toolbar'
           ,height: 'full-110'
           ,url:  ctx + '/sysUser/page'
+          ,cellMinWidth: 80
           ,page: true //开启分页
           ,cols: [[ //表头
               {type: 'checkbox', fixed: 'left'},
-              {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
+              {field: 'id', title: 'ID', hide:true},
               {field: 'avatar', title: "头像", templet: function (d) { return crud.showImg(d.avatar); }},
-              {field: 'nickName', width: 100, title: '昵称'},
-              {field: 'userName', width: 100, title: '账户'},
-              {field: 'sex', title: "性别",width: 60, templet: function (d) { return crud.getDictValue('sex',d.sex);}},
-              {field: 'phonenumber', title: '手机号',width: 120},
-              {field: 'enabled', align: "center", width: 100, templet: '#enabledTpl', title: '状态'},
-              {field: 'deptName', width: 100, title: '部门名称'},
-              {field: 'postName', width: 200, title: '岗位名称'},
-              {toolbar: '#tableBar', title: '操作', width: 220, align:'center',fixed: 'right'}
+              {field: 'nickName', title: '昵称'},
+              {field: 'userName', title: '账户'},
+              {field: 'sex', title: "性别", templet: function (d) { return crud.getDictValue('sex',d.sex);}},
+              {field: 'phonenumber', title: '手机号'},
+              {field: 'enabled', align: "center", templet: '#enabledTpl', title: '状态'},
+              {field: 'deptName', title: '部门名称'},
+              {field: 'postName', title: '岗位名称'},
+              {toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
           ]]
       });
       //头工具栏事件

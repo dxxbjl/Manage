@@ -70,10 +70,11 @@
             ,toolbar: '#toolbar'
             ,height: 'full-110'
             ,url:  ctx + '/qrtz/job/page'
+            ,cellMinWidth: 80
             ,page: true //开启分页
             ,cols: [[ //表头
                 {type: 'checkbox', fixed: 'left'},
-                {field: 'id', title: 'ID', sort: true, width: 80, fixed: 'left'},
+                {field: 'id', title: 'ID', hide:true},
                 {field: 'jobName', title: '任务名字'},
                 {field: 'cron', title: 'cron表达式'},
                 {field: 'jobClassName', title: '类名称'},
