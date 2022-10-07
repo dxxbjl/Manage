@@ -60,7 +60,7 @@ public class ApiIndexService {
         List<String> noticeVOList = noticeList.stream().map(Notice::getNoticeTitle).collect(Collectors.toList());
         IndexVO indexVO = new IndexVO();
         indexVO.setAdVOList(adVOList);
-        indexVO.setNoticeList(noticeVOList);
+        indexVO.setNoticeList(String.join(",", noticeVOList));
         return indexVO;
     }
 

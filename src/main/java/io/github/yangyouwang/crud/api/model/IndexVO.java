@@ -26,7 +26,7 @@ public class IndexVO {
      * 通知公告列表
      */
     @ApiModelProperty("通知公告列表")
-    private List<String> noticeList;
+    private String noticeList;
 
     @Data
     @ApiModel("轮播图VO")
