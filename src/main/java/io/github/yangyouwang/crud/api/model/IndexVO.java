@@ -26,17 +26,7 @@ public class IndexVO {
      * 通知公告列表
      */
     @ApiModelProperty("通知公告列表")
-    private List<NoticeVO> noticeList;
-
-    @Data
-    @ApiModel("通知公告VO")
-    public static class NoticeVO {
-        /**
-         * 标题
-         */
-        @ApiModelProperty(value = "标题")
-        private String noticeTitle;
-    }
+    private List<String> noticeList;
 
     @Data
     @ApiModel("轮播图VO")

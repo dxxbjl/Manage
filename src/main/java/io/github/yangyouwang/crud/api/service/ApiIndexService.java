@@ -57,11 +57,7 @@ public class ApiIndexService {
         // 通知公告
         List<Notice> noticeList = noticeService.list(new LambdaQueryWrapper<Notice>()
                 .eq(Notice::getNoticeStatus, ConfigConsts.ENABLED_YES));
-        List<IndexVO.NoticeVO> noticeVOList = noticeList.stream().map(s -> {
-            IndexVO.NoticeVO noticeVO = new IndexVO.NoticeVO();
-            noticeVO.setNoticeTitle(s.getNoticeTitle());
-            return noticeVO;
-        }).collect(Collectors.toList());
+        List<String> noticeVOList = noticeList.stream().map(Notice::getNoticeTitle).collect(Collectors.toList());
         IndexVO indexVO = new IndexVO();
         indexVO.setAdVOList(adVOList);
         indexVO.setNoticeList(noticeVOList);
