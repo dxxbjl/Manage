@@ -56,7 +56,7 @@ public class ApiIndexService {
         }).collect(Collectors.toList());
         // 通知公告
         List<Notice> noticeList = noticeService.list(new LambdaQueryWrapper<Notice>()
-                .eq(Notice::getNoticeStatus, ConfigConsts.ENABLED_YES));
+                .eq(Notice::getNoticeStatus, ConfigConsts.NOTICE_STATUS_NORMAL));
         List<String> noticeVOList = noticeList.stream().map(Notice::getNoticeTitle).collect(Collectors.toList());
         IndexVO indexVO = new IndexVO();
         indexVO.setAdVOList(adVOList);

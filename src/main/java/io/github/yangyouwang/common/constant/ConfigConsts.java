@@ -69,7 +69,7 @@ public interface ConfigConsts {
      */
     String DEFAULT_PASSWORD = "123456";
     /**
-     * 通知公告
+     * 通知公告 正常
      */
-    String noticeStatus_ = "0";
+    Integer NOTICE_STATUS_NORMAL = 0;
 }
