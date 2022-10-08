@@ -68,8 +68,4 @@ public interface ConfigConsts {
      * 默认密码
      */
     String DEFAULT_PASSWORD = "123456";
-    /**
-     * 通知公告 正常
-     */
-    Integer NOTICE_STATUS_NORMAL = 0;
 }

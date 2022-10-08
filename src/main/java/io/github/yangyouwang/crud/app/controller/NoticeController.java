@@ -1,9 +1,12 @@
 package io.github.yangyouwang.crud.app.controller;
 
+import io.github.yangyouwang.common.annotation.CrudLog;
+import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.crud.app.entity.Notice;
 import io.github.yangyouwang.crud.app.service.NoticeService;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.TableDataInfo;
+import io.github.yangyouwang.crud.system.entity.SysUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -104,4 +107,20 @@ public class NoticeController extends CrudController {
      noticeService.removes(ids);
      return Result.success();
    }
+
+  /**
+   * 修改通知公告状态
+   * @param param 修改通知公告状态对象
+   * @return 修改状态
+   */
+  @CrudLog(title = "修改通知公告状态",businessType = BusinessType.UPDATE)
+  @PostMapping("/changeNoticeStatus")
+  @ResponseBody
+  public Result changeNoticeStatus(@RequestBody @Validated Notice param, BindingResult bindingResult) {
+    if (bindingResult.hasErrors()){
+      return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
+    }
+    boolean flag = noticeService.updateById(param);
+    return Result.success(flag);
+  }
 }

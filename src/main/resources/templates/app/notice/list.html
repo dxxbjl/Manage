@@ -30,6 +30,9 @@
                     <a sec:authorize="hasAuthority('notice:add')" class="layui-btn layui-btn-xs" lay-event="add"><i class="layui-icon layui-icon-add-1"></i>添加</a>
                 </div>
             </script>
+            <script type="text/html" id="noticeStatusTpl">
+                <input type="checkbox" lay-filter="noticeStatus" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" {{d.noticeStatus==='Y'?'checked':''}} />
+            </script>
             <script type="text/html" id="tableBar">
                 <a sec:authorize="hasAuthority('notice:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
                 <a sec:authorize="hasAuthority('notice:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="remove"><i class="layui-icon layui-icon-delete"></i>删除</a>
@@ -56,6 +59,12 @@
                 where: field
             });
         });
+        // 修改通知公告状态
+        form.on('switch(noticeStatus)', function (obj) {
+            let noticeId = obj.elem.value;
+            let checked = obj.elem.checked ? 'Y' : 'N';
+            active.changeNoticeStatus(noticeId,checked);
+        });
         //监听重置
         form.on('submit(reset)', function(data) {
             Object.keys(data.field).forEach(key => (data.field[key] = ''));
@@ -76,7 +85,7 @@
                 {field: 'id', title: 'ID', hide:true},
                 {field: 'noticeTitle', title: '标题'},
                 {field: 'noticeType', title: '公告类型',templet: function (d) { return crud.getDictValue('noticeType',d.noticeType);}},
-                {field: 'noticeStatus', title: '公告状态',templet: function (d) { return crud.getDictValue('noticeStatus',d.noticeStatus);}},
+                {field: 'noticeStatus', align: "center", templet: '#noticeStatusTpl', title: '公告状态'},
                 {toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
             ]]
         });
@@ -102,6 +111,29 @@
         });
         /* 触发弹层 */
         let active = {
+            /**
+             * 修改通知公告状态
+             * @param noticeId 通知公告id
+             * @param checked 状态
+             */
+            changeNoticeStatus: function (noticeId,checked) {
+                $.ajax({
+                    type: 'POST',
+                    url:  ctx + '/app/notice/changeNoticeStatus',
+                    data: JSON.stringify({
+                        id: noticeId,
+                        noticeStatus: checked
+                    }),
+                    contentType:'application/json;charset=UTF-8',
+                    dataType: 'json',
+                    success: function(result) {
+                        layer.msg(result.message);
+                        if (result.code === 200) {
+                            table.reload('userTable');
+                        }
+                    }
+                });
+            },
             /**
              * 添加
              * */
