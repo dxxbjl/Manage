@@ -180,6 +180,11 @@
            * @param obj 对象
            */
           removes: function(obj) {
+            let flag = $.inArray(true, obj.map(x => {return x.roleKey === 'ADMIN'}));
+            if (flag >= 0) {
+              layer.msg('禁止删除超级管理员角色');
+              return false;
+            }
             let ids = fun.objToArrIds(obj);
             layer.confirm('真的删除行么', function(index) {
               //向服务端发送删除指令
