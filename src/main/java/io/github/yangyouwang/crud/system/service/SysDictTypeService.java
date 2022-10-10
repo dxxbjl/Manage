@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author yangyouwang
@@ -82,14 +83,17 @@ public class SysDictTypeService extends ServiceImpl<SysDictTypeMapper, SysDictTy
      * 缓存字典
      */
     public void cacheDict() {
-        List<SysDictType> sysDictTypes = sysDictTypeMapper.selectDictPage(new LambdaQueryWrapper<SysDictType>()
-                .eq(SysDictType::getEnabled, ConfigConsts.ENABLED_YES));
+        List<SysDictType> sysDictTypes = sysDictTypeMapper.selectDictPage(new LambdaQueryWrapper<SysDictType>());
         sysDictTypes.forEach(sysDictType -> {
-            List<SysDictValue> dictValues = sysDictType.getDictValues();
+            List<SysDictValue> dictValues = sysDictType.getDictValues().stream().filter(s -> ConfigConsts.ENABLED_YES.equals(s.getEnabled())).collect(Collectors.toList());
             String dictValue = JSONArray.parseArray(JSON.toJSONString(dictValues)).toJSONString();
             try {
                 Cookie cookie = new Cookie(sysDictType.getDictKey(), URLEncoder.encode(dictValue, "utf-8"));
-                cookie.setMaxAge(7 * 24 * 60 * 60);
+                if (ConfigConsts.ENABLED_YES.equals(sysDictType.getEnabled())) {
+                    cookie.setMaxAge(7 * 24 * 60 * 60);
+                } else {
+                    cookie.setMaxAge(0);
+                }
                 cookie.setPath("/");
                 response.addCookie(cookie);
             } catch (UnsupportedEncodingException e) {

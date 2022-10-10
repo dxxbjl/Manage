@@ -3,7 +3,7 @@ layui.define(['jquery','cookie'], function(exports){
         cookie = layui.cookie;
     let options = function(name) {
         let list = [];
-        if (name) {
+        if (name && $.cookie(name)) {
             // 获取字典
             list = JSON.parse(decodeURI($.cookie(name)));
         }
