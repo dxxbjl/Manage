@@ -37,7 +37,7 @@ public class TreeSelectNode extends XmSelectNode implements Treeable {
     /**
      * 是否打开
      */
-    private Boolean open = false;
+    private Boolean open = true;
     /**
      * 节点
      */
