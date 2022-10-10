@@ -68,7 +68,7 @@
             });
             // 禁止重复点击按钮
             $('.layui-btn').attr("disabled",true);
-            //请求登录接口
+            //请求登入接口
             $.ajax({
                 type: 'POST',
                 url:  ctx + '/login',
@@ -76,7 +76,7 @@
                 dataType: 'json',
                 success: function(result) {
                     if (result.code === 200) {
-                        layer.msg('登录成功', {
+                        layer.msg('登入成功', {
                              icon: 1
                             ,time: 1000
                         }, function(){
