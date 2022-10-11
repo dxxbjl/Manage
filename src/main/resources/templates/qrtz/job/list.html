@@ -179,11 +179,15 @@
                         contentType:'application/json;charset=UTF-8',
                         dataType: 'json',
                         success: function(result) {
-                            layer.msg(result.message);
-                            if (result.code === 200) {
-                                layer.close(index);
-                                table.reload('jobTable');
-                            }
+                            layer.msg(result.message, {
+                                offset:['50%'],
+                                time: 1000
+                            },function() {
+                                if (result.code === 200) {
+                                    layer.close(index);
+                                    table.reload('jobTable');
+                                }
+                            });
                         }
                     });
                 });
@@ -200,11 +204,15 @@
                         contentType:'application/json;charset=UTF-8',
                         dataType: 'json',
                         success: function(result) {
-                            layer.msg(result.message);
-                            if (result.code === 200) {
-                                layer.close(index);
-                                table.reload('jobTable');
-                            }
+                            layer.msg(result.message, {
+                                offset:['50%'],
+                                time: 1000
+                            }, function() {
+                                if (result.code === 200) {
+                                    layer.close(index);
+                                    table.reload('jobTable');
+                                }
+                            });
                         }
                     });
                 });
