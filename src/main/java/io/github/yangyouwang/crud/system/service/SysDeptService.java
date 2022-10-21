@@ -3,8 +3,10 @@ package io.github.yangyouwang.crud.system.service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.domain.TreeSelectNode;
+import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.core.converter.ListToTree;
 import io.github.yangyouwang.core.converter.impl.ListToTreeImpl;
+import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.crud.system.entity.SysDept;
 import io.github.yangyouwang.crud.system.mapper.SysDeptMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -74,6 +76,12 @@ public class SysDeptService extends ServiceImpl<SysDeptMapper, SysDept> {
   * @param id 主键
   */
   public void remove(Long id) {
+    // 删除子部门
+    int count = this.count(new LambdaQueryWrapper<SysDept>()
+            .eq(SysDept::getParentId, id));
+    if (count != 0) {
+      throw new CrudException(ResultStatus.DATA_EXIST_ERROR);
+    }
     removeById(id);
   }
 

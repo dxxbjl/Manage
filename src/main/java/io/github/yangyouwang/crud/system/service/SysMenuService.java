@@ -83,7 +83,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
         int count = this.count(new LambdaQueryWrapper<SysMenu>()
                 .eq(SysMenu::getParentId, id));
         if (count != 0) {
-            throw new CrudException(ResultStatus.MENU_EXIST_ERROR);
+            throw new CrudException(ResultStatus.DATA_EXIST_ERROR);
         }
         this.removeById(id);
         // 删除角色关联菜单

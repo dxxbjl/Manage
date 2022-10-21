@@ -82,6 +82,10 @@ public enum ResultStatus {
      * 删除数据出错
      */
     DELETE_DATA_ERROR(503,"删除数据出错"),
+    /**
+     * 存在子节点
+     */
+    DATA_EXIST_ERROR(504,"当前层级存在下级节点"),
 
     /**
      * 验证码不能为空
@@ -108,11 +112,6 @@ public enum ResultStatus {
      * 字典不存在
      */
     DICT_NO_EXIST_ERROR(703,"字典不存在"),
-
-    /**
-     * 菜单存在子节点
-     */
-    MENU_EXIST_ERROR(801,"菜单存在子节点"),
     /**
      * 暂未分配菜单
      */
