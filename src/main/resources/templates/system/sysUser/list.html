@@ -84,11 +84,11 @@
         success: function(data) {
           if(data.code !== 500) {
             let zTree = $.fn.zTree.init($("#deptTree"), fun.setting(function (event,treeId,treeNode) {
-              let deptId = treeNode.id;
-              //执行重载
+              let deptIds = getzTreeChildrenNodeIds(treeNode);
+                //执行重载
               table.reload('userTable', {
                 where: {
-                  deptId
+                  deptIds
                 }
               });
             }), data);

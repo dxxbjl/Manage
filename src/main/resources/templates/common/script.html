@@ -10,7 +10,38 @@
         <script th:src="@{/static/lib/jquery-ztree/3.5/js/jquery.ztree.all-3.5.js}"></script>
         <script th:inline="javascript">
             let ctx = [[${#request.getContextPath()}]];
-
+            /**
+             * 获取树结构ID组
+             * @param treeNode 树结构
+             * @returns ids数组
+             */
+            function getzTreeChildrenNodeIds(treeNode) {
+                //定义变量接收节点
+                let strID = "";
+                //接收返回的节点
+                strID = getzTreeChildrenNode(treeNode, strID);
+                //节点拼接
+                strID = strID + "," + treeNode.id;
+                //去除拼接节点的第一个“,”号
+                return strID.substring(1, strID.length);
+            }
+            //递归查询当前节点下面的全部子节点（一）
+            function getzTreeChildrenNode(treeNode, result) {
+                //检测是否为父节点
+                if (treeNode.isParent) {
+                    //查询子节点
+                    let childrenNodes = treeNode.children;
+                    if (childrenNodes) {
+                        //子节点拼接
+                        for (let i = 0 ; i < childrenNodes.length ; i++) {
+                            result += ',' + childrenNodes[i].id;
+                            //循环调用
+                            result = getzTreeChildrenNode(childrenNodes[i], result);
+                        }
+                    }
+                }
+                return result;//返回
+            }
             //超出部分用鼠标悬停时，tooltip显示完整内容
             $(document).on('mouseenter', "tbody td", function () {
                 try

@@ -34,6 +34,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -73,7 +74,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
      */
     public List<SysUser> list(SysUser sysUser) {
         return sysUserMapper.findUserList(new LambdaQueryWrapper<SysUser>()
-                .eq(null != sysUser.getDeptId(),SysUser::getDeptId, sysUser.getDeptId())
+                .in(!CollectionUtils.isEmpty(sysUser.getDeptIds()), SysUser::getDeptId, sysUser.getDeptIds())
                 .like(StringUtils.isNotBlank(sysUser.getNickName()),SysUser::getNickName, sysUser.getNickName())
                 .like(StringUtils.isNotBlank(sysUser.getPhonenumber()), SysUser::getPhonenumber, sysUser.getPhonenumber()));
     }
