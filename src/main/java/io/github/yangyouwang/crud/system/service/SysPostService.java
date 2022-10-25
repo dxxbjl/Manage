@@ -1,6 +1,7 @@
 package io.github.yangyouwang.crud.system.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.domain.XmSelectNode;
 import io.github.yangyouwang.core.util.StringUtil;
 import io.github.yangyouwang.crud.system.entity.SysPost;
@@ -92,7 +93,8 @@ public class SysPostService extends ServiceImpl<SysPostMapper, SysPost> {
    */
   @Transactional(readOnly = true)
   public List<XmSelectNode> xmSelect(String ids) {
-    List<SysPost> sysPosts = this.list(new LambdaQueryWrapper<>());
+    List<SysPost> sysPosts = this.list(new LambdaQueryWrapper<SysPost>()
+            .eq(SysPost::getEnabled,ConfigConsts.ENABLED_YES));
     return sysPosts.stream().map(sysPost -> {
       XmSelectNode treeNode = new XmSelectNode();
       treeNode.setName(sysPost.getPostName());
