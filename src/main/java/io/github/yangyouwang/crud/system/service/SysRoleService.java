@@ -3,7 +3,6 @@ package io.github.yangyouwang.crud.system.service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.domain.XmSelectNode;
-import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.core.util.StringUtil;
 import io.github.yangyouwang.crud.system.mapper.SysRoleMapper;
 import io.github.yangyouwang.crud.system.mapper.SysRoleMenuMapper;
@@ -58,7 +57,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public void add(@NotNull SysRole sysRole) {
         SysRole old = this.getOne(new LambdaQueryWrapper<SysRole>().eq(SysRole::getRoleKey,sysRole.getRoleKey()));
-        Assert.isNull(old, ResultStatus.ROLE_EXIST_ERROR.message);
+        Assert.isNull(old, "角色已存在");
         // 添加角色
         boolean flag = this.save(sysRole);
         if (flag) {

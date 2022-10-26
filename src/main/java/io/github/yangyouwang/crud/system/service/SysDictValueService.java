@@ -1,8 +1,6 @@
 package io.github.yangyouwang.crud.system.service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import io.github.yangyouwang.common.enums.ResultStatus;
-import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.crud.system.entity.SysDictType;
 import io.github.yangyouwang.crud.system.entity.SysDictValue;
 import io.github.yangyouwang.crud.system.mapper.SysDictTypeMapper;
@@ -58,6 +56,6 @@ public class SysDictValueService extends ServiceImpl<SysDictValueMapper, SysDict
                 return dictValue.getDictValueName();
             }
         }
-        throw new CrudException(ResultStatus.DICT_NO_EXIST_ERROR);
+        throw new RuntimeException("字典不存在");
     }
 }

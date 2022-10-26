@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.constant.ConfigConsts;
-import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.crud.system.mapper.SysDictTypeMapper;
 import io.github.yangyouwang.crud.system.mapper.SysDictValueMapper;
 import io.github.yangyouwang.crud.system.entity.SysDictType;
@@ -63,7 +62,7 @@ public class SysDictTypeService extends ServiceImpl<SysDictTypeMapper, SysDictTy
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public boolean add(SysDictType sysDictType) {
         SysDictType old = sysDictTypeMapper.findDictByKey(sysDictType.getDictKey());
-        Assert.isNull(old, ResultStatus.DICT_EXIST_ERROR.message);
+        Assert.isNull(old, "字典已存在");
         return this.save(sysDictType);
     }
 

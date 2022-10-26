@@ -62,7 +62,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
             menus = sysMenuMapper.findMenuByUserId(userId);
         }
         if (menus.isEmpty()) {
-            throw new AccessDeniedException(ResultStatus.MENU_NULL_ERROR.message);
+            throw new AccessDeniedException("暂未分配菜单");
         }
         List<SysMenuDTO> sysMenuDTOS = menus.stream().map(sysMenu -> {
             SysMenuDTO sysMenuDTO = new SysMenuDTO();

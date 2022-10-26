@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import javax.crypto.Cipher;
@@ -105,9 +106,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
     public UserInfoVO getUserInfo() {
         Long userId = ApiContext.getUserId();
         User user = getById(userId);
-        if (Objects.isNull(user)) {
-            throw new CrudException(ResultStatus.USER_NO_EXIST_ERROR);
-        }
+        Assert.notNull(user, "用户不存在");
         UserInfoVO userInfoVO = new UserInfoVO();
         BeanUtils.copyProperties(user,userInfoVO);
         // 性别
@@ -121,9 +120,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
      */
     public UserAuthVO passwordAuth(PasswordAuthDTO passwordAuthDTO) {
         User user = this.getOne(new LambdaQueryWrapper<User>().eq(User::getMobile, passwordAuthDTO.getMobile()));
-        if (Objects.isNull(user)) {
-            throw new CrudException(ResultStatus.USER_NO_EXIST_ERROR);
-        }
+        Assert.notNull(user, "用户不存在");
         Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>()
                 .eq(Oauth::getUserId, user.getId()).eq(Oauth::getAppType,ConfigConsts.PASSWORD_APP_TYPE));
         if (!oauth.getAppSecret().equals(passwordAuthDTO.getAppSecret())) {
@@ -244,9 +241,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
     public boolean modifyUser(UserInfoDTO userInfoDTO) {
         Long userId = ApiContext.getUserId();
         User user = getById(userId);
-        if (Objects.isNull(user)) {
-            throw new CrudException(ResultStatus.USER_NO_EXIST_ERROR);
-        }
+        Assert.notNull(user, "用户不存在");
         BeanUtils.copyProperties(userInfoDTO,user);
         return updateById(user);
     }

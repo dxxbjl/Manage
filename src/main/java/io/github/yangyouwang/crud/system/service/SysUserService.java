@@ -6,8 +6,6 @@ import com.alibaba.excel.support.ExcelTypeEnum;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.constant.ConfigConsts;
-import io.github.yangyouwang.common.enums.ResultStatus;
-import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.core.util.EasyExcelUtil;
 import io.github.yangyouwang.core.util.StringUtil;
 import io.github.yangyouwang.crud.system.entity.*;
@@ -84,7 +82,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
         // 通过用户名从数据库获取用户信息
         SysUser user = sysUserMapper.findUserByName(userName);
         if (ObjectUtil.isNull(user)) {
-            throw new UsernameNotFoundException(ResultStatus.LOGIN_ERROR.message);
+            throw new UsernameNotFoundException("用户不存在");
         }
         List<String> menuRole;
         if (ConfigConsts.ADMIN_USER.equals(userName)) {
@@ -92,7 +90,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
         } else {
             String roleIds = user.getRoleIds();
             if (StringUtils.isBlank(roleIds)) {
-                throw new AccessDeniedException(ResultStatus.MENU_NULL_ERROR.message);
+                throw new AccessDeniedException("暂未分配菜单");
             }
             Long[] ids = StringUtil.getId(roleIds);
             menuRole = sysMenuMapper.findMenuRoleByRoleIds(ids);
@@ -118,7 +116,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public String add(SysUser sysUser) {
         SysUser old = this.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUserName,sysUser.getUserName()));
-        Assert.isNull(old,ResultStatus.USER_EXIST_ERROR.message);
+        Assert.isNull(old,"用户已存在");
         String passWord = passwordEncoder.encode(ConfigConsts.DEFAULT_PASSWORD);
         sysUser.setPassWord(passWord);
         boolean flag = this.save(sysUser);
@@ -237,7 +235,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
     public boolean modifyPass(ModifyPassDTO modifyPassDTO) {
         SysUser sysUser = this.getById(modifyPassDTO.getId());
         boolean matches = passwordEncoder.matches(modifyPassDTO.getOldPassword(),sysUser.getPassWord());
-        Assert.isTrue(matches,ResultStatus.OLD_PASSWORD_ERROR.message);
+        Assert.isTrue(matches,"旧密码输入错误");
         String password = passwordEncoder.encode(modifyPassDTO.getPassword());
         sysUser.setPassWord(password);
         return this.updateById(sysUser);
@@ -251,9 +249,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public String resetPass(ResetPassDTO resetPassDTO) {
         SysUser sysUser = this.getById(resetPassDTO.getId());
-        if (Objects.isNull(sysUser)) {
-            throw new CrudException(ResultStatus.USER_NO_EXIST_ERROR);
-        }
+        Assert.notNull(sysUser, "用户不存在");
         String password = passwordEncoder.encode(ConfigConsts.DEFAULT_PASSWORD);
         sysUser.setPassWord(password);
         this.updateById(sysUser);
