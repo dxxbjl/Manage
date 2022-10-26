@@ -218,7 +218,10 @@ INSERT INTO `sys_menu` VALUES (3071, '通知公告管理', 3051, 3, 'layui-icon-
 INSERT INTO `sys_menu` VALUES (3072, '添加通知公告表', 3071, 1, '', '#', 'F', 'Y', 'notice:add', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3073, '编辑通知公告表', 3071, 2, '', '#', 'F', 'Y', 'notice:edit', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3074, '删除通知公告表', 3071, 3, '', '#', 'F', 'Y', 'notice:del', '', NULL, '', NULL, 0, '');
-
+INSERT INTO `sys_menu` VALUES (3075, '任务日志管理', 1, 11, 'layui-icon-home', '/qrtz/jobLog/listPage', 'C', 'Y', 'jobLog:list', '', NULL, 'admin', '2022-10-26 18:06:18', 0, '');
+INSERT INTO `sys_menu` VALUES (3076, '添加任务日志', 3075, 1, '', '#', 'F', 'Y', 'jobLog:add', '', NULL, '', NULL, 0, '');
+INSERT INTO `sys_menu` VALUES (3077, '编辑任务日志', 3075, 2, '', '#', 'F', 'Y', 'jobLog:edit', '', NULL, '', NULL, 0, '');
+INSERT INTO `sys_menu` VALUES (3078, '删除任务日志', 3075, 3, '', '#', 'F', 'Y', 'jobLog:del', '', NULL, '', NULL, 0, '');
 -- ----------------------------
 -- Table structure for sys_role
 -- ----------------------------

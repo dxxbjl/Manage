@@ -276,4 +276,29 @@ CREATE TABLE `qrtz_triggers`  (
 -- Records of qrtz_triggers
 -- ----------------------------
 
+-- ----------------------------
+-- Table structure for qrtz_job_log
+-- ----------------------------
+DROP TABLE IF EXISTS `qrtz_job_log`;
+CREATE TABLE `qrtz_job_log`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `task_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '任务名称',
+  `task_group` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '任务组名',
+  `invoke_target` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '调用目标字符串',
+  `invoke_param` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '调用目标参数',
+  `task_message` text CHARACTER SET utf8 COLLATE utf8_bin NULL COMMENT '日志信息',
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '执行状态：0 正常、1 失败',
+  `exception_info` text CHARACTER SET utf8 COLLATE utf8_bin NULL COMMENT '异常信息',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `deleted` int(11) NULL DEFAULT 0 COMMENT '逻辑删除 0 否、1 是',
+  `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '任务日志' ROW_FORMAT = Dynamic;
+-- ----------------------------
+-- Records of qrtz_job_log
+-- ----------------------------
+
 SET FOREIGN_KEY_CHECKS = 1;
