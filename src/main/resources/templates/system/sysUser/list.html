@@ -82,18 +82,16 @@
         type: "get",
         url:  ctx + '/system/sysDept/treeSelect',
         success: function(data) {
-          if(data.code !== 500) {
-            let zTree = $.fn.zTree.init($("#deptTree"), fun.setting(function (event,treeId,treeNode) {
-              let deptIds = getzTreeChildrenNodeIds(treeNode);
-                //执行重载
-              table.reload('userTable', {
-                where: {
-                  deptIds
-                }
-              });
-            }), data);
-            zTree.expandAll(true);
-          }
+          let zTree = $.fn.zTree.init($("#deptTree"), fun.setting(function (event,treeId,treeNode) {
+            let deptIds = getzTreeChildrenNodeIds(treeNode);
+            //执行重载
+            table.reload('userTable', {
+              where: {
+                deptIds
+              }
+            });
+          }), data);
+          zTree.expandAll(true);
         }
       });
       //监听搜索
