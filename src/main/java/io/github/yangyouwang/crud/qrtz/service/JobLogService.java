@@ -29,19 +29,9 @@ public class JobLogService extends ServiceImpl<JobLogMapper, JobLog> {
     QueryWrapper<JobLog> queryWrapper = new QueryWrapper<>();
     queryWrapper.lambda()
       // 任务名称
-          .eq(!StringUtils.isEmpty(param.getTaskName()), JobLog::getTaskName, param.getTaskName())
+          .like(!StringUtils.isEmpty(param.getTaskName()), JobLog::getTaskName, param.getTaskName())
           // 任务组名
-          .eq(!StringUtils.isEmpty(param.getTaskGroup()), JobLog::getTaskGroup, param.getTaskGroup())
-          // 调用目标字符串
-          .eq(!StringUtils.isEmpty(param.getInvokeTarget()), JobLog::getInvokeTarget, param.getInvokeTarget())
-          // 调用目标参数
-          .eq(!StringUtils.isEmpty(param.getInvokeParam()), JobLog::getInvokeParam, param.getInvokeParam())
-          // 日志信息
-          .eq(!StringUtils.isEmpty(param.getTaskMessage()), JobLog::getTaskMessage, param.getTaskMessage())
-          // 执行状态：0 正常、1 失败
-          .eq(!StringUtils.isEmpty(param.getStatus()), JobLog::getStatus, param.getStatus())
-          // 异常信息
-          .eq(!StringUtils.isEmpty(param.getExceptionInfo()), JobLog::getExceptionInfo, param.getExceptionInfo())
+          .like(!StringUtils.isEmpty(param.getTaskGroup()), JobLog::getTaskGroup, param.getTaskGroup())
     .orderByDesc(JobLog::getCreateTime);
     return list(queryWrapper);
   }
