@@ -4,6 +4,7 @@ import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+
 /**
  * @author yangyouwang
  * @title: TestJob
@@ -16,6 +17,7 @@ public class TestJob implements Job {
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        int result = 10 / 0;
         System.out.println("测试");
     }
 }
