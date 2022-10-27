@@ -1,8 +1,10 @@
 package io.github.yangyouwang.core.aop;
 
+import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.crud.qrtz.entity.JobLog;
 import io.github.yangyouwang.crud.qrtz.service.JobLogService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -11,6 +13,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 
 
 /**
@@ -40,8 +43,10 @@ public class JobLogAspect {
      * 切点通知(方法执行后)
      */
     @AfterReturning("jobLogPointCut()")
-    public void doAfterReturning() {
-        log.info("开始写入日志");
+    public void doAfterReturning(JoinPoint joinPoint) {
+        JobLog jobLog = handleJobLog(joinPoint);
+        jobLog.setStatus(ConfigConsts.SUCCESS_STATUS);
+        jobLogService.save(jobLog);
     }
 
     /**
@@ -49,12 +54,23 @@ public class JobLogAspect {
      */
     @AfterThrowing(value = "jobLogPointCut()", throwing = "e")
     private void doAfterThrowing(JoinPoint joinPoint, Exception e) {
-        log.info("开始写入日志 = 出错了");
+        JobLog jobLog = handleJobLog(joinPoint);
+        String errMsg = e.getMessage();
+        jobLog.setExceptionInfo(errMsg);
+        jobLog.setStatus(ConfigConsts.ERROR_STATUS);
+        jobLogService.save(jobLog);
     }
 
     private JobLog handleJobLog(JoinPoint joinPoint) {
         JobLog jobLog = new JobLog();
-        // TODO: 2022/10/27 保存定时日志功能待实现 
+        String taskName = Thread.currentThread().getName();
+        jobLog.setTaskName(taskName);
+        String taskGroup = Thread.currentThread().getThreadGroup().getName();
+        jobLog.setTaskGroup(taskGroup);
+        String methodName = joinPoint.getSignature().getName();
+        jobLog.setInvokeTarget(methodName);
+        Object[] argsValue = Arrays.stream(joinPoint.getArgs()).toArray(Object[]::new);
+        jobLog.setInvokeParam(StringUtils.join(argsValue));
         return jobLog;
     }
 }

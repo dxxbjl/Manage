@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
 /**
  * <p>
  * 任务日志
@@ -43,6 +42,4 @@ public class JobLog extends BaseEntity {
 
     @ApiModelProperty(value = "异常信息")
     private String exceptionInfo;
-
-
 }

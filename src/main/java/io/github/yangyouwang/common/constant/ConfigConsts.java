@@ -68,4 +68,12 @@ public interface ConfigConsts {
      * 默认密码
      */
     String DEFAULT_PASSWORD = "123456";
+    /**
+     * 正常
+     */
+    String SUCCESS_STATUS = "0";
+    /**
+     * 失败
+     */
+    String ERROR_STATUS = "1";
 }

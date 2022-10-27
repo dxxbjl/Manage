@@ -17,7 +17,7 @@ public class TestJob implements Job {
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        int result = 10 / 0;
+        //int result = 10 / 0;
         System.out.println("测试");
     }
 }
