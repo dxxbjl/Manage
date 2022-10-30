@@ -48,6 +48,7 @@ public class JobService extends ServiceImpl<JobMapper, QrtzJob> {
   public List<QrtzJob> page(QrtzJob param) {
     LambdaQueryWrapper<QrtzJob> queryWrapper = new LambdaQueryWrapper<>();
     queryWrapper.like(StringUtils.isNotBlank(param.getJobName()), QrtzJob::getJobName,param.getJobName())
+            .like(StringUtils.isNotBlank(param.getJobGroup()), QrtzJob::getJobGroup,param.getJobGroup())
             .orderByDesc(QrtzJob::getCreateTime);
     return list(queryWrapper).stream().map(s -> quartzManager.setTriggerState(s)).collect(Collectors.toList());
   }

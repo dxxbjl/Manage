@@ -80,7 +80,7 @@ public class JobController extends CrudController {
     if (bindingResult.hasErrors()){
         return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
     }
-      jobService.add(param);
+    jobService.add(param);
     return Result.success();
   }
   @CrudLog(title = "修改任务",businessType = BusinessType.UPDATE)
