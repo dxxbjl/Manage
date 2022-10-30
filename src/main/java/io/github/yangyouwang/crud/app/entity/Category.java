@@ -29,8 +29,9 @@ public class Category extends BaseEntity {
     @ApiModelProperty(value = "图标")
     private String icon;
 
+    @ApiModelProperty(value = "顺序")
+    private String orderNum;
+
     @ApiModelProperty(value = "父分类ID")
     private Long parentId;
-
-
 }

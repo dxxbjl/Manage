@@ -128,6 +128,7 @@ CREATE TABLE `app_category`  (
     `id` bigint(0) NOT NULL AUTO_INCREMENT,
     `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '名称',
     `icon` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '图标',
+    `order_num` int DEFAULT '0' COMMENT '显示顺序',
     `parent_id` bigint(0) NULL DEFAULT 0 COMMENT '父分类ID',
     `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '创建者',
     `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',

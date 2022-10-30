@@ -36,7 +36,7 @@ public class CategoryService extends ServiceImpl<CategoryMapper, Category> {
     queryWrapper.lambda()
           // 名称
           .like(!StringUtils.isEmpty(param.getName()), Category::getName, param.getName())
-    .orderByDesc(Category::getCreateTime);
+            .orderByAsc(Category::getParentId,Category::getOrderNum);
     return list(queryWrapper);
   }
 
