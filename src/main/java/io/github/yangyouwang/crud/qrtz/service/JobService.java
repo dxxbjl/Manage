@@ -7,7 +7,6 @@ import io.github.yangyouwang.crud.qrtz.mapper.JobMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.*;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -58,10 +57,8 @@ public class JobService extends ServiceImpl<JobMapper, QrtzJob> {
    * @param param 根据需要进行传值
    */
   public void add(QrtzJob param) {
+    save(param);
     quartzManager.addJob(param);
-    QrtzJob job = new QrtzJob();
-    BeanUtils.copyProperties(param,job);
-    save(job);
   }
 
   /**
@@ -69,14 +66,12 @@ public class JobService extends ServiceImpl<JobMapper, QrtzJob> {
    * @param param 根据需要进行传值
    */
   public void modify(QrtzJob param) {
+    updateById(param);
     try {
       quartzManager.updateJobCron(param);
     } catch (SchedulerException e) {
       throw new RuntimeException("修改任务异常");
     }
-    QrtzJob job = new QrtzJob();
-    BeanUtils.copyProperties(param,job);
-    updateById(job);
   }
 
   /**
