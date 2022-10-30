@@ -31,6 +31,7 @@
                 </div>
             </script>
             <script type="text/html" id="tableBar">
+                <a sec:authorize="hasAuthority('job:log')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="log"><i class="layui-icon"></i>调度</a>
                 <a sec:authorize="hasAuthority('job:pause')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="pause"><i class="layui-icon"></i>暂停</a>
                 <a sec:authorize="hasAuthority('job:resume')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="resume"><i class="layui-icon"></i>恢复</a>
                 <a sec:authorize="hasAuthority('job:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
@@ -76,6 +77,7 @@
                 {type: 'checkbox', fixed: 'left'},
                 {field: 'id', title: 'ID', hide:true},
                 {field: 'jobName', title: '任务名字'},
+                {field: 'jobGroup', title: '任务组'},
                 {field: 'cron', title: 'cron表达式'},
                 {field: 'jobClassName', title: '类名称'},
                 {field: 'triggerState', title: '任务状态'},
@@ -104,6 +106,8 @@
                 active.pause(data.id);
             } else if(layEvent === 'resume') {
                 active.resume(data.id);
+            } else if(layEvent === 'log') {
+                active.log(data.id);
             }
         });
         /* 触发弹层 */
@@ -216,6 +220,15 @@
                         }
                     });
                 });
+            },
+            /**
+             * 调度日志
+             * @param jobId 主键
+             */
+            log: function (jobId) {
+                let url = ctx + "/qrtz/jobLog/listPage?jobId="+jobId;
+                let title = "调度日志";
+                top.layui.index.openTabsPage(url, title)
             }
         }
     });

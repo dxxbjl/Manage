@@ -18,21 +18,21 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @TableName("qrtz_job_log")
 @ApiModel(value="JobLog对象", description="任务日志")
-public class JobLog extends BaseEntity {
+public class QrtzJobLog extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty(value = "任务外键")
+    private Long jobId;
+
     @ApiModelProperty(value = "任务名称")
-    private String taskName;
+    private String jobName;
 
     @ApiModelProperty(value = "任务组名")
-    private String taskGroup;
+    private String jobGroup;
 
-    @ApiModelProperty(value = "调用目标字符串")
-    private String invokeTarget;
-
-    @ApiModelProperty(value = "调用目标参数")
-    private String invokeParam;
+    @ApiModelProperty(value = "类名称")
+    private String jobClassName;
 
     @ApiModelProperty(value = "日志信息")
     private String taskMessage;

@@ -4,7 +4,7 @@ import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.base.CrudController;
 import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.github.yangyouwang.common.enums.BusinessType;
-import io.github.yangyouwang.crud.qrtz.entity.Job;
+import io.github.yangyouwang.crud.qrtz.entity.QrtzJob;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.crud.qrtz.service.JobService;
 import io.swagger.annotations.Api;
@@ -47,15 +47,15 @@ public class JobController extends CrudController {
   }
 
   @PreAuthorize("hasAuthority('job:list')")
-  @ApiOperation(value = "任务表分页列表", response = Job.class)
+  @ApiOperation(value = "任务表分页列表", response = QrtzJob.class)
   @ApiImplicitParams({
   @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer"),
   @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer")})
   @GetMapping(value = "/page")
   @ResponseBody
-  public TableDataInfo page(@Validated Job job) {
+  public TableDataInfo page(@Validated QrtzJob job) {
     startPage();
-    List<Job> data = jobService.page(job);
+    List<QrtzJob> data = jobService.page(job);
     return getDataTable(data);
   }
 
@@ -76,7 +76,7 @@ public class JobController extends CrudController {
   @ApiOperation(value = "任务新增")
   @PostMapping(value = "/add")
   @ResponseBody
-  public Result add(@RequestBody @Validated Job param, BindingResult bindingResult) {
+  public Result add(@RequestBody @Validated QrtzJob param, BindingResult bindingResult) {
     if (bindingResult.hasErrors()){
         return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
     }
@@ -87,7 +87,7 @@ public class JobController extends CrudController {
   @ApiOperation(value = "任务表修改")
   @PostMapping(value = "/modify")
   @ResponseBody
-  public Result modify(@RequestBody @Validated Job param, BindingResult bindingResult) {
+  public Result modify(@RequestBody @Validated QrtzJob param, BindingResult bindingResult) {
     if (bindingResult.hasErrors()){
         return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
     }

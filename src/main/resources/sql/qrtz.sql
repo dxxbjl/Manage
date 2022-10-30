@@ -106,6 +106,7 @@ DROP TABLE IF EXISTS `qrtz_job`;
 CREATE TABLE `qrtz_job`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `job_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '任务名字',
+  `job_group` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '任务组',
   `cron` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT 'cron表达式',
   `job_class_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '类名称',
   `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '创建者',
@@ -282,10 +283,10 @@ CREATE TABLE `qrtz_triggers`  (
 DROP TABLE IF EXISTS `qrtz_job_log`;
 CREATE TABLE `qrtz_job_log`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `task_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '任务名称',
-  `task_group` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '任务组名',
-  `invoke_target` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '调用目标字符串',
-  `invoke_param` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '调用目标参数',
+  `job_id` bigint DEFAULT NULL COMMENT 'job外键',
+  `job_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '任务名称',
+  `job_group` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '任务组名',
+  `job_class_name` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '类名称',
   `task_message` text CHARACTER SET utf8 COLLATE utf8_bin NULL COMMENT '日志信息',
   `status` char(1) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '执行状态：0 正常、1 失败',
   `exception_info` text CHARACTER SET utf8 COLLATE utf8_bin NULL COMMENT '异常信息',

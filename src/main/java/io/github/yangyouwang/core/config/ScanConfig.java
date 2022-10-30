@@ -5,6 +5,7 @@ import org.springframework.context.annotation.ComponentScans;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.retry.annotation.EnableRetry;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @since JDK 1.8
  */
 @EnableRetry
+@EnableScheduling
 @EnableTransactionManagement
 @EnableAspectJAutoProxy(exposeProxy = true)
 @Configuration

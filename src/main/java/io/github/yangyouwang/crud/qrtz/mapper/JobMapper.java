@@ -1,6 +1,6 @@
 package io.github.yangyouwang.crud.qrtz.mapper;
 
-import io.github.yangyouwang.crud.qrtz.entity.Job;
+import io.github.yangyouwang.crud.qrtz.entity.QrtzJob;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author yangyouwang
  * @since 2022-07-30
  */
-public interface JobMapper extends BaseMapper<Job> {
+public interface JobMapper extends BaseMapper<QrtzJob> {
 
 }

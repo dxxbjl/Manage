@@ -20,12 +20,15 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @TableName("qrtz_job")
 @ApiModel(value="Job对象", description="任务表")
-public class Job extends BaseEntity {
+public class QrtzJob extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "任务名字")
     private String jobName;
+
+    @ApiModelProperty(value = "任务组")
+    private String jobGroup;
 
     @ApiModelProperty(value = "cron表达式")
     private String cron;

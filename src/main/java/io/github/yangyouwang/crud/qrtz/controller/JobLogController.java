@@ -1,6 +1,6 @@
 package io.github.yangyouwang.crud.qrtz.controller;
 
-import io.github.yangyouwang.crud.qrtz.entity.JobLog;
+import io.github.yangyouwang.crud.qrtz.entity.QrtzJobLog;
 import io.github.yangyouwang.crud.qrtz.service.JobLogService;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.TableDataInfo;
@@ -39,19 +39,20 @@ public class JobLogController extends CrudController {
   private JobLogService jobLogService;
 
   @GetMapping("/listPage")
-  public String listPage(){
+  public String listPage(String jobId, ModelMap map) {
+    map.put("jobId",jobId);
     return SUFFIX + "/list";
   }
 
-  @ApiOperation(value = "任务日志分页列表", response = JobLog.class)
+  @ApiOperation(value = "任务日志分页列表", response = QrtzJobLog.class)
   @ApiImplicitParams({
   @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer"),
   @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer")})
   @GetMapping(value = "/page")
   @ResponseBody
-  public TableDataInfo page(JobLog param) {
+  public TableDataInfo page(QrtzJobLog param) {
     startPage();
-    List<JobLog> data = jobLogService.page(param);
+    List<QrtzJobLog> data = jobLogService.page(param);
     return getDataTable(data);
   }
 
@@ -70,7 +71,7 @@ public class JobLogController extends CrudController {
   @ApiOperation(value = "任务日志新增")
   @PostMapping(value = "/add")
   @ResponseBody
-  public Result add(@RequestBody @Validated JobLog param,BindingResult bindingResult) {
+  public Result add(@RequestBody @Validated QrtzJobLog param, BindingResult bindingResult) {
     if (bindingResult.hasErrors()){
         return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
     }
@@ -81,7 +82,7 @@ public class JobLogController extends CrudController {
   @ApiOperation(value = "任务日志修改")
   @PostMapping(value = "/modify")
   @ResponseBody
-  public Result modify(@RequestBody @Validated JobLog param,BindingResult bindingResult) {
+  public Result modify(@RequestBody @Validated QrtzJobLog param, BindingResult bindingResult) {
     if (bindingResult.hasErrors()){
         return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
     }

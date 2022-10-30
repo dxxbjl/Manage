@@ -76,4 +76,8 @@ public interface ConfigConsts {
      * 失败
      */
     String ERROR_STATUS = "1";
+    /**
+     * 任务属性
+     */
+    String TASK_PROPERTIES = "task";
 }

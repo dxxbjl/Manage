@@ -12,13 +12,13 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">任务名称</label>
                     <div class="layui-input-block">
-                        <input type="text" name="taskName" placeholder="请输入任务名称" class="layui-input">
+                        <input type="text" name="jobName" placeholder="请输入任务名称" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">任务组名</label>
                     <div class="layui-input-block">
-                        <input type="text" name="taskGroup" placeholder="请输入任务组名" class="layui-input">
+                        <input type="text" name="jobGroup" placeholder="请输入任务组名" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -53,7 +53,8 @@
         let $ = layui.$,
             form = layui.form,
             table = layui.table,
-            crud = layui.crud;
+            crud = layui.crud,
+            jobId = [[${jobId}]];
         //监听搜索
         form.on('submit(search)', function(data) {
             let field = data.field;
@@ -74,16 +75,15 @@
             elem: '#jobLogTable'
             ,toolbar: '#toolbar'
             ,height: 'full-110'
-            ,url:  ctx + '/qrtz/jobLog/page'
+            ,url:  ctx + '/qrtz/jobLog/page?jobId=' + jobId
             ,cellMinWidth: 80
             ,page: true //开启分页
             ,cols: [[ //表头
                 {type: 'checkbox', fixed: 'left'},
                 {field: 'id', title: 'ID', hide:true},
-                {field: 'taskName', title: '任务名称'},
-                {field: 'taskGroup', title: '任务组名'},
-                {field: 'invokeTarget', title: '调用目标字符串'},
-                {field: 'invokeParam', title: '调用目标参数'},
+                {field: 'jobName', title: '任务名称'},
+                {field: 'jobGroup', title: '任务组名'},
+                {field: 'jobClassName', title: '类名称'},
                 {field: 'taskMessage', title: '日志信息'},
                 {field: 'status', title: '执行状态', templet: function (d) { return crud.getDictValue('executeStatus',d.status);}},
                 {field: 'exceptionInfo', title: '异常信息'},

@@ -1,6 +1,6 @@
 package io.github.yangyouwang.crud.qrtz.service;
 
-import io.github.yangyouwang.crud.qrtz.entity.JobLog;
+import io.github.yangyouwang.crud.qrtz.entity.QrtzJobLog;
 import io.github.yangyouwang.crud.qrtz.mapper.JobLogMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -18,21 +18,23 @@ import java.util.List;
 * @since 2022-10-26
 */
 @Service
-public class JobLogService extends ServiceImpl<JobLogMapper, JobLog> {
+public class JobLogService extends ServiceImpl<JobLogMapper, QrtzJobLog> {
 
   /**
   * 任务日志分页列表
   * @param param 参数
   * @return 结果
   */
-  public List<JobLog> page(JobLog param) {
-    QueryWrapper<JobLog> queryWrapper = new QueryWrapper<>();
+  public List<QrtzJobLog> page(QrtzJobLog param) {
+    QueryWrapper<QrtzJobLog> queryWrapper = new QueryWrapper<>();
     queryWrapper.lambda()
-      // 任务名称
-          .like(!StringUtils.isEmpty(param.getTaskName()), JobLog::getTaskName, param.getTaskName())
+          // 任务名称
+          .like(!StringUtils.isEmpty(param.getJobName()), QrtzJobLog::getJobName, param.getJobName())
           // 任务组名
-          .like(!StringUtils.isEmpty(param.getTaskGroup()), JobLog::getTaskGroup, param.getTaskGroup())
-    .orderByDesc(JobLog::getCreateTime);
+          .like(!StringUtils.isEmpty(param.getJobGroup()), QrtzJobLog::getJobGroup, param.getJobGroup())
+          // 任务外键
+          .like(null != param.getJobId(), QrtzJobLog::getJobId, param.getJobId())
+    .orderByDesc(QrtzJobLog::getCreateTime);
     return list(queryWrapper);
   }
 
@@ -41,7 +43,7 @@ public class JobLogService extends ServiceImpl<JobLogMapper, JobLog> {
   * @param id 主键
   * @return 结果
   */
-  public JobLog info(Long id) {
+  public QrtzJobLog info(Long id) {
     return getById(id);
   }
 
@@ -49,7 +51,7 @@ public class JobLogService extends ServiceImpl<JobLogMapper, JobLog> {
   * 任务日志新增
   * @param param 根据需要进行传值
   */
-  public void add(JobLog param) {
+  public void add(QrtzJobLog param) {
     save(param);
   }
 
@@ -57,7 +59,7 @@ public class JobLogService extends ServiceImpl<JobLogMapper, JobLog> {
   * 任务日志修改
   * @param param 根据需要进行传值
   */
-  public void modify(JobLog param) {
+  public void modify(QrtzJobLog param) {
     updateById(param);
   }
 

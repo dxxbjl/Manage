@@ -1,175 +1,116 @@
 package io.github.yangyouwang.crud.qrtz.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import io.github.yangyouwang.core.util.StringUtil;
-import io.github.yangyouwang.crud.qrtz.entity.Job;
+import io.github.yangyouwang.core.job.QuartzManager;
+import io.github.yangyouwang.crud.qrtz.entity.QrtzJob;
 import io.github.yangyouwang.crud.qrtz.mapper.JobMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.*;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
-* <p>
+ * <p>
  * 任务表 服务实现类
  * </p>
-*
-* @author yangyouwang
-* @since 2022-07-30
-*/
+ *
+ * @author yangyouwang
+ * @since 2022-07-30
+ */
 @Service
-public class JobService extends ServiceImpl<JobMapper, Job> {
+public class JobService extends ServiceImpl<JobMapper, QrtzJob> {
 
-  @Autowired
-  private Scheduler scheduler;
+  @Resource
+  private QuartzManager quartzManager;
 
   /**
-  * 任务表分页列表
-  * @param param 分页DTO
-  * @return 结果
-  */
-  public List<Job> page(Job param) {
-    LambdaQueryWrapper<Job> queryWrapper = new LambdaQueryWrapper<>();
-    queryWrapper.like(StringUtils.isNotBlank(param.getJobName()),Job::getJobName,param.getJobName())
-            .orderByDesc(Job::getCreateTime);
-    List<Job> list = list(queryWrapper);
-    list.forEach(job -> {
-      TriggerKey triggerKey = TriggerKey.triggerKey(job.getJobName());
-      try {
-        Trigger.TriggerState triggerState = scheduler.getTriggerState(triggerKey);
-        String triggerStateCn = StringUtil.getTriggerStateCN(triggerState);
-        job.setTriggerState(triggerStateCn);
-      } catch (SchedulerException e) {
-        e.printStackTrace();
-      }
-    });
-    return list;
+   * 项目启动时，初始化定时器
+   * 主要是防止手动修改数据库导致未同步到定时任务处理（注：不能手动修改数据库ID和任务组名，否则会导致脏数据）
+   */
+  @PostConstruct
+  public void init() throws SchedulerException
+  {
+    for (QrtzJob task : list())
+    {
+      quartzManager.addJob(task);
+    }
+  }
+  /**
+   * 任务表分页列表
+   * @param param 分页DTO
+   * @return 结果
+   */
+  public List<QrtzJob> page(QrtzJob param) {
+    LambdaQueryWrapper<QrtzJob> queryWrapper = new LambdaQueryWrapper<>();
+    queryWrapper.like(StringUtils.isNotBlank(param.getJobName()), QrtzJob::getJobName,param.getJobName())
+            .orderByDesc(QrtzJob::getCreateTime);
+    return list(queryWrapper).stream().map(s -> quartzManager.setTriggerState(s)).collect(Collectors.toList());
   }
 
   /**
-  * 任务表新增
-  * @param param 根据需要进行传值
-  */
-  public void add(Job param) {
-    try {
-      /**通过JobBuilder.newJob()方法获取到当前Job的具体实现(以下均为链式调用)
-       * 这里是固定Job创建，所以代码写死XXX.class
-       * 如果是动态的，根据不同的类来创建Job，则 ((Job)Class.forName("com.zy.job.TestJob").newInstance()).getClass()
-       * 即是 JobBuilder.newJob(((Job)Class.forName("com.zy.job.TestJob").newInstance()).getClass())
-       * */
-      JobDetail jobDetail = JobBuilder.newJob(((org.quartz.Job)Class.forName(param.getJobClassName()).newInstance()).getClass())
-              /**给当前JobDetail添加参数，K V形式*/
-              //.usingJobData("name","zy")
-              /**给当前JobDetail添加参数，K V形式，链式调用，可以传入多个参数，在Job实现类中，可以通过jobExecutionContext.getJobDetail().getJobDataMap().get("age")获取值*/
-              //  .usingJobData("age",23)
-              /**添加认证信息，有3种重写的方法，我这里是其中一种，可以查看源码看其余2种*/
-              .withIdentity(param.getJobName())
-              .build();//执行
-
-      Trigger trigger = TriggerBuilder.newTrigger()
-              /**给当前JobDetail添加参数，K V形式，链式调用，可以传入多个参数，在Job实现类中，可以通过jobExecutionContext.getTrigger().getJobDataMap().get("orderNo")获取值*/
-              // .usingJobData("orderNo", orderNo)
-              /**添加认证信息，有3种重写的方法，我这里是其中一种，可以查看源码看其余2种*/
-              .withIdentity(param.getJobName())
-              /**立即生效*/
-              .startNow()
-              /**开始执行时间*/
-//         .startAt(start)
-              /**结束执行时间*/
-//        .endAt(start)
-              /**添加执行规则，SimpleTrigger、CronTrigger的区别主要就在这里*/
-              .withSchedule(
-                      CronScheduleBuilder.cronSchedule(param.getCron())
-              )
-              .build();//执行
-
-      /**添加定时任务*/
-      scheduler.scheduleJob(jobDetail, trigger);
-      if (!scheduler.isShutdown()) {
-        /**启动*/
-        scheduler.start();
-      }
-      System.err.println("--------定时任务启动成功 "+new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date())+" ------------");
-    } catch (ClassNotFoundException | SchedulerException | InstantiationException | IllegalAccessException e) {
-      throw new RuntimeException(String.format("创建定时任务出错:%s",e));
-    }
-    Job job = new Job();
+   * 任务表新增
+   * @param param 根据需要进行传值
+   */
+  public void add(QrtzJob param) {
+    quartzManager.addJob(param);
+    QrtzJob job = new QrtzJob();
     BeanUtils.copyProperties(param,job);
     save(job);
   }
 
   /**
-  * 任务表修改
-  * @param param 根据需要进行传值
-  */
-  public void modify(Job param) {
+   * 任务表修改
+   * @param param 根据需要进行传值
+   */
+  public void modify(QrtzJob param) {
     try {
-      //获取到对应任务的触发器
-      TriggerKey triggerKey = TriggerKey.triggerKey(param.getJobName());
-      //设置定时任务执行方式
-      CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(param.getCron());
-      //重新构建任务的触发器trigger
-      CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
-      trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
-      //重置对应的job
-      scheduler.rescheduleJob(triggerKey, trigger);
-    } catch (Exception e) {
-      throw new RuntimeException(String.format("修改定时任务出错:%s",e));
+      quartzManager.updateJobCron(param);
+    } catch (SchedulerException e) {
+      throw new RuntimeException("修改任务异常");
     }
-    Job job = new Job();
+    QrtzJob job = new QrtzJob();
     BeanUtils.copyProperties(param,job);
     updateById(job);
   }
 
   /**
-  * 任务表删除(单个条目)
-  * @param id 主键
-  */
+   * 任务表删除(单个条目)
+   * @param id 主键
+   */
   public void remove(Long id) {
-    Job job = getById(id);
+    QrtzJob job = getById(id);
     try {
-      TriggerKey triggerKey = TriggerKey.triggerKey(job.getJobName());
-      // 停止触发器
-      scheduler.pauseTrigger(triggerKey);
-      // 移除触发器
-      scheduler.unscheduleJob(triggerKey);
-      // 删除任务
-      scheduler.deleteJob(JobKey.jobKey(job.getJobName()));
-    } catch (Exception e) {
-      throw new RuntimeException(String.format("删除定时任务出错:%s",e));
+      quartzManager.deleteJob(job);
+    } catch (SchedulerException e) {
+      throw new RuntimeException("删除任务异常");
     }
     removeById(id);
   }
 
   /**
-  * 任务表删除(多个条目)
-  * @param ids 主键数组
-  */
+   * 任务表删除(多个条目)
+   * @param ids 主键数组
+   */
   public void removes(List<Long> ids) {
-     removeByIds(ids);
-   }
+    removeByIds(ids);
+  }
 
 
   /**
    * 暂停某个定时任务（任务恢复后，暂停时间段内未执行的任务会继续执行，如暂停时间段内有2次，则会执行2次）
    */
   public void pauseJob(Long id) {
-    Job job = getById(id);
-    JobKey jobKey = JobKey.jobKey(job.getJobName());
+    QrtzJob job = getById(id);
     try {
-      JobDetail jobDetail = scheduler.getJobDetail(jobKey);
-      if(jobDetail == null){
-        return;
-      }
-      scheduler.pauseJob(jobKey);
+      quartzManager.pauseJob(job);
     } catch (SchedulerException e) {
-      throw new RuntimeException(String.format("暂停定时任务出错:%s",e));
+      throw new RuntimeException("暂停定时任务异常");
     }
   }
 
@@ -177,16 +118,11 @@ public class JobService extends ServiceImpl<JobMapper, Job> {
    * 恢复某个定时任务
    */
   public void resumeJob(Long id) {
-    Job job = getById(id);
-    JobKey jobKey = JobKey.jobKey(job.getJobName());
+    QrtzJob job = getById(id);
     try {
-      JobDetail jobDetail = scheduler.getJobDetail(jobKey);
-      if(jobDetail == null){
-        return;
-      }
-      scheduler.resumeJob(jobKey);
+      quartzManager.resumeJob(job);
     } catch (SchedulerException e) {
-      throw new RuntimeException(String.format("恢复定时任务出错:%s",e));
+      throw new RuntimeException("恢复定时任务异常");
     }
   }
 }
