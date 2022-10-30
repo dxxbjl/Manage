@@ -226,6 +226,10 @@ INSERT INTO `sys_menu` VALUES (3076, '添加任务日志', 3075, 1, '', '#', 'F'
 INSERT INTO `sys_menu` VALUES (3077, '编辑任务日志', 3075, 2, '', '#', 'F', 'Y', 'jobLog:edit', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3078, '删除任务日志', 3075, 3, '', '#', 'F', 'Y', 'jobLog:del', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3079, '调度', 3043, 6, '', '#', 'F', 'Y', 'job:log', 'admin', '2022-10-30 14:03:16', 'admin', '2022-10-30 14:03:25', 0, '');
+INSERT INTO `sys_menu` VALUES (3080, '分类管理', 3051, 4, 'layui-icon-home', '/app/category/listPage', 'C', 'Y', 'category:list', '', NULL, 'admin', '2022-10-30 22:20:03', 0, '');
+INSERT INTO `sys_menu` VALUES (3081, '添加分类表', 3080, 1, '', '#', 'F', 'Y', 'category:add', '', NULL, '', NULL, 0, '');
+INSERT INTO `sys_menu` VALUES (3082, '编辑分类表', 3080, 2, '', '#', 'F', 'Y', 'category:edit', '', NULL, '', NULL, 0, '');
+INSERT INTO `sys_menu` VALUES (3083, '删除分类表', 3080, 3, '', '#', 'F', 'Y', 'category:del', '', NULL, '', NULL, 0, '');
 -- ----------------------------
 -- Table structure for sys_role
 -- ----------------------------

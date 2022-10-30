@@ -120,4 +120,25 @@ CREATE TABLE `app_notice`  (
 -- Records of app_notice
 -- ----------------------------
 
+-- ----------------------------
+-- Table structure for app_category
+-- ----------------------------
+DROP TABLE IF EXISTS `app_category`;
+CREATE TABLE `app_category`  (
+    `id` bigint(0) NOT NULL AUTO_INCREMENT,
+    `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '名称',
+    `icon` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '图标',
+    `parent_id` bigint(0) NULL DEFAULT 0 COMMENT '父分类ID',
+    `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '创建者',
+    `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+    `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '更新者',
+    `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+    `deleted` int(0) NULL DEFAULT 0 COMMENT '逻辑删除 0 否、1 是',
+    `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '备注',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '分类表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of app_category
+-- ----------------------------
 SET FOREIGN_KEY_CHECKS = 1;

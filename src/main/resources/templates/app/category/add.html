@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>添加分类表</title>
+  <div th:replace="common/link::header"></div>
+</head>
+<body>
+<div class="layui-fluid">
+  <div class="layui-row">
+    <div class="layui-form" lay-filter="categoryForm" id="categoryForm">
+        <div class="layui-form-item">
+          <label class="layui-form-label">名称</label>
+          <div class="layui-input-inline">
+            <input type="text" lay-verify="required"  class="layui-input" name="name" placeholder="请输入名称"/>
+          </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">父级</label>
+            <div class="layui-input-inline">
+                <input id="parentId" name="parentId" type="hidden">
+                <div id="parentName" lay-filter="parentName" class="xm-select-demo"></div>
+            </div>
+        </div>
+        <input type="hidden" id="icon" name="icon">
+        <div class="layui-form-item">
+            <label class="layui-form-label">图标</label>
+            <div class="layui-input-inline layui-upload">
+                <div class="layui-upload-list">
+                    <img class="layui-upload-img" onclick="fun.preview(this)" id="upload-img" width="100px" height="100px">
+                    <p id="upload-text"></p>
+                </div>
+                <button type="button" class="layui-btn" id="upload-btn">上传</button>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-inline">
+                <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
+            </div>
+        </div>
+      <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
+      </div>
+    </div>
+  </div>
+</div>
+<div th:replace="common/script::footer"></div>
+<script th:inline="javascript">
+  layui.config({
+      base: '/static/layuiadmin/' //静态资源所在路径
+  }).extend({
+     index: 'lib/index', //主入口模块
+  }).use(['index', 'form','crud','treeSelect','upload'], function(){
+    let $ = layui.$,
+            form = layui.form,
+            crud = layui.crud,
+        upload = layui.upload,
+        treeSelect= layui.treeSelect,
+        parentId = [[${parentId}]];
+    form.on('submit(save-submit)', function(data) {
+      $.ajax({
+        type: 'POST',
+        url:  ctx + '/app/category/add',
+        data: JSON.stringify(data.field),
+        contentType:'application/json;charset=UTF-8',
+        dataType: 'json',
+        success: function(result) {
+          layer.msg(result.message);
+          if (result.code === 200) {
+            let index = parent.layer.getFrameIndex(window.name);
+            // 关闭
+            parent.layer.close(index);
+            // 刷新
+            parent.location.reload();
+          }
+        }
+      });
+    });
+      //普通图片上传
+    let uploadInst = upload.render({
+        elem: '#upload-btn'
+        ,url: ctx + '/common/uploadMinIo'
+        ,before: function(obj){
+            //预读本地文件示例，不支持ie8
+            obj.preview(function(index, file, result){
+                $('#upload-img').attr('src', result); //图片链接（base64）
+            });
+        }
+        ,done: function(res) {
+            if (res.code === 200) {
+                $("#icon").val(res.data.url);
+                return layer.msg('上传成功');
+           }
+        }
+        ,error: function(){
+            //演示失败状态，并实现重传
+            let uploadText = $('#upload-text');
+            uploadText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+            uploadText.find('.demo-reload').on('click', function(){
+                uploadInst.upload();
+            });
+        }
+      });
+      treeSelect.render({
+          // 选择器
+          elem: '#parentName',
+          // 数据
+          data: ctx + '/app/category/treeSelect',
+          // 异步加载方式：get/post，默认get
+          type: 'get',
+          // 占位符
+          placeholder: '请输入父级编号',
+          // 是否开启搜索功能：true/false，默认false
+          search: true,
+          // 点击回调
+          click: function(d){
+              $("#parentId").val(d.current.id);
+              $("#parentName").val(d.current.name);
+          },
+          // 加载完成后的回调函数
+          success: function (d) {
+              console.log(parentId);
+              if (parentId) {
+                  $("#parentId").val(parentId);
+                  treeSelect.checkNode('parentName', parentId);
+                  treeSelect.refresh('parentName');
+              }
+          }
+      });
+  });
+</script>
+</body>
+</html>
