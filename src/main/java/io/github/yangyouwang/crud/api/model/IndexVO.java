@@ -27,6 +27,11 @@ public class IndexVO {
      */
     @ApiModelProperty("通知公告列表")
     private String noticeList;
+    /**
+     * 分类列表
+     */
+    @ApiModelProperty("分类列表")
+    private List<CategoryVO> categoryList;
 
     @Data
     @ApiModel("轮播图VO")
@@ -41,5 +46,24 @@ public class IndexVO {
          */
         @ApiModelProperty("广告宣传图片")
         private String url;
+    }
+    @Data
+    @ApiModel("分类VO")
+    public static class CategoryVO {
+        /**
+         * 主键
+         */
+        @ApiModelProperty("主键")
+        private Long id;
+        /**
+         * 分类名称
+         */
+        @ApiModelProperty("分类名称")
+        private String title;
+        /**
+         * 图标
+         */
+        @ApiModelProperty("图标")
+        private String image;
     }
 }

@@ -6,9 +6,11 @@ import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.core.aliyun.SampleSms;
 import io.github.yangyouwang.crud.api.model.IndexVO;
 import io.github.yangyouwang.crud.app.entity.Ad;
+import io.github.yangyouwang.crud.app.entity.Category;
 import io.github.yangyouwang.crud.app.entity.Notice;
 import io.github.yangyouwang.crud.app.entity.SmsCode;
 import io.github.yangyouwang.crud.app.service.AdService;
+import io.github.yangyouwang.crud.app.service.CategoryService;
 import io.github.yangyouwang.crud.app.service.NoticeService;
 import io.github.yangyouwang.crud.app.service.SmsCodeService;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -39,6 +41,8 @@ public class ApiIndexService {
     @Autowired
     private NoticeService noticeService;
 
+    @Autowired
+    private CategoryService categoryService;
 
     /**
      * 获取首页数据
@@ -58,9 +62,21 @@ public class ApiIndexService {
         List<Notice> noticeList = noticeService.list(new LambdaQueryWrapper<Notice>()
                 .eq(Notice::getNoticeStatus, ConfigConsts.ENABLED_YES));
         List<String> noticeVOList = noticeList.stream().map(Notice::getNoticeTitle).collect(Collectors.toList());
+        // 分类
+        List<Category> categoryList = categoryService.list(new LambdaQueryWrapper<Category>()
+                .eq(Category::getParentId,0L)
+                .orderByAsc(Category::getParentId,Category::getOrderNum));
+        List<IndexVO.CategoryVO> categoryVOList = categoryList.stream().map(s -> {
+            IndexVO.CategoryVO categoryVO = new IndexVO.CategoryVO();
+            categoryVO.setId(s.getId());
+            categoryVO.setTitle(s.getName());
+            categoryVO.setImage(s.getIcon());
+            return categoryVO;
+        }).collect(Collectors.toList());
         IndexVO indexVO = new IndexVO();
         indexVO.setAdVOList(adVOList);
         indexVO.setNoticeList(String.join(",", noticeVOList));
+        indexVO.setCategoryList(categoryVOList);
         return indexVO;
     }
 
