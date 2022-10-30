@@ -3,6 +3,8 @@ package io.github.yangyouwang.crud.qrtz.service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.github.yangyouwang.core.job.QuartzManager;
 import io.github.yangyouwang.crud.qrtz.entity.QrtzJob;
+import io.github.yangyouwang.crud.qrtz.entity.QrtzJobLog;
+import io.github.yangyouwang.crud.qrtz.mapper.JobLogMapper;
 import io.github.yangyouwang.crud.qrtz.mapper.JobMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang3.StringUtils;
@@ -27,6 +29,9 @@ public class JobService extends ServiceImpl<JobMapper, QrtzJob> {
 
   @Resource
   private QuartzManager quartzManager;
+
+  @Resource
+  private JobLogMapper jobLogMapper;
 
   /**
    * 项目启动时，初始化定时器
@@ -86,7 +91,11 @@ public class JobService extends ServiceImpl<JobMapper, QrtzJob> {
     } catch (SchedulerException e) {
       throw new RuntimeException("删除任务异常");
     }
+    // 删除调度
     removeById(id);
+    // 删除调度日志
+    jobLogMapper.delete(new LambdaQueryWrapper<QrtzJobLog>()
+            .eq(QrtzJobLog::getJobId,id));
   }
 
   /**
