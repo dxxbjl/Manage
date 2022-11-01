@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `app_ad`;
 CREATE TABLE `app_ad`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT,
   `ad_title` varchar(63) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '广告标题',
-  `ad_url` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '广告宣传图片',
+  `ad_url` text CHARACTER SET utf8 COLLATE utf8_bin NULL COMMENT '广告宣传图片',
   `ad_content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '活动内容',
   `enabled` char(1) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '0' COMMENT '是否启用 Y 启用 N 禁用',
   `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '创建者',
@@ -64,7 +64,7 @@ DROP TABLE IF EXISTS `app_user`;
 CREATE TABLE `app_user`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `nick_name` varchar(63) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '用户昵称或网络名称',
-  `avatar` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '用户头像图片',
+  `avatar` text CHARACTER SET utf8 COLLATE utf8_bin NULL COMMENT '用户头像图片',
   `gender` int(0) NULL DEFAULT 1 COMMENT '性别：1时是男性，值为2时是女性，值为0时是未知',
   `birthday` date NULL DEFAULT NULL COMMENT '生日',
   `mobile` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '手机号',
@@ -127,7 +127,7 @@ DROP TABLE IF EXISTS `app_category`;
 CREATE TABLE `app_category`  (
     `id` bigint(0) NOT NULL AUTO_INCREMENT,
     `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '名称',
-    `icon` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '图标',
+    `icon` text CHARACTER SET utf8 COLLATE utf8_bin NULL COMMENT '图标',
     `order_num` int DEFAULT '0' COMMENT '显示顺序',
     `parent_id` bigint(0) NULL DEFAULT 0 COMMENT '父分类ID',
     `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '创建者',
@@ -151,7 +151,7 @@ CREATE TABLE `app_news`  (
     `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键',
     `category_id` bigint DEFAULT NULL COMMENT '分类外键',
     `title` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '标题',
-    `thumbnail` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '缩略图',
+    `thumbnail` text CHARACTER SET utf8 COLLATE utf8_bin NULL COMMENT '缩略图',
     `content` text CHARACTER SET utf8 COLLATE utf8_bin NULL COMMENT '内容',
     `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '创建者',
     `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
