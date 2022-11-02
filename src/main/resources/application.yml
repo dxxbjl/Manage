@@ -3,6 +3,7 @@ server:
   ssl:
     key-store: 证书的名字.pfx
     key-store-password: 证书密码
+    key-store-type: PKCS12
   servlet:
     #session会话超时时间
     session:
