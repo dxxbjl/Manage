@@ -45,6 +45,9 @@
     width: 7px;
     transform: rotate(-135deg);
 }
-.ck-editor__editable_inline {
-    height: 300px !important;
+.ck.ck-editor {
+    width: 650px !important;
+}
+.ck-editor__editable {
+    min-height: 300px !important;
 }
