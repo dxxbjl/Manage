@@ -255,7 +255,7 @@
           },
           // 加载完成后的回调函数
           success: function (d) {
-            if (sysUser.deptId) {
+            if (sysUser.deptId && d.data.length < 0) {
               treeSelect.checkNode('deptName', sysUser.deptId);
               treeSelect.refresh('deptName');
             }

@@ -119,7 +119,7 @@
             },
             // 加载完成后的回调函数
             success: function (d) {
-                if (sysMenu.parentId) {
+                if (sysMenu.parentId && d.data.length < 0) {
                     treeSelect.checkNode('parentName', sysMenu.parentId);
                     treeSelect.refresh('parentName');
                 }
