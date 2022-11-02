@@ -8,14 +8,20 @@
 <div class="layui-fluid">
   <div class="layui-row">
     <div class="layui-form" lay-filter="${table.entityPath}Form" id="${table.entityPath}Form">
-      <#list table.fields as field>
-        <div class="layui-form-item">
-          <label class="layui-form-label">${field.comment}</label>
-          <div class="layui-input-inline">
-            <input type="text" class="layui-input" name="${field.propertyName}" placeholder="请输入${field.comment}"/>
-          </div>
+     <#list table.fields as field>
+      <div class="layui-form-item">
+        <label class="layui-form-label">${field.comment}</label>
+        <div class="layui-input-inline">
+          <input type="text" lay-verify="required" class="layui-input" name="${field.propertyName}" placeholder="请输入${field.comment}"/>
         </div>
-      </#list>
+      </div>
+     </#list>
+      <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-inline">
+          <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
+        </div>
+      </div>
       <div class="layui-form-item layui-hide">
         <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
       </div>

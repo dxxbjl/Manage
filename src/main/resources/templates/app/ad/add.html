@@ -58,13 +58,10 @@
             form = layui.form,
             crud = layui.crud,
             upload = layui.upload;
-    ClassicEditor.create(document.querySelector('#adContent'),{}).then(editor => {
-        window.editor = editor;
-    }).catch(err => {
-        console.error(err.stack);
-    });
+    // 编辑器
+    initEditor('adContent');
     form.on('submit(save-submit)', function(data) {
-        data.field.adContent = window.editor.getData();
+        data.field.adContent = getEditorData();
         $.ajax({
         type: 'POST',
         url:  ctx + '/app/ad/add',

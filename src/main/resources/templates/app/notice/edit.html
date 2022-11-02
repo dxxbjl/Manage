@@ -52,16 +52,12 @@
             form = layui.form,
             crud = layui.crud,
             notice = [[${notice}]];
+    // 编辑器
+    initEditor('noticeContent',notice.noticeContent);
     form.val('noticeForm',notice);
-    ClassicEditor.create(document.querySelector('#noticeContent'),{}).then(editor => {
-      window.editor = editor;
-      window.editor.setData(notice.noticeContent);
-    }).catch(err => {
-      console.error(err.stack);
-    });
     // 编辑
     form.on('submit(save-submit)', function(data) {
-      data.field.noticeContent = window.editor.getData();
+      data.field.noticeContent = getEditorData();
       $.ajax({
         type: 'POST',
         url:  ctx + '/app/notice/modify',

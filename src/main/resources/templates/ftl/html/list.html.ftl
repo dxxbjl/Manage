@@ -45,10 +45,11 @@
         base: '/static/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'useradmin', 'table'], function() {
+    }).use(['index', 'useradmin', 'table', 'crud'], function() {
         let $ = layui.$,
             form = layui.form,
-            table = layui.table;
+            table = layui.table,
+            crud = layui.crud;
         //监听搜索
         form.on('submit(search)', function(data) {
             let field = data.field;

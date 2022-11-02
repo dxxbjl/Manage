@@ -11,6 +11,27 @@
         <script th:inline="javascript">
             let ctx = [[${#request.getContextPath()}]];
             /**
+             * 初始化富文本编辑器
+             * @param obj dom对象
+             * @param data 回显数据
+             */
+            function initEditor(obj,data = {}) {
+                ClassicEditor.create(document.querySelector("#" + obj),{}).then(editor => {
+                    window.editor = editor;
+                    if (data) {
+                        window.editor.setData(data);
+                    }
+                }).catch(err => {
+                    console.error(err.stack);
+                });
+            }
+            /**
+             * 获取富文本编辑器数据
+             */
+            function getEditorData() {
+                return window.editor.getData();
+            }
+            /**
              * 获取树结构ID组
              * @param treeNode 树结构
              * @returns ids数组

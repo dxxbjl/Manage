@@ -50,13 +50,10 @@
     let $ = layui.$,
             form = layui.form,
             crud = layui.crud;
-      ClassicEditor.create(document.querySelector('#noticeContent'),{}).then(editor => {
-          window.editor = editor;
-      }).catch(err => {
-          console.error(err.stack);
-      });
+    // 编辑器
+    initEditor('noticeContent');
     form.on('submit(save-submit)', function(data) {
-      data.field.noticeContent = window.editor.getData();
+      data.field.noticeContent = getEditorData();
       $.ajax({
         type: 'POST',
         url:  ctx + '/app/notice/add',

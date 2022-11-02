@@ -60,17 +60,14 @@
             crud = layui.crud,
             upload = layui.upload,
             ad = [[${ad}]];
-    ClassicEditor.create(document.querySelector('#adContent'),{}).then(editor => {
-      window.editor = editor;
-      window.editor.setData(ad.adContent);
-    }).catch(err => {
-      console.error(err.stack);
-    });
+    // 编辑器
+    initEditor('adContent',ad.adContent);
+    // 回显图片
     $('#upload-img').attr('src', ad.adUrl);
     form.val('ad_form',ad);
     // 编辑
     form.on('submit(save-submit)', function(data) {
-      data.field.adContent = window.editor.getData();
+      data.field.adContent = getEditorData();
       $.ajax({
         type: 'POST',
         url:  ctx + '/app/ad/modify',

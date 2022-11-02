@@ -11,7 +11,7 @@
         <div class="layui-form-item">
           <label class="layui-form-label">标题</label>
           <div class="layui-input-inline">
-            <input type="text" class="layui-input" name="title" placeholder="请输入标题"/>
+            <input type="text" lay-verify="required" class="layui-input" name="title" placeholder="请输入标题"/>
           </div>
         </div>
         <div class="layui-form-item">
@@ -62,13 +62,10 @@
             crud = layui.crud,
             upload = layui.upload,
             treeSelect = layui.treeSelect;
-      ClassicEditor.create(document.querySelector('#content'),{}).then(editor => {
-          window.editor = editor;
-      }).catch(err => {
-          console.error(err.stack);
-      });
+    // 编辑器
+    initEditor('content');
     form.on('submit(save-submit)', function(data) {
-      data.field.content = window.editor.getData();
+      data.field.content = getEditorData();
       $.ajax({
         type: 'POST',
         url:  ctx + '/app/news/add',
