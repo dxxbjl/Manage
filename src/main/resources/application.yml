@@ -1,9 +1,4 @@
 server:
-  port: 8080
-#  ssl:
-#    key-store: 证书的名字.pfx
-#    key-store-password: 证书密码
-#    key-store-type: JKS
   servlet:
     #session会话超时时间
     session:

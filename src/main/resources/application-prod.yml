@@ -1,3 +1,9 @@
+server:
+  port: 443
+  ssl:
+    key-store: 证书的名字.pfx
+    key-store-password: 证书密码
+    key-store-type: JKS
 spring:
   # 配置数据源
   datasource:
