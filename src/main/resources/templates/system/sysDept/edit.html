@@ -113,7 +113,7 @@
       },
       // 加载完成后的回调函数
       success: function (d) {
-        if (sysDept.parentId && d.data.length < 0) {
+        if (sysDept.parentId && d.data.length > 0) {
           treeSelect.checkNode('parentName', sysDept.parentId);
           treeSelect.refresh('parentName');
         }

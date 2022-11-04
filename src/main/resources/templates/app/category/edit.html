@@ -129,7 +129,7 @@
       },
       // 加载完成后的回调函数
       success: function (d) {
-        if (category.parentId && d.data.length < 0) {
+        if (category.parentId && d.data.length > 0) {
           treeSelect.checkNode('parentName', category.parentId);
           treeSelect.refresh('parentName');
         }

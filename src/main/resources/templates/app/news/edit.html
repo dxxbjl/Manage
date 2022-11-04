@@ -133,7 +133,7 @@
           },
           // 加载完成后的回调函数
           success: function (d) {
-              if (news.categoryId && d.data.length < 0) {
+              if (news.categoryId && d.data.length > 0) {
                   treeSelect.checkNode('name', news.categoryId);
                   treeSelect.refresh('name');
               }
