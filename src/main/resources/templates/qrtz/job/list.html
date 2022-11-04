@@ -37,9 +37,9 @@
                 </div>
             </script>
             <script type="text/html" id="tableBar">
-                <a sec:authorize="hasAuthority('job:log')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="log"><i class="layui-icon"></i>调度</a>
-                <a sec:authorize="hasAuthority('job:pause')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="pause"><i class="layui-icon"></i>暂停</a>
-                <a sec:authorize="hasAuthority('job:resume')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="resume"><i class="layui-icon"></i>恢复</a>
+                <a sec:authorize="hasAuthority('job:log')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="log"><i class="layui-icon"></i>调度日志</a>
+                <a sec:authorize="hasAuthority('job:pause')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="pause"><i class="layui-icon"></i>暂停任务</a>
+                <a sec:authorize="hasAuthority('job:resume')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="resume"><i class="layui-icon"></i>恢复任务</a>
                 <a sec:authorize="hasAuthority('job:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
                 <a sec:authorize="hasAuthority('job:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
             </script>
