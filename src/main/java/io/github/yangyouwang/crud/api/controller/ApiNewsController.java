@@ -11,7 +11,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -48,9 +47,14 @@ public class ApiNewsController extends CrudController {
         return getDataTable(data);
     }
 
+    /**
+     * 新闻详情
+     * @param id 主键
+     * @return 响应
+     */
     @GetMapping("/info/{id}")
     @PassToken
-    public News info(@Valid @NotNull(message = "id不能为空") @PathVariable Long id, ModelMap map){
+    public News info(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
         return newsService.info(id);
     }
 }

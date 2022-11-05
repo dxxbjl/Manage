@@ -4,11 +4,8 @@ import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.core.aliyun.SampleSms;
-import io.github.yangyouwang.crud.api.model.AdVO;
-import io.github.yangyouwang.crud.app.entity.Ad;
 import io.github.yangyouwang.crud.app.entity.Notice;
 import io.github.yangyouwang.crud.app.entity.SmsCode;
-import io.github.yangyouwang.crud.app.service.AdService;
 import io.github.yangyouwang.crud.app.service.NoticeService;
 import io.github.yangyouwang.crud.app.service.SmsCodeService;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -30,31 +27,13 @@ import java.util.stream.Collectors;
 @Service
 public class ApiIndexService {
     
-    @Autowired
-    private AdService adService;
+
 
     @Autowired
     private SmsCodeService smsCodeService;
 
     @Autowired
     private NoticeService noticeService;
-
-    /**
-     * 获取首页数据
-     */
-    public List<AdVO> getAdList() {
-        // 获取轮播图列表
-        List<Ad> adList = adService.list(new LambdaQueryWrapper<Ad>()
-                 .select(Ad::getId,Ad::getAdUrl)
-                .eq(Ad::getEnabled, ConfigConsts.ENABLED_YES).orderByDesc(Ad::getCreateBy));
-        return adList.stream().map(s -> {
-            AdVO adVO = new AdVO();
-            adVO.setId(s.getId());
-            adVO.setUrl(s.getAdUrl());
-            return adVO;
-        }).collect(Collectors.toList());
-    }
-
     /**
      * 通知公告接口
      * @return 响应

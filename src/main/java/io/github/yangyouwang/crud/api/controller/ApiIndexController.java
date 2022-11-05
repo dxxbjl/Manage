@@ -8,15 +8,12 @@ import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.core.util.MobileUtil;
-import io.github.yangyouwang.crud.api.model.AdVO;
 import io.github.yangyouwang.crud.api.service.ApiIndexService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * Description: 首页控制层 <br/>
@@ -34,18 +31,6 @@ import java.util.List;
 public class ApiIndexController {
 
     private final ApiIndexService apiIndexService;
-
-    /**
-     * 轮播图列表接口
-     * @return 响应
-     */
-    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
-    @GetMapping("/get_ad_list")
-    @ApiOperation(value="轮播图列表接口", notes="轮播图列表接口")
-    @PassToken
-    public List<AdVO> getAdList() {
-        return apiIndexService.getAdList();
-    }
 
     /**
      * 通知公告接口
