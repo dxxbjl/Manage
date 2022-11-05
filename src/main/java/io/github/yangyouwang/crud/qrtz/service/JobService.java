@@ -40,8 +40,7 @@ public class JobService extends ServiceImpl<JobMapper, QrtzJob> {
   @PostConstruct
   public void init() throws SchedulerException
   {
-    for (QrtzJob task : list(new LambdaQueryWrapper<QrtzJob>()
-            .eq(QrtzJob::getEnabled,ConfigConsts.ENABLED_YES)))
+    for (QrtzJob task : list())
     {
       quartzManager.addJob(task);
     }
