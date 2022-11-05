@@ -228,10 +228,10 @@ INSERT INTO `sys_menu` VALUES (3080, '分类管理', 3051, 4, 'layui-icon-home',
 INSERT INTO `sys_menu` VALUES (3081, '添加分类表', 3080, 1, '', '#', 'F', 'Y', 'category:add', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3082, '编辑分类表', 3080, 2, '', '#', 'F', 'Y', 'category:edit', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3083, '删除分类表', 3080, 3, '', '#', 'F', 'Y', 'category:del', '', NULL, '', NULL, 0, '');
-INSERT INTO `sys_menu` VALUES (3084, '新闻表管理', 3051, 5, 'layui-icon-home', '/app/news/listPage', 'C', 'Y', 'news:list', '', NULL, 'admin', '2022-11-01 19:43:41', 0, '');
-INSERT INTO `sys_menu` VALUES (3085, '添加新闻表', 3084, 1, '', '#', 'F', 'Y', 'news:add', '', NULL, '', NULL, 0, '');
-INSERT INTO `sys_menu` VALUES (3086, '编辑新闻表', 3084, 2, '', '#', 'F', 'Y', 'news:edit', '', NULL, '', NULL, 0, '');
-INSERT INTO `sys_menu` VALUES (3087, '删除新闻表', 3084, 3, '', '#', 'F', 'Y', 'news:del', '', NULL, '', NULL, 0, '');
+INSERT INTO `sys_menu` VALUES (3084, '新闻管理', 3051, 5, 'layui-icon-home', '/app/news/listPage', 'C', 'Y', 'news:list', '', NULL, 'admin', '2022-11-01 19:43:41', 0, '');
+INSERT INTO `sys_menu` VALUES (3085, '添加新闻', 3084, 1, '', '#', 'F', 'Y', 'news:add', '', NULL, '', NULL, 0, '');
+INSERT INTO `sys_menu` VALUES (3086, '编辑新闻', 3084, 2, '', '#', 'F', 'Y', 'news:edit', '', NULL, '', NULL, 0, '');
+INSERT INTO `sys_menu` VALUES (3087, '删除新闻', 3084, 3, '', '#', 'F', 'Y', 'news:del', '', NULL, '', NULL, 0, '');
 -- ----------------------------
 -- Table structure for sys_role
 -- ----------------------------

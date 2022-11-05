@@ -4,7 +4,7 @@ import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.core.aliyun.SampleSms;
-import io.github.yangyouwang.crud.api.model.IndexVO;
+import io.github.yangyouwang.crud.api.model.AdVO;
 import io.github.yangyouwang.crud.app.entity.Ad;
 import io.github.yangyouwang.crud.app.entity.Notice;
 import io.github.yangyouwang.crud.app.entity.SmsCode;
@@ -42,25 +42,29 @@ public class ApiIndexService {
     /**
      * 获取首页数据
      */
-    public IndexVO getIndexData() {
+    public List<AdVO> getAdList() {
         // 获取轮播图列表
         List<Ad> adList = adService.list(new LambdaQueryWrapper<Ad>()
                  .select(Ad::getId,Ad::getAdUrl)
                 .eq(Ad::getEnabled, ConfigConsts.ENABLED_YES).orderByDesc(Ad::getCreateBy));
-        List<IndexVO.AdVO> adVOList = adList.stream().map(s -> {
-            IndexVO.AdVO adVO = new IndexVO.AdVO();
+        return adList.stream().map(s -> {
+            AdVO adVO = new AdVO();
             adVO.setId(s.getId());
             adVO.setUrl(s.getAdUrl());
             return adVO;
         }).collect(Collectors.toList());
+    }
+
+    /**
+     * 通知公告接口
+     * @return 响应
+     */
+    public Object getNotice() {
         // 通知公告
         List<Notice> noticeList = noticeService.list(new LambdaQueryWrapper<Notice>()
                 .eq(Notice::getNoticeStatus, ConfigConsts.ENABLED_YES));
         List<String> noticeVOList = noticeList.stream().map(Notice::getNoticeTitle).collect(Collectors.toList());
-        IndexVO indexVO = new IndexVO();
-        indexVO.setAdVOList(adVOList);
-        indexVO.setNoticeList(String.join(" ", noticeVOList));
-        return indexVO;
+        return String.join(" ", noticeVOList);
     }
 
     /**
@@ -84,4 +88,5 @@ public class ApiIndexService {
         }
         return smsCodeService.save(smsCode);
     }
+
 }
