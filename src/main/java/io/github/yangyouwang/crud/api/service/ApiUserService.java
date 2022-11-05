@@ -143,7 +143,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         user.setId(userId);
         user.setMobile(userPhoneNumber);
         this.updateById(user);
-        return userPhoneNumber;
+        return String.format("绑定手机号为：%s",userPhoneNumber);
     }
 
     /**
@@ -184,7 +184,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
                 return jsonObject.getString("phoneNumber");
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("获取手机号失败");
         }
         return null;
     }
