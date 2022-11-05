@@ -98,7 +98,8 @@ public class ApiUserController {
             throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
         String userPhoneNumber = apiUserService.decodeUserInfo(wxUserInfoDTO);
-        return Result.success(userPhoneNumber);
+        String message = String.format("绑定手机号为：%s", userPhoneNumber);
+        return Result.success(message,userPhoneNumber);
     }
 
     /**

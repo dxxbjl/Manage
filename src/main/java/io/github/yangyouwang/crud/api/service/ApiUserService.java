@@ -134,7 +134,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
     /**
      * 解密微信用户信息
      * @param wxUserInfoDTO 加密微信用户信息
-     * @return 响应
+     * @return 手机号
      */
     public String decodeUserInfo(WxUserInfoDTO wxUserInfoDTO) {
         String userPhoneNumber = getUserPhoneNumber(wxUserInfoDTO.getSessionKey(), wxUserInfoDTO.getIv(), wxUserInfoDTO.getEncryptedData());
@@ -143,7 +143,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         user.setId(userId);
         user.setMobile(userPhoneNumber);
         this.updateById(user);
-        return String.format("绑定手机号为：%s",userPhoneNumber);
+        return userPhoneNumber;
     }
 
     /**
