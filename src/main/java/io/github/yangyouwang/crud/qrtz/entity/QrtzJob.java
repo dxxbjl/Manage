@@ -1,6 +1,5 @@
 package io.github.yangyouwang.crud.qrtz.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.github.yangyouwang.common.domain.BaseEntity;
 import io.swagger.annotations.ApiModel;
@@ -36,7 +35,6 @@ public class QrtzJob extends BaseEntity {
     @ApiModelProperty(value = "类名称")
     private String jobClassName;
 
-    @TableField(exist = false)
-    @ApiModelProperty(value = "任务状态")
-    private String triggerState;
+    @ApiModelProperty(value = "是否启用 Y 启用 N 禁用")
+    private String enabled;
 }

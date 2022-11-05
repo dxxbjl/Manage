@@ -1,7 +1,6 @@
 package io.github.yangyouwang.core.job;
 
 import io.github.yangyouwang.common.constant.ConfigConsts;
-import io.github.yangyouwang.core.util.StringUtil;
 import io.github.yangyouwang.crud.qrtz.entity.QrtzJob;
 import org.quartz.*;
 import org.springframework.stereotype.Service;
@@ -58,9 +57,14 @@ public class QuartzManager {
             }
             // 把job和触发器注册到任务调度中
             scheduler.scheduleJob(jobDetail, trigger);
-            if (!scheduler.isShutdown()) {
-                /**启动*/
+            // 执行调度任务
+            if (!scheduler.isShutdown() &&
+                    ConfigConsts.ENABLED_YES.equals(task.getEnabled())) {
                 scheduler.start();
+            }
+            // 暂停调度任务
+            if (!ConfigConsts.ENABLED_YES.equals(task.getEnabled())) {
+                scheduler.pauseJob(getJobKey(task.getJobName(), task.getJobGroup()));
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -119,21 +123,5 @@ public class QuartzManager {
         CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(task.getCron());
         trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
         scheduler.rescheduleJob(triggerKey, trigger);
-    }
-
-    /**
-     * 设置任务状态
-     * @param task 任务
-     */
-    public QrtzJob setTriggerState(QrtzJob task) {
-        TriggerKey triggerKey = TriggerKey.triggerKey(task.getJobName(),task.getJobGroup());
-        try {
-            Trigger.TriggerState triggerState = scheduler.getTriggerState(triggerKey);
-            String triggerStateCn = StringUtil.getTriggerStateCN(triggerState);
-            task.setTriggerState(triggerStateCn);
-        } catch (SchedulerException e) {
-            e.printStackTrace();
-        }
-        return task;
     }
 }

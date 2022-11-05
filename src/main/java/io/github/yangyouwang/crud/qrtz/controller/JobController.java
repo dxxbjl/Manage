@@ -19,7 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.ui.ModelMap;
 
- import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Controller;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -117,20 +117,19 @@ public class JobController extends CrudController {
         return "qrtz/cron/index";
     }
 
-    @CrudLog(title = "暂停任务",businessType = BusinessType.UPDATE)
-    @ApiOperation(value = "暂停某个定时任务")
-    @GetMapping(value = "/pause/{id}")
+    /**
+     * 修改任务状态
+     * @param param 修改任务状态对象
+     * @return 修改状态响应
+     */
+    @CrudLog(title = "更新任务状态",businessType = BusinessType.UPDATE)
+    @PostMapping("/changeJob")
     @ResponseBody
-    public Result pause(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
-        jobService.pauseJob(id);
-        return Result.success();
-    }
-    @CrudLog(title = "恢复任务",businessType = BusinessType.UPDATE)
-    @ApiOperation(value = "恢复某个定时任务")
-    @GetMapping(value = "/resume/{id}")
-    @ResponseBody
-    public Result resume(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
-        jobService.resumeJob(id);
-        return Result.success();
+    public Result changeJob(@RequestBody @Validated QrtzJob param, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()){
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
+        }
+        boolean flag = jobService.changeJob(param);
+        return Result.success(flag);
     }
 }

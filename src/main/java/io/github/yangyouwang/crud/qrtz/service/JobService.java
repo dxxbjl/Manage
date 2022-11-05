@@ -1,6 +1,7 @@
 package io.github.yangyouwang.crud.qrtz.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.core.job.QuartzManager;
 import io.github.yangyouwang.crud.qrtz.entity.QrtzJob;
 import io.github.yangyouwang.crud.qrtz.entity.QrtzJobLog;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -40,7 +40,8 @@ public class JobService extends ServiceImpl<JobMapper, QrtzJob> {
   @PostConstruct
   public void init() throws SchedulerException
   {
-    for (QrtzJob task : list())
+    for (QrtzJob task : list(new LambdaQueryWrapper<QrtzJob>()
+            .eq(QrtzJob::getEnabled,ConfigConsts.ENABLED_YES)))
     {
       quartzManager.addJob(task);
     }
@@ -55,7 +56,7 @@ public class JobService extends ServiceImpl<JobMapper, QrtzJob> {
     queryWrapper.like(StringUtils.isNotBlank(param.getJobName()), QrtzJob::getJobName,param.getJobName())
             .like(StringUtils.isNotBlank(param.getJobGroup()), QrtzJob::getJobGroup,param.getJobGroup())
             .orderByDesc(QrtzJob::getCreateTime);
-    return list(queryWrapper).stream().map(s -> quartzManager.setTriggerState(s)).collect(Collectors.toList());
+    return list(queryWrapper);
   }
 
   /**
@@ -63,8 +64,8 @@ public class JobService extends ServiceImpl<JobMapper, QrtzJob> {
    * @param param 根据需要进行传值
    */
   public void add(QrtzJob param) {
-    save(param);
     quartzManager.addJob(param);
+    save(param);
   }
 
   /**
@@ -72,12 +73,12 @@ public class JobService extends ServiceImpl<JobMapper, QrtzJob> {
    * @param param 根据需要进行传值
    */
   public void modify(QrtzJob param) {
-    updateById(param);
     try {
       quartzManager.updateJobCron(param);
     } catch (SchedulerException e) {
       throw new RuntimeException("修改任务异常");
     }
+    updateById(param);
   }
 
   /**
@@ -106,28 +107,24 @@ public class JobService extends ServiceImpl<JobMapper, QrtzJob> {
     removeByIds(ids);
   }
 
-
   /**
-   * 暂停某个定时任务（任务恢复后，暂停时间段内未执行的任务会继续执行，如暂停时间段内有2次，则会执行2次）
+   * 修改任务状态
+   * @param param 任务对象
+   * @return 修改任务对象响应
    */
-  public void pauseJob(Long id) {
-    QrtzJob job = getById(id);
+  public boolean changeJob(QrtzJob param) {
+    QrtzJob job = getById(param.getId());
     try {
-      quartzManager.pauseJob(job);
+      if (ConfigConsts.ENABLED_YES.equals(param.getEnabled())) {
+        // 恢复某个定时任务
+        quartzManager.resumeJob(job);
+      } else {
+        // 暂停某个定时任务（任务恢复后，暂停时间段内未执行的任务会继续执行，如暂停时间段内有2次，则会执行2次）
+        quartzManager.pauseJob(job);
+      }
     } catch (SchedulerException e) {
-      throw new RuntimeException("暂停定时任务异常");
+      throw new RuntimeException("修改定时任务异常");
     }
-  }
-
-  /**
-   * 恢复某个定时任务
-   */
-  public void resumeJob(Long id) {
-    QrtzJob job = getById(id);
-    try {
-      quartzManager.resumeJob(job);
-    } catch (SchedulerException e) {
-      throw new RuntimeException("恢复定时任务异常");
-    }
+    return updateById(param);
   }
 }

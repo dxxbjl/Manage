@@ -34,6 +34,10 @@
         </div>
       </div>
       <div class="layui-form-item">
+        <label class="layui-form-label">任务状态</label>
+        <div class="layui-input-block" id="enabled"></div>
+      </div>
+      <div class="layui-form-item">
         <label class="layui-form-label">备注</label>
         <div class="layui-input-inline">
           <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
@@ -93,6 +97,7 @@
         }
       });
     });
+    crud.setRadio("enabled","enabled",job.enabled);
   });
 </script>
 </body>

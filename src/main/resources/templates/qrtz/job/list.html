@@ -36,10 +36,11 @@
                     <a sec:authorize="hasAuthority('job:add')" class="layui-btn layui-btn-xs" lay-event="add"><i class="layui-icon layui-icon-add-1"></i>添加</a>
                 </div>
             </script>
+            <script type="text/html" id="enabledTpl">
+                <input type="checkbox" lay-filter="enabled" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" {{d.enabled==='Y'?'checked':''}} />
+            </script>
             <script type="text/html" id="tableBar">
                 <a sec:authorize="hasAuthority('job:log')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="log"><i class="layui-icon"></i>调度日志</a>
-                <a sec:authorize="hasAuthority('job:pause')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="pause"><i class="layui-icon"></i>暂停任务</a>
-                <a sec:authorize="hasAuthority('job:resume')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="resume"><i class="layui-icon"></i>恢复任务</a>
                 <a sec:authorize="hasAuthority('job:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
                 <a sec:authorize="hasAuthority('job:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
             </script>
@@ -52,10 +53,11 @@
         base: '/static/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'useradmin', 'table'], function() {
+    }).use(['index', 'useradmin', 'table', 'crud'], function() {
         let $ = layui.$,
             form = layui.form,
-            table = layui.table;
+            table = layui.table,
+            crud = layui.crud;
         //监听搜索
         form.on('submit(search)', function(data) {
             let field = data.field;
@@ -63,6 +65,12 @@
             table.reload('jobTable', {
                 where: field
             });
+        });
+        // 修改任务状态
+        form.on('switch(enabled)', function (obj) {
+            let id = obj.elem.value;
+            let checked = obj.elem.checked ? 'Y' : 'N';
+            active.changeJobEnabled(id,checked);
         });
         //监听重置
         form.on('submit(reset)', function(data) {
@@ -86,8 +94,8 @@
                 {field: 'jobGroup', title: '任务组'},
                 {field: 'cron', title: 'cron表达式'},
                 {field: 'jobClassName', title: '类名称'},
-                {field: 'triggerState', title: '任务状态'},
-                {toolbar: '#tableBar', title: '操作', width: 500, align:'center',fixed: 'right'}
+                {field: 'enabled', align: "center", templet: '#enabledTpl', title: '任务状态'},
+                {toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
             ]]
         });
         //头工具栏事件
@@ -108,16 +116,35 @@
                 active.editView(data.id);
             } else if(layEvent === 'del') {
                 active.del(data.id);
-            } else if(layEvent === 'pause') {
-                active.pause(data.id);
-            } else if(layEvent === 'resume') {
-                active.resume(data.id);
             } else if(layEvent === 'log') {
                 active.log(data.id);
             }
         });
         /* 触发弹层 */
         let active = {
+            /**
+             * 修改任务状态
+             * @param id 任务id
+             * @param checked 状态
+             */
+            changeJobEnabled: function (id,checked) {
+                $.ajax({
+                    type: 'POST',
+                    url:  ctx + '/qrtz/job/changeJob',
+                    data: JSON.stringify({
+                        id: id,
+                        enabled: checked
+                    }),
+                    contentType:'application/json;charset=UTF-8',
+                    dataType: 'json',
+                    success: function(result) {
+                        layer.msg(result.message);
+                        if (result.code === 200) {
+                            table.reload('jobTable');
+                        }
+                    }
+                });
+            },
             /**
              * 添加
              * */
@@ -128,7 +155,7 @@
                     ,title: "添加任务表"
                     ,content: ctx + '/qrtz/job/addPage'
                     ,maxmin: true
-                    ,area: ['80%', '80%']
+                    ,area: ['100%', '100%']
                     ,btn: ['确定', '取消']
                     ,yes: function(index, layero) {
                         let submit = layero.find('iframe').contents().find('#save-submit');
@@ -147,7 +174,7 @@
                     ,title: '修改任务表'
                     ,content: ctx + '/qrtz/job/editPage/' + id
                     ,maxmin: true
-                    ,area: ['80%', '80%']
+                    ,area: ['100%', '100%']
                     ,btn: ['确定', '取消']
                     ,yes: function(index, layero) {
                         let submit = layero.find('iframe').contents().find('#save-submit');
@@ -173,56 +200,6 @@
                                 layer.close(index);
                                 table.reload('jobTable');
                             }
-                        }
-                    });
-                });
-            },
-            /**
-             * 暂停某个定时任务
-             * @param id id
-             */
-            pause: function(id) {
-                layer.confirm('是否暂停定时任务？', function(index) {
-                    $.ajax({
-                        type: 'GET',
-                        url:  ctx + '/qrtz/job/pause/' + id,
-                        contentType:'application/json;charset=UTF-8',
-                        dataType: 'json',
-                        success: function(result) {
-                            layer.msg(result.message, {
-                                offset:['50%'],
-                                time: 1000
-                            },function() {
-                                if (result.code === 200) {
-                                    layer.close(index);
-                                    table.reload('jobTable');
-                                }
-                            });
-                        }
-                    });
-                });
-            },
-            /**
-             * 恢复某个定时任务
-             * @param id id
-             */
-            resume: function(id) {
-                layer.confirm('是否恢复定时任务？', function(index) {
-                    $.ajax({
-                        type: 'GET',
-                        url:  ctx + '/qrtz/job/resume/' + id,
-                        contentType:'application/json;charset=UTF-8',
-                        dataType: 'json',
-                        success: function(result) {
-                            layer.msg(result.message, {
-                                offset:['50%'],
-                                time: 1000
-                            }, function() {
-                                if (result.code === 200) {
-                                    layer.close(index);
-                                    table.reload('jobTable');
-                                }
-                            });
                         }
                     });
                 });
