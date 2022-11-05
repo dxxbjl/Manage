@@ -36,6 +36,7 @@ public class AdService extends ServiceImpl<AdMapper, Ad> {
           .eq(!StringUtils.isEmpty(param.getAdContent()), Ad::getAdContent, param.getAdContent())
           // 是否启用 Y 启用 N 禁用
           .eq(!StringUtils.isEmpty(param.getEnabled()), Ad::getEnabled, param.getEnabled())
+          .orderByDesc(Ad::getCreateTime);
     ;
     return list(queryWrapper);
   }
