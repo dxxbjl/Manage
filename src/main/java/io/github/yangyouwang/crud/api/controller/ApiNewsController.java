@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -55,6 +56,9 @@ public class ApiNewsController extends CrudController {
     @GetMapping("/info/{id}")
     @PassToken
     public News info(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
-        return newsService.info(id);
+        News info = newsService.info(id);
+        String content = StringEscapeUtils.unescapeHtml4(info.getContent());
+        info.setContent(content);
+        return info;
     }
 }
