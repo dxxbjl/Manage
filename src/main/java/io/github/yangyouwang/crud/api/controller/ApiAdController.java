@@ -6,13 +6,13 @@ import io.github.yangyouwang.common.annotation.PassToken;
 import io.github.yangyouwang.common.annotation.ResponseResultBody;
 import io.github.yangyouwang.common.constant.ApiVersionConstant;
 import io.github.yangyouwang.common.constant.ConfigConsts;
+import io.github.yangyouwang.core.util.StringUtil;
 import io.github.yangyouwang.crud.api.model.AdVO;
 import io.github.yangyouwang.crud.app.entity.Ad;
 import io.github.yangyouwang.crud.app.service.AdService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,8 +69,7 @@ public class ApiAdController {
     @PassToken
     public Ad info(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
         Ad info = adService.info(id);
-        String content = StringEscapeUtils.unescapeHtml4(info.getAdContent());
-        info.setAdContent(content);
+        info.setAdContent(StringUtil.toHtml(info.getAdContent()));
         return info;
     }
 }

@@ -1,6 +1,7 @@
 package io.github.yangyouwang.core.util;
 
 import org.apache.commons.beanutils.ConvertUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.security.authentication.event.*;
 
 import java.util.Random;
@@ -13,6 +14,14 @@ import java.util.Random;
  */
 public class StringUtil {
 
+    /**
+     * html转义
+     * @param html HTML代码
+     * @return html字符串
+     */
+    public static String toHtml(String html) {
+        return StringEscapeUtils.unescapeHtml4(html).replaceAll("figure","div");
+    }
     /**
      * 获取字符串中id数组
      * @param ids ids字符串
