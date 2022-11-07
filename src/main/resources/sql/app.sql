@@ -149,7 +149,6 @@ CREATE TABLE `app_category`  (
 DROP TABLE IF EXISTS `app_news`;
 CREATE TABLE `app_news`  (
     `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `category_id` bigint DEFAULT NULL COMMENT '分类外键',
     `title` varchar(50) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '标题',
     `thumbnail` text CHARACTER SET utf8 COLLATE utf8_bin NULL COMMENT '缩略图',
     `content` text CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '内容',

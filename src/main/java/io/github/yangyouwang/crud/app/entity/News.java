@@ -23,9 +23,6 @@ public class News extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "分类外键")
-    private Long categoryId;
-
     @ApiModelProperty(value = "标题")
     private String title;
 
@@ -34,6 +31,4 @@ public class News extends BaseEntity {
 
     @ApiModelProperty(value = "内容")
     private String content;
-
-
 }
