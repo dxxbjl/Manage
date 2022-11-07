@@ -30,6 +30,7 @@
             <script type="text/html" id="toolbar">
                 <div class="layui-btn-container">
                     <a sec:authorize="hasAuthority('${table.entityPath}:add')" class="layui-btn layui-btn-xs" lay-event="add"><i class="layui-icon layui-icon-add-1"></i>添加</a>
+                    <a sec:authorize="hasAuthority('${table.entityPath}:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="removes"><i class="layui-icon layui-icon-delete"></i>删除</a>
                 </div>
             </script>
             <script type="text/html" id="tableBar">
@@ -89,6 +90,13 @@
             switch(obj.event) {
                 case 'add':
                     active.addView();
+                    break;
+                case 'removes':
+                    if (data.length === 0) {
+                        layer.msg('请选择需要删除的行')
+                    } else {
+                        active.removes(data);
+                    }
                     break;
             }
         });
@@ -162,7 +170,31 @@
                         }
                     });
                 });
-            }
+            },
+            /**
+             * 批量删除
+             * @param obj 对象
+             */
+            removes: function(obj) {
+                let ids = fun.objToArrIds(obj);
+                layer.confirm('真的删除行么', function(index) {
+                    //向服务端发送删除指令
+                    $.ajax({
+                        type: 'POST',
+                        url:  ctx + '<#if package.ModuleName??>/${package.ModuleName}</#if>/${table.entityPath}/removes',
+                        data: JSON.stringify(ids),
+                        contentType:'application/json;charset=UTF-8',
+                        dataType: 'json',
+                        success: function(result) {
+                            layer.msg(result.message);
+                            if (result.code === 200) {
+                                layer.close(index);
+                                table.reload('${table.entityPath}Table');
+                            }
+                        }
+                    });
+                });
+            },
         }
     });
 </script>
