@@ -117,8 +117,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 配置session管理
                 .sessionManagement()
                 //session失效默认的跳转地址
-                .invalidSessionUrl("/loginPage")
-                // 同一用户 只允许一个在线 自动踢出在线用户
-                .maximumSessions(1);
+                .invalidSessionUrl("/loginPage");
     }
 }
