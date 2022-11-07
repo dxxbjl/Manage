@@ -7,22 +7,21 @@
 <body>
 <div class="layui-fluid">
   <div class="layui-row">
-    <div class="layui-form" lay-filter="ad_form" id="ad_form">
-        <div class="layui-form-item">
-          <label class="layui-form-label">标题</label>
-          <div class="layui-input-inline">
-            <input type="text" lay-verify="required" class="layui-input" name="adTitle" placeholder="请输入广告标题"/>
-          </div>
-        </div>
+    <div class="layui-form layui-form-pane" lay-filter="ad_form" id="ad_form">
         <input type="hidden" id="adUrl" name="adUrl">
-        <div class="layui-form-item">
-            <label class="layui-form-label">宣传图片</label>
-            <div class="layui-input-inline layui-upload">
+        <div class="layui-form-item" style="text-align: center">
+            <div class="layui-upload">
                 <div class="layui-upload-list">
                     <img class="layui-upload-img" onclick="fun.preview(this)" id="upload-img" width="100px" height="100px">
                     <p id="upload-text"></p>
                 </div>
                 <button type="button" class="layui-btn" id="upload-btn">上传</button>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">标题</label>
+            <div class="layui-input-block">
+                <input type="text" lay-verify="required" class="layui-input" name="adTitle" placeholder="请输入广告标题"/>
             </div>
         </div>
         <div class="layui-form-item">
@@ -32,9 +31,9 @@
             <label class="layui-form-label">状态</label>
             <div class="layui-input-block" id="enabled"></div>
         </div>
-        <div class="layui-form-item">
+        <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">备注</label>
-            <div class="layui-input-inline">
+            <div class="layui-input-block">
                 <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
             </div>
         </div>

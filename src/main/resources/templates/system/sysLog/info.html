@@ -7,7 +7,7 @@
 <body>
 <div class="layui-fluid">
   <div class="layui-row">
-    <div class="layui-form" lay-filter="log_form" id="log_form">
+    <div class="layui-form layui-form-pane" lay-filter="log_form" id="log_form">
       <input type="hidden" name="id" id="id">
         <div class="layui-form-item">
           <label class="layui-form-label">业务标题</label>
@@ -45,27 +45,27 @@
             <input type="text" class="layui-input" name="argsName" disabled="disabled"/>
           </div>
         </div>
-        <div class="layui-form-item">
+        <div class="layui-form-item layui-form-text">
           <label class="layui-form-label">参数值</label>
-          <div class="layui-input-inline">
+          <div class="layui-input-block">
             <textarea class="layui-textarea" name="argsValue" disabled="disabled"></textarea>
           </div>
         </div>
-        <div class="layui-form-item">
+        <div class="layui-form-item layui-form-text">
           <label class="layui-form-label">异常类型</label>
-          <div class="layui-input-inline">
+          <div class="layui-input-block">
             <textarea class="layui-textarea" name="exceptionName" disabled="disabled"></textarea>
           </div>
         </div>
-        <div class="layui-form-item">
+        <div class="layui-form-item layui-form-text">
           <label class="layui-form-label">错误信息</label>
-          <div class="layui-input-inline">
+          <div class="layui-input-block">
             <textarea class="layui-textarea" name="errMsg" disabled="disabled"></textarea>
           </div>
         </div>
-        <div class="layui-form-item">
+        <div class="layui-form-item layui-form-text">
           <label class="layui-form-label">异常堆栈信息</label>
-          <div class="layui-input-inline">
+          <div class="layui-input-block">
             <textarea class="layui-textarea" name="stackTrace" disabled="disabled"></textarea>
           </div>
         </div>

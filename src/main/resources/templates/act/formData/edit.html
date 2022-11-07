@@ -13,7 +13,7 @@
 <div class="layui-fluid">
   <div class="layui-row">
     <div class="layui-col-md4">
-      <div class="layui-form" lay-filter="formDataForm" id="formDataForm">
+      <div class="layui-form layui-form-pane" lay-filter="formDataForm" id="formDataForm">
         <input type="hidden" name="id" id="id">
         <div class="layui-form-item">
           <label class="layui-form-label">表单名称</label>
@@ -27,9 +27,9 @@
             <input type="text" name="formKey" lay-verify="required" placeholder="请输入表单KEY" class="layui-input">
           </div>
         </div>
-        <div class="layui-form-item">
+        <div class="layui-form-item layui-form-text">
           <label class="layui-form-label">备注</label>
-          <div class="layui-input-inline">
+          <div class="layui-input-block">
             <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
           </div>
         </div>

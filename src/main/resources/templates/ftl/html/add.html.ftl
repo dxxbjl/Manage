@@ -7,7 +7,7 @@
 <body>
 <div class="layui-fluid">
   <div class="layui-row">
-    <div class="layui-form" lay-filter="${table.entityPath}Form" id="${table.entityPath}Form">
+    <div class="layui-form layui-form-pane" lay-filter="${table.entityPath}Form" id="${table.entityPath}Form">
      <#list table.fields as field>
       <div class="layui-form-item">
         <label class="layui-form-label">${field.comment}</label>
@@ -16,9 +16,9 @@
         </div>
       </div>
      </#list>
-      <div class="layui-form-item">
+      <div class="layui-form-item layui-form-text">
         <label class="layui-form-label">备注</label>
-        <div class="layui-input-inline">
+        <div class="layui-input-block">
           <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
         </div>
       </div>

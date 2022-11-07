@@ -7,7 +7,7 @@
 <body>
 <div class="layui-fluid">
   <div class="layui-row">
-    <div class="layui-form" lay-filter="sysDeptForm" id="sysDeptForm">
+    <div class="layui-form layui-form-pane" lay-filter="sysDeptForm" id="sysDeptForm">
       <input type="hidden" name="id" id="id">
         <div class="layui-form-item">
           <label class="layui-form-label">部门名称</label>
@@ -50,12 +50,12 @@
         <label class="layui-form-label">状态</label>
         <div class="layui-input-block" id="enabled"></div>
       </div>
-        <div class="layui-form-item">
-          <label class="layui-form-label">备注</label>
-          <div class="layui-input-inline">
-            <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
-          </div>
+      <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block">
+          <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
         </div>
+      </div>
       <div class="layui-form-item layui-hide">
         <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
       </div>
