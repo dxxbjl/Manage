@@ -9,31 +9,49 @@
   <div class="layui-row">
     <div class="layui-form layui-form-pane" lay-filter="sysPostForm" id="sysPostForm">
         <div class="layui-form-item">
-          <label class="layui-form-label">岗位编码</label>
-          <div class="layui-input-inline">
-            <input type="text" class="layui-input" name="postCode" placeholder="请输入岗位编码"/>
-          </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">岗位编码</label>
+                <div class="layui-input-inline">
+                    <input type="text" lay-verify="required" class="layui-input" name="postCode" placeholder="请输入岗位编码"/>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">岗位名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" lay-verify="required" class="layui-input" name="postName" placeholder="请输入岗位名称"/>
+                </div>
+            </div>
         </div>
         <div class="layui-form-item">
-          <label class="layui-form-label">岗位名称</label>
-          <div class="layui-input-inline">
-            <input type="text" class="layui-input" name="postName" placeholder="请输入岗位名称"/>
-          </div>
-        </div>
-        <div class="layui-form-item">
-          <label class="layui-form-label">显示顺序</label>
-          <div class="layui-input-inline">
-            <input type="number" class="layui-input" name="orderNum" placeholder="请输入显示顺序"/>
-          </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">状态</label>
-            <div class="layui-input-block" id="enabled"></div>
+            <div class="layui-inline">
+                <label class="layui-form-label">显示顺序</label>
+                <div class="layui-input-inline">
+                    <input type="number" lay-verify="required" class="layui-input" name="orderNum" placeholder="请输入显示顺序"/>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">状态</label>
+                <div class="layui-input-block" id="enabled"></div>
+            </div>
         </div>
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">备注</label>
             <div class="layui-input-block">
                 <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">创建者</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" name="createBy" disabled="disabled"/>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">创建时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" name="createTime" disabled="disabled"/>
+                </div>
             </div>
         </div>
       <div class="layui-form-item layui-hide">

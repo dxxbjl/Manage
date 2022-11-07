@@ -10,26 +10,42 @@
     <div class="layui-form layui-form-pane" lay-filter="sys-role-form" id="sys-role-form">
       <div class="layui-form-item">
         <label class="layui-form-label">角色名称</label>
-        <div class="layui-input-inline">
+        <div class="layui-input-block">
           <input type="text" name="roleName" lay-verify="required" placeholder="请输入角色名称" class="layui-input">
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">角色别名</label>
-        <div class="layui-input-inline">
-          <input type="text" name="roleKey" lay-verify="required" placeholder="请输入角色别名" class="layui-input">
+        <div class="layui-inline">
+          <label class="layui-form-label">角色别名</label>
+          <div class="layui-input-inline">
+            <input type="text" name="roleKey" lay-verify="required" placeholder="请输入角色别名" class="layui-input">
+          </div>
         </div>
-      </div>
-      <div class="layui-form-item">
-        <label class="layui-form-label">菜单</label>
-        <div class="layui-input-inline">
-          <div id="menuName" class="xm-select-demo"></div>
+        <div class="layui-inline">
+          <label class="layui-form-label">菜单</label>
+          <div class="layui-input-inline">
+            <div id="menuName" class="xm-select-demo"></div>
+          </div>
         </div>
       </div>
       <div class="layui-form-item layui-form-text">
         <label class="layui-form-label">备注</label>
         <div class="layui-input-block">
           <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label">创建者</label>
+          <div class="layui-input-inline">
+            <input type="text" class="layui-input" name="createBy" disabled="disabled"/>
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">创建时间</label>
+          <div class="layui-input-inline">
+            <input type="text" class="layui-input" name="createTime" disabled="disabled"/>
+          </div>
         </div>
       </div>
       <div class="layui-form-item layui-hide">
