@@ -100,7 +100,7 @@
           // 异步加载方式：get/post，默认get
           type: 'get',
           // 占位符
-          placeholder: '请输入父级编号',
+          placeholder: '请选择',
           // 是否开启搜索功能：true/false，默认false
           search: true,
           // 点击回调
@@ -110,8 +110,7 @@
           },
           // 加载完成后的回调函数
           success: function (d) {
-              console.log(parentId);
-              if (parentId) {
+              if (parentId && d.data.length > 0) {
                   $("#parentId").val(parentId);
                   treeSelect.checkNode('parentName', parentId);
                   treeSelect.refresh('parentName');
