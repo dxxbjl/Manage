@@ -25,7 +25,7 @@ CREATE TABLE `app_ad`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT,
   `ad_title` varchar(63) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '广告标题',
   `ad_url` text CHARACTER SET utf8 COLLATE utf8_bin NULL COMMENT '广告宣传图片',
-  `ad_content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '活动内容',
+  `ad_content` text CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '活动内容',
   `enabled` char(1) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '0' COMMENT '是否启用 Y 启用 N 禁用',
   `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '创建者',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
