@@ -23,7 +23,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `app_ad`;
 CREATE TABLE `app_ad`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT,
-  `ad_title` varchar(63) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '广告标题',
+  `ad_title` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '广告标题',
   `ad_url` text CHARACTER SET utf8 COLLATE utf8_bin NULL COMMENT '广告宣传图片',
   `ad_content` text CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '活动内容',
   `enabled` char(1) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '0' COMMENT '是否启用 Y 启用 N 禁用',
@@ -63,7 +63,7 @@ CREATE TABLE `app_oauth`  (
 DROP TABLE IF EXISTS `app_user`;
 CREATE TABLE `app_user`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `nick_name` varchar(63) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '用户昵称或网络名称',
+  `nick_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '用户昵称或网络名称',
   `avatar` text CHARACTER SET utf8 COLLATE utf8_bin NULL COMMENT '用户头像图片',
   `gender` int(0) NULL DEFAULT 1 COMMENT '性别：1时是男性，值为2时是女性，值为0时是未知',
   `birthday` date NULL DEFAULT NULL COMMENT '生日',
@@ -103,7 +103,7 @@ CREATE TABLE `app_sms_code`  (
 DROP TABLE IF EXISTS `app_notice`;
 CREATE TABLE `app_notice`  (
     `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `notice_title` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '标题',
+    `notice_title` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '标题',
     `notice_type` char(1) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '公告类型（1通知 2公告）',
     `notice_status` char(1) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '公告状态（0正常 1关闭）',
     `notice_content` text CHARACTER SET utf8 COLLATE utf8_bin NULL COMMENT '内容',
@@ -149,7 +149,7 @@ CREATE TABLE `app_category`  (
 DROP TABLE IF EXISTS `app_news`;
 CREATE TABLE `app_news`  (
     `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `title` varchar(50) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '标题',
+    `title` varchar(100) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '标题',
     `thumbnail` text CHARACTER SET utf8 COLLATE utf8_bin NULL COMMENT '缩略图',
     `content` text CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '内容',
     `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '创建者',
