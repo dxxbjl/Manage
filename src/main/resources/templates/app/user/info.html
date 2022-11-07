@@ -8,17 +8,14 @@
 <div class="layui-fluid">
   <div class="layui-row">
     <div class="layui-form layui-form-pane" lay-filter="user_form" id="user_form">
-      <input type="hidden" name="id" id="id">
+        <input type="hidden" name="id" id="id">
+        <div class="layui-form-item" style="text-align: center">
+          <img class="layui-upload-img" onclick="fun.preview(this)" id="upload-img" width="100px" height="100px" src="/static/img/def_profile.jpg">
+        </div>
         <div class="layui-form-item">
           <label class="layui-form-label">用户昵称</label>
           <div class="layui-input-inline">
             <input type="text" class="layui-input" name="nickName" disabled="disabled"/>
-          </div>
-        </div>
-        <div class="layui-form-item">
-          <label class="layui-form-label">用户头像</label>
-          <div class="layui-input-inline">
-            <img class="layui-upload-img" onclick="fun.preview(this)" id="upload-img" width="100px" height="100px" src="/static/img/def_profile.jpg">
           </div>
         </div>
         <div class="layui-form-item">
