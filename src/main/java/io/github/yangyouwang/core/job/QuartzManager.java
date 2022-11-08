@@ -123,5 +123,9 @@ public class QuartzManager {
         CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(task.getCron());
         trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
         scheduler.rescheduleJob(triggerKey, trigger);
+        //暂停任务
+        if(!ConfigConsts.ENABLED_YES.equals(task.getEnabled())){
+            scheduler.pauseJob(getJobKey(task.getJobName(), task.getJobGroup()));
+        }
     }
 }
