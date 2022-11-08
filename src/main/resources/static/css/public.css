@@ -45,9 +45,6 @@
     width: 7px;
     transform: rotate(-135deg);
 }
-.ck.ck-editor {
-    width: 650px !important;
-}
 .ck-editor__editable {
     min-height: 300px !important;
 }
