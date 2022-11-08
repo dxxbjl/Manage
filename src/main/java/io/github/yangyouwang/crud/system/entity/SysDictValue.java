@@ -1,11 +1,8 @@
 package io.github.yangyouwang.crud.system.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+import io.github.yangyouwang.common.domain.BaseEntity;
 import lombok.Data;
-
-import java.io.Serializable;
 
 
 /**
@@ -16,14 +13,9 @@ import java.io.Serializable;
  */
 @Data
 @TableName("sys_dict_value")
-public class SysDictValue implements Serializable {
+public class SysDictValue extends BaseEntity {
 
     private static final long serialVersionUID = -4529258645002738400L;
-    /**
-     * 主键id
-     */
-    @TableId(type = IdType.AUTO)
-    private Long id;
     /**
      * 字典类型id
      */
@@ -45,9 +37,4 @@ public class SysDictValue implements Serializable {
      * 启用
      */
     private String enabled;
-
-    /**
-     * 备注
-     *  */
-    private String remark;
 }

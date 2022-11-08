@@ -61,6 +61,7 @@ CREATE TABLE `sys_dict_value`  (
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '更新者',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `deleted` int(11) DEFAULT '0' COMMENT '逻辑删除 0 否、1 是',
   `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 32 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '数据字典值' ROW_FORMAT = Dynamic;
@@ -68,21 +69,20 @@ CREATE TABLE `sys_dict_value`  (
 -- ----------------------------
 -- Records of sys_dict_value
 -- ----------------------------
-INSERT INTO `sys_dict_value` VALUES (22, 17, '0', '男', 0, 'Y', '', NULL, 'admin', '2022-06-25 21:58:53', '');
-INSERT INTO `sys_dict_value` VALUES (23, 17, '1', '女', 1, 'Y', '', NULL, 'admin', '2022-06-25 21:59:02', NULL);
-INSERT INTO `sys_dict_value` VALUES (24, 18, 'M', '目录', 1, 'Y', '', NULL, 'admin', '2022-06-25 21:56:49', NULL);
-INSERT INTO `sys_dict_value` VALUES (25, 18, 'C', '菜单', 2, 'Y', '', NULL, 'admin', '2022-06-25 21:28:28', NULL);
-INSERT INTO `sys_dict_value` VALUES (26, 18, 'F', '按钮', 3, 'Y', '', NULL, 'admin', '2022-06-25 21:28:30', NULL);
-INSERT INTO `sys_dict_value` VALUES (27, 17, '2', '未知', 2, 'Y', '', NULL, 'admin', '2022-06-25 21:26:22', NULL);
-INSERT INTO `sys_dict_value` VALUES (30, 19, 'Y', '启用', 1, 'Y', '', NULL, 'admin', '2022-06-25 21:29:01', NULL);
-INSERT INTO `sys_dict_value` VALUES (31, 19, 'N', '禁用', 2, 'Y', '', NULL, 'admin', '2022-06-25 21:29:13', NULL);
-INSERT INTO `sys_dict_value` VALUES (32, 20, 'leaveProcess', '请假流程', 1, 'Y', '', NULL, 'admin', '2022-06-25 21:29:01', '');
-INSERT INTO `sys_dict_value` VALUES (33, 20, 'reimbursementProcess', '报销流程', 2, 'Y', '', NULL, 'admin', '2022-06-25 21:29:01', '');
-INSERT INTO `sys_dict_value` VALUES (34, 21, '1', '通知', 1, 'Y', '', NULL, 'admin', '2022-06-25 21:29:01', '');
-INSERT INTO `sys_dict_value` VALUES (35, 21, '2', '公告', 2, 'Y', '', NULL, 'admin', '2022-06-25 21:29:01', '');
-INSERT INTO `sys_dict_value` VALUES (36, 22, '0', '正常', 1, 'Y', '', NULL, '', NULL, '正常');
-INSERT INTO `sys_dict_value` VALUES (37, 22, '1', '失败', 2, 'Y', '', NULL, '', NULL, '失败');
-
+INSERT INTO `sys_dict_value` VALUES (22, 17, '0', '男', 0, 'Y', 'admin', '2022-06-25 21:58:53', 'admin', '2022-06-25 21:58:53', 0, '');
+INSERT INTO `sys_dict_value` VALUES (23, 17, '1', '女', 1, 'Y', 'admin', '2022-06-25 21:59:02', 'admin', '2022-06-25 21:59:02', 0, NULL);
+INSERT INTO `sys_dict_value` VALUES (24, 18, 'M', '目录', 1, 'Y', 'admin', '2022-06-25 21:56:49', 'admin', '2022-06-25 21:56:49', 0, NULL);
+INSERT INTO `sys_dict_value` VALUES (25, 18, 'C', '菜单', 2, 'Y', 'admin', '2022-06-25 21:28:28', 'admin', '2022-06-25 21:28:28', 0, NULL);
+INSERT INTO `sys_dict_value` VALUES (26, 18, 'F', '按钮', 3, 'Y', 'admin', '2022-06-25 21:28:30', 'admin', '2022-06-25 21:28:30', 0, NULL);
+INSERT INTO `sys_dict_value` VALUES (27, 17, '2', '未知', 2, 'Y', 'admin', '2022-06-25 21:26:22', 'admin', '2022-06-25 21:26:22', 0, NULL);
+INSERT INTO `sys_dict_value` VALUES (30, 19, 'Y', '启用', 1, 'Y', 'admin', '2022-06-25 21:29:01', 'admin', '2022-06-25 21:29:01', 0, NULL);
+INSERT INTO `sys_dict_value` VALUES (31, 19, 'N', '禁用', 2, 'Y', 'admin', '2022-06-25 21:29:13', 'admin', '2022-06-25 21:29:13', 0, NULL);
+INSERT INTO `sys_dict_value` VALUES (32, 20, 'leaveProcess', '请假流程', 1, 'Y', 'admin', '2022-06-25 21:29:01', 'admin', '2022-06-25 21:29:01', 0, '');
+INSERT INTO `sys_dict_value` VALUES (33, 20, 'reimbursementProcess', '报销流程', 2, 'Y', 'admin', '2022-06-25 21:29:01', 'admin', '2022-06-25 21:29:01', 0, '');
+INSERT INTO `sys_dict_value` VALUES (34, 21, '1', '通知', 1, 'Y', 'admin', '2022-06-25 21:29:01', 'admin', '2022-06-25 21:29:01', 0, '');
+INSERT INTO `sys_dict_value` VALUES (35, 21, '2', '公告', 2, 'Y', 'admin', '2022-06-25 21:29:01', 'admin', '2022-06-25 21:29:01', 0, '');
+INSERT INTO `sys_dict_value` VALUES (36, 22, '0', '正常', 1, 'Y', 'admin', '2022-06-25 21:29:01', 'admin', '2022-06-25 21:29:01', 0, '正常');
+INSERT INTO `sys_dict_value` VALUES (37, 22, '1', '失败', 2, 'Y', 'admin', '2022-06-25 21:29:01', 'admin', '2022-06-25 21:29:01', 0, '失败');
 -- ----------------------------
 -- Table structure for sys_log
 -- ----------------------------
