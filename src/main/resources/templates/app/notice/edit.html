@@ -64,11 +64,11 @@
             crud = layui.crud,
             notice = [[${notice}]];
     // 编辑器
-    initEditor('noticeContent',notice.noticeContent);
+    fun.initEditor('noticeContent',notice.noticeContent);
     form.val('noticeForm',notice);
     // 编辑
     form.on('submit(save-submit)', function(data) {
-      data.field.noticeContent = getEditorData();
+      data.field.noticeContent = fun.getEditorData();
       $.ajax({
         type: 'POST',
         url:  ctx + '/app/notice/modify',

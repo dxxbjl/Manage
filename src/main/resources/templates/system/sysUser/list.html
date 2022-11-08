@@ -83,7 +83,7 @@
         url:  ctx + '/system/sysDept/treeSelect',
         success: function(data) {
           let zTree = $.fn.zTree.init($("#deptTree"), fun.setting(function (event,treeId,treeNode) {
-            let deptIds = getzTreeChildrenNodeIds(treeNode);
+            let deptIds = fun.getzTreeChildrenNodeIds(treeNode);
             //执行重载
             table.reload('userTable', {
               where: {

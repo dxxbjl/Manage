@@ -62,9 +62,9 @@
             form = layui.form,
             crud = layui.crud;
     // 编辑器
-    initEditor('noticeContent');
+    fun.initEditor('noticeContent');
     form.on('submit(save-submit)', function(data) {
-      data.field.noticeContent = getEditorData();
+      data.field.noticeContent = fun.getEditorData();
       $.ajax({
         type: 'POST',
         url:  ctx + '/app/notice/add',
