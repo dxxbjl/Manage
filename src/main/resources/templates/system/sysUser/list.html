@@ -175,7 +175,14 @@
          *  导出excel
          * */
         exportExcel: function() {
+          // 打开loading
+          let loading = layer.load(0, {
+            shade: false,
+            time: 2 * 1000
+          });
           $(location).attr('href',  ctx + '/sysUser/exportExcel');
+          // 关闭loading
+          layer.close(loading);
         },
         /**
          * 添加
@@ -187,7 +194,7 @@
             ,title: "添加用户"
             ,content: ctx + '/sysUser/addPage'
             ,maxmin: true
-            ,area: ['80%', '80%']
+            ,area: ['100%', '100%']
             ,btn: ['确定', '取消']
             ,yes: function(index, layero){
               let submit = layero.find('iframe').contents().find('#save-submit');
@@ -206,7 +213,7 @@
             ,title: '修改用户'
             ,content: ctx + '/sysUser/editPage/' + id
             ,maxmin: true
-            ,area: ['80%', '80%']
+            ,area: ['100%', '100%']
             ,btn: ['确定', '取消']
             ,yes: function(index, layero){
               let submit = layero.find('iframe').contents().find('#save-submit');
