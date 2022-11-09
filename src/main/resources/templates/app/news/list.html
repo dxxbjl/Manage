@@ -30,6 +30,11 @@
                     <a sec:authorize="hasAuthority('news:add')" class="layui-btn layui-btn-xs" lay-event="add"><i class="layui-icon layui-icon-add-1"></i>添加</a>
                 </div>
             </script>
+            <script type="text/html" id="contentTpl">
+                <div class="layui-btn-container">
+                    <a class="layui-btn layui-btn-xs" lay-event="info"><i class="layui-icon layui-icon-about"></i>查看</a>
+                </div>
+            </script>
             <script type="text/html" id="tableBar">
                 <a sec:authorize="hasAuthority('news:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
                 <a sec:authorize="hasAuthority('news:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="remove"><i class="layui-icon layui-icon-delete"></i>删除</a>
@@ -76,7 +81,7 @@
                 {field: 'id', title: 'ID', hide:true},
                 {field: 'title', title: '标题'},
                 {field: 'thumbnail', title: "缩略图", templet: function (d) { return crud.showImg(d.thumbnail); }},
-                {field: 'remark', title: '备注'},
+                {templet: '#contentTpl', title: '内容'},
                 {toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
             ]]
         });
@@ -98,6 +103,8 @@
                 active.editView(data.id);
             } else if(layEvent === 'remove') {
                 active.remove(data.id);
+            } else if (layEvent === 'info') {
+                active.showInfo(data);
             }
         });
         /* 触发弹层 */
@@ -159,6 +166,23 @@
                             }
                         }
                     });
+                });
+            },
+            /**
+             * 查看详情
+             */
+            showInfo(data) {
+                layer.open({
+                    type: 1
+                    ,shade: 0.3
+                    ,title: data.title
+                    ,content: data.content
+                    ,maxmin: true
+                    ,area: ['100%', '100%']
+                    ,btn: ['关闭']
+                    ,yes: function(index, layero) {
+                        layer.close(index);
+                    }
                 });
             }
         }
