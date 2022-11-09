@@ -15,6 +15,7 @@ import io.github.yangyouwang.core.properties.CodeGeneratorProperties;
 import io.github.yangyouwang.crud.system.model.CodeConfigVO;
 import io.github.yangyouwang.crud.system.model.CodeGeneratorDTO;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,9 +24,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Description: 代码生成接口控制层 <br/>
@@ -83,7 +82,46 @@ public class SysCodeGeneratorController extends CrudController {
         }
         return tableNames;
     }
-
+    /**
+     * 查询字段列表
+     * @return 字段列表
+     */
+    @GetMapping("/fieldList")
+    @ResponseBody
+    public List fieldList(String table) {
+        List result = new ArrayList();
+        try {
+            Class.forName(codeGeneratorProperties.getDriverName());
+            Connection conn = DriverManager.getConnection(codeGeneratorProperties.getUrl(), codeGeneratorProperties.getUsername(), codeGeneratorProperties.getPassword());
+            // 获取数据库元数据
+            DatabaseMetaData databaseMetaData = conn.getMetaData();
+            ResultSet resultSet = databaseMetaData.getTables(null, "%", table, new String[] { "TABLE" });
+            while (resultSet.next()) {
+                String tableName = resultSet.getString("TABLE_NAME");
+                if(tableName.equals(table)){
+                    ResultSet rs = conn.getMetaData().getColumns(null, conn.getMetaData().getUserName(),tableName.toUpperCase(), "%");
+                    while(rs.next()){
+                        Map map = new HashMap();
+                        String columnName = rs.getString("COLUMN_NAME");
+                        map.put("columnName", columnName);
+                        String remarks = rs.getString("REMARKS");
+                        if(Strings.isBlank(remarks)){
+                            remarks = columnName;
+                        }
+                        map.put("remarks",remarks);
+                        String typeName = rs.getString("TYPE_NAME");
+                        map.put("typeName",typeName);
+                        String columnSize = rs.getString("COLUMN_SIZE");
+                        map.put("columnSize",columnSize);
+                        result.add(map);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("数据库链接错误");
+        }
+        return result;
+    }
     /**
      * 代码生成接口
      * @param codeGeneratorDTO 代码生成DTO
