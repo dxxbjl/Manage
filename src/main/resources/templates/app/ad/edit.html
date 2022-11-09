@@ -71,13 +71,13 @@
             upload = layui.upload,
             ad = [[${ad}]];
     // 编辑器
-    fun.initEditor('adContent',ad.adContent);
+    crud.initEditor('adContent',ad.adContent);
     // 回显图片
     $('#upload-img').attr('src', ad.adUrl);
     form.val('ad_form',ad);
     // 编辑
     form.on('submit(save-submit)', function(data) {
-      data.field.adContent = fun.getEditorData();
+      data.field.adContent = crud.getEditorData();
       $.ajax({
         type: 'POST',
         url:  ctx + '/app/ad/modify',

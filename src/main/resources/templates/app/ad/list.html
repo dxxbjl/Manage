@@ -33,6 +33,11 @@
             <script type="text/html" id="enabledTpl">
                 <input type="checkbox" lay-filter="enabled" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" {{d.enabled==='Y'?'checked':''}} />
             </script>
+            <script type="text/html" id="contentTpl">
+                <div class="layui-btn-container">
+                    <a class="layui-btn layui-btn-xs" lay-event="info"><i class="layui-icon layui-icon-about"></i>查看</a>
+                </div>
+            </script>
             <script type="text/html" id="tableBar">
                 <a sec:authorize="hasAuthority('ad:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
                 <a sec:authorize="hasAuthority('ad:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
@@ -86,6 +91,7 @@
                 {field: 'adTitle', title: '标题'},
                 {field: 'adUrl', title: "宣传图片", templet: function (d) { return crud.showImg(d.adUrl); }},
                 {field: 'enabled', align: "center", sort: true, templet: '#enabledTpl', title: '状态'},
+                {templet: '#contentTpl', title: '内容'},
                 {toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
             ]]
         });
@@ -107,6 +113,8 @@
                 active.editView(data.id);
             } else if(layEvent === 'del') {
                 active.del(data.id);
+            } else if (layEvent === 'info') {
+                active.showInfo(data);
             }
         });
         /* 触发弹层 */
@@ -190,6 +198,23 @@
                         if (result.code === 200) {
                             table.reload('adTable');
                         }
+                    }
+                });
+            },
+            /**
+             * 查看详情
+             */
+            showInfo(data) {
+                layer.open({
+                    type: 1
+                    ,shade: 0.3
+                    ,title: data.adTitle
+                    ,content: data.adContent
+                    ,maxmin: true
+                    ,area: ['100%', '100%']
+                    ,btn: ['关闭']
+                    ,yes: function(index, layero) {
+                        layer.close(index);
                     }
                 });
             }

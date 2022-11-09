@@ -68,13 +68,13 @@
             upload = layui.upload,
             treeSelect = layui.treeSelect;
     // 编辑器
-    fun.initEditor('content',news.content);
+    crud.initEditor('content',news.content);
     // 图片
     $('#upload-img').attr('src', news.thumbnail);
     form.val('newsForm',news);
     // 编辑
     form.on('submit(save-submit)', function(data) {
-      data.field.content = fun.getEditorData();
+      data.field.content = crud.getEditorData();
       $.ajax({
         type: 'POST',
         url:  ctx + '/app/news/modify',

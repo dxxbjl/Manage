@@ -69,9 +69,9 @@
             crud = layui.crud,
             upload = layui.upload;
     // 编辑器
-    fun.initEditor('adContent');
+    crud.initEditor('adContent');
     form.on('submit(save-submit)', function(data) {
-        data.field.adContent = fun.getEditorData();
+        data.field.adContent = crud.getEditorData();
         $.ajax({
         type: 'POST',
         url:  ctx + '/app/ad/add',

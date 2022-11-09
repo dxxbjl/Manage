@@ -33,6 +33,11 @@
             <script type="text/html" id="noticeStatusTpl">
                 <input type="checkbox" lay-filter="noticeStatus" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" {{d.noticeStatus==='Y'?'checked':''}} />
             </script>
+            <script type="text/html" id="contentTpl">
+                <div class="layui-btn-container">
+                    <a class="layui-btn layui-btn-xs" lay-event="info"><i class="layui-icon layui-icon-about"></i>查看</a>
+                </div>
+            </script>
             <script type="text/html" id="tableBar">
                 <a sec:authorize="hasAuthority('notice:edit')" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
                 <a sec:authorize="hasAuthority('notice:del')" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="remove"><i class="layui-icon layui-icon-delete"></i>删除</a>
@@ -86,6 +91,7 @@
                 {field: 'noticeTitle', title: '标题'},
                 {field: 'noticeType', title: '公告类型',templet: function (d) { return crud.getDictValue('noticeType',d.noticeType);}},
                 {field: 'noticeStatus', align: "center", templet: '#noticeStatusTpl', title: '公告状态'},
+                {templet: '#contentTpl', title: '内容'},
                 {toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
             ]]
         });
@@ -107,6 +113,8 @@
                 active.editView(data.id);
             } else if(layEvent === 'remove') {
                 active.remove(data.id);
+            } else if (layEvent === 'info') {
+                active.showInfo(data);
             }
         });
         /* 触发弹层 */
@@ -191,6 +199,23 @@
                             }
                         }
                     });
+                });
+            },
+            /**
+             * 查看详情
+             */
+            showInfo(data) {
+                layer.open({
+                    type: 1
+                    ,shade: 0.3
+                    ,title: data.noticeTitle
+                    ,content: data.noticeContent
+                    ,maxmin: true
+                    ,area: ['100%', '100%']
+                    ,btn: ['关闭']
+                    ,yes: function(index, layero) {
+                        layer.close(index);
+                    }
                 });
             }
         }

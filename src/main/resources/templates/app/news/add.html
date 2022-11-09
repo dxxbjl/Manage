@@ -66,9 +66,9 @@
             upload = layui.upload,
             treeSelect = layui.treeSelect;
     // 编辑器
-    fun.initEditor('content');
+    crud.initEditor('content');
     form.on('submit(save-submit)', function(data) {
-      data.field.content = fun.getEditorData();
+      data.field.content = crud.getEditorData();
       $.ajax({
         type: 'POST',
         url:  ctx + '/app/news/add',

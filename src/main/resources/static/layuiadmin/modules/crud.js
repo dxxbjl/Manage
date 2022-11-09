@@ -9,7 +9,106 @@ layui.define(['jquery','cookie'], function(exports){
         }
         return list;
     }
+    // 富文本上传文件适配器
+    class UploadAdapter {
+        constructor(loader) {
+            this.loader = loader;
+        }
+        upload() {
+            return new Promise((resolve, reject) => {
+                let file = [];
+                this.loader.file.then(res=>{
+                    const data = new FormData();
+                    file = res;
+                    //文件流
+                    data.append('file', file);
+                    $.ajax({
+                        url: ctx + '/common/uploadMinIo',
+                        type: 'POST',
+                        data: data,
+                        dataType: 'json',
+                        processData: false,
+                        contentType: false,
+                        success: function (res) {
+                            if (res.code === 200) {
+                                resolve({
+                                    default: res.data.url
+                                });
+                            } else {
+                                reject(res.message);
+                            }
+                        }
+                    });
+                })
+            });
+        }
+        abort() {
+        }
+    }
     let crud = {
+        /**
+         * 初始化富文本编辑器
+         * @param obj dom对象
+         * @param data 回显数据
+         */
+        initEditor: function(obj,data = {}) {
+            ClassicEditor.create(document.querySelector("#" + obj), {
+                toolbar: {
+                    items: [
+                        'heading',
+                        '|',
+                        'bold',
+                        'italic',
+                        'link',
+                        'bulletedList',
+                        'numberedList',
+                        '|',
+                        'indent',
+                        'outdent',
+                        '|',
+                        'imageUpload',
+                        'blockQuote',
+                        'insertTable',
+                        'mediaEmbed',
+                        'undo',
+                        'redo'
+                    ]
+                },
+                language: 'zh-cn',
+                image: {
+                    toolbar: [
+                        'imageTextAlternative',
+                        'imageStyle:full',
+                        'imageStyle:side'
+                    ]
+                },
+                table: {
+                    contentToolbar: [
+                        'tableColumn',
+                        'tableRow',
+                        'mergeTableCells'
+                    ]
+                },
+                licenseKey: '',
+            }).then(editor => {
+                // 加载了适配器
+                editor.plugins.get('FileRepository').createUploadAdapter = (loader)=>{
+                    return new UploadAdapter(loader);
+                };
+                window.editor = editor;
+                if (data) {
+                    window.editor.setData(data);
+                }
+            }).catch(err => {
+                console.error(err.stack);
+            });
+        },
+        /**
+         * 获取富文本编辑器数据
+         */
+        getEditorData: function() {
+            return window.editor.getData();
+        },
         /**
          * 显示图片
          */
