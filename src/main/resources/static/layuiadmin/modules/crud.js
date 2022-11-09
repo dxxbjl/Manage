@@ -1,6 +1,7 @@
-layui.define(['jquery','cookie'], function(exports){
+layui.define(['jquery','cookie','upload'], function(exports){
     let $ = layui.jquery,
-        cookie = layui.cookie;
+        cookie = layui.cookie,
+        upload = layui.upload;
     let options = function(name) {
         let list = [];
         if (name && $.cookie(name)) {
@@ -46,6 +47,35 @@ layui.define(['jquery','cookie'], function(exports){
         }
     }
     let crud = {
+        /**
+         * 普通图片上传
+         */
+        uploadImg: function(obj) {
+            let uploadInst = upload.render({
+                elem: '#upload-btn'
+                ,url: ctx + '/common/uploadMinIo'
+                ,before: function(obj){
+                    //预读本地文件示例，不支持ie8
+                    obj.preview(function(index, file, result){
+                        $('#upload-img').attr('src', result); //图片链接（base64）
+                    });
+                }
+                ,done: function(res){
+                    layer.msg(res.message);
+                    if (res.code === 200) {
+                        $("#" + obj).val(res.data.url);
+                    }
+                }
+                ,error: function(){
+                    //演示失败状态，并实现重传
+                    let uploadText = $('#upload-text');
+                    uploadText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                    uploadText.find('.demo-reload').on('click', function(){
+                        uploadInst.upload();
+                    });
+                }
+            });
+        },
         /**
          * 初始化富文本编辑器
          * @param obj dom对象

@@ -9,15 +9,22 @@
   <div class="layui-row">
     <div class="layui-form layui-form-pane" lay-filter="sys-user-form" id="sys-user-form">
       <input type="hidden" name="id" id="id">
-      <div class="layui-form-item" style="text-align: center">
-        <input type="hidden" id="avatar" name="avatar">
-        <div class="layui-upload">
-          <div class="layui-upload-list">
-            <img class="layui-upload-img" onclick="fun.preview(this)" id="upload-img" style="width: 100px;height: 100px;">
-            <p id="upload-text"></p>
+      <div class="layui-form-item">
+        <label class="layui-form-label">头像</label>
+        <div class="layui-input-inline">
+          <div class="layui-upload">
+            <input type="hidden" id="avatar" name="avatar">
+            <div class="layui-upload-list">
+              <img class="layui-upload-img" onclick="fun.preview(this)" id="upload-img">
+              <p id="upload-text"></p>
+            </div>
+            <button type="button" class="layui-btn layui-btn-radius layui-btn-primary" id="upload-btn">上传</button>
           </div>
-          <button type="button" class="layui-btn" id="upload-btn">上传</button>
         </div>
+      </div>
+      <div class="layui-form-item" lay-filter="sex">
+        <label class="layui-form-label">选择性别</label>
+        <div class="layui-input-block" id="sex"></div>
       </div>
       <div class="layui-form-item">
         <div class="layui-inline">
@@ -32,10 +39,6 @@
             <input type="text" name="userName" lay-verify="required" placeholder="请输入用户名" class="layui-input" disabled="disabled">
           </div>
         </div>
-      </div>
-      <div class="layui-form-item" lay-filter="sex">
-        <label class="layui-form-label">选择性别</label>
-        <div class="layui-input-block" id="sex"></div>
       </div>
       <div class="layui-form-item">
         <div class="layui-inline">
@@ -232,32 +235,8 @@
             })
           }
         });
-
         //普通图片上传
-        let uploadInst = upload.render({
-            elem: '#upload-btn'
-            ,url: ctx + '/common/uploadMinIo'
-            ,before: function(obj){
-                //预读本地文件示例，不支持ie8
-                obj.preview(function(index, file, result){
-                    $('#upload-img').attr('src', result); //图片链接（base64）
-                });
-            }
-            ,done: function(res){
-                if (res.code === 200) {
-                    $("#avatar").val(res.data.url);
-                    return layer.msg('上传成功');
-                }
-            }
-            ,error: function() {
-                //演示失败状态，并实现重传
-                let uploadText = $('#upload-text');
-                uploadText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
-                uploadText.find('.demo-reload').on('click', function(){
-                    uploadInst.upload();
-                });
-            }
-        });
+        crud.uploadImg("avatar");
         treeSelect.render({
           // 选择器
           elem: '#deptName',

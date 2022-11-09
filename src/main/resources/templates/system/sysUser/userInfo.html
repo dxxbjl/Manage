@@ -36,11 +36,12 @@
               <div class="layui-form-item">
                 <label class="layui-form-label">头像</label>
                 <div class="layui-input-inline layui-upload">
-                  <button type="button" class="layui-btn" id="upload-btn">上传</button>
+                  <input type="hidden" id="avatar" name="avatar">
                   <div class="layui-upload-list">
                     <img class="layui-upload-img" onclick="fun.preview(this)" id="upload-img" width="100px" height="100px" src="/static/img/def_profile.jpg">
                     <p id="upload-text"></p>
                   </div>
+                  <button type="button" class="layui-btn layui-btn-radius layui-btn-primary" id="upload-btn">上传</button>
                 </div>
               </div>
               <div class="layui-form-item">
@@ -79,9 +80,10 @@
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
     index: 'lib/index' //主入口模块
-  }).use(['index', 'set', 'upload','form'],function () {
+  }).use(['index', 'set', 'upload','form','crud'],function () {
       let $ = layui.$,
               upload = layui.upload,
+              crud = layui.crud,
               form = layui.form;
       let sysUser = [[${sysUser}]];
       $('#upload-img').attr('src', sysUser.avatar); //图片链接（base64）
@@ -99,30 +101,7 @@
           });
       });
       //普通图片上传
-      let uploadInst = upload.render({
-          elem: '#upload-btn'
-          ,url: ctx + '/common/uploadMinIo'
-          ,before: function(obj){
-              //预读本地文件示例，不支持ie8
-              obj.preview(function(index, file, result){
-                  $('#upload-img').attr('src', result); //图片链接（base64）
-              });
-          }
-          ,done: function(res){
-              if (res.code === 200) {
-                  $("#avatar").val(res.data.url);
-                  return layer.msg('上传成功');
-              }
-          }
-          ,error: function(){
-              //演示失败状态，并实现重传
-              let uploadText = $('#upload-text');
-              uploadText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
-              uploadText.find('.demo-reload').on('click', function(){
-                  uploadInst.upload();
-              });
-          }
-      });
+      crud.uploadImg("avatar");
   });
 </script>
 </body>
