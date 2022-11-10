@@ -136,6 +136,7 @@
                   ,title: "添加模型"
                   ,content: ctx + '/actReModel/addPage'
                   ,maxmin: true
+                  ,scrollbar: false
                   ,area: ['100%', '100%']
                   ,btn: ['确定', '取消']
                   ,yes: function(index, layero){
@@ -155,6 +156,7 @@
                   ,title: '修改模型'
                   ,content: ctx + '/actReModel/editPage/' + id
                   ,maxmin: true
+                  ,scrollbar: false
                   ,area: ['100%', '100%']
                   ,btn: ['确定', '取消']
                   ,yes: function(index, layero){
@@ -195,9 +197,10 @@
             ,shade: 0.3
             ,title: "设计模型"
             ,content: ctx + '/actReModel/design/' + id
-            ,area: ['100%', '100%'],
-            maxmin: true,
-            success: function(layero,index){
+            ,area: ['100%', '100%']
+            ,maxmin: true
+            ,scrollbar: false
+            ,success: function(layero,index){
               layer.full(index);
             }
           });
