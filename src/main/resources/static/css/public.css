@@ -51,7 +51,7 @@
 .ck-editor__editable {
     min-height: 300px !important;
 }
-.layui-upload, .layui-btn {
+.layui-upload, #upload-btn {
     margin-left: 20px;
 }
 .layui-upload-img {
