@@ -1,5 +1,5 @@
-html{
-    overflow:hidden;
+.layui-layer-page .layui-layer-content{
+    overflow:visible;
 }
 .layui-row {
     display:flex;
