@@ -111,6 +111,14 @@ public class SysDeptController extends CrudController {
    }
 
   /**
+   * 跳转到部门向导页
+   * @return 部门向导页
+   */
+  @GetMapping("/treePage")
+  public String treePage(){
+    return SUFFIX + "/tree";
+  }
+  /**
    * 查询部门树结构
    * @return 部门树结构
    */

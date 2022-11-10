@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>选择部门</title>
+    <div th:replace="common/link::header"></div>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row">
+        <div id="deptTree" class="ztree"></div>
+    </div>
+</div>
+<div th:replace="common/script::footer"></div>
+<script th:inline="javascript">
+    let result = {
+        deptId: '',
+        deptName: ''
+    };
+    layui.config({
+        base: '/static/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index', //主入口模块
+    }).use(['index', 'form','crud'], function(){
+        let $ = layui.$,
+            form = layui.form,
+            crud = layui.crud;
+        $.ajax({
+            type: "get",
+            url:  ctx + '/system/sysDept/treeSelect',
+            success: function(data) {
+                let zTree = $.fn.zTree.init($("#deptTree"), fun.setting(function (event,treeId,treeNode) {
+                    result = {
+                        deptId: treeNode.id,
+                        deptName: treeNode.name
+                    }
+                }), data);
+                zTree.expandAll(true);
+            }
+        });
+    });
+    function getData() {
+        return result;
+    }
+</script>
+</body>
+</html>

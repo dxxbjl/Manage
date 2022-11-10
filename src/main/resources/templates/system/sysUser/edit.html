@@ -58,8 +58,15 @@
         <div class="layui-inline">
           <label class="layui-form-label">部门</label>
           <div class="layui-input-inline">
-            <input id="deptId" name="deptId" type="hidden">
-            <div id="deptName" lay-filter="deptName" class="xm-select-demo"></div>
+            <div class="layui-row">
+              <div class="layui-col-md9">
+                <input name="deptId" type="hidden">
+                <input name="deptName" type="text" class="layui-input" placeholder="请选择部门" lay-verify="required" disabled>
+              </div>
+              <div class="layui-col-md3">
+                <button type="button" class="layui-btn layui-btn-primary deptWizard">选择</button>
+              </div>
+            </div>
           </div>
         </div>
         <div class="layui-inline">
@@ -237,29 +244,23 @@
         });
         //普通图片上传
         crud.uploadImg("avatar");
-        treeSelect.render({
-          // 选择器
-          elem: '#deptName',
-          // 数据
-          data: ctx + '/system/sysDept/treeSelect',
-          // 异步加载方式：get/post，默认get
-          type: 'get',
-          // 占位符
-          placeholder: '请选择',
-          // 是否开启搜索功能：true/false，默认false
-          search: true,
-          // 点击回调
-          click: function(d){
-            $("#deptId").val(d.current.id);
-            $("#deptName").val(d.current.name);
-          },
-          // 加载完成后的回调函数
-          success: function (d) {
-            if (sysUser.deptId && d.data.length > 0) {
-              treeSelect.checkNode('deptName', sysUser.deptId);
-              treeSelect.refresh('deptName');
+        // 部门向导
+        $('.deptWizard').on('click', function () {
+          layer.open({
+            type: 2
+            ,shade: 0.3
+            ,title: "选择部门"
+            ,content: ctx + '/system/sysDept/treePage'
+            ,maxmin: true
+            ,scrollbar: false
+            ,area: ['30%', '80%']
+            ,btn: ['确定', '取消']
+            ,yes: function(index, layero){
+              let result = window["layui-layer-iframe" + index].getData();
+              form.val('sys-user-form', JSON.parse(JSON.stringify(result)));
+              layer.close(index);
             }
-          }
+          });
         });
         crud.setRadio("enabled","enabled",sysUser.enabled);
         crud.setRadio("sex","sex",sysUser.sex);
