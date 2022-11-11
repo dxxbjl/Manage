@@ -126,7 +126,7 @@
           } else if(layEvent === 'remove'){
               active.remove(data.id);
           } else if(layEvent === 'add'){
-            active.addView(data.id);
+            active.addView(data);
           }
       });
 
@@ -147,10 +147,10 @@
           /**
            * 添加
            * */
-          addView: function(id) {
+          addView: function(data) {
               let url = ctx + '/sysMenu/addPage';
-              if (id) {
-                url = url + '?id=' + id;
+              if (data) {
+                url = url + '?id=' + data.id + "&menuName=" + data.menuName;
               }
               layer.open({
                   type: 2,

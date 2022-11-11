@@ -98,8 +98,11 @@
     let $ = layui.$,
             treeSelect= layui.treeSelect,
             form = layui.form,
-            crud = layui.crud,
-            parentId = [[${parentId}]];
+            crud = layui.crud;
+    form.val('sysDeptForm', {
+        parentId: [[${parentId}]],
+        parentName: [[${parentName}]]
+    });
     form.on('submit(save-submit)', function(data) {
       $.ajax({
         type: 'POST',

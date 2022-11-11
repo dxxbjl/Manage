@@ -8,7 +8,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
@@ -63,9 +62,10 @@ public class CategoryController extends CrudController {
   }
 
   @GetMapping("/addPage")
-  public String addPage(String id, ModelMap map) {
-    if (Strings.isNotBlank(id)) {
-      map.put("parentId",id);
+  public String addPage(Category category, ModelMap map) {
+    if (Objects.nonNull(category)) {
+      map.put("parentId",category.getId());
+      map.put("parentName",category.getName());
     }
     return SUFFIX + "/add";
   }

@@ -86,8 +86,11 @@
             form = layui.form,
             crud = layui.crud,
         upload = layui.upload,
-        treeSelect= layui.treeSelect,
-        parentId = [[${parentId}]];
+        treeSelect= layui.treeSelect;
+    form.val('categoryForm', {
+        parentId: [[${parentId}]],
+        parentName: [[${parentName}]]
+    });
     form.on('submit(save-submit)', function(data) {
       $.ajax({
         type: 'POST',

@@ -131,7 +131,7 @@
             } else if(layEvent === 'del') {
                 active.del(data.id);
             } else if(layEvent === 'add') {
-                active.addView(data.id);
+                active.addView(data);
             }
         });
         // 修改部门状态
@@ -157,10 +157,10 @@
             /**
              * 添加
              * */
-            addView: function(id) {
+            addView: function(data) {
                 let url = ctx + '/system/sysDept/addPage';
-                if (id) {
-                    url = url + '?id=' + id;
+                if (data) {
+                    url = url + '?id=' + data.id + "&deptName=" + data.deptName;
                 }
                 layer.open({
                     type: 2

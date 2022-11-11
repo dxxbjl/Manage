@@ -11,7 +11,6 @@ import io.github.yangyouwang.crud.system.service.SysMenuService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -54,9 +53,10 @@ public class SysMenuController extends CrudController {
      * @return 添加页面
      */
     @GetMapping("/addPage")
-    public String addPage(String id, ModelMap map) {
-        if (Strings.isNotBlank(id)) {
-            map.put("parentId",id);
+    public String addPage(SysMenu sysMenu,ModelMap map) {
+        if (Objects.nonNull(sysMenu)) {
+            map.put("parentId",sysMenu.getId());
+            map.put("parentName",sysMenu.getMenuName());
         }
         return SUFFIX + "/add";
     }

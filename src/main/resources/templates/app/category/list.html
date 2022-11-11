@@ -113,7 +113,7 @@
             } else if (layEvent === 'remove') {
                 active.remove(data.id);
             } else if(layEvent === 'add') {
-                active.addView(data.id);
+                active.addView(data);
             }
         });
         /* 触发弹层 */
@@ -133,10 +133,10 @@
             /**
              * 添加
              * */
-            addView: function(id) {
+            addView: function(data) {
                 let url = ctx + '/app/category/addPage';
-                if (id) {
-                    url = url + '?id=' + id;
+                if (data) {
+                    url = url + '?id=' + data.id + "&name=" + data.name;
                 }
                 layer.open({
                     type: 2
