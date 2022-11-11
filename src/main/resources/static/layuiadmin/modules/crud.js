@@ -1,7 +1,10 @@
-layui.define(['jquery','cookie','upload'], function(exports){
+layui.extend({
+    xmSelect: 'xm-select'
+}).define(['jquery','cookie','upload','xmSelect'], function(exports){
     let $ = layui.jquery,
         cookie = layui.cookie,
-        upload = layui.upload;
+        upload = layui.upload,
+        xmSelect = layui.xmSelect;
     let options = function(name) {
         let list = [];
         if (name && $.cookie(name)) {
@@ -47,6 +50,61 @@ layui.define(['jquery','cookie','upload'], function(exports){
         }
     }
     let crud = {
+        /**
+         * 多选下拉框
+         * @param url 地址
+         * @param obj dom节点
+         * @param obj obj对象
+         */
+        initXmSelect(url,dom,obj) {
+            let select = xmSelect.render({
+                el: "#" + dom,
+                tips: "请选择",
+                name: dom,
+                filterable: true,
+                tree: {
+                    //是否显示树状结构
+                    show: true,
+                    //是否展示三角图标
+                    showFolderIcon: true,
+                    //是否显示虚线
+                    showLine: true,
+                    //间距
+                    indent: 20,
+                    //默认展开节点的数组, 为 true 时, 展开所有节点
+                    expandedKeys: [ -3 ],
+                    //是否严格遵守父子模式
+                    strict: false,
+                    //是否开启极简模式
+                    simple: false,
+                    //点击节点是否展开
+                    clickExpand: true,
+                    //点击节点是否选中
+                    clickCheck: true
+                },
+                toolbar: {
+                    show: false
+                },
+                height: 'auto',
+                data: [],
+                //分页
+                paging: true,
+                //每页条数
+                pageSize: 10,
+            });
+            if (obj) {
+                url = url + '?ids=' + obj[dom];
+            }
+            $.ajax({
+                type: 'get',
+                url: ctx + url,
+                success: function(res) {
+                    select.update({
+                        data: res
+                    })
+                }
+            });
+        },
         /**
          * 树结构向导
          * @param url 请求tree接口
