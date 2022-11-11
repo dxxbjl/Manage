@@ -148,15 +148,11 @@
            * 添加
            * */
           addView: function(data) {
-              let url = ctx + '/sysMenu/addPage';
-              if (data) {
-                url = url + '?id=' + data.id + "&menuName=" + data.menuName;
-              }
               layer.open({
-                  type: 2,
-                  shade: 0.3,
-                  title: "添加菜单",
-                  content: url
+                   type: 2
+                  ,shade: 0.3
+                  ,title: "添加菜单"
+                  ,content: fun.appendUrlParams(ctx + "/sysMenu/addPage", data, ["id","menuName"])
                   ,maxmin: true
                   ,scrollbar: false
                   ,area: ['100%', '100%']

@@ -134,15 +134,11 @@
              * 添加
              * */
             addView: function(data) {
-                let url = ctx + '/app/category/addPage';
-                if (data) {
-                    url = url + '?id=' + data.id + "&name=" + data.name;
-                }
                 layer.open({
                     type: 2
                     ,shade: 0.3
                     ,title: "添加分类表"
-                    ,content: url
+                    ,content: fun.appendUrlParams(ctx + "/app/category/addPage", data, ["id","name"])
                     ,maxmin: true
                     ,scrollbar: false
                     ,area: ['100%', '100%']

@@ -158,15 +158,11 @@
              * 添加
              * */
             addView: function(data) {
-                let url = ctx + '/system/sysDept/addPage';
-                if (data) {
-                    url = url + '?id=' + data.id + "&deptName=" + data.deptName;
-                }
                 layer.open({
                     type: 2
                     ,shade: 0.3
                     ,title: "添加部门表"
-                    ,content: url
+                    ,content: fun.appendUrlParams(ctx + "/system/sysDept/addPage", data, ["id","deptName"])
                     ,maxmin: true
                     ,scrollbar: false
                     ,area: ['100%', '100%']

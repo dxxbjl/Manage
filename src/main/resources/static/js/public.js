@@ -1,5 +1,20 @@
 let fun = {
     /**
+     * URL地址追加参数
+     * @param url url地址
+     * @param json json对象
+     * @param field 字段
+     * @returns {string}
+     */
+    appendUrlParams(url,json,field) {
+        if (json && field) {
+            url = url + "?" + Object.keys(json)
+                .filter(key => field.indexOf(key) > -1)
+                .map(key => key + '=' + json[key]).join('&');
+        }
+        return url;
+    },
+    /**
      * 获取树结构ID组
      * @param treeNode 树结构
      * @returns ids数组
