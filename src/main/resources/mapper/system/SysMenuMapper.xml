@@ -5,6 +5,7 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="menu_name" jdbcType="VARCHAR" property="menuName" />
     <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="parent_name" jdbcType="VARCHAR" property="parentName" />
     <result column="order_num" jdbcType="INTEGER" property="orderNum" />
     <result column="icon" jdbcType="VARCHAR" property="icon" />
     <result column="url" jdbcType="VARCHAR" property="url" />
@@ -54,5 +55,13 @@
   <!-- 查询所有菜单权限 -->
   <select id="findMenuRole" resultType="java.lang.String">
     select perms from sys_menu where deleted = 0 and visible = 'Y' and perms &lt;&gt; ''
+  </select>
+
+  <select id="info" resultMap="BaseResultMap">
+    select sm.id, sm.menu_name, sm.parent_id, sm.order_num, sm.icon, sm.url, sm.menu_type, sm.visible,
+           sm.perms, sm.create_by, sm.create_time,sm.update_by, sm.update_time, sm.remark, child.menu_name as parent_name
+    from sys_menu sm
+    left join sys_menu child on sm.parent_id = child.id
+    where sm.id = #{id}
   </select>
 </mapper>

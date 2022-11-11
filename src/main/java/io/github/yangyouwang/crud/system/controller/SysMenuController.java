@@ -68,8 +68,8 @@ public class SysMenuController extends CrudController {
      */
     @GetMapping("/editPage/{id}")
     public String editPage(@Valid @NotNull(message = "id不能为空") @PathVariable Long id, ModelMap map){
-        Object data = sysMenuService.getById(id);
-        map.put("sysMenu",data);
+        SysMenu sysMenu = sysMenuService.info(id);
+        map.put("sysMenu",sysMenu);
         return SUFFIX + "/edit";
     }
 

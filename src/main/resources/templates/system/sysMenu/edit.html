@@ -17,10 +17,17 @@
           </div>
         </div>
         <div class="layui-inline">
-          <label class="layui-form-label">父级编号</label>
+          <label class="layui-form-label">上级菜单</label>
           <div class="layui-input-inline">
-            <input id="parentId" name="parentId" type="hidden">
-            <div id="parentName" lay-filter="parentName" class="xm-select-demo"></div>
+            <div class="layui-row">
+              <div class="layui-col-md9">
+                <input name="parentId" type="hidden" lay-verify="required">
+                <input name="parentName" type="text" class="layui-input" placeholder="请选择菜单" disabled>
+              </div>
+              <div class="layui-col-md3">
+                <button type="button" class="layui-btn layui-btn-primary menuWizard">选择</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -123,30 +130,16 @@
                 }
             });
         });
-        treeSelect.render({
-            // 选择器
-            elem: '#parentName',
-            // 数据
-            data: ctx + '/sysMenu/treeSelect',
-            // 异步加载方式：get/post，默认get
-            type: 'get',
-            // 占位符
-            placeholder: '请选择',
-            // 是否开启搜索功能：true/false，默认false
-            search: true,
-            // 点击回调
-            click: function(d){
-                $("#parentId").val(d.current.id);
-                $("#parentName").val(d.current.name);
-            },
-            // 加载完成后的回调函数
-            success: function (d) {
-                if (sysMenu.parentId && d.data.length > 0) {
-                    treeSelect.checkNode('parentName', sysMenu.parentId);
-                    treeSelect.refresh('parentName');
-                }
-            }
+      // 菜单向导
+      $('.menuWizard').on('click', function () {
+        // 树结构向导
+        crud.treeWizard("/sysMenu/treeSelect",function (result) {
+          form.val('sys-menu-form', {
+            parentId: result.id,
+            parentName: result.name
+          });
         });
+      });
         crud.setSelect("menuType","menuType",sysMenu.menuType);
         crud.setRadio("visible","enabled",sysMenu.visible);
 

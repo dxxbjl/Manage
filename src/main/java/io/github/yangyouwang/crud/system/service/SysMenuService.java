@@ -138,4 +138,13 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
         ListToTree treeBuilder = new ListToTreeImpl();
         return treeBuilder.toTree(result);
     }
+
+    /**
+     * 根据id获取菜单详情
+     * @param id 菜单id
+     * @return 菜单详情
+     */
+    public SysMenu info(Long id) {
+        return sysMenuMapper.info(id);
+    }
 }
