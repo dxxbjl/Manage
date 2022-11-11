@@ -65,7 +65,7 @@ layui.define(['jquery','cookie','upload'], function(exports){
                 ,yes: function(index, layero){
                     let result = window["layui-layer-iframe" + index].getData();
                     layer.close(index);
-                    callback(JSON.parse(JSON.stringify(result)));
+                    callback(result);
                 }
             });
         },

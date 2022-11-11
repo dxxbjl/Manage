@@ -13,6 +13,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Service;
 import org.apache.commons.lang3.StringUtils;
+
+import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +29,8 @@ import java.util.stream.Collectors;
 @Service
 public class SysDeptService extends ServiceImpl<SysDeptMapper, SysDept> {
 
+  @Resource
+  private SysDeptMapper sysDeptMapper;
   /**
   * 部门表分页列表
   * @param param 参数
@@ -52,7 +56,7 @@ public class SysDeptService extends ServiceImpl<SysDeptMapper, SysDept> {
   * @return 结果
   */
   public SysDept info(Long id) {
-    return getById(id);
+    return sysDeptMapper.info(id);
   }
 
   /**

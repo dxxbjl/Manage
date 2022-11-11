@@ -13,8 +13,8 @@
 <div th:replace="common/script::footer"></div>
 <script th:inline="javascript">
     let result = {
-        deptId: '',
-        deptName: ''
+        id: 0,
+        name: '顶级'
     };
     layui.config({
         base: '/static/layuiadmin/' //静态资源所在路径
@@ -30,10 +30,7 @@
             url: ctx + url,
             success: function(data) {
                 let zTree = $.fn.zTree.init($("#deptTree"), fun.setting(function (event,treeId,treeNode) {
-                    result = {
-                        deptId: treeNode.id,
-                        deptName: treeNode.name
-                    }
+                    result = treeNode;
                 }), data);
                 zTree.expandAll(true);
             }

@@ -1,5 +1,6 @@
 package io.github.yangyouwang.crud.system.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.github.yangyouwang.common.domain.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -39,6 +40,10 @@ public class SysDept extends BaseEntity {
 
     @ApiModelProperty(value = "父部门ID")
     private Long parentId;
+
+    @TableField(exist=false)
+    @ApiModelProperty(value = "父部门名称")
+    private String parentName;
 
     @ApiModelProperty(value = "是否启用 Y 启用 N 禁用")
     private String enabled;

@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="io.github.yangyouwang.crud.system.mapper.SysDeptMapper">
-
+    <resultMap id="BaseResultMap" type="io.github.yangyouwang.crud.system.entity.SysDept">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+        <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+        <result column="leader" jdbcType="VARCHAR" property="leader" />
+        <result column="phone" jdbcType="VARCHAR" property="phone" />
+        <result column="email" jdbcType="VARCHAR" property="email" />
+        <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+        <result column="parent_name" jdbcType="VARCHAR" property="parentName" />
+        <result column="enabled" jdbcType="CHAR" property="enabled" />
+        <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, dept_name, order_num, leader, phone, email, parent_id, enabled, create_by, create_time,
+    update_by, update_time, remark
+    </sql>
+    <select id="info" resultMap="BaseResultMap">
+        select
+            sd.id, sd.dept_name, sd.order_num, sd.leader, sd.phone, sd.email, sd.parent_id, sd.enabled,
+            sd.create_by, sd.create_time,sd.update_by, sd.update_time, sd.remark, child.dept_name as parent_name
+        from sys_dept sd
+        left join sys_dept child on sd.parent_id = child.id
+        where sd.id = #{id}
+    </select>
 </mapper>

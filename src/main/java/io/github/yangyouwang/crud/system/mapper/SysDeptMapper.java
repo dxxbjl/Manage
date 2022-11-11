@@ -12,4 +12,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2022-09-03
  */
 public interface SysDeptMapper extends BaseMapper<SysDept> {
+    /**
+     * 根据id查询部门详情
+     * @param id 部门id
+     * @return 部门详情
+     */
+    SysDept info(Long id);
 }
