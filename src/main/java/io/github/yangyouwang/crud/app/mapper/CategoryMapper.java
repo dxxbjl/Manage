@@ -12,5 +12,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2022-10-30
  */
 public interface CategoryMapper extends BaseMapper<Category> {
-
+    /**
+     * 根据id获取分类详情
+     * @param id 分类id
+     * @return 分类详情
+     */
+    Category info(Long id);
 }

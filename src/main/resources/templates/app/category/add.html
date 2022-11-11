@@ -29,10 +29,17 @@
         </div>
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">父级</label>
+                <label class="layui-form-label">上级分类</label>
                 <div class="layui-input-inline">
-                    <input id="parentId" name="parentId" type="hidden">
-                    <div id="parentName" lay-filter="parentName" class="xm-select-demo"></div>
+                    <div class="layui-row">
+                        <div class="layui-col-md9">
+                            <input name="parentId" type="hidden" lay-verify="required">
+                            <input name="parentName" type="text" class="layui-input" placeholder="请选择分类" disabled>
+                        </div>
+                        <div class="layui-col-md3">
+                            <button type="button" class="layui-btn layui-btn-primary categoryWizard">选择</button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="layui-inline">
@@ -102,32 +109,16 @@
     });
     //普通图片上传
     crud.uploadImg("icon");
-    treeSelect.render({
-          // 选择器
-          elem: '#parentName',
-          // 数据
-          data: ctx + '/app/category/treeSelect',
-          // 异步加载方式：get/post，默认get
-          type: 'get',
-          // 占位符
-          placeholder: '请选择',
-          // 是否开启搜索功能：true/false，默认false
-          search: true,
-          // 点击回调
-          click: function(d){
-              $("#parentId").val(d.current.id);
-              $("#parentName").val(d.current.name);
-          },
-          // 加载完成后的回调函数
-          success: function (d) {
-              console.log(parentId);
-              if (parentId && d.data.length > 0) {
-                  $("#parentId").val(parentId);
-                  treeSelect.checkNode('parentName', parentId);
-                  treeSelect.refresh('parentName');
-              }
-          }
-      });
+    // 分类向导
+    $('.categoryWizard').on('click', function () {
+        // 树结构向导
+        crud.treeWizard("/app/category/treeSelect",function (result) {
+            form.val('categoryForm', {
+                parentId: result.id,
+                parentName: result.name
+            });
+        });
+    });
   });
 </script>
 </body>

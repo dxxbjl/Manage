@@ -1,5 +1,6 @@
 package io.github.yangyouwang.crud.app.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.github.yangyouwang.common.domain.BaseEntity;
 import io.swagger.annotations.ApiModel;
@@ -34,4 +35,8 @@ public class Category extends BaseEntity {
 
     @ApiModelProperty(value = "父分类ID")
     private Long parentId;
+
+    @TableField(exist=false)
+    @ApiModelProperty(value = "父分类名称")
+    private String parentName;
 }

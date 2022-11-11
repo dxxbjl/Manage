@@ -57,8 +57,8 @@ public class CategoryController extends CrudController {
 
    @GetMapping("/editPage/{id}")
    public String editPage(@Valid @NotNull(message = "id不能为空") @PathVariable Long id, ModelMap map){
-    Object data = categoryService.info(id);
-    map.put("category",data);
+    Category category = categoryService.info(id);
+    map.put("category",category);
     return SUFFIX + "/edit";
   }
 
