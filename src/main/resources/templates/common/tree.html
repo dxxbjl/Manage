@@ -23,10 +23,11 @@
     }).use(['index', 'form','crud'], function(){
         let $ = layui.$,
             form = layui.form,
-            crud = layui.crud;
+            crud = layui.crud,
+            url = [[${url}]];
         $.ajax({
             type: "get",
-            url:  ctx + '/system/sysDept/treeSelect',
+            url: ctx + url,
             success: function(data) {
                 let zTree = $.fn.zTree.init($("#deptTree"), fun.setting(function (event,treeId,treeNode) {
                     result = {

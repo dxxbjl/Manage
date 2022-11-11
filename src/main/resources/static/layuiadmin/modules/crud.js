@@ -48,6 +48,28 @@ layui.define(['jquery','cookie','upload'], function(exports){
     }
     let crud = {
         /**
+         * 树结构向导
+         * @param url 请求tree接口
+         * @param callback 回调函数
+         */
+        treeWizard: function (url,callback) {
+            layer.open({
+                type: 2
+                ,shade: 0.3
+                ,title: "选择"
+                ,content: ctx + '/common/treePage?url=' +url
+                ,maxmin: true
+                ,scrollbar: false
+                ,area: ['30%', '80%']
+                ,btn: ['确定', '取消']
+                ,yes: function(index, layero){
+                    let result = window["layui-layer-iframe" + index].getData();
+                    layer.close(index);
+                    callback(JSON.parse(JSON.stringify(result)));
+                }
+            });
+        },
+        /**
          * 普通图片上传
          */
         uploadImg: function(obj) {
@@ -81,7 +103,7 @@ layui.define(['jquery','cookie','upload'], function(exports){
          * @param obj dom对象
          * @param data 回显数据
          */
-        initEditor: function(obj,data = {}) {
+        initEditor: function(obj,data) {
             ClassicEditor.create(document.querySelector("#" + obj), {
                 toolbar: {
                     items: [

@@ -17,9 +17,8 @@ import javax.validation.constraints.NotNull;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.ui.ModelMap;
-
- import org.springframework.stereotype.Controller;
- import io.github.yangyouwang.common.base.CrudController;
+import org.springframework.stereotype.Controller;
+import io.github.yangyouwang.common.base.CrudController;
 
 import javax.validation.Valid;
 import java.util.Objects;
@@ -110,14 +109,6 @@ public class SysDeptController extends CrudController {
      return Result.success();
    }
 
-  /**
-   * 跳转到部门向导页
-   * @return 部门向导页
-   */
-  @GetMapping("/treePage")
-  public String treePage(){
-    return SUFFIX + "/tree";
-  }
   /**
    * 查询部门树结构
    * @return 部门树结构

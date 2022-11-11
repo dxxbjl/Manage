@@ -12,10 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
@@ -38,6 +36,18 @@ public class CommonController extends CrudController {
     private final MinIoUtil minIoUtil;
 
     private final MinioProperties minioProperties;
+
+    private static final String SUFFIX = "common";
+
+    /**
+     * 跳转到树结构向导页
+     * @return 树结构向导页
+     */
+    @GetMapping("/treePage")
+    public String treePage(String url, ModelMap map) {
+        map.put("url", url);
+        return SUFFIX + "/tree";
+    }
 
     /**
      * 通用上传请求
