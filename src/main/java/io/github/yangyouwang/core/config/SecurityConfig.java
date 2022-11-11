@@ -99,7 +99,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 登出
                 .logout()
                 .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
+                .deleteCookies("remember-me")
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/loginPage")
                  .and()
@@ -107,7 +107,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 有效期7天
                 .tokenValiditySeconds(3600 * 24 * 7)
                 // 开启记住我功能
-                .rememberMeParameter("JSESSIONID")
+                .rememberMeParameter("remember-me")
                 .and()
                 //禁用csrf
                 .csrf().disable()
