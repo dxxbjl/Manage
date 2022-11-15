@@ -197,7 +197,7 @@ INSERT INTO `sys_menu` VALUES (3047, '广告管理', 3051, 1, 'layui-icon-home',
 INSERT INTO `sys_menu` VALUES (3048, '添加广告表', 3047, 1, '', '#', 'F', 'Y', 'ad:add', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3049, '编辑广告表', 3047, 2, '', '#', 'F', 'Y', 'ad:edit', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3050, '删除广告表', 3047, 3, '', '#', 'F', 'Y', 'ad:del', '', NULL, '', NULL, 0, '');
-INSERT INTO `sys_menu` VALUES (3051, 'APP管理', 0, 4, 'layui-icon-cellphone', '#', 'M', 'Y', '', 'admin', '2022-08-11 19:33:57', 'admin', '2022-08-11 19:34:19', 0, '');
+INSERT INTO `sys_menu` VALUES (3051, 'APP管理', 0, 5, 'layui-icon-cellphone', '#', 'M', 'Y', '', 'admin', '2022-08-11 11:33:57', 'admin', '2022-11-15 14:44:36', 0, '');
 INSERT INTO `sys_menu` VALUES (3054, '用户管理', 3051, 1, 'layui-icon-home', '/app/user/listPage', 'C', 'Y', 'user:list', '', NULL, 'admin', '2022-08-27 08:56:40', 0, '');
 INSERT INTO `sys_menu` VALUES (3055, '用户详情', 3054, 1, '', '#', 'M', 'Y', 'user:info', 'admin', '2022-08-27 09:18:24', 'admin', '2022-08-27 09:18:34', 0, '');
 INSERT INTO `sys_menu` VALUES (3056, '登录日志管理', 1, 9, 'layui-icon-location', '/sysLoginLog/listPage', 'C', 'Y', 'sysLoginLog:list', '', NULL, 'admin', '2022-09-15 22:10:11', 0, '');
@@ -232,6 +232,8 @@ INSERT INTO `sys_menu` VALUES (3084, '新闻管理', 3051, 5, 'layui-icon-home',
 INSERT INTO `sys_menu` VALUES (3085, '添加新闻', 3084, 1, '', '#', 'F', 'Y', 'news:add', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3086, '编辑新闻', 3084, 2, '', '#', 'F', 'Y', 'news:edit', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3087, '删除新闻', 3084, 3, '', '#', 'F', 'Y', 'news:del', '', NULL, '', NULL, 0, '');
+INSERT INTO `sys_menu` VALUES (3088, '任务管理', 0, 4, 'layui-icon-rate', '#', 'M', 'Y', '', 'admin', '2022-11-15 14:44:26', '', NULL, 0, '任务管理');
+
 -- ----------------------------
 -- Table structure for sys_role
 -- ----------------------------

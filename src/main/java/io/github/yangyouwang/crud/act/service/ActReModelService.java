@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import static org.activiti.editor.constants.ModelDataJsonConstants.*;
@@ -59,15 +60,7 @@ public class ActReModelService extends ServiceImpl<ActReModelMapper, ActReModel>
      */
     public String add(ActReModel actReModel) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            ObjectNode editorNode = objectMapper.createObjectNode();
-            editorNode.put("id", "canvas");
-            editorNode.put("resourceId", "canvas");
-            ObjectNode stencilSetNode = objectMapper.createObjectNode();
-            stencilSetNode.put("namespace", "http://b3mn.org/stencilset/bpmn2.0#");
-            editorNode.put("stencilset", stencilSetNode);
             Model modelData = repositoryService.newModel();
-
             ObjectNode modelObjectNode = objectMapper.createObjectNode();
             modelObjectNode.put(MODEL_NAME, actReModel.getName());
             modelObjectNode.put(MODEL_REVISION, 1);
@@ -77,15 +70,25 @@ public class ActReModelService extends ServiceImpl<ActReModelMapper, ActReModel>
             modelData.setName(actReModel.getName());
             modelData.setKey(StringUtils.defaultString(actReModel.getKey()));
             modelData.setCategory(actReModel.getCategory());
-
             repositoryService.saveModel(modelData);
+            ObjectMapper objectMapper = new ObjectMapper();
+            ObjectNode editorNode = objectMapper.createObjectNode();
+            editorNode.put("id", "canvas");
+            editorNode.put("resourceId", "canvas");
+            ObjectNode stencilSetNode = objectMapper.createObjectNode();
+            stencilSetNode.put("namespace", "http://b3mn.org/stencilset/bpmn2.0#");
+            editorNode.put("stencilset", stencilSetNode);
+            ObjectNode properties = objectMapper.createObjectNode();
+            properties.put("process_id", actReModel.getKey());
+            properties.put("name", actReModel.getName());
+            properties.put("documentation", actReModel.getDescription());
+            editorNode.put("properties",properties);
             repositoryService.addModelEditorSource(modelData.getId(), editorNode.toString().getBytes("utf-8"));
             log.info(modelData.getId());
             return modelData.getId();
-        } catch (Exception e) {
-            log.info(e.toString());
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     /**
@@ -111,10 +114,11 @@ public class ActReModelService extends ServiceImpl<ActReModelMapper, ActReModel>
             repositoryService.saveModel(modelData);
             log.info(deployment.getId());
             return deployment.getId();
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     public void edit(ActReModel actReModel) {
@@ -129,7 +133,7 @@ public class ActReModelService extends ServiceImpl<ActReModelMapper, ActReModel>
             model.setCategory(actReModel.getCategory());
             repositoryService.saveModel(model);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 }
