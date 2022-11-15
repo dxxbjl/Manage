@@ -54,10 +54,8 @@ public class SysMenuController extends CrudController {
      */
     @GetMapping("/addPage")
     public String addPage(SysMenu sysMenu,ModelMap map) {
-        if (Objects.nonNull(sysMenu)) {
-            map.put("parentId",sysMenu.getId());
-            map.put("parentName",sysMenu.getMenuName());
-        }
+        map.put("parentId",sysMenu.getId());
+        map.put("parentName",sysMenu.getMenuName());
         return SUFFIX + "/add";
     }
 

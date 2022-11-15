@@ -63,10 +63,8 @@ public class CategoryController extends CrudController {
 
   @GetMapping("/addPage")
   public String addPage(Category category, ModelMap map) {
-    if (Objects.nonNull(category)) {
-      map.put("parentId",category.getId());
-      map.put("parentName",category.getName());
-    }
+    map.put("parentId",category.getId());
+    map.put("parentName",category.getName());
     return SUFFIX + "/add";
   }
 

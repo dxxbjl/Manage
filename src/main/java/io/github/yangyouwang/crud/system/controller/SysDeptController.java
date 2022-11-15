@@ -64,10 +64,8 @@ public class SysDeptController extends CrudController {
 
   @GetMapping("/addPage")
   public String addPage(SysDept sysDept, ModelMap map) {
-    if (Objects.nonNull(sysDept)) {
-      map.put("parentId",sysDept.getId());
-      map.put("parentName",sysDept.getDeptName());
-    }
+    map.put("parentId",sysDept.getId());
+    map.put("parentName",sysDept.getDeptName());
     return SUFFIX + "/add";
   }
 
