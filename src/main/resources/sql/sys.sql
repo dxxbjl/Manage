@@ -233,6 +233,9 @@ INSERT INTO `sys_menu` VALUES (3085, '添加新闻', 3084, 1, '', '#', 'F', 'Y',
 INSERT INTO `sys_menu` VALUES (3086, '编辑新闻', 3084, 2, '', '#', 'F', 'Y', 'news:edit', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3087, '删除新闻', 3084, 3, '', '#', 'F', 'Y', 'news:del', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3088, '任务管理', 0, 4, 'layui-icon-rate', '#', 'M', 'Y', '', 'admin', '2022-11-15 14:44:26', '', NULL, 0, '任务管理');
+INSERT INTO `sys_menu` VALUES (3089, '我的流程', 3088, 1, 'layui-icon-username', '#', 'C', 'Y', '', 'admin', '2022-11-16 06:42:06', 'admin', '2022-11-16 14:43:52', 0, '');
+INSERT INTO `sys_menu` VALUES (3090, '代办任务', 3088, 2, 'layui-icon-username', '#', 'C', 'Y', '', 'admin', '2022-11-16 06:42:29', 'admin', '2022-11-16 14:44:01', 0, '');
+INSERT INTO `sys_menu` VALUES (3091, '已办任务', 3088, 3, 'layui-icon-username', '#', 'C', 'Y', '', 'admin', '2022-11-16 06:42:59', 'admin', '2022-11-16 14:44:10', 0, '');
 
 -- ----------------------------
 -- Table structure for sys_role
