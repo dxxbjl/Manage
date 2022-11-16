@@ -438,5 +438,11 @@
                <profile.active>test</profile.active>
            </properties>
        </profile>
+	   <profile>
+		   <id>ssl</id>
+		   <properties>
+			   <profile.active>ssl</profile.active>
+		   </properties>
+	   </profile>
    </profiles>
 </project>

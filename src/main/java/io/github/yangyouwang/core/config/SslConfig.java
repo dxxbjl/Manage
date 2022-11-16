@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 public class SslConfig {
     @Bean
-    @Profile("prod")
+    @Profile("ssl")
     public ServletWebServerFactory servletContainer() {
         TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory() {
             @Override
