@@ -36,9 +36,9 @@
     1、推荐使用IDEA开发工具运行此项目
     2、在mysql中创建crud数据库后，项目启动时候表结构会自动创建
     3、针对各环境修改对应配置文件：application-dev.yml开发环境、application-prod.yml生产环境、application-test.yml测试环境
-   ![配置截图](https://gitee.com/yangyouwang/crud/raw/master/img/13.png "13.png")
+   ![配置截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/13.png "13.png")
     4、运行项目中CrudApplication.java启动类
-   ![配置截图](https://gitee.com/yangyouwang/crud/raw/master/img/14.png "14.png")
+   ![配置截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/14.png "14.png")
 ## 使用说明
     
     1.控制层接口版本管理、包装响应Result返回值进行全局处理，使用@ResponseResultBody注解
@@ -103,49 +103,49 @@ sec:authorize="hasAuthority('权限标识')" // thymeleaf声明
     
     登陆功能
     账号：admin 密码：123456
-   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/0.png "0.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/0.png "0.png")
     
     首页
-   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/1.png "1.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/1.png "1.png")
    
     用户管理模块
-   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/2.png "2.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/2.png "2.png")
    
     角色管理模块
-   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/3.png "3.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/3.png "3.png")
 
     部门管理
-   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/18.png "18.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/18.png "18.png")
 
     岗位管理
-   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/19.png "19.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/19.png "19.png")
 
     菜单管理模块
-   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/4.png "4.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/4.png "4.png")
    
     swagger接口文档
-   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/5.png "5.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/5.png "5.png")
    
     druid监控
     账号：admin 密码：admin
-   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/6.png "6.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/6.png "6.png")
    
     定时任务
-   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/8.png "8.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/8.png "8.png")
    
     字典管理
-   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/12.png "12.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/12.png "12.png")
 
     代码生成
-   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/17.png "17.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/17.png "17.png")
 
     工作流
-   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/9.png "9.png")
-   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/10.png "10.png")
-   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/16.png "16.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/9.png "9.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/10.png "10.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/16.png "16.png")
 
     登录日志管理
-   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/11.png "11.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/11.png "11.png")
 
     操作日志管理
-   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/img/15.png "15.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/15.png "15.png")
