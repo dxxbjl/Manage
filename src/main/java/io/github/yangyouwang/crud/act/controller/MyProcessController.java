@@ -1,18 +1,19 @@
 package io.github.yangyouwang.crud.act.controller;
 
 import io.github.yangyouwang.common.base.CrudController;
+import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.TableDataInfo;
-import io.github.yangyouwang.core.util.SecurityUtils;
+import io.github.yangyouwang.crud.act.model.StartProcessDTO;
+import io.github.yangyouwang.crud.act.service.MyProcessService;
 import lombok.RequiredArgsConstructor;
-import org.activiti.engine.TaskService;
-import org.activiti.engine.task.TaskQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.Objects;
 
 
 /**
@@ -26,7 +27,7 @@ public class MyProcessController extends CrudController {
     private static final String SUFFIX = "act/myProcess";
 
     @Autowired
-    private TaskService taskService;
+    private MyProcessService myProcessService;
 
     /**
      * 跳转列表
@@ -45,25 +46,33 @@ public class MyProcessController extends CrudController {
     @GetMapping("/page")
     @ResponseBody
     public TableDataInfo page(HttpServletRequest request) {
-        String userName = SecurityUtils.getUserName();
-        TaskQuery query = taskService.createTaskQuery()
-                .taskAssignee(userName)
-                .orderByTaskCreateTime().desc();
-        TableDataInfo rspData = new TableDataInfo();
-        rspData.setCode(0);
-        rspData.setData(query.listPage(Integer.parseInt(request.getParameter("page")),
-                Integer.parseInt(request.getParameter("limit"))));
-        rspData.setCount(query.count());
-        return rspData;
+        int page = Integer.parseInt(request.getParameter("page"));
+        int limit = Integer.parseInt(request.getParameter("limit"));
+        return myProcessService.list(page, limit);
     }
 
 
     /**
-     * 跳转添加
-     * @return 添加页面
+     * 启动流程
+     * @return 启动流程页面
      */
     @GetMapping("/addPage")
     public String addPage(){
         return SUFFIX + "/add";
+    }
+
+    /**
+     * 启动流程
+     * @param startProcessDTO 启动流程对象
+     * @return 添加状态
+     */
+    @PostMapping("/start")
+    @ResponseBody
+    public Result start(@RequestBody @Valid StartProcessDTO startProcessDTO, BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
+        }
+        String flag = myProcessService.start(startProcessDTO);
+        return Result.success(flag);
     }
 }

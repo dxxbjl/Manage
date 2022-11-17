@@ -1,28 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>创建流程</title>
+  <title>发起流程</title>
   <div th:replace="common/link::header"></div>
 </head>
 <body>
 <div class="layui-fluid">
   <div class="layui-row">
-    <div class="layui-form layui-form-pane" lay-filter="myProcessForm" id="myProcessForm">
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                <label class="layui-form-label">岗位编码</label>
-                <div class="layui-input-inline">
-                    <input type="text" lay-verify="required" class="layui-input" name="postCode" placeholder="请输入岗位编码"/>
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">岗位名称</label>
-                <div class="layui-input-inline">
-                    <input type="text" lay-verify="required" class="layui-input" name="postName" placeholder="请输入岗位名称"/>
-                </div>
-            </div>
-        </div>
-
+    <div class="layui-form" lay-filter="myProcessForm" id="myProcessForm">
+      <div class="layui-form-item">
+          <label class="layui-form-label">流程分类</label>
+          <div class="layui-input-inline">
+              <select lay-verify="required" name="category" id="category"></select>
+          </div>
+      </div>
       <div class="layui-form-item layui-hide">
         <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
       </div>
@@ -39,6 +30,7 @@
     let $ = layui.$,
             form = layui.form,
             crud = layui.crud;
+    crud.setSelect("category","actCategory");
     form.on('submit(save-submit)', function(data) {
       $.ajax({
         type: 'POST',

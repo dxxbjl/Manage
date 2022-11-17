@@ -21,7 +21,7 @@
         <table id="myProcessTable" lay-filter="myProcessTable"></table>
         <script type="text/html" id="toolbar">
           <div class="layui-btn-container">
-            <a class="layui-btn layui-btn-xs" lay-event="add"><i class="layui-icon layui-icon-add-1"></i>添加</a>
+            <a class="layui-btn layui-btn-xs" lay-event="add"><i class="layui-icon layui-icon-add-1"></i>发起流程</a>
           </div>
         </script>
         <script type="text/html" id="tableBar">
@@ -88,13 +88,13 @@
       /* 触发弹层 */
       let active = {
         /**
-         * 添加
+         * 启动流程
          * */
         addView: function() {
           layer.open({
             type: 2
             ,shade: 0.3
-            ,title: "创建流程"
+            ,title: "启动流程"
             ,content: ctx + '/myProcess/addPage'
             ,maxmin: true
             ,scrollbar: false
