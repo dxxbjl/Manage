@@ -6,6 +6,7 @@ import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.github.yangyouwang.crud.act.model.StartProcessDTO;
 import io.github.yangyouwang.crud.act.service.MyProcessService;
 import lombok.RequiredArgsConstructor;
+import org.activiti.engine.repository.ProcessDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -57,10 +59,8 @@ public class MyProcessController extends CrudController {
      */
     @GetMapping("/processPage")
     @ResponseBody
-    public TableDataInfo processPage(HttpServletRequest request,String category) {
-        int page = Integer.parseInt(request.getParameter("page"));
-        int limit = Integer.parseInt(request.getParameter("limit"));
-        return myProcessService.processPage(page, limit, category);
+    public List<ProcessDefinition> processPage(String category) {
+        return myProcessService.processList(category);
     }
 
 

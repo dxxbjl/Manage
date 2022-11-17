@@ -13,6 +13,8 @@ import org.activiti.engine.task.TaskQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Description: 我的流程 <br/>
  * date: 2022/11/17 23:15<br/>
@@ -52,15 +54,10 @@ public class MyProcessService {
         return rspData;
     }
 
-    public TableDataInfo processPage(int page, int limit, String category) {
-        ProcessDefinitionQuery processDefinitionQuery = repositoryService
-                .createProcessDefinitionQuery()
+    public List<ProcessDefinition> processList(String category) {
+        ProcessDefinitionQuery processDefinitionQuery = repositoryService.createProcessDefinitionQuery()
                 .processDefinitionCategory(category)
                 .orderByProcessDefinitionVersion().asc();
-        TableDataInfo rspData = new TableDataInfo();
-        rspData.setCode(0);
-        rspData.setData(processDefinitionQuery.listPage(page,limit));
-        rspData.setCount(processDefinitionQuery.count());
-        return rspData;
+        return processDefinitionQuery.list();
     }
 }
