@@ -140,8 +140,8 @@ public class ActReModelController extends CrudController {
     @ApiOperation(value = "模型删除(单个条目)")
     @DeleteMapping(value = "/remove/{id}")
     @ResponseBody
-    public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
-        boolean flag = actReModelService.removeById(id);
-        return Result.success(flag);
+    public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable String id) {
+        actReModelService.remove(id);
+        return Result.success();
     }
 }

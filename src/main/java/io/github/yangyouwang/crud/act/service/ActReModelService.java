@@ -136,4 +136,14 @@ public class ActReModelService extends ServiceImpl<ActReModelMapper, ActReModel>
             throw new RuntimeException(e);
         }
     }
+
+    public void remove(String id) {
+        Model model = repositoryService.getModel(id);
+        // 删除流程模型
+        repositoryService.deleteModel(id);
+        if (null != model.getDeploymentId()) {
+            // 删除流程定义
+            repositoryService.deleteDeployment(model.getDeploymentId());
+        }
+    }
 }
