@@ -7,6 +7,7 @@ import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.repository.ProcessDefinitionQuery;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.TaskQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ public class MyProcessService {
         return processInstance.getProcessInstanceId();
     }
 
-    public TableDataInfo list(int page, int limit) {
+    public TableDataInfo taskPage(int page, int limit) {
         String userName = SecurityUtils.getUserName();
         TaskQuery query = taskService.createTaskQuery()
                 .taskAssignee(userName)
@@ -48,6 +49,18 @@ public class MyProcessService {
         rspData.setCode(0);
         rspData.setData(query.listPage(page,limit));
         rspData.setCount(query.count());
+        return rspData;
+    }
+
+    public TableDataInfo processPage(int page, int limit, String category) {
+        ProcessDefinitionQuery processDefinitionQuery = repositoryService
+                .createProcessDefinitionQuery()
+                .processDefinitionCategory(category)
+                .orderByProcessDefinitionVersion().asc();
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(0);
+        rspData.setData(processDefinitionQuery.listPage(page,limit));
+        rspData.setCount(processDefinitionQuery.count());
         return rspData;
     }
 }

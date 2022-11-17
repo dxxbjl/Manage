@@ -43,12 +43,24 @@ public class MyProcessController extends CrudController {
      * 流程实例列表
      * @return 请求列表
      */
-    @GetMapping("/page")
+    @GetMapping("/taskPage")
     @ResponseBody
-    public TableDataInfo page(HttpServletRequest request) {
+    public TableDataInfo taskPage(HttpServletRequest request) {
         int page = Integer.parseInt(request.getParameter("page"));
         int limit = Integer.parseInt(request.getParameter("limit"));
-        return myProcessService.list(page, limit);
+        return myProcessService.taskPage(page, limit);
+    }
+
+    /**
+     * 查询流程定义列表
+     * @return 请求列表
+     */
+    @GetMapping("/processPage")
+    @ResponseBody
+    public TableDataInfo processPage(HttpServletRequest request,String category) {
+        int page = Integer.parseInt(request.getParameter("page"));
+        int limit = Integer.parseInt(request.getParameter("limit"));
+        return myProcessService.processPage(page, limit, category);
     }
 
 
