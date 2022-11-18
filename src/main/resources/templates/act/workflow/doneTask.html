@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-  <title>代办任务</title>
+  <title>已办任务</title>
   <div th:replace="common/link::header"></div>
 </head>
 <body>
@@ -18,15 +18,7 @@
         </div>
       </form>
       <div class="layui-card-body">
-        <table id="toDoTaskTable" lay-filter="toDoTaskTable"></table>
-        <script type="text/html" id="toolbar">
-          <div class="layui-btn-container">
-            <a class="layui-btn layui-btn-xs" lay-event="add"><i class="layui-icon layui-icon-add-1"></i>添加</a>
-          </div>
-        </script>
-        <script type="text/html" id="tableBar">
-
-        </script>
+        <table id="doneTaskTable" lay-filter="doneTaskTable"></table>
       </div>
     </div>
   </div>
@@ -44,23 +36,23 @@
       form.on('submit(search)', function(data) {
         let field = data.field;
           //执行重载
-          table.reload('toDoTaskTable', {
+          table.reload('doneTaskTable', {
               where: field
           });
       });
       //监听重置
       form.on('submit(reset)', function(data) {
         Object.keys(data.field).forEach(key => (data.field[key] = ''));
-        table.reload('toDoTaskTable', {
+        table.reload('doneTaskTable', {
           where: data.field
         });
       });
       // 查询列表接口
       table.render({
-          elem: '#toDoTaskTable'
+          elem: '#doneTaskTable'
           ,toolbar: '#toolbar'
           ,height: 'full-110'
-          ,url:  ctx + '/toDoTask/page'
+          ,url:  ctx + '/workflow/doneTask'
           ,cellMinWidth: 80
           ,page: true //开启分页,
           ,cols: [[ //表头
@@ -70,42 +62,22 @@
           ]]
       });
       //头工具栏事件
-      table.on('toolbar(toDoTaskTable)', function(obj) {
+      table.on('toolbar(doneTaskTable)', function(obj) {
         let checkStatus = table.checkStatus(obj.config.id)
                 ,data = checkStatus.data;
         switch(obj.event) {
-          case 'add':
-            active.addView();
-            break;
+
         }
       });
       //监听行工具事件
-      table.on('tool(toDoTaskTable)', function(obj) {
+      table.on('tool(doneTaskTable)', function(obj) {
         let data = obj.data //获得当前行数据
                 ,layEvent = obj.event;
 
       });
       /* 触发弹层 */
       let active = {
-        /**
-         * 添加
-         * */
-        addView: function() {
-          layer.open({
-            type: 2
-            ,shade: 0.3
-            ,title: "创建流程"
-            ,content: ctx + '/toDoTask/addPage'
-            ,maxmin: true
-            ,scrollbar: false
-            ,area: ['100%', '100%']
-            ,btn: ['确定', '取消']
-            ,yes: function(index, layero){
-              let submit = layero.find('iframe').contents().find('#save-submit');
-              submit.trigger('click');
-            }
-          });
-        },
+
       }
   });
 </script>

@@ -11,7 +11,7 @@ import lombok.Data;
  * @since JDK 1.8
  */
 @Data
-public class StartProcessDTO {
+public class StartDTO {
 
     private String deploymentId;
 }
