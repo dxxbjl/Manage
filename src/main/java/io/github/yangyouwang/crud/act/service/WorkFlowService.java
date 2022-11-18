@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  * 工作流业务层
  */
 @Service
-public class WorkflowService {
+public class WorkFlowService {
 
     @Autowired
     private RepositoryService repositoryService;

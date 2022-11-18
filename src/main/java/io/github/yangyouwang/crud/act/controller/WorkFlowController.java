@@ -3,7 +3,7 @@ package io.github.yangyouwang.crud.act.controller;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.github.yangyouwang.crud.act.model.StartDTO;
-import io.github.yangyouwang.crud.act.service.WorkflowService;
+import io.github.yangyouwang.crud.act.service.WorkFlowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -17,13 +17,13 @@ import java.util.Objects;
  * 工作流控制层
  */
 @Controller
-@RequestMapping("/workflow")
+@RequestMapping("/workFlow")
 @RequiredArgsConstructor
-public class WorkflowController {
+public class WorkFlowController {
 
-    private static final String SUFFIX = "act/workflow";
+    private static final String SUFFIX = "act/workFlow";
 
-    private final WorkflowService workflowService;
+    private final WorkFlowService workflowService;
 
     /**
      * 跳转我的流程

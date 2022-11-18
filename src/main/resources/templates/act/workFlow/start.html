@@ -43,7 +43,7 @@
           elem: '#processList'
           ,toolbar: '#toolbar'
           ,height: 'full-110'
-          ,url:  ctx + '/workflow/flow'
+          ,url:  ctx + '/workFlow/flow'
           ,cellMinWidth: 80
           ,page: true //开启分页,
           ,cols: [[ //表头
@@ -59,7 +59,7 @@
     form.on('submit(save-submit)', function(data) {
       $.ajax({
         type: 'POST',
-        url:  ctx + '/workflow/start',
+        url:  ctx + '/workFlow/start',
         data: JSON.stringify(data.field),
         contentType:'application/json;charset=UTF-8',
         dataType: 'json',
