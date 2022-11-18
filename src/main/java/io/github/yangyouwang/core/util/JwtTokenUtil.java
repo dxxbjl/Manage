@@ -1,7 +1,7 @@
 package io.github.yangyouwang.core.util;
 
 import io.github.yangyouwang.common.constant.JwtConstants;
-import io.github.yangyouwang.core.context.ApiContext;
+import io.github.yangyouwang.core.api.context.ApiContext;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;

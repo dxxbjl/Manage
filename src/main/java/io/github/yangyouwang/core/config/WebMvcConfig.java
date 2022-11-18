@@ -1,7 +1,7 @@
 package io.github.yangyouwang.core.config;
 
-import io.github.yangyouwang.core.interceptor.ApiRestInteceptor;
-import io.github.yangyouwang.core.web.CustomRequestMappingHandlerMapping;
+import io.github.yangyouwang.core.api.interceptor.ApiRestInteceptor;
+import io.github.yangyouwang.core.api.version.CustomRequestMappingHandlerMapping;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcRegistrations;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;

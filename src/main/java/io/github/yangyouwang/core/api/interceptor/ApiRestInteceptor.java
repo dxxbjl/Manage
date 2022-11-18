@@ -1,4 +1,4 @@
-package io.github.yangyouwang.core.interceptor;
+package io.github.yangyouwang.core.api.interceptor;
 
 import io.github.yangyouwang.common.annotation.ApiIdempotent;
 import io.github.yangyouwang.common.annotation.PassToken;

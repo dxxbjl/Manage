@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import io.github.yangyouwang.common.base.CrudController;
 import io.github.yangyouwang.common.domain.BaseEntity;
 import io.github.yangyouwang.common.domain.Result;
-import io.github.yangyouwang.core.properties.CodeGeneratorProperties;
+import io.github.yangyouwang.core.config.properties.CodeGeneratorProperties;
 import io.github.yangyouwang.crud.system.model.CodeConfigVO;
 import io.github.yangyouwang.crud.system.model.CodeGeneratorDTO;
 import lombok.RequiredArgsConstructor;

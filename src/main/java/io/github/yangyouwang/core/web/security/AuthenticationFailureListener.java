@@ -1,4 +1,4 @@
-package io.github.yangyouwang.core.security;
+package io.github.yangyouwang.core.web.security;
 
 import cn.hutool.extra.servlet.ServletUtil;
 import io.github.yangyouwang.core.util.StringUtil;

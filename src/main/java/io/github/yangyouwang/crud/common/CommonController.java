@@ -6,7 +6,7 @@ import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.core.aliyun.SampleOSS;
-import io.github.yangyouwang.core.properties.MinioProperties;
+import io.github.yangyouwang.core.config.properties.MinioProperties;
 import io.github.yangyouwang.core.util.MinIoUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -11,7 +11,7 @@ import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.core.exception.CrudException;
-import io.github.yangyouwang.core.properties.SmsProperties;
+import io.github.yangyouwang.core.config.properties.SmsProperties;
 import io.github.yangyouwang.core.util.SpringUtils;
 import java.text.SimpleDateFormat;
 import java.util.Date;

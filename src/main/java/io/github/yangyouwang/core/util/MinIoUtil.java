@@ -1,6 +1,6 @@
 package io.github.yangyouwang.core.util;
 
-import io.github.yangyouwang.core.properties.MinioProperties;
+import io.github.yangyouwang.core.config.properties.MinioProperties;
 import io.minio.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

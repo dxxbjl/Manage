@@ -3,7 +3,7 @@ package io.github.yangyouwang.core.aliyun;
 import com.aliyun.oss.ClientConfiguration;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.common.auth.DefaultCredentialProvider;
-import io.github.yangyouwang.core.properties.OSSProperties;
+import io.github.yangyouwang.core.config.properties.OSSProperties;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
