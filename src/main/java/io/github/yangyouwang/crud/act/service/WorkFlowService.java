@@ -41,11 +41,14 @@ public class WorkFlowService {
     @Autowired
     private HistoryService historyService;
 
-    public TableDataInfo myFlow(int page, int limit) {
+    public TableDataInfo myFlow(String name, int page, int limit) {
         String userName = SecurityUtils.getUserName();
         TaskQuery query = taskService.createTaskQuery()
                 .taskAssignee(userName)
                 .orderByTaskCreateTime().desc();
+        if (StringUtils.isNotBlank(name)) {
+            query.processDefinitionNameLike("%" + name + "%");
+        }
         List<Task> tasks = query.listPage(page, limit);
         List<TaskVO> taskVOList = tasks.stream().map(s -> {
             TaskVO taskVO = new TaskVO();

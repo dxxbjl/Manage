@@ -68,10 +68,10 @@ public class WorkFlowController {
      */
     @GetMapping("/myFlow")
     @ResponseBody
-    public TableDataInfo myFlow(HttpServletRequest request) {
+    public TableDataInfo myFlow(String name, HttpServletRequest request) {
         int page = Integer.parseInt(request.getParameter("page")) - 1;
         int limit = Integer.parseInt(request.getParameter("limit"));
-        return workflowService.myFlow(page, limit);
+        return workflowService.myFlow(name, page, limit);
     }
 
     /**

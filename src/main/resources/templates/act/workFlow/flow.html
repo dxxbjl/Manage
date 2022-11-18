@@ -10,6 +10,12 @@
       <form class="layui-form layui-card-header layuiadmin-card-header-auto">
         <div class="layui-form-item">
           <div class="layui-inline">
+            <label class="layui-form-label">名称</label>
+            <div class="layui-input-block">
+              <input type="text" name="name" placeholder="请输入名称" class="layui-input">
+            </div>
+          </div>
+          <div class="layui-inline">
             <button type="button" class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
               <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
             </button>
@@ -67,8 +73,8 @@
               {type: 'checkbox', fixed: 'left'},
               {field: 'id', title: 'ID', hide:true},
               {field: 'name', title: '名称'},
-              {field: 'assignee', title: '代理人'},
               {field: 'category', title: '分类'},
+              {field: 'assignee', title: '代理人'},
               {field: 'description', title: '描述'},
               {field: 'createTime', title: '创建日期'},
               {toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
@@ -93,7 +99,7 @@
       /* 触发弹层 */
       let active = {
         /**
-         * 启动流程
+         * 发起流程
          * */
         startView: function() {
           layer.open({
