@@ -54,8 +54,8 @@ public class WorkFlowController {
     }
 
     /**
-     * 启动流程
-     * @return 启动流程页面
+     * 发起流程
+     * @return 发起流程页面
      */
     @GetMapping("/startPage")
     public String startPage(){
@@ -80,10 +80,10 @@ public class WorkFlowController {
      */
     @GetMapping("/flow")
     @ResponseBody
-    public TableDataInfo flow(HttpServletRequest request) {
+    public TableDataInfo flow(String name, String key, String category, HttpServletRequest request) {
         int page = Integer.parseInt(request.getParameter("page")) - 1;
         int limit = Integer.parseInt(request.getParameter("limit"));
-        return workflowService.flow(page, limit);
+        return workflowService.flow(name, key, category, page, limit);
     }
 
     /**
@@ -112,8 +112,8 @@ public class WorkFlowController {
     }
 
     /**
-     * 启动流程
-     * @param startDTO 启动流程对象
+     * 发起流程
+     * @param startDTO 发起流程对象
      * @return 添加状态
      */
     @PostMapping("/start")

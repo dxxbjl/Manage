@@ -64,9 +64,18 @@ public class WorkFlowService {
         return rspData;
     }
 
-    public TableDataInfo flow(int page, int limit) {
+    public TableDataInfo flow(String name, String key, String category, int page, int limit) {
         ProcessDefinitionQuery query = repositoryService.createProcessDefinitionQuery()
                 .orderByProcessDefinitionVersion().asc();
+        if (StringUtils.isNotBlank(name)) {
+            query.processDefinitionNameLike("%" + name + "%");
+        }
+        if (StringUtils.isNotBlank(key)) {
+            query.processDefinitionKeyLike(key);
+        }
+        if (StringUtils.isNotBlank(category)) {
+            query.processDefinitionCategory(category);
+        }
         List<ProcessDefinition> processDefinitions = query.listPage(page, limit);
         List<FlowVO> flowVOList = processDefinitions.stream().map(s -> {
             FlowVO flowVO = new FlowVO();
