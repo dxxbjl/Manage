@@ -114,7 +114,7 @@ public class ActReModelController extends CrudController {
     @ResponseBody
     public Result deploy(@Valid @NotNull(message = "id不能为空")  @PathVariable("id") String id) {
         String flag = actReModelService.deploy(id);
-        return Result.success(flag);
+        return Result.success(String.format("流程部署成功，部署ID：%S",flag));
     }
 
     /**

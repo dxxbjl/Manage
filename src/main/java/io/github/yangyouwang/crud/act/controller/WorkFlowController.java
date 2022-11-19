@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
 /**
  * 工作流控制层
+ * @author yangyouwang
  */
 @Controller
 @RequestMapping("/workFlow")
@@ -110,7 +112,17 @@ public class WorkFlowController {
         int limit = Integer.parseInt(request.getParameter("limit"));
         return workflowService.doneTask(page, limit, name, categoryId);
     }
-
+    /**
+     * 获取启动流程表单
+     * @param deploymentId 部署ID
+     * @return 添加状态
+     */
+    @GetMapping("/getStartFlowForm")
+    @ResponseBody
+    public Result getStartFlowForm(@RequestParam @NotBlank(message = "部署ID不为空") String deploymentId) {
+        String flowForm = workflowService.getStartFlowForm(deploymentId);
+        return Result.success("请填写表单信息",flowForm);
+    }
     /**
      * 发起流程
      * @param startDTO 发起流程对象
@@ -122,7 +134,7 @@ public class WorkFlowController {
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        String flag = workflowService.start(startDTO);
-        return Result.success(flag);
+        workflowService.start(startDTO);
+        return Result.success();
     }
 }

@@ -7,7 +7,7 @@
 <body>
 <div class="layui-fluid">
     <div class="layui-card">
-        <form class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="flowForm" id="flowForm">
+        <form class="layui-form layui-card-header layuiadmin-card-header-auto">
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label">名称</label>
@@ -37,21 +37,41 @@
             </div>
         </form>
         <div class="layui-card-body">
-            <table id="flowTable" lay-filter="flowTable"></table>
+            <div class="layui-row">
+                <div class="layui-col-md6">
+                    <table id="flowTable" lay-filter="flowTable"></table>
+                </div>
+                <div class="layui-col-md6">
+                    <div class="layui-tab">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this">表单</li>
+                            <li>办理人</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                                <div class="build-wrap"></div>
+                            </div>
+                            <div class="layui-tab-item">内容2</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 <div th:replace="common/script::footer"></div>
+<script th:src="@{/static/lib/form-builder/form-builder.min.js}"></script>
+<script th:src="@{/static/lib/form-builder/form-render.min.js}"></script>
 <script th:inline="javascript">
   layui.config({
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
      index: 'lib/index', //主入口模块
-  }).use(['index', 'form','crud', 'table'], function(){
+  }).use(['index', 'form', 'crud', 'table'], function(){
     let $ = layui.$,
             form = layui.form,
             table = layui.table,
-            crud = layui.crud;
+        crud = layui.crud;
     crud.setSelect("category","actCategory");
     //监听搜索
     form.on('submit(search)', function(data) {
@@ -76,33 +96,74 @@
           ,cellMinWidth: 80
           ,page: true //开启分页,
           ,cols: [[ //表头
-              {type: 'checkbox', fixed: 'left'},
+              {type: 'radio', fixed: 'left'},
               {field: 'id', title: 'ID', hide:true},
               {field: 'name', title: '名称'},
               {field: 'key', title: 'KEY'},
-              {field: 'category', title: '分类'},
+              {field: 'category', title: "流程分类", templet: function (d) { return crud.getDictValue('actCategory',d.category);}},
               {field: 'version', title: '版本'},
               {field: 'description', title: '描述'},
           ]]
     });
+
+    //监听流程单击事件
+    table.on('row(flowTable)', function(obj) {
+        // 获取启动流程表单
+        getStartFlowForm(obj.data.deploymentId);
+        //标注选中样式
+        obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+    });
+     /**
+     * 获取启动流程表单
+     * @param deploymentId 部署ID
+     */
+    function getStartFlowForm(deploymentId) {
+         $.ajax({
+             type: 'GET',
+             url:  ctx + '/workFlow/getStartFlowForm?deploymentId=' + deploymentId,
+             contentType:'application/json;charset=UTF-8',
+             dataType: 'json',
+             success: function(result) {
+                 layer.msg(result.message);
+                 $('.build-wrap').empty();
+                 if (result.code === 200) {
+                     $('.build-wrap').formRender({
+                         formData: result.data,
+                         dataType: 'xml'
+                     });
+                 }
+             }
+         });
+    }
+
+    /**
+     * 发起流程
+     */
     form.on('submit(save-submit)', function(data) {
-      $.ajax({
-        type: 'POST',
-        url:  ctx + '/workFlow/start',
-        data: JSON.stringify(data.field),
-        contentType:'application/json;charset=UTF-8',
-        dataType: 'json',
-        success: function(result) {
-          layer.msg(result.message);
-          if (result.code === 200) {
-            let index = parent.layer.getFrameIndex(window.name);
-            // 关闭
-            parent.layer.close(index);
-            // 刷新
-            parent.location.reload();
-          }
+        let selectData = layui.table.checkStatus('flowTable').data;
+        if (selectData.length === 0) {
+            layer.msg('请选择发起流程');
+            return;
         }
-      });
+        $.ajax({
+            type: 'POST',
+            url:  ctx + '/workFlow/start',
+            data: JSON.stringify({
+                deploymentId : selectData[selectData.length - 1].deploymentId
+            }),
+            contentType:'application/json;charset=UTF-8',
+            dataType: 'json',
+            success: function(result) {
+              layer.msg(result.message);
+              if (result.code === 200) {
+                let index = parent.layer.getFrameIndex(window.name);
+                // 关闭
+                parent.layer.close(index);
+                // 刷新
+                parent.location.reload();
+              }
+            }
+        });
     });
   });
 </script>

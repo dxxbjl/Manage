@@ -12,6 +12,8 @@ import lombok.Data;
  */
 @Data
 public class StartDTO {
-
+    /**
+     * 部署ID
+     */
     private String deploymentId;
 }

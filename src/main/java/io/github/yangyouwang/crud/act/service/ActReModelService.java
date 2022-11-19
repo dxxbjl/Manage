@@ -82,6 +82,7 @@ public class ActReModelService extends ServiceImpl<ActReModelMapper, ActReModel>
             properties.put("process_id", actReModel.getKey());
             properties.put("name", actReModel.getName());
             properties.put("documentation", actReModel.getDescription());
+            properties.put("process_namespace", actReModel.getCategory());
             editorNode.put("properties",properties);
             repositoryService.addModelEditorSource(modelData.getId(), editorNode.toString().getBytes("utf-8"));
             log.info(modelData.getId());
@@ -114,8 +115,6 @@ public class ActReModelService extends ServiceImpl<ActReModelMapper, ActReModel>
             repositoryService.saveModel(modelData);
             log.info(deployment.getId());
             return deployment.getId();
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

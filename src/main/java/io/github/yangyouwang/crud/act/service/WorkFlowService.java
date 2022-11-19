@@ -1,14 +1,13 @@
 package io.github.yangyouwang.crud.act.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.github.yangyouwang.core.util.SecurityUtils;
+import io.github.yangyouwang.crud.act.entity.FormData;
 import io.github.yangyouwang.crud.act.model.FlowVO;
 import io.github.yangyouwang.crud.act.model.StartDTO;
 import io.github.yangyouwang.crud.act.model.TaskVO;
-import org.activiti.engine.HistoryService;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
+import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricProcessInstanceQuery;
 import org.activiti.engine.repository.ProcessDefinition;
@@ -21,13 +20,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
  * 工作流业务层
+ * @author yangyouwang
  */
 @Service
 public class WorkFlowService {
+
+    @Autowired
+    private FormDataService formDataService;
 
     @Autowired
     private RepositoryService repositoryService;
@@ -40,6 +44,9 @@ public class WorkFlowService {
 
     @Autowired
     private HistoryService historyService;
+
+    @Autowired
+    private FormService formService;
 
     public TableDataInfo myFlow(String name, int page, int limit) {
         String userName = SecurityUtils.getUserName();
@@ -130,10 +137,26 @@ public class WorkFlowService {
         return rspData;
     }
 
-    public String start(StartDTO startDTO) {
+    public void start(StartDTO startDTO) {
         ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
                 .deploymentId(startDTO.getDeploymentId()).singleResult();
-        ProcessInstance processInstance = runtimeService.startProcessInstanceById(processDefinition.getId(), "abc");
-        return processInstance.getProcessInstanceId();
+        if (!processDefinition.hasStartFormKey()) {
+            throw new RuntimeException("流程未配置表单");
+        }
+        runtimeService.startProcessInstanceById(processDefinition.getId());
+    }
+
+    public String getStartFlowForm(String deploymentId) {
+        ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
+                .deploymentId(deploymentId).singleResult();
+        if (!processDefinition.hasStartFormKey()) {
+            throw new RuntimeException("流程未配置表单");
+        }
+        String formKey = formService.getStartFormKey(processDefinition.getId());
+        FormData formData = formDataService.getOne(new LambdaQueryWrapper<FormData>().eq(FormData::getFormKey, formKey));
+        if (Objects.isNull(formData)) {
+            throw new RuntimeException("流程表单不存在");
+        }
+        return formData.getFormXmlData();
     }
 }
