@@ -1,6 +1,6 @@
-package io.github.yangyouwang.core.converter.impl;
-import io.github.yangyouwang.core.converter.ListToTree;
-import io.github.yangyouwang.core.converter.Treeable;
+package io.github.yangyouwang.core.util.converter.impl;
+import io.github.yangyouwang.core.util.converter.ListToTree;
+import io.github.yangyouwang.core.util.converter.Treeable;
 
 import java.util.ArrayList;
 import java.util.HashMap;

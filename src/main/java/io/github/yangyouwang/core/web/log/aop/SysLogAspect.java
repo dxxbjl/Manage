@@ -1,4 +1,4 @@
-package io.github.yangyouwang.core.aop;
+package io.github.yangyouwang.core.web.log.aop;
 
 import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.crud.system.mapper.SysLogMapper;

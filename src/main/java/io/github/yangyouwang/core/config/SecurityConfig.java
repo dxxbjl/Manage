@@ -1,7 +1,7 @@
 package io.github.yangyouwang.core.config;
 import io.github.yangyouwang.core.web.filter.ValidateCodeFilter;
-import io.github.yangyouwang.core.web.security.DefaultAuthenticationFailureHandler;
-import io.github.yangyouwang.core.web.security.DefaultAuthenticationSuccessHandler;
+import io.github.yangyouwang.core.web.handler.DefaultAuthenticationFailureHandler;
+import io.github.yangyouwang.core.web.handler.DefaultAuthenticationSuccessHandler;
 import io.github.yangyouwang.crud.system.service.SysUserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

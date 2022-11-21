@@ -1,7 +1,7 @@
 package io.github.yangyouwang.crud.system.model;
 
 
-import io.github.yangyouwang.core.converter.Treeable;
+import io.github.yangyouwang.core.util.converter.Treeable;
 import io.github.yangyouwang.crud.system.entity.SysMenu;
 import lombok.Data;
 
