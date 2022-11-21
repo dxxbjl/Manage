@@ -16,4 +16,8 @@ public class StartDTO {
      * 部署ID
      */
     private String deploymentId;
+    /**
+     * 表单
+     */
+    private String formData;
 }

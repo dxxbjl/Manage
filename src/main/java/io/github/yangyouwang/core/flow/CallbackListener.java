@@ -4,9 +4,9 @@ import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.ExecutionListener;
 
 /**
- * 结束任務监听
+ * 回调监听
  */
-public class StopTaskListener implements ExecutionListener {
+public class CallbackListener implements ExecutionListener {
 
     @Override
     public void notify(DelegateExecution execution) throws Exception {
