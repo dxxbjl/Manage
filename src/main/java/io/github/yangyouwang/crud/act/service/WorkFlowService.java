@@ -7,18 +7,21 @@ import io.github.yangyouwang.crud.act.entity.FormData;
 import io.github.yangyouwang.crud.act.model.FlowVO;
 import io.github.yangyouwang.crud.act.model.StartDTO;
 import io.github.yangyouwang.crud.act.model.TaskVO;
+import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricProcessInstanceQuery;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
-import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
+import org.activiti.image.impl.DefaultProcessDiagramGenerator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.image.BufferedImage;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -158,5 +161,16 @@ public class WorkFlowService {
             throw new RuntimeException("流程表单不存在");
         }
         return formData.getFormXmlData();
+    }
+
+    public BufferedImage getFlowDiagram(String deploymentId) {
+        ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
+                .deploymentId(deploymentId).singleResult();
+        BpmnModel bpmnModel = repositoryService.getBpmnModel(processDefinition.getId());
+        DefaultProcessDiagramGenerator diagramGenerator = new DefaultProcessDiagramGenerator();
+        return diagramGenerator.generateImage(bpmnModel, "png",
+                Collections.emptyList(), Collections.emptyList(),
+                "宋体", "宋体", "宋体",
+                null, 0);
     }
 }

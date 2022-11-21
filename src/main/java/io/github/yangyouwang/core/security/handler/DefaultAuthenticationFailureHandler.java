@@ -1,4 +1,4 @@
-package io.github.yangyouwang.core.web.handler;
+package io.github.yangyouwang.core.security.handler;
 
 import com.alibaba.fastjson.JSON;
 import io.github.yangyouwang.common.domain.Result;

@@ -1,4 +1,4 @@
-package io.github.yangyouwang.core.web.log.listener;
+package io.github.yangyouwang.core.log.listener;
 
 import cn.hutool.extra.servlet.ServletUtil;
 import io.github.yangyouwang.crud.system.entity.SysLoginLog;

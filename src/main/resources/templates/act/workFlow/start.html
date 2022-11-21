@@ -46,12 +46,16 @@
                         <ul class="layui-tab-title">
                             <li class="layui-this">表单</li>
                             <li>办理人</li>
+                            <li>流程图</li>
                         </ul>
                         <div class="layui-tab-content">
                             <div class="layui-tab-item layui-show">
                                 <div class="build-wrap"></div>
                             </div>
                             <div class="layui-tab-item">内容2</div>
+                            <div class="layui-tab-item">
+                                <img width="80%" height="100%" alt="流程图" id="flowDiagram"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -110,6 +114,8 @@
     table.on('row(flowTable)', function(obj) {
         // 获取启动流程表单
         getStartFlowForm(obj.data.deploymentId);
+        // 获取流程图片
+        getFlowDiagram(obj.data.deploymentId);
         //标注选中样式
         obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
     });
@@ -135,7 +141,13 @@
              }
          });
     }
-
+    /**
+     * 获取流程图片
+     * @param deploymentId 部署ID
+     */
+    function getFlowDiagram(deploymentId) {
+        $("#flowDiagram").attr("src", ctx + '/workFlow/getFlowDiagram?deploymentId=' + deploymentId);
+    }
     /**
      * 发起流程
      */

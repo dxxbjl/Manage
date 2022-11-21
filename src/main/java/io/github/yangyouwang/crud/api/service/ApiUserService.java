@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.enums.ResultStatus;
-import io.github.yangyouwang.core.api.context.ApiContext;
+import io.github.yangyouwang.core.util.api.ApiContext;
 import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.core.config.properties.WeChatProperties;
 import io.github.yangyouwang.core.util.DateTimeUtil;

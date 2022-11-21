@@ -1,4 +1,4 @@
-package io.github.yangyouwang.core.web.filter;
+package io.github.yangyouwang.core.security.filter;
 
 import com.alibaba.fastjson.JSON;
 import io.github.yangyouwang.common.constant.ConfigConsts;

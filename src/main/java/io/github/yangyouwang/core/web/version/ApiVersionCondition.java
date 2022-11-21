@@ -1,4 +1,4 @@
-package io.github.yangyouwang.core.api.version;
+package io.github.yangyouwang.core.web.version;
 
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
