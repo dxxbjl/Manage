@@ -159,7 +159,7 @@ public class WorkFlowController {
         if (bindingResult.hasErrors()){
             return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        workflowService.start(startDTO);
-        return Result.success();
+        String businessKey = workflowService.start(startDTO);
+        return Result.success("发起流程成功",businessKey);
     }
 }

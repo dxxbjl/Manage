@@ -1,5 +1,6 @@
 package io.github.yangyouwang.crud.act.service;
 
+import com.alibaba.fastjson.JSON;
 import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.github.yangyouwang.core.util.SecurityUtils;
 import io.github.yangyouwang.crud.act.model.FlowVO;
@@ -15,6 +16,7 @@ import org.activiti.engine.history.HistoricProcessInstanceQuery;
 import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
+import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
 import org.activiti.image.impl.DefaultProcessDiagramGenerator;
@@ -25,6 +27,8 @@ import org.springframework.stereotype.Service;
 import java.awt.image.BufferedImage;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -138,14 +142,19 @@ public class WorkFlowService {
         return rspData;
     }
 
-    public void start(StartDTO startDTO) {
-        String userName = SecurityUtils.getUserName();
+    public String start(StartDTO startDTO) {
         ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
                 .deploymentId(startDTO.getDeploymentId()).singleResult();
         // 设置流程发起人用户信息
+        String userName = SecurityUtils.getUserName();
         Authentication.setAuthenticatedUserId(userName);
         // 发起流程
-        runtimeService.startProcessInstanceById(processDefinition.getId());
+        String businessKey = UUID.randomUUID().toString().replaceAll("-", "");
+        Map formData = JSON.parseObject(startDTO.getFormData(), Map.class);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceById(processDefinition.getId(), businessKey , formData);
+        // 设置流程实例名称
+        runtimeService.setProcessInstanceName(processInstance.getId(),startDTO.getTitle());
+        return businessKey;
     }
 
     public FormVO getStartFlowForm(String deploymentId) {
