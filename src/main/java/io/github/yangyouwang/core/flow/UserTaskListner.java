@@ -18,9 +18,8 @@ public class UserTaskListner implements TaskListener {
     @Override
     public void notify(DelegateTask delegateTask) {
         String event = delegateTask.getEventName();
-        System.out.println(event);
         switch (event) {
-            case "take" :
+            case "create" :
                 String assignee = request.getParameter("assignee");
                 if (Strings.isNotBlank(assignee)) {
                     delegateTask.setAssignee(assignee);

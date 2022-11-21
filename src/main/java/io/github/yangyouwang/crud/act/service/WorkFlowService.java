@@ -11,8 +11,10 @@ import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricProcessInstanceQuery;
+import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
+import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
 import org.activiti.image.impl.DefaultProcessDiagramGenerator;
@@ -141,11 +143,15 @@ public class WorkFlowService {
     }
 
     public void start(StartDTO startDTO) {
+        String userName = SecurityUtils.getUserName();
         ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
                 .deploymentId(startDTO.getDeploymentId()).singleResult();
         if (!processDefinition.hasStartFormKey()) {
             throw new RuntimeException("流程未配置表单");
         }
+        // 设置流程发起人用户信息
+        Authentication.setAuthenticatedUserId(userName);
+        // 发起流程
         runtimeService.startProcessInstanceById(processDefinition.getId());
     }
 
