@@ -1,20 +1,19 @@
 package io.github.yangyouwang.crud.act.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.github.yangyouwang.core.util.SecurityUtils;
-import io.github.yangyouwang.crud.act.entity.FormData;
 import io.github.yangyouwang.crud.act.model.FlowVO;
 import io.github.yangyouwang.crud.act.model.StartDTO;
 import io.github.yangyouwang.crud.act.model.TaskVO;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.*;
+import org.activiti.engine.form.FormProperty;
+import org.activiti.engine.form.StartFormData;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricProcessInstanceQuery;
 import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
-import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
 import org.activiti.image.impl.DefaultProcessDiagramGenerator;
@@ -25,7 +24,6 @@ import org.springframework.stereotype.Service;
 import java.awt.image.BufferedImage;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -34,9 +32,6 @@ import java.util.stream.Collectors;
  */
 @Service
 public class WorkFlowService {
-
-    @Autowired
-    private FormDataService formDataService;
 
     @Autowired
     private RepositoryService repositoryService;
@@ -123,7 +118,7 @@ public class WorkFlowService {
         return rspData;
     }
 
-    public TableDataInfo doneTask(int page, int limit, String name, String categoryId) {
+    public TableDataInfo historicTask(int page, int limit, String name, String categoryId) {
         String userName = SecurityUtils.getUserName();
         HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery();
         query.involvedUser(userName);
@@ -155,18 +150,14 @@ public class WorkFlowService {
         runtimeService.startProcessInstanceById(processDefinition.getId());
     }
 
-    public String getStartFlowForm(String deploymentId) {
+    public List<FormProperty> getStartFlowForm(String deploymentId) {
         ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
                 .deploymentId(deploymentId).singleResult();
         if (!processDefinition.hasStartFormKey()) {
             throw new RuntimeException("流程未配置表单");
         }
-        String formKey = formService.getStartFormKey(processDefinition.getId());
-        FormData formData = formDataService.getOne(new LambdaQueryWrapper<FormData>().eq(FormData::getFormKey, formKey));
-        if (Objects.isNull(formData)) {
-            throw new RuntimeException("流程表单不存在");
-        }
-        return formData.getFormXmlData();
+        StartFormData startFormData = formService.getStartFormData(processDefinition.getId());
+        return startFormData.getFormProperties();
     }
 
     public BufferedImage getFlowDiagram(String deploymentId) {

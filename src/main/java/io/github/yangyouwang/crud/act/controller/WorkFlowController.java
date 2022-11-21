@@ -5,6 +5,7 @@ import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.github.yangyouwang.crud.act.model.StartDTO;
 import io.github.yangyouwang.crud.act.service.WorkFlowService;
 import lombok.RequiredArgsConstructor;
+import org.activiti.engine.form.FormProperty;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 /**
  * 工作流控制层
@@ -53,9 +55,9 @@ public class WorkFlowController {
      * 跳转已办任务
      * @return 已办任务页面
      */
-    @GetMapping("/doneTaskPage")
-    public String doneTaskPage(){
-        return SUFFIX + "/doneTask";
+    @GetMapping("/historicTaskPage")
+    public String historicTaskPage(){
+        return SUFFIX + "/historicTask";
     }
 
     /**
@@ -107,13 +109,13 @@ public class WorkFlowController {
      * 已办任务列表
      * @return 请求列表
      */
-    @GetMapping("/doneTask")
+    @GetMapping("/historicTask")
     @ResponseBody
-    public TableDataInfo doneTask(HttpServletRequest request,
+    public TableDataInfo historicTask(HttpServletRequest request,
                               String name, String categoryId) {
         int page = Integer.parseInt(request.getParameter("page")) - 1;
         int limit = Integer.parseInt(request.getParameter("limit"));
-        return workflowService.doneTask(page, limit, name, categoryId);
+        return workflowService.historicTask(page, limit, name, categoryId);
     }
 
     /**
@@ -124,7 +126,7 @@ public class WorkFlowController {
     @GetMapping("/getStartFlowForm")
     @ResponseBody
     public Result getStartFlowForm(@RequestParam @NotBlank(message = "部署ID不为空") String deploymentId) {
-        String flowForm = workflowService.getStartFlowForm(deploymentId);
+        List<FormProperty> flowForm = workflowService.getStartFlowForm(deploymentId);
         return Result.success("请填写表单信息",flowForm);
     }
 

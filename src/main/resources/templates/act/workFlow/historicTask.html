@@ -18,7 +18,7 @@
         </div>
       </form>
       <div class="layui-card-body">
-        <table id="doneTaskTable" lay-filter="doneTaskTable"></table>
+        <table id="historicTaskTable" lay-filter="historicTaskTable"></table>
       </div>
     </div>
   </div>
@@ -36,23 +36,23 @@
       form.on('submit(search)', function(data) {
         let field = data.field;
           //执行重载
-          table.reload('doneTaskTable', {
+          table.reload('historicTaskTable', {
               where: field
           });
       });
       //监听重置
       form.on('submit(reset)', function(data) {
         Object.keys(data.field).forEach(key => (data.field[key] = ''));
-        table.reload('doneTaskTable', {
+        table.reload('historicTaskTable', {
           where: data.field
         });
       });
       // 查询列表接口
       table.render({
-          elem: '#doneTaskTable'
+          elem: '#historicTaskTable'
           ,toolbar: '#toolbar'
           ,height: 'full-110'
-          ,url:  ctx + '/workFlow/doneTask'
+          ,url:  ctx + '/workFlow/historicTask'
           ,cellMinWidth: 80
           ,page: true //开启分页,
           ,cols: [[ //表头
@@ -62,7 +62,7 @@
           ]]
       });
       //头工具栏事件
-      table.on('toolbar(doneTaskTable)', function(obj) {
+      table.on('toolbar(historicTaskTable)', function(obj) {
         let checkStatus = table.checkStatus(obj.config.id)
                 ,data = checkStatus.data;
         switch(obj.event) {
@@ -70,7 +70,7 @@
         }
       });
       //监听行工具事件
-      table.on('tool(doneTaskTable)', function(obj) {
+      table.on('tool(historicTaskTable)', function(obj) {
         let data = obj.data //获得当前行数据
                 ,layEvent = obj.event;
 

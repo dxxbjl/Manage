@@ -50,7 +50,7 @@
                         </ul>
                         <div class="layui-tab-content">
                             <div class="layui-tab-item layui-show">
-                                <div class="build-wrap"></div>
+
                             </div>
                             <div class="layui-tab-item">内容2</div>
                             <div class="layui-tab-item">
@@ -64,8 +64,6 @@
     </div>
 </div>
 <div th:replace="common/script::footer"></div>
-<script th:src="@{/static/lib/form-builder/form-builder.min.js}"></script>
-<script th:src="@{/static/lib/form-builder/form-render.min.js}"></script>
 <script th:inline="javascript">
   layui.config({
       base: '/static/layuiadmin/' //静态资源所在路径
@@ -120,7 +118,6 @@
         // 选中radio样式
         obj.tr.find('i[class="layui-anim layui-icon"]').trigger("click");
     });
-    let formRenderInstance = null;
      /**
      * 获取启动流程表单
      * @param deploymentId 部署ID
@@ -133,13 +130,8 @@
              dataType: 'json',
              success: function(result) {
                  layer.msg(result.message);
-                 $('.build-wrap').empty();
-                 formRenderInstance = null;
                  if (result.code === 200) {
-                     formRenderInstance = $('.build-wrap').formRender({
-                         formData: result.data,
-                         dataType: 'xml'
-                     });
+                     console.log(result.data);
                  }
              }
          });
@@ -165,7 +157,7 @@
             url:  ctx + '/workFlow/start',
             data: JSON.stringify({
                 deploymentId : selectData[selectData.length - 1].deploymentId,
-                formData: formRenderInstance? JSON.stringify(formRenderInstance.userData): ''
+                formData: ''
             }),
             contentType:'application/json;charset=UTF-8',
             dataType: 'json',
