@@ -7,6 +7,7 @@ import io.github.yangyouwang.crud.act.model.FlowVO;
 import io.github.yangyouwang.crud.act.model.FormVO;
 import io.github.yangyouwang.crud.act.model.StartDTO;
 import io.github.yangyouwang.crud.act.model.TaskVO;
+import lombok.extern.slf4j.Slf4j;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.*;
 import org.activiti.engine.form.FormProperty;
@@ -36,6 +37,7 @@ import java.util.stream.Collectors;
  * @author yangyouwang
  */
 @Service
+@Slf4j
 public class WorkFlowService {
 
     @Autowired
@@ -176,10 +178,16 @@ public class WorkFlowService {
             formPropertyVO.setId(s.getId());
             formPropertyVO.setName(s.getName());
             formPropertyVO.setValue(s.getValue());
-            formPropertyVO.setTypeName(s.getType().getName());
+            String type = s.getType().getName();
+            formPropertyVO.setTypeName(type);
+            if("enum".equals(type)) {
+                formPropertyVO.setValues(s.getType().getInformation("values"));
+            } else if("date".equals(type)){
+                formPropertyVO.setDatePatterns(s.getType().getInformation("datePattern"));
+            }
             return formPropertyVO;
         }).collect(Collectors.toList());
-        formVO.setFormPropertyVOList(formPropertyVOList);
+        formVO.setFormProperties(formPropertyVOList);
         return formVO;
     }
 
