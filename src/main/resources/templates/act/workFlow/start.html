@@ -100,7 +100,7 @@
           ,cellMinWidth: 80
           ,page: true //开启分页,
           ,cols: [[ //表头
-              {type: 'radio', fixed: 'left'},
+              {type: 'radio', align : 'center'},
               {field: 'id', title: 'ID', hide:true},
               {field: 'name', title: '名称'},
               {field: 'key', title: 'KEY'},
@@ -109,15 +109,16 @@
               {field: 'description', title: '描述'},
           ]]
     });
-
     //监听流程单击事件
     table.on('row(flowTable)', function(obj) {
         // 获取启动流程表单
         getStartFlowForm(obj.data.deploymentId);
         // 获取流程图片
         getFlowDiagram(obj.data.deploymentId);
-        //标注选中样式
+        // 标注选中样式
         obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+        // 选中radio样式
+        obj.tr.find('i[class="layui-anim layui-icon"]').trigger("click");
     });
      /**
      * 获取启动流程表单
