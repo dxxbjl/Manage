@@ -131,7 +131,14 @@
              success: function(result) {
                  layer.msg(result.message);
                  if (result.code === 200) {
-                     console.log(result.data);
+                     let data = result.data;
+                     if (data.hasStartFormKey) {
+                         // 外置表单
+
+                     }
+                     // 内置表单
+                     let formProperty = data.formPropertyVOList;
+                     console.log(formProperty)
                  }
              }
          });

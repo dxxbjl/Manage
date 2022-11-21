@@ -11,10 +11,6 @@ public class CallbackListener implements ExecutionListener {
     @Override
     public void notify(DelegateExecution execution) throws Exception {
         String event = execution.getEventName();
-        switch (event) {
-            case "end" :
-                System.out.println("end event");
-                break;
-        }
+        System.out.println(event + " event");
     }
 }

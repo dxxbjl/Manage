@@ -3,6 +3,7 @@ package io.github.yangyouwang.crud.act.service;
 import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.github.yangyouwang.core.util.SecurityUtils;
 import io.github.yangyouwang.crud.act.model.FlowVO;
+import io.github.yangyouwang.crud.act.model.FormVO;
 import io.github.yangyouwang.crud.act.model.StartDTO;
 import io.github.yangyouwang.crud.act.model.TaskVO;
 import org.activiti.bpmn.model.BpmnModel;
@@ -141,23 +142,36 @@ public class WorkFlowService {
         String userName = SecurityUtils.getUserName();
         ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
                 .deploymentId(startDTO.getDeploymentId()).singleResult();
-        if (!processDefinition.hasStartFormKey()) {
-            throw new RuntimeException("流程未配置表单");
-        }
         // 设置流程发起人用户信息
         Authentication.setAuthenticatedUserId(userName);
         // 发起流程
         runtimeService.startProcessInstanceById(processDefinition.getId());
     }
 
-    public List<FormProperty> getStartFlowForm(String deploymentId) {
+    public FormVO getStartFlowForm(String deploymentId) {
         ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
                 .deploymentId(deploymentId).singleResult();
-        if (!processDefinition.hasStartFormKey()) {
-            throw new RuntimeException("流程未配置表单");
+        FormVO formVO = new FormVO();
+        formVO.setHasStartFormKey(processDefinition.hasStartFormKey());
+        if (processDefinition.hasStartFormKey()) {
+           // 外置表单判断
         }
+        // 内置表单配置
         StartFormData startFormData = formService.getStartFormData(processDefinition.getId());
-        return startFormData.getFormProperties();
+        List<FormProperty> formProperties = startFormData.getFormProperties();
+        if (formProperties.isEmpty()) {
+            throw new RuntimeException("内置动态表单未配置");
+        }
+        List<FormVO.FormPropertyVO> formPropertyVOList = formProperties.stream().map(s -> {
+            FormVO.FormPropertyVO formPropertyVO = new FormVO.FormPropertyVO();
+            formPropertyVO.setId(s.getId());
+            formPropertyVO.setName(s.getName());
+            formPropertyVO.setValue(s.getValue());
+            formPropertyVO.setTypeName(s.getType().getName());
+            return formPropertyVO;
+        }).collect(Collectors.toList());
+        formVO.setFormPropertyVOList(formPropertyVOList);
+        return formVO;
     }
 
     public BufferedImage getFlowDiagram(String deploymentId) {

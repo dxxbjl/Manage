@@ -2,6 +2,7 @@ package io.github.yangyouwang.crud.act.controller;
 
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.TableDataInfo;
+import io.github.yangyouwang.crud.act.model.FormVO;
 import io.github.yangyouwang.crud.act.model.StartDTO;
 import io.github.yangyouwang.crud.act.service.WorkFlowService;
 import lombok.RequiredArgsConstructor;
@@ -126,8 +127,8 @@ public class WorkFlowController {
     @GetMapping("/getStartFlowForm")
     @ResponseBody
     public Result getStartFlowForm(@RequestParam @NotBlank(message = "部署ID不为空") String deploymentId) {
-        List<FormProperty> flowForm = workflowService.getStartFlowForm(deploymentId);
-        return Result.success("请填写表单信息",flowForm);
+        FormVO formVO = workflowService.getStartFlowForm(deploymentId);
+        return Result.success("请填写表单信息",formVO);
     }
 
     /**
