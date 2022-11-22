@@ -230,7 +230,7 @@ INSERT INTO `sys_menu` VALUES (3086, '编辑新闻', 3084, 2, '', '#', 'F', 'Y',
 INSERT INTO `sys_menu` VALUES (3087, '删除新闻', 3084, 3, '', '#', 'F', 'Y', 'news:del', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3089, '我的流程', 3013, 2, 'layui-icon-username', '/workFlow/flowPage', 'C', 'Y', '', 'admin', '2022-11-14 06:42:06', 'admin', '2022-11-21 16:25:45', 0, '');
 INSERT INTO `sys_menu` VALUES (3090, '代办任务', 3013, 3, 'layui-icon-username', '/workFlow/toDoTaskPage', 'C', 'Y', '', 'admin', '2022-11-14 06:42:29', 'admin', '2022-11-21 16:25:56', 0, '');
-INSERT INTO `sys_menu` VALUES (3091, '已办任务', 3013, 4, 'layui-icon-username', '/workFlow/historicTask', 'C', 'Y', '', 'admin', '2022-11-14 06:42:59', 'admin', '2022-11-21 16:26:19', 0, '');
+INSERT INTO `sys_menu` VALUES (3091, '已办任务', 3013, 4, 'layui-icon-username', '/workFlow/historicTaskPage', 'C', 'Y', '', 'admin', '2022-11-14 06:42:59', 'admin', '2022-11-21 16:26:19', 0, '');
 
 -- ----------------------------
 -- Table structure for sys_role

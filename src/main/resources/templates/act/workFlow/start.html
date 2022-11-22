@@ -50,13 +50,15 @@
                         </ul>
                         <div class="layui-tab-content">
                             <div class="layui-tab-item layui-show">
-                                <div id="flowFormView">
-
-                                </div>
+                                <div id="flowFormView"></div>
                             </div>
-                            <div class="layui-tab-item">内容2</div>
                             <div class="layui-tab-item">
-                                <img width="80%" height="100%" alt="流程图" id="flowDiagram"></div>
+                                <table id="userTable" lay-filter="userTable"></table>
+                            </div>
+                            <div class="layui-tab-item">
+                                <div align="center">
+                                    <img height="100%" width="80%" alt="流程图" id="flowDiagram"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -66,23 +68,25 @@
     </div>
 </div>
 <script type="text/html" id="flowFormTpl">
-    <form class="layui-form layui-form-pane" lay-filter="flowForm" id="flowForm">
-        {{#  layui.each(d, function(index, item){ }}
-            {{#  if(item.typeName === 'long'){ }}
+    <div class="layui-fluid">
+        <div class="layui-row">
+            <form class="layui-form layui-form-pane" lay-filter="flowForm" id="flowForm">
+                {{#  layui.each(d, function(index, item){ }}
+                {{#  if(item.typeName === 'long'){ }}
                 <div class="layui-form-item">
                     <label class="layui-form-label">{{item.name}}</label>
                     <div class="layui-input-inline">
                         <input type="number" lay-verify="required" class="layui-input" name="{{item.id}}" placeholder="请输入{{item.name}}"/>
                     </div>
                 </div>
-            {{#  } else if(item.typeName === 'string') { }}
+                {{#  } else if(item.typeName === 'string') { }}
                 <div class="layui-form-item">
                     <label class="layui-form-label">{{item.name}}</label>
                     <div class="layui-input-inline">
                         <input type="text" lay-verify="required" class="layui-input" name="{{item.id}}" placeholder="请输入{{item.name}}"/>
                     </div>
                 </div>
-            {{#  } else if(item.typeName === "date") { }}
+                {{#  } else if(item.typeName === "date") { }}
                 <div class="layui-form-item">
                     <label class="layui-form-label">{{item.name}}</label>
                     <div class="layui-input-inline">
@@ -90,28 +94,30 @@
                                dateFormat="{{item.datePatterns}}" placeholder="{{item.datePatterns}}" autocomplete="off"/>
                     </div>
                 </div>
-            {{#  } else if(item.typeName === "enum") { }}
+                {{#  } else if(item.typeName === "enum") { }}
                 <div class="layui-form-item">
                     <label class="layui-form-label">{{item.name}}</label>
                     <div class="layui-input-inline">
                         <select name="{{item.id}}" lay-verify="required">
                             {{#  layui.each(item.values, function(k, v){ }}
-                                <option value="{{k}}">{{v}}</option>
+                            <option value="{{k}}">{{v}}</option>
                             {{# });  }}
                         </select>
                     </div>
                 </div>
-            {{#  } else { }}
-                <div class="layui-form-item" lay-filter="{{item.id}}" pane>
+                {{#  } else { }}
+                <div class="layui-form-item" lay-filter="{{item.id}}">
                     <label class="layui-form-label">{{item.name}}</label>
                     <div class="layui-input-inline">
-                        <input type="radio" name="{{item.id}}" value="{{item.id}}" title="是">
+                        <input type="radio" name="{{item.id}}" value="{{item.id}}" title="是" checked>
                         <input type="radio" name="{{item.id}}" value="{{item.id}}" title="否">
                     </div>
                 </div>
-            {{#  } }}
-        {{#  }); }}
-    </form>
+                {{#  } }}
+                {{#  }); }}
+            </form>
+        </div>
+    </div>
 </script>
 <div th:replace="common/script::footer"></div>
 <script th:inline="javascript">
@@ -213,6 +219,28 @@
              }
          });
     }
+    // 查询列表接口
+    table.render({
+        elem: '#userTable',
+        height: 'full-110',
+        url:  ctx + '/sysUser/page',
+        cellMinWidth: 80,
+        page: true, //开启分页
+        cols: [[ //表头
+            {type: 'checkbox', fixed: 'left'},
+            {field: 'id', title: 'ID', hide:true},
+            {field: 'nickName', title: '昵称'},
+            {field: 'userName', title: '账户'},
+            {field: 'phonenumber', title: '手机号'},
+            {field: 'deptName', title: '部门名称'},
+            {field: 'postName', title: '岗位名称'},
+        ]]
+    });
+    //监听人员单击事件
+    table.on('row(userTable)', function(obj) {
+        // 标注选中样式
+        obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+    });
     /**
      * 获取流程图片
      * @param deploymentId 部署ID
@@ -224,17 +252,23 @@
      * 发起流程
      */
     form.on('submit(save-submit)', function(data) {
-        let selectData = layui.table.checkStatus('flowTable').data;
-        if (selectData.length === 0) {
+        let flows = layui.table.checkStatus('flowTable').data;
+        let users = layui.table.checkStatus('userTable').data;
+        if (flows.length === 0) {
             layer.msg('请选择发起流程');
+            return;
+        }
+        if (users.length === 0) {
+            layer.msg('请选择审批人');
             return;
         }
         $.ajax({
             type: 'POST',
             url:  ctx + '/workFlow/start',
             data: JSON.stringify({
-                deploymentId : selectData[selectData.length - 1].deploymentId,
-                formData: $('#flowForm').serialize()
+                deploymentId : flows[flows.length - 1].deploymentId,
+                flowForm: $('#flowForm').serialize(),
+                users: users.map(x => x.userName)
             }),
             contentType:'application/json;charset=UTF-8',
             dataType: 'json',

@@ -55,8 +55,12 @@
           ,cellMinWidth: 80
           ,page: true //开启分页,
           ,cols: [[ //表头
-              {type: 'checkbox', fixed: 'left'},
-              {field: 'id', title: 'ID', hide:true},
+            {type: 'checkbox', fixed: 'left'},
+            {field: 'id', title: 'ID', hide:true},
+            {field: 'name', title: '名称'},
+            {field: 'assignee', title: '代理人'},
+            {field: 'createTime', title: '创建日期'},
+            {toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
           ]]
       });
   });

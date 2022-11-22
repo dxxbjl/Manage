@@ -2,6 +2,8 @@ package io.github.yangyouwang.crud.act.model;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * Description: 发起流程<br/>
  * date: 2022/11/17 23:13<br/>
@@ -19,5 +21,9 @@ public class StartDTO {
     /**
      * 表单
      */
-    private String formData;
+    private String flowForm;
+    /**
+     * 审批人
+     */
+    private List<String> users;
 }

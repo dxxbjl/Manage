@@ -5,10 +5,10 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * 任务VO
+ * 历史任务
  */
 @Data
-public class TaskVO {
+public class HistoricTaskVO {
     /**
      * 流程ID
      */
@@ -18,11 +18,15 @@ public class TaskVO {
      */
     private String name;
     /**
-     * 代理人
+     * 描述
      */
-    private String assignee;
+    private String description;
     /**
-     * 创建日期
+     * 开始日期
      */
-    private Date createTime;
+    private Date startTime;
+    /**
+     * 结束日期
+     */
+    private Date endTime;
 }

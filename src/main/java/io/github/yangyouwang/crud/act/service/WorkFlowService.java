@@ -3,10 +3,7 @@ package io.github.yangyouwang.crud.act.service;
 import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.github.yangyouwang.core.util.SecurityUtils;
 import io.github.yangyouwang.core.util.StringUtil;
-import io.github.yangyouwang.crud.act.model.FlowVO;
-import io.github.yangyouwang.crud.act.model.FormVO;
-import io.github.yangyouwang.crud.act.model.StartDTO;
-import io.github.yangyouwang.crud.act.model.TaskVO;
+import io.github.yangyouwang.crud.act.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.*;
@@ -64,10 +61,8 @@ public class WorkFlowService {
         List<TaskVO> taskVOList = tasks.stream().map(s -> {
             TaskVO taskVO = new TaskVO();
             taskVO.setId(s.getId());
-            taskVO.setCategory(s.getCategory());
             taskVO.setName(s.getName());
             taskVO.setAssignee(s.getAssignee());
-            taskVO.setDescription(s.getDescription());
             taskVO.setCreateTime(s.getCreateTime());
             return taskVO;
         }).collect(Collectors.toList());
@@ -115,9 +110,17 @@ public class WorkFlowService {
                 .taskCandidateOrAssigned(userName)
                 .orderByTaskCreateTime().desc();
         List<Task> tasks = query.listPage(page, limit);
+        List<TaskVO> taskVOList = tasks.stream().map(s -> {
+            TaskVO taskVO = new TaskVO();
+            taskVO.setId(s.getId());
+            taskVO.setName(s.getName());
+            taskVO.setAssignee(s.getAssignee());
+            taskVO.setCreateTime(s.getCreateTime());
+            return taskVO;
+        }).collect(Collectors.toList());
         TableDataInfo rspData = new TableDataInfo();
         rspData.setCode(0);
-        rspData.setData(tasks);
+        rspData.setData(taskVOList);
         rspData.setCount(query.count());
         return rspData;
     }
@@ -134,9 +137,18 @@ public class WorkFlowService {
         }
         query.orderByProcessInstanceStartTime().desc();
         List<HistoricProcessInstance> historicProcessInstances = query.listPage(page, limit);
+        List<HistoricTaskVO> historicTaskVOList = historicProcessInstances.stream().map(s -> {
+            HistoricTaskVO historicTaskVO = new HistoricTaskVO();
+            historicTaskVO.setId(s.getId());
+            historicTaskVO.setName(s.getName());
+            historicTaskVO.setDescription(s.getDescription());
+            historicTaskVO.setStartTime(s.getStartTime());
+            historicTaskVO.setEndTime(s.getEndTime());
+            return historicTaskVO;
+        }).collect(Collectors.toList());
         TableDataInfo rspData = new TableDataInfo();
         rspData.setCode(0);
-        rspData.setData(historicProcessInstances);
+        rspData.setData(historicTaskVOList);
         rspData.setCount(query.count());
         return rspData;
     }
@@ -149,10 +161,11 @@ public class WorkFlowService {
         Authentication.setAuthenticatedUserId(userName);
         // 发起流程
         String businessKey = UUID.randomUUID().toString().replaceAll("-", "");
-        Map formData = StringUtil.paramToMap(startDTO.getFormData());
-        ProcessInstance processInstance = runtimeService.startProcessInstanceById(processDefinition.getId(), businessKey , formData);
+        Map variables = StringUtil.paramToMap(startDTO.getFlowForm());
+        variables.put("users", startDTO.getUsers());
+        ProcessInstance processInstance = runtimeService.startProcessInstanceById(processDefinition.getId(), businessKey , variables);
         // 设置流程实例名称
-        runtimeService.setProcessInstanceName(processInstance.getId(),String.format("%s - %s - %s" ,processDefinition.getName(),userName,new Date()));
+        runtimeService.setProcessInstanceName(processInstance.getId(),String.format("%s - %s" ,processDefinition.getName(),userName));
         return businessKey;
     }
 
