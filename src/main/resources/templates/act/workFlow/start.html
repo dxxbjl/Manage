@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
   <title>发起流程</title>
   <div th:replace="common/link::header"></div>
@@ -50,7 +50,9 @@
                         </ul>
                         <div class="layui-tab-content">
                             <div class="layui-tab-item layui-show">
+                                <div id="flowFormView">
 
+                                </div>
                             </div>
                             <div class="layui-tab-item">内容2</div>
                             <div class="layui-tab-item">
@@ -63,17 +65,77 @@
         </div>
     </div>
 </div>
+<script type="text/html" id="flowFormTpl">
+    <div class="layui-form layui-form-pane" lay-filter="flowForm" id="flowForm">
+        <div class="layui-form-item">
+            <label class="layui-form-label">标题</label>
+            <div class="layui-input-inline">
+                <input type="text" lay-verify="required" class="layui-input" name="title" placeholder="请输入标题"/>
+            </div>
+        </div>
+        {{#  layui.each(d, function(index, item){ }}
+            {{#  if(item.typeName === 'long'){ }}
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{{item.name}}</label>
+                    <div class="layui-input-inline">
+                        <input type="number" lay-verify="required" class="layui-input" name="{{item.id}}" placeholder="请输入{{item.name}}"/>
+                    </div>
+                </div>
+            {{#  } else if(item.typeName === 'string') { }}
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{{item.name}}</label>
+                    <div class="layui-input-inline">
+                        <input type="text" lay-verify="required" class="layui-input" name="{{item.id}}" placeholder="请输入{{item.name}}"/>
+                    </div>
+                </div>
+            {{#  } else if(item.typeName === "date") { }}
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{{item.name}}</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" name="{{item.id}}" id="{{item.id}}"
+                               dateFormat="{{item.datePatterns}}" placeholder="{{item.datePatterns}}" autocomplete="off"/>
+                    </div>
+                </div>
+            {{#  } else if(item.typeName === "enum") { }}
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{{item.name}}</label>
+                    <div class="layui-input-inline">
+                        <select name="{{item.id}}" lay-verify="required">
+                            {{#  layui.each(item.values, function(k, v){ }}
+                                <option value="{{k}}">{{v}}</option>
+                            {{# });  }}
+                        </select>
+                    </div>
+                </div>
+            {{#  } else { }}
+                <div class="layui-form-item" lay-filter="{{item.id}}" pane>
+                    <label class="layui-form-label">{{item.name}}</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="{{item.id}}" value="{{item.id}}" title="是">
+                        <input type="radio" name="{{item.id}}" value="{{item.id}}" title="否">
+                    </div>
+                </div>
+            {{#  } }}
+        {{#  }); }}
+        {{#  if(d.length === 0){ }}
+        无数据
+        {{#  } }}
+    </div>
+</script>
 <div th:replace="common/script::footer"></div>
 <script th:inline="javascript">
   layui.config({
       base: '/static/layuiadmin/' //静态资源所在路径
   }).extend({
      index: 'lib/index', //主入口模块
-  }).use(['index', 'form', 'crud', 'table'], function(){
+  }).use(['index', 'form', 'crud', 'table', 'laytpl', 'laydate'], function(){
     let $ = layui.$,
             form = layui.form,
             table = layui.table,
-        crud = layui.crud;
+            laytpl = layui.laytpl,
+            laydate = layui.laydate,
+            crud = layui.crud;
+    // 流程分类
     crud.setSelect("category","actCategory");
     //监听搜索
     form.on('submit(search)', function(data) {
@@ -107,7 +169,6 @@
               {field: 'description', title: '描述'},
           ]]
     });
-
     //监听流程单击事件
     table.on('row(flowTable)', function(obj) {
         // 标注选中样式
@@ -115,14 +176,13 @@
         // 选中radio样式
         obj.tr.find('i[class="layui-anim layui-icon"]').trigger("click");
     });
-
+    // 列表单选监听事件
     table.on('radio(flowTable)',function (obj) {
         // 获取启动流程表单
         getStartFlowForm(obj.data.deploymentId);
         // 获取流程图片
         getFlowDiagram(obj.data.deploymentId);
     });
-
      /**
      * 获取启动流程表单
      * @param deploymentId 部署ID
@@ -139,11 +199,25 @@
                      let data = result.data;
                      if (data.hasStartFormKey) {
                          // 外置表单
-
+                        return;
                      }
                      // 内置表单
                      let formProperty = data.formProperties;
-                     console.log(formProperty)
+                     let flowFormTpl = document.getElementById('flowFormTpl').innerHTML
+                         ,flowFormView = document.getElementById('flowFormView');
+                     laytpl(flowFormTpl).render(formProperty, function(html){
+                         flowFormView.innerHTML = html;
+                     });
+                     $.each(formProperty,function(index,value){
+                         // 日期类型做特殊处理
+                         if (value.typeName === 'date') {
+                             laydate.render({
+                                 elem: '#' + value.id,
+                                 format: value.datePatterns
+                             });
+                         }
+                     });
+                     form.render(null, 'flowForm');
                  }
              }
          });
