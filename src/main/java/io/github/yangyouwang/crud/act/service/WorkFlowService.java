@@ -68,6 +68,8 @@ public class WorkFlowService {
         List<TaskVO> taskVOList = tasks.stream().map(s -> {
             TaskVO taskVO = new TaskVO();
             taskVO.setId(s.getId());
+            ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(s.getProcessInstanceId()).singleResult();
+            taskVO.setFlowName(processInstance.getName());
             taskVO.setName(s.getName());
             taskVO.setAssignee(s.getAssignee());
             taskVO.setCreateTime(s.getCreateTime());
@@ -117,6 +119,8 @@ public class WorkFlowService {
         List<TaskVO> taskVOList = tasks.stream().map(s -> {
             TaskVO taskVO = new TaskVO();
             taskVO.setId(s.getId());
+            ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(s.getProcessInstanceId()).singleResult();
+            taskVO.setFlowName(processInstance.getName());
             taskVO.setName(s.getName());
             taskVO.setAssignee(s.getAssignee());
             taskVO.setCreateTime(s.getCreateTime());
@@ -223,7 +227,7 @@ public class WorkFlowService {
         ProcessDiagramGenerator processDiagramGenerator = new DefaultProcessDiagramGenerator();
         InputStream inputStream = processDiagramGenerator.generateDiagram(bpmnModel, "png",
                 runtimeService.getActiveActivityIds(task.getExecutionId()),
-                new ArrayList<String>(), "宋体", "宋体", "宋体", null, 1.0d);
+                Collections.emptyList(), "宋体", "宋体", "宋体", null, 1.0d);
         return ImageIO.read(inputStream);
     }
 

@@ -16,6 +16,10 @@ public class TaskVO {
     /**
      * 流程名称
      */
+    private String flowName;
+    /**
+     * 节点名称
+     */
     private String name;
     /**
      * 代理人
