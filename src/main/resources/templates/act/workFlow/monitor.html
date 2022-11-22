@@ -7,15 +7,11 @@
 <body>
 <div class="layui-fluid">
     <div class="layui-card">
+        <div class="layui-card-header layuiadmin-card-header-auto">
+            <img height="100%" width="100%" alt="流程图" id="flowDiagram" onclick="fun.preview(this)"/>
+        </div>
         <div class="layui-card-body">
-            <div class="layui-row">
-                <div class="layui-col-md6">
-
-                </div>
-                <div class="layui-col-md6">
-
-                </div>
-            </div>
+            <table id="approvalHistoricTaskTable" lay-filter="approvalHistoricTaskTable"></table>
         </div>
     </div>
 </div>
@@ -30,7 +26,21 @@
             form = layui.form,
             table = layui.table,
             id = [[${id}]];
-        alert(id);
+        $("#flowDiagram").attr("src", ctx + '/workFlow/getCurrentFlowDiagram?taskId=' + id);
+        // 查询列表接口
+        table.render({
+            elem: '#approvalHistoricTaskTable',
+            height: 'full-110',
+            url:  ctx + '/workFlow/approvalHistoricTask',
+            cellMinWidth: 80,
+            page: true, //开启分页
+            cols: [[ //表头
+                {field: 'name', title: '节点名称'},
+                {field: 'assignee', title: '审批人'},
+                {field: 'endTime', title: '经办时间'},
+                {field: 'comment', title: '审批人'}
+            ]]
+        });
     });
 </script>
 </body>

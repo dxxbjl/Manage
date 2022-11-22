@@ -11,18 +11,25 @@ import org.activiti.engine.form.FormProperty;
 import org.activiti.engine.form.StartFormData;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricProcessInstanceQuery;
+import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.history.HistoricTaskInstanceQuery;
 import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
+import org.activiti.image.ProcessDiagramGenerator;
 import org.activiti.image.impl.DefaultProcessDiagramGenerator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -73,17 +80,11 @@ public class WorkFlowService {
         return rspData;
     }
 
-    public TableDataInfo flow(String name, String key, String category, int page, int limit) {
+    public TableDataInfo flow(String name, int page, int limit) {
         ProcessDefinitionQuery query = repositoryService.createProcessDefinitionQuery()
                 .orderByProcessDefinitionVersion().asc();
         if (StringUtils.isNotBlank(name)) {
             query.processDefinitionNameLike("%" + name + "%");
-        }
-        if (StringUtils.isNotBlank(key)) {
-            query.processDefinitionKeyLike(key);
-        }
-        if (StringUtils.isNotBlank(category)) {
-            query.processDefinitionCategory(category);
         }
         List<ProcessDefinition> processDefinitions = query.listPage(page, limit);
         List<FlowVO> flowVOList = processDefinitions.stream().map(s -> {
@@ -209,7 +210,21 @@ public class WorkFlowService {
         return diagramGenerator.generateImage(bpmnModel, "png",
                 Collections.emptyList(), Collections.emptyList(),
                 "宋体", "宋体", "宋体",
-                null, 0);
+                null, 1.0d);
+    }
+
+    public BufferedImage getCurrentFlowDiagram(String taskId) throws IOException {
+        HistoricTaskInstance task = historyService
+                .createHistoricTaskInstanceQuery()
+                .taskId(taskId)
+                .singleResult();
+        // 流程定义
+        BpmnModel bpmnModel = repositoryService.getBpmnModel(task.getProcessDefinitionId());
+        ProcessDiagramGenerator processDiagramGenerator = new DefaultProcessDiagramGenerator();
+        InputStream inputStream = processDiagramGenerator.generateDiagram(bpmnModel, "png",
+                runtimeService.getActiveActivityIds(task.getExecutionId()),
+                new ArrayList<String>(), "宋体", "宋体", "宋体", null, 1.0d);
+        return ImageIO.read(inputStream);
     }
 
     public void complete(CompleteDTO completeDTO) {
@@ -223,5 +238,26 @@ public class WorkFlowService {
             taskService.complete(task.getId());
             log.info(userName + "：完成任务");
         }
+    }
+
+    public TableDataInfo approvalHistoricTask(int page, int limit, String taskId) {
+        HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery()
+                .taskId(taskId).orderByHistoricTaskInstanceEndTime().asc();
+        List<HistoricTaskInstance> historicTaskInstances = query.listPage(page, limit);
+        List<ApprovalHistoricTaskVO> approvalHistoricTaskVOList = historicTaskInstances.stream().map(s -> {
+            ApprovalHistoricTaskVO approvalHistoricTaskVO = new ApprovalHistoricTaskVO();
+            approvalHistoricTaskVO.setName(s.getName());
+            approvalHistoricTaskVO.setAssignee(s.getAssignee());
+            approvalHistoricTaskVO.setEndTime(s.getEndTime());
+            List<Comment> taskComments = taskService.getTaskComments(s.getId());
+            List<String> comment = taskComments.stream().map(Comment::getFullMessage).collect(Collectors.toList());
+            approvalHistoricTaskVO.setComment(StringUtils.join(comment,","));
+            return approvalHistoricTaskVO;
+        }).collect(Collectors.toList());
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(0);
+        rspData.setData(approvalHistoricTaskVOList);
+        rspData.setCount(query.count());
+        return rspData;
     }
 }

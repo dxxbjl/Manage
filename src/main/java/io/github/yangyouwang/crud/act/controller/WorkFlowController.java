@@ -99,10 +99,10 @@ public class WorkFlowController {
      */
     @GetMapping("/flow")
     @ResponseBody
-    public TableDataInfo flow(String name, String key, String category, HttpServletRequest request) {
+    public TableDataInfo flow(String name, HttpServletRequest request) {
         int page = Integer.parseInt(request.getParameter("page")) - 1;
         int limit = Integer.parseInt(request.getParameter("limit"));
-        return workflowService.flow(name, key, category, page, limit);
+        return workflowService.flow(name, page, limit);
     }
 
     /**
@@ -143,8 +143,6 @@ public class WorkFlowController {
 
     /**
      * 获取流程图片
-     * @param deploymentId 部署ID
-     * @return 添加状态
      */
     @GetMapping("/getFlowDiagram")
     @ResponseBody
@@ -156,6 +154,33 @@ public class WorkFlowController {
         response.setHeader("Cache-Control", "no-cache");
         response.setDateHeader("Expires", 0);
         ImageIO.write(image,"png",response.getOutputStream());
+    }
+
+    /**
+     * 查看当前流程图
+     */
+    @GetMapping( "/getCurrentFlowDiagram")
+    @ResponseBody
+    public void getCurrentFlowDiagram(@RequestParam @NotBlank(message = "任务ID不为空")String taskId,
+                                      HttpServletResponse response) throws IOException {
+        BufferedImage image = workflowService.getCurrentFlowDiagram(taskId);
+        response.setContentType("image/png");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setDateHeader("Expires", 0);
+        ImageIO.write(image,"png",response.getOutputStream());
+    }
+
+    /**
+     * 查看审批历史
+     * @return 请求列表
+     */
+    @GetMapping("/approvalHistoricTask")
+    @ResponseBody
+    public TableDataInfo approvalHistoricTask(HttpServletRequest request, String taskId) {
+        int page = Integer.parseInt(request.getParameter("page")) - 1;
+        int limit = Integer.parseInt(request.getParameter("limit"));
+        return workflowService.approvalHistoricTask(page, limit, taskId);
     }
 
     /**
@@ -187,5 +212,4 @@ public class WorkFlowController {
         workflowService.complete(completeDTO);
         return Result.success();
     }
-
 }

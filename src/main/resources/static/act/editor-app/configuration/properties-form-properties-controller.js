@@ -108,7 +108,7 @@ var KisBpmFormPropertiesPopupCtrl = ['$scope', '$q', '$translate', '$timeout', f
 
         // Check date. If date, show date pattern
         if ($scope.selectedProperties[0].type === 'date') {
-            $scope.selectedProperties[0].datePattern = 'MM-dd-yyyy hh:mm';
+            $scope.selectedProperties[0].datePattern = 'yyyy-MM-dd';
             
         } else {
             delete $scope.selectedProperties[0].datePattern;
