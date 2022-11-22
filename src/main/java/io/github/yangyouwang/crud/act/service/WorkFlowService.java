@@ -1,8 +1,8 @@
 package io.github.yangyouwang.crud.act.service;
 
-import com.alibaba.fastjson.JSON;
 import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.github.yangyouwang.core.util.SecurityUtils;
+import io.github.yangyouwang.core.util.StringUtil;
 import io.github.yangyouwang.crud.act.model.FlowVO;
 import io.github.yangyouwang.crud.act.model.FormVO;
 import io.github.yangyouwang.crud.act.model.StartDTO;
@@ -26,10 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.awt.image.BufferedImage;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -152,10 +149,10 @@ public class WorkFlowService {
         Authentication.setAuthenticatedUserId(userName);
         // 发起流程
         String businessKey = UUID.randomUUID().toString().replaceAll("-", "");
-        Map formData = JSON.parseObject(startDTO.getFormData(), Map.class);
+        Map formData = StringUtil.paramToMap(startDTO.getFormData());
         ProcessInstance processInstance = runtimeService.startProcessInstanceById(processDefinition.getId(), businessKey , formData);
         // 设置流程实例名称
-        runtimeService.setProcessInstanceName(processInstance.getId(),startDTO.getTitle());
+        runtimeService.setProcessInstanceName(processInstance.getId(),String.format("%s - %s - %s" ,processDefinition.getName(),userName,new Date()));
         return businessKey;
     }
 

@@ -17,10 +17,6 @@ public class StartDTO {
      */
     private String deploymentId;
     /**
-     * 流程实例标题
-     */
-    private String title;
-    /**
      * 表单
      */
     private String formData;
