@@ -27,6 +27,7 @@
         <table id="toDoTaskTable" lay-filter="toDoTaskTable"></table>
         <script type="text/html" id="tableBar">
           <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="complete"><i class="layui-icon layui-icon-ok"></i>完成任务</a>
+          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="monitor">流程监控</a>
         </script>
       </div>
     </div>
@@ -78,35 +79,53 @@
                 ,layEvent = obj.event;
         if(layEvent === 'complete'){
           active.completeTask(data.id);
+        } else if(layEvent === 'monitor'){
+          active.monitorView(data.id);
         }
       });
-    /* 触发弹层 */
-    let active = {
-      /**
-       * 完成任务
-       * @param id 任务ID
-       */
-      completeTask: function (id) {
-        layer.confirm('确定完成任务么', function(index) {
-          $.ajax({
-            type: 'POST',
-            url:  ctx + '/workFlow/complete',
-            data: JSON.stringify({
-              taskId: id
-            }),
-            contentType:'application/json;charset=UTF-8',
-            dataType: 'json',
-            success: function(result) {
-              layer.msg(result.message);
-              if (result.code === 200) {
-                layer.close(index);
-                table.reload('toDoTaskTable');
+      /* 触发弹层 */
+      let active = {
+        /**
+         * 完成任务
+         * @param id 任务ID
+         */
+        completeTask: function (id) {
+          layer.confirm('确定完成任务么', function(index) {
+            $.ajax({
+              type: 'POST',
+              url:  ctx + '/workFlow/complete',
+              data: JSON.stringify({
+                taskId: id
+              }),
+              contentType:'application/json;charset=UTF-8',
+              dataType: 'json',
+              success: function(result) {
+                layer.msg(result.message);
+                if (result.code === 200) {
+                  layer.close(index);
+                  table.reload('toDoTaskTable');
+                }
               }
-            }
+            });
           });
-        });
+        },
+        /**
+         * 流程监控
+         * @param id 流程实例ID
+         */
+        monitorView: function (id) {
+          layer.open({
+            type: 2
+            ,shade: 0.3
+            ,title: '流程监控'
+            ,content: ctx + '/workFlow/monitorPage/' + id
+            ,maxmin: true
+            ,scrollbar: false
+            ,area: ['100%', '100%']
+            ,btn: ['确定']
+          });
+        }
       }
-    }
   });
 </script>
 </body>

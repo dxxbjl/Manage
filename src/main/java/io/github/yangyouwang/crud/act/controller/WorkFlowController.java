@@ -8,6 +8,7 @@ import io.github.yangyouwang.crud.act.model.StartDTO;
 import io.github.yangyouwang.crud.act.service.WorkFlowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
@@ -67,6 +69,16 @@ public class WorkFlowController {
     @GetMapping("/startPage")
     public String startPage(){
         return SUFFIX + "/start";
+    }
+
+    /**
+     * 流程监控页面
+     * @return 流程监控页面
+     */
+    @GetMapping("/monitorPage/{id}")
+    public String monitorPage(@Valid @NotNull(message = "id不能为空")  @PathVariable String id, ModelMap map) {
+        map.put("id",id);
+        return SUFFIX + "/monitor";
     }
 
     /**
