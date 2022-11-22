@@ -104,11 +104,14 @@ public class WorkFlowService {
         return rspData;
     }
 
-    public TableDataInfo toDoTask(int page, int limit) {
+    public TableDataInfo toDoTask(int page, int limit,String name) {
         String userName = SecurityUtils.getUserName();
         TaskQuery query = taskService.createTaskQuery()
                 .taskCandidateOrAssigned(userName)
                 .orderByTaskCreateTime().desc();
+        if (StringUtils.isNotBlank(name)) {
+            query.processDefinitionNameLike("%" + name + "%");
+        }
         List<Task> tasks = query.listPage(page, limit);
         List<TaskVO> taskVOList = tasks.stream().map(s -> {
             TaskVO taskVO = new TaskVO();
@@ -125,15 +128,12 @@ public class WorkFlowService {
         return rspData;
     }
 
-    public TableDataInfo historicTask(int page, int limit, String name, String categoryId) {
+    public TableDataInfo historicTask(int page, int limit, String name) {
         String userName = SecurityUtils.getUserName();
-        HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery();
-        query.involvedUser(userName);
+        HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery()
+                .involvedUser(userName);
         if (StringUtils.isNotBlank(name)) {
             query.processInstanceNameLike("%" + name + "%");
-        }
-        if (StringUtils.isNotBlank(categoryId)) {
-            query.processDefinitionCategory(categoryId);
         }
         query.orderByProcessInstanceStartTime().desc();
         List<HistoricProcessInstance> historicProcessInstances = query.listPage(page, limit);

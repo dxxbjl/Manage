@@ -100,10 +100,10 @@ public class WorkFlowController {
      */
     @GetMapping("/toDoTask")
     @ResponseBody
-    public TableDataInfo toDoTask(HttpServletRequest request) {
+    public TableDataInfo toDoTask(HttpServletRequest request, String name) {
         int page = Integer.parseInt(request.getParameter("page")) - 1;
         int limit = Integer.parseInt(request.getParameter("limit"));
-        return workflowService.toDoTask(page, limit);
+        return workflowService.toDoTask(page, limit, name);
     }
 
     /**
@@ -112,11 +112,10 @@ public class WorkFlowController {
      */
     @GetMapping("/historicTask")
     @ResponseBody
-    public TableDataInfo historicTask(HttpServletRequest request,
-                              String name, String categoryId) {
+    public TableDataInfo historicTask(HttpServletRequest request, String name) {
         int page = Integer.parseInt(request.getParameter("page")) - 1;
         int limit = Integer.parseInt(request.getParameter("limit"));
-        return workflowService.historicTask(page, limit, name, categoryId);
+        return workflowService.historicTask(page, limit, name);
     }
 
     /**
