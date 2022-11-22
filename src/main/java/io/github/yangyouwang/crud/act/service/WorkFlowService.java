@@ -162,7 +162,7 @@ public class WorkFlowService {
         // 发起流程
         String businessKey = UUID.randomUUID().toString().replaceAll("-", "");
         Map variables = StringUtil.paramToMap(startDTO.getFlowForm());
-        variables.put("users", startDTO.getUsers());
+        variables.put("assignee", startDTO.getAssignee());
         ProcessInstance processInstance = runtimeService.startProcessInstanceById(processDefinition.getId(), businessKey , variables);
         // 设置流程实例名称
         runtimeService.setProcessInstanceName(processInstance.getId(),String.format("%s - %s" ,processDefinition.getName(),userName));

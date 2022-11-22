@@ -268,7 +268,7 @@
             data: JSON.stringify({
                 deploymentId : flows[flows.length - 1].deploymentId,
                 flowForm: $('#flowForm').serialize(),
-                users: users.map(x => x.userName)
+                assignee: users[users.length() - 1].userName
             }),
             contentType:'application/json;charset=UTF-8',
             dataType: 'json',

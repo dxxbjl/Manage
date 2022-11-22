@@ -2,7 +2,6 @@ package io.github.yangyouwang.crud.act.model;
 
 import lombok.Data;
 
-import java.util.List;
 
 /**
  * Description: 发起流程<br/>
@@ -25,5 +24,5 @@ public class StartDTO {
     /**
      * 审批人
      */
-    private List<String> users;
+    private String assignee;
 }
