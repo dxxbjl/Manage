@@ -211,4 +211,17 @@ public class WorkFlowService {
                 "宋体", "宋体", "宋体",
                 null, 0);
     }
+
+    public void complete(CompleteDTO completeDTO) {
+        String userName = SecurityUtils.getUserName();
+        Task task = taskService.createTaskQuery()
+                .taskId(completeDTO.getTaskId())
+                .taskAssignee(userName)
+                .singleResult();
+        if(task != null){
+            // 完成任务
+            taskService.complete(task.getId());
+            log.info(userName + "：完成任务");
+        }
+    }
 }

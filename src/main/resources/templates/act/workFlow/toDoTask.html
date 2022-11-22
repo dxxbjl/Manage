@@ -25,6 +25,9 @@
       </form>
       <div class="layui-card-body">
         <table id="toDoTaskTable" lay-filter="toDoTaskTable"></table>
+        <script type="text/html" id="tableBar">
+          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="complete"><i class="layui-icon layui-icon-ok"></i>完成任务</a>
+        </script>
       </div>
     </div>
   </div>
@@ -69,6 +72,41 @@
             {toolbar: '#tableBar', title: '操作', width: 300, align:'center',fixed: 'right'}
           ]]
       });
+      //监听行工具事件
+      table.on('tool(toDoTaskTable)', function(obj) {
+        let data = obj.data //获得当前行数据
+                ,layEvent = obj.event;
+        if(layEvent === 'complete'){
+          active.completeTask(data.id);
+        }
+      });
+    /* 触发弹层 */
+    let active = {
+      /**
+       * 完成任务
+       * @param id 任务ID
+       */
+      completeTask: function (id) {
+        layer.confirm('确定完成任务么', function(index) {
+          $.ajax({
+            type: 'POST',
+            url:  ctx + '/workFlow/complete',
+            data: JSON.stringify({
+              taskId: id
+            }),
+            contentType:'application/json;charset=UTF-8',
+            dataType: 'json',
+            success: function(result) {
+              layer.msg(result.message);
+              if (result.code === 200) {
+                layer.close(index);
+                table.reload('toDoTaskTable');
+              }
+            }
+          });
+        });
+      }
+    }
   });
 </script>
 </body>

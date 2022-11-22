@@ -2,11 +2,11 @@ package io.github.yangyouwang.crud.act.controller;
 
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.TableDataInfo;
+import io.github.yangyouwang.crud.act.model.CompleteDTO;
 import io.github.yangyouwang.crud.act.model.FormVO;
 import io.github.yangyouwang.crud.act.model.StartDTO;
 import io.github.yangyouwang.crud.act.service.WorkFlowService;
 import lombok.RequiredArgsConstructor;
-import org.activiti.engine.form.FormProperty;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +18,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.List;
 import java.util.Objects;
 /**
  * 工作流控制层
@@ -161,4 +160,20 @@ public class WorkFlowController {
         String businessKey = workflowService.start(startDTO);
         return Result.success("发起流程成功",businessKey);
     }
+
+    /**
+     * 完成任务
+     * @param completeDTO 完成任务对象
+     * @return 添加状态
+     */
+    @PostMapping("/complete")
+    @ResponseBody
+    public Result complete(@RequestBody @Valid CompleteDTO completeDTO, BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
+        }
+        workflowService.complete(completeDTO);
+        return Result.success();
+    }
+
 }
