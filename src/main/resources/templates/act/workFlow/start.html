@@ -227,7 +227,7 @@
         cellMinWidth: 80,
         page: true, //开启分页
         cols: [[ //表头
-            {type: 'checkbox', fixed: 'left'},
+            {type: 'radio', align : 'center'},
             {field: 'id', title: 'ID', hide:true},
             {field: 'nickName', title: '昵称'},
             {field: 'userName', title: '账户'},
@@ -240,6 +240,8 @@
     table.on('row(userTable)', function(obj) {
         // 标注选中样式
         obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+        // 选中radio样式
+        obj.tr.find('i[class="layui-anim layui-icon"]').trigger("click");
     });
     /**
      * 获取流程图片
@@ -268,7 +270,7 @@
             data: JSON.stringify({
                 deploymentId : flows[flows.length - 1].deploymentId,
                 flowForm: $('#flowForm').serialize(),
-                assignee: users[users.length() - 1].userName
+                assignee: users[users.length - 1].userName
             }),
             contentType:'application/json;charset=UTF-8',
             dataType: 'json',
