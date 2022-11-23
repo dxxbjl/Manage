@@ -50,7 +50,13 @@
                         </ul>
                         <div class="layui-tab-content">
                             <div class="layui-tab-item layui-show">
-                                <div id="flowFormView"></div>
+                                <div class="layui-fluid">
+                                    <div class="layui-row">
+                                        <form class="layui-form layui-form-pane" lay-filter="flowForm" id="flowForm">
+                                            <div id="flowFormView"></div>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                             <div class="layui-tab-item">
                                 <table id="userTable" lay-filter="userTable"></table>
@@ -68,56 +74,52 @@
     </div>
 </div>
 <script type="text/html" id="flowFormTpl">
-    <div class="layui-fluid">
-        <div class="layui-row">
-            <form class="layui-form layui-form-pane" lay-filter="flowForm" id="flowForm">
-                {{#  layui.each(d, function(index, item){ }}
-                {{#  if(item.typeName === 'long'){ }}
-                <div class="layui-form-item">
-                    <label class="layui-form-label">{{item.name}}</label>
-                    <div class="layui-input-inline">
-                        <input type="number" lay-verify="required" class="layui-input" name="{{item.id}}" placeholder="请输入{{item.name}}"/>
-                    </div>
-                </div>
-                {{#  } else if(item.typeName === 'string') { }}
-                <div class="layui-form-item">
-                    <label class="layui-form-label">{{item.name}}</label>
-                    <div class="layui-input-inline">
-                        <input type="text" lay-verify="required" class="layui-input" name="{{item.id}}" placeholder="请输入{{item.name}}"/>
-                    </div>
-                </div>
-                {{#  } else if(item.typeName === "date") { }}
-                <div class="layui-form-item">
-                    <label class="layui-form-label">{{item.name}}</label>
-                    <div class="layui-input-inline">
-                        <input type="text" class="layui-input" name="{{item.id}}" id="{{item.id}}"
-                               dateFormat="{{item.datePatterns}}" placeholder="{{item.datePatterns}}" autocomplete="off"/>
-                    </div>
-                </div>
-                {{#  } else if(item.typeName === "enum") { }}
-                <div class="layui-form-item">
-                    <label class="layui-form-label">{{item.name}}</label>
-                    <div class="layui-input-inline">
-                        <select name="{{item.id}}" lay-verify="required">
-                            {{#  layui.each(item.values, function(k, v){ }}
-                            <option value="{{k}}">{{v}}</option>
-                            {{# });  }}
-                        </select>
-                    </div>
-                </div>
-                {{#  } else { }}
-                <div class="layui-form-item" lay-filter="{{item.id}}">
-                    <label class="layui-form-label">{{item.name}}</label>
-                    <div class="layui-input-inline">
-                        <input type="radio" name="{{item.id}}" value="{{item.id}}" title="是" checked>
-                        <input type="radio" name="{{item.id}}" value="{{item.id}}" title="否">
-                    </div>
-                </div>
-                {{#  } }}
-                {{#  }); }}
-            </form>
+    {{#  layui.each(d, function(index, item){ }}
+    {{#  if(item.typeName === 'long'){ }}
+    <div class="layui-form-item">
+        <label class="layui-form-label">{{item.name}}</label>
+        <div class="layui-input-inline">
+            <input type="number" lay-verify="required" class="layui-input" name="{{item.id}}" placeholder="请输入{{item.name}}"/>
         </div>
     </div>
+    {{#  } else if(item.typeName === 'string') { }}
+    <div class="layui-form-item">
+        <label class="layui-form-label">{{item.name}}</label>
+        <div class="layui-input-inline">
+            <input type="text" lay-verify="required" class="layui-input" name="{{item.id}}" placeholder="请输入{{item.name}}"/>
+        </div>
+    </div>
+    {{#  } else if(item.typeName === "date") { }}
+    <div class="layui-form-item">
+        <label class="layui-form-label">{{item.name}}</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input" name="{{item.id}}" id="{{item.id}}"
+                   dateFormat="{{item.datePatterns}}" placeholder="{{item.datePatterns}}" autocomplete="off"/>
+        </div>
+    </div>
+    {{#  } else if(item.typeName === "enum") { }}
+    <div class="layui-form-item">
+        <label class="layui-form-label">{{item.name}}</label>
+        <div class="layui-input-inline">
+            <select name="{{item.id}}" lay-verify="required">
+                {{#  layui.each(item.values, function(k, v){ }}
+                <option value="{{k}}">{{v}}</option>
+                {{# });  }}
+            </select>
+        </div>
+    </div>
+    {{#  } else if(item.typeName === "boolean") { }}
+    <div class="layui-form-item">
+        <label class="layui-form-label">{{item.name}}</label>
+        <div class="layui-input-inline">
+            <input type="radio" name="{{item.id}}" value="Y" title="是">
+            <input type="radio" name="{{item.id}}" value="N" title="否">
+        </div>
+    </div>
+    {{#  } else { }}
+        <p>未识别表单</p>
+    {{#  } }}
+    {{#  }); }}
 </script>
 <div th:replace="common/script::footer"></div>
 <script th:inline="javascript">
@@ -176,18 +178,18 @@
     // 列表单选监听事件
     table.on('radio(flowTable)',function (obj) {
         // 获取启动流程表单
-        getStartFlowForm(obj.data.deploymentId);
+        getStartForm(obj.data.deploymentId);
         // 获取流程图片
         getFlowDiagram(obj.data.deploymentId);
     });
      /**
-     * 获取启动流程表单
+     * 获取启动表单
      * @param deploymentId 部署ID
      */
-    function getStartFlowForm(deploymentId) {
+    function getStartForm(deploymentId) {
          $.ajax({
              type: 'GET',
-             url:  ctx + '/workFlow/getStartFlowForm?deploymentId=' + deploymentId,
+             url:  ctx + '/workFlow/getStartForm?deploymentId=' + deploymentId,
              contentType:'application/json;charset=UTF-8',
              dataType: 'json',
              success: function(result) {

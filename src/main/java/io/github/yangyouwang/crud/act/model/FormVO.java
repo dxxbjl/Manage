@@ -3,7 +3,6 @@ package io.github.yangyouwang.crud.act.model;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 流程表单

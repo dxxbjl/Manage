@@ -8,7 +8,15 @@ import lombok.Data;
 @Data
 public class CompleteDTO {
     /**
-     * 任务ID
+     * 流程实例ID
      */
-    private String taskId;
+    private String processInstanceId;
+    /**
+     * 审批决策
+     */
+    private String pass;
+    /**
+     * 审批意见
+     */
+    private String comment;
 }

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+  <title>任务审批</title>
+  <div th:replace="common/link::header"></div>
+</head>
+<body>
+<div class="layui-fluid">
+  <div class="layui-row">
+    <form class="layui-form layui-form-pane" lay-filter="flowForm" id="flowForm">
+      <div id="flowFormView"></div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">审批决策</label>
+        <div class="layui-input-inline">
+          <input type="radio" name="pass" value="Y" checked title="通过">
+          <input type="radio" name="pass" value="N" title="不通过">
+        </div>
+      </div>
+      <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">意见</label>
+        <div class="layui-input-block">
+          <textarea class="layui-textarea" name="comment" lay-verify="required" placeholder="请输入意见"></textarea>
+        </div>
+      </div>
+      <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
+      </div>
+    </form>
+  </div>
+</div>
+  <script type="text/html" id="flowFormTpl">
+    {{#  layui.each(d, function(index, item){ }}
+    {{#  if(item.typeName === 'long'){ }}
+    <div class="layui-form-item">
+      <label class="layui-form-label">{{item.name}}</label>
+      <div class="layui-input-inline">
+        <input type="number" lay-verify="required" disabled class="layui-input layui-disabled" name="{{item.id}}" value="{{item.value}}" placeholder="请输入{{item.name}}"/>
+      </div>
+    </div>
+    {{#  } else if(item.typeName === 'string') { }}
+    <div class="layui-form-item">
+      <label class="layui-form-label">{{item.name}}</label>
+      <div class="layui-input-inline">
+        <input type="text" lay-verify="required" disabled class="layui-input layui-disabled" name="{{item.id}}" value="{{item.value}}" placeholder="请输入{{item.name}}"/>
+      </div>
+    </div>
+    {{#  } else if(item.typeName === "date") { }}
+    <div class="layui-form-item">
+      <label class="layui-form-label">{{item.name}}</label>
+      <div class="layui-input-inline">
+        <input type="text" disabled class="layui-input layui-disabled" name="{{item.id}}" id="{{item.id}}"
+               dateFormat="{{item.datePatterns}}" placeholder="{{item.datePatterns}}" autocomplete="off"/>
+      </div>
+    </div>
+    {{#  } else if(item.typeName === "enum") { }}
+    <div class="layui-form-item">
+      <label class="layui-form-label">{{item.name}}</label>
+      <div class="layui-input-inline">
+        <select name="{{item.id}}" lay-verify="required" disabled>
+          {{#  layui.each(item.values, function(k, v){ }}
+          <option value="{{k}}">{{v}}</option>
+          {{# });  }}
+        </select>
+      </div>
+    </div>
+    {{#  } else if(item.typeName === "boolean") { }}
+      <div class="layui-form-item">
+        <label class="layui-form-label">{{item.name}}</label>
+        <div class="layui-input-inline">
+          <input type="radio" name="{{item.id}}" value="Y" title="是" disabled>
+          <input type="radio" name="{{item.id}}" value="N" title="否" disabled>
+        </div>
+      </div>
+    {{#  } else { }}
+      <p>未识别表单</p>
+    {{#  } }}
+    {{#  }); }}
+  </script>
+<div th:replace="common/script::footer"></div>
+<script th:inline="javascript">
+  layui.config({
+    base: '/static/layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'useradmin', 'table', 'laytpl', 'laydate'], function() {
+    let $ = layui.$,
+            form = layui.form,
+            table = layui.table,
+            laytpl = layui.laytpl,
+            laydate = layui.laydate,
+            processInstanceId = [[${processInstanceId}]];
+    $.ajax({
+      type: 'GET',
+      url:  ctx + '/workFlow/getTaskForm?processInstanceId=' + processInstanceId,
+      contentType:'application/json;charset=UTF-8',
+      dataType: 'json',
+      success: function(result) {
+        layer.msg(result.message);
+        if (result.code === 200) {
+          let data = result.data;
+          if (data.hasStartFormKey) {
+            // 外置表单
+            return;
+          }
+          // 内置表单
+          let formProperty = data.formProperties;
+          let flowFormTpl = document.getElementById('flowFormTpl').innerHTML
+                  ,flowFormView = document.getElementById('flowFormView');
+          laytpl(flowFormTpl).render(formProperty, function(html){
+            flowFormView.innerHTML = html;
+          });
+          $.each(formProperty,function(index,value){
+            // 日期类型做特殊处理
+            if (value.typeName === 'date') {
+              laydate.render({
+                elem: '#' + value.id,
+                value: value.value,
+                format: value.datePatterns
+              });
+            }
+            // 下拉框做特殊处理
+            if (value.typeName === 'enum') {
+              $("select[name="+value.id+"]").val(value.value);
+            }
+            // 单选框做特殊处理
+            if (value.typeName === 'boolean') {
+              $("input[name="+value.id+"][value="+value.value+"]").prop("checked",true);
+            }
+          });
+          form.render(null, 'flowForm');
+        }
+      }
+    });
+    form.on('submit(save-submit)', function(data) {
+      layer.confirm('确定完成任务么', function(index) {
+        $.ajax({
+          type: 'POST',
+          url:  ctx + '/workFlow/complete',
+          data: JSON.stringify({
+            ...
+            data.field,
+            processInstanceId: processInstanceId
+          }),
+          contentType:'application/json;charset=UTF-8',
+          dataType: 'json',
+          success: function(result) {
+            layer.msg(result.message);
+            if (result.code === 200) {
+              let index = parent.layer.getFrameIndex(window.name);
+              // 关闭
+              parent.layer.close(index);
+              // 刷新
+              parent.location.reload();
+            }
+          }
+        });
+      });
+    });
+  });
+</script>
+</body>
+</html>

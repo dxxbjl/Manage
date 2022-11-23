@@ -9,6 +9,7 @@ import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.*;
 import org.activiti.engine.form.FormProperty;
 import org.activiti.engine.form.StartFormData;
+import org.activiti.engine.form.TaskFormData;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricProcessInstanceQuery;
 import org.activiti.engine.history.HistoricTaskInstance;
@@ -23,6 +24,7 @@ import org.activiti.engine.task.TaskQuery;
 import org.activiti.image.ProcessDiagramGenerator;
 import org.activiti.image.impl.DefaultProcessDiagramGenerator;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -176,20 +178,15 @@ public class WorkFlowService {
         return businessKey;
     }
 
-    public FormVO getStartFlowForm(String deploymentId) {
+    public FormVO getStartForm(String deploymentId) {
         ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
                 .deploymentId(deploymentId).singleResult();
-        FormVO formVO = new FormVO();
-        formVO.setHasStartFormKey(processDefinition.hasStartFormKey());
         if (processDefinition.hasStartFormKey()) {
            // 外置表单判断
         }
         // 内置表单配置
         StartFormData startFormData = formService.getStartFormData(processDefinition.getId());
         List<FormProperty> formProperties = startFormData.getFormProperties();
-        if (formProperties.isEmpty()) {
-            throw new RuntimeException("内置动态表单未配置");
-        }
         List<FormVO.FormPropertyVO> formPropertyVOList = formProperties.stream().map(s -> {
             FormVO.FormPropertyVO formPropertyVO = new FormVO.FormPropertyVO();
             formPropertyVO.setId(s.getId());
@@ -204,7 +201,38 @@ public class WorkFlowService {
             }
             return formPropertyVO;
         }).collect(Collectors.toList());
+        FormVO formVO = new FormVO();
+        formVO.setHasStartFormKey(processDefinition.hasStartFormKey());
         formVO.setFormProperties(formPropertyVOList);
+        return formVO;
+    }
+
+    public FormVO getTaskForm(String processInstanceId) {
+        Task task = taskService.createTaskQuery()
+                .processInstanceId(processInstanceId).singleResult();
+        TaskFormData taskFormData = formService.getTaskFormData(task.getId());
+        String formKey = taskFormData.getFormKey();
+        if (Strings.isNotBlank(formKey)) {
+            // 外置表单
+        }
+        List<FormProperty> formProperties =  taskFormData.getFormProperties();
+        List<FormVO.FormPropertyVO> formPropertyVOList = formProperties.stream().map(s -> {
+            FormVO.FormPropertyVO formPropertyVO = new FormVO.FormPropertyVO();
+            formPropertyVO.setId(s.getId());
+            formPropertyVO.setName(s.getName());
+            formPropertyVO.setValue(s.getValue());
+            String type = s.getType().getName();
+            formPropertyVO.setTypeName(type);
+            if("enum".equals(type)) {
+                formPropertyVO.setValues(s.getType().getInformation("values"));
+            } else if("date".equals(type)){
+                formPropertyVO.setDatePatterns(s.getType().getInformation("datePattern"));
+            }
+            return formPropertyVO;
+        }).collect(Collectors.toList());
+        FormVO formVO = new FormVO();
+        formVO.setFormProperties(formPropertyVOList);
+        formVO.setHasStartFormKey(false);
         return formVO;
     }
 
@@ -241,13 +269,18 @@ public class WorkFlowService {
 
     public void complete(CompleteDTO completeDTO) {
         String userName = SecurityUtils.getUserName();
+        Authentication.setAuthenticatedUserId(userName);
+        String processInstanceId = completeDTO.getProcessInstanceId();
         Task task = taskService.createTaskQuery()
-                .taskId(completeDTO.getTaskId())
                 .taskAssignee(userName)
+                .processInstanceId(processInstanceId)
                 .singleResult();
-        if(task != null){
+        if(task != null) {
+            String taskId = task.getId();
+            // 添加审批意见
+            taskService.addComment(taskId,processInstanceId,completeDTO.getComment());
             // 完成任务
-            taskService.complete(task.getId());
+            taskService.complete(taskId);
             log.info(userName + "：完成任务");
         }
     }

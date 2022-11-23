@@ -34,7 +34,6 @@ public class WorkFlowController {
 
     /**
      * 跳转我的流程
-     * @return 我的流程页面
      */
     @GetMapping("/flowPage")
     public String flowPage(){
@@ -44,7 +43,6 @@ public class WorkFlowController {
 
     /**
      * 跳转代办任务
-     * @return 代办任务页面
      */
     @GetMapping("/toDoTaskPage")
     public String toDoTaskPage(){
@@ -53,7 +51,6 @@ public class WorkFlowController {
 
     /**
      * 跳转已办任务
-     * @return 已办任务页面
      */
     @GetMapping("/historicTaskPage")
     public String historicTaskPage(){
@@ -62,7 +59,6 @@ public class WorkFlowController {
 
     /**
      * 发起流程
-     * @return 发起流程页面
      */
     @GetMapping("/startPage")
     public String startPage(){
@@ -71,7 +67,6 @@ public class WorkFlowController {
 
     /**
      * 流程监控页面
-     * @return 流程监控页面
      */
     @GetMapping("/monitorPage")
     public String monitorPage(String processInstanceId, ModelMap map) {
@@ -80,8 +75,16 @@ public class WorkFlowController {
     }
 
     /**
+     * 审批页面
+     */
+    @GetMapping("/approvalPage")
+    public String approvalPage(String processInstanceId, ModelMap map) {
+        map.put("processInstanceId",processInstanceId);
+        return SUFFIX + "/approval";
+    }
+
+    /**
      * 流程实例列表
-     * @return 请求列表
      */
     @GetMapping("/myFlow")
     @ResponseBody
@@ -93,7 +96,6 @@ public class WorkFlowController {
 
     /**
      * 查询流程定义列表
-     * @return 请求列表
      */
     @GetMapping("/flow")
     @ResponseBody
@@ -105,7 +107,6 @@ public class WorkFlowController {
 
     /**
      * 代办任务列表
-     * @return 请求列表
      */
     @GetMapping("/toDoTask")
     @ResponseBody
@@ -117,7 +118,6 @@ public class WorkFlowController {
 
     /**
      * 已办任务列表
-     * @return 请求列表
      */
     @GetMapping("/historicTask")
     @ResponseBody
@@ -128,19 +128,32 @@ public class WorkFlowController {
     }
 
     /**
-     * 获取启动流程表单
+     * 获取启动表单
      * @param deploymentId 部署ID
-     * @return 添加状态
+     * @return 响应
      */
-    @GetMapping("/getStartFlowForm")
+    @GetMapping("/getStartForm")
     @ResponseBody
-    public Result getStartFlowForm(String deploymentId) {
-        FormVO formVO = workflowService.getStartFlowForm(deploymentId);
+    public Result getStartForm(String deploymentId) {
+        FormVO formVO = workflowService.getStartForm(deploymentId);
         return Result.success("请填写表单信息",formVO);
     }
 
     /**
+     * 获取任务表单
+     * @param processInstanceId 流程实例ID
+     * @return 响应
+     */
+    @GetMapping("/getTaskForm")
+    @ResponseBody
+    public Result getTaskForm(String processInstanceId) {
+        FormVO formVO = workflowService.getTaskForm(processInstanceId);
+        return Result.success("等待人员审批",formVO);
+    }
+
+    /**
      * 获取流程图片
+     * @param deploymentId 部署ID
      */
     @GetMapping("/getFlowDiagram")
     @ResponseBody
@@ -155,6 +168,7 @@ public class WorkFlowController {
 
     /**
      * 查看当前流程图
+     * @param processInstanceId 流程实例ID
      */
     @GetMapping( "/getCurrentFlowDiagram")
     @ResponseBody
@@ -169,11 +183,11 @@ public class WorkFlowController {
 
     /**
      * 查看审批历史
-     * @return 请求列表
+     * @param processInstanceId 流程实例ID
      */
     @GetMapping("/historic")
     @ResponseBody
-    public TableDataInfo historic(HttpServletRequest request, String processInstanceId) {
+    public TableDataInfo historic(String processInstanceId,HttpServletRequest request) {
         int page = Integer.parseInt(request.getParameter("page")) - 1;
         int limit = Integer.parseInt(request.getParameter("limit"));
         return workflowService.historic(page, limit, processInstanceId);
@@ -182,7 +196,6 @@ public class WorkFlowController {
     /**
      * 发起流程
      * @param startDTO 发起流程对象
-     * @return 添加状态
      */
     @PostMapping("/start")
     @ResponseBody
@@ -197,7 +210,6 @@ public class WorkFlowController {
     /**
      * 完成任务
      * @param completeDTO 完成任务对象
-     * @return 添加状态
      */
     @PostMapping("/complete")
     @ResponseBody
