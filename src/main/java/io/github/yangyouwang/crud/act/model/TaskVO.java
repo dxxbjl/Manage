@@ -10,9 +10,13 @@ import java.util.Date;
 @Data
 public class TaskVO {
     /**
-     * 流程ID
+     * 任务ID
      */
     private String id;
+    /**
+     * 流程实例ID
+     */
+    private String processInstanceId;
     /**
      * 流程名称
      */

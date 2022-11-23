@@ -81,7 +81,7 @@
         if(layEvent === 'complete'){
           active.completeTask(data.id);
         } else if(layEvent === 'monitor'){
-          active.monitorView(data.id);
+          active.monitorView(data.processInstanceId);
         }
       });
       /* 触发弹层 */
@@ -119,7 +119,7 @@
             type: 2
             ,shade: 0.3
             ,title: '流程监控'
-            ,content: ctx + '/workFlow/monitorPage/' + id
+            ,content: ctx + '/workFlow/monitorPage?processInstanceId=' + id
             ,maxmin: true
             ,scrollbar: false
             ,area: ['100%', '100%']

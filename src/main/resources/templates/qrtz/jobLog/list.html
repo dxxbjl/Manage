@@ -76,7 +76,10 @@
             elem: '#jobLogTable'
             ,toolbar: '#toolbar'
             ,height: 'full-110'
-            ,url:  ctx + '/qrtz/jobLog/page?jobId=' + jobId
+            ,url:  ctx + '/qrtz/jobLog/page'
+            ,where:{
+                "jobId": jobId
+            }
             ,cellMinWidth: 80
             ,page: true //开启分页
             ,cols: [[ //表头

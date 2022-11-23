@@ -16,8 +16,6 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
@@ -75,9 +73,9 @@ public class WorkFlowController {
      * 流程监控页面
      * @return 流程监控页面
      */
-    @GetMapping("/monitorPage/{id}")
-    public String monitorPage(@Valid @NotNull(message = "id不能为空")  @PathVariable String id, ModelMap map) {
-        map.put("id",id);
+    @GetMapping("/monitorPage")
+    public String monitorPage(String processInstanceId, ModelMap map) {
+        map.put("processInstanceId",processInstanceId);
         return SUFFIX + "/monitor";
     }
 
@@ -136,7 +134,7 @@ public class WorkFlowController {
      */
     @GetMapping("/getStartFlowForm")
     @ResponseBody
-    public Result getStartFlowForm(@RequestParam @NotBlank(message = "部署ID不为空") String deploymentId) {
+    public Result getStartFlowForm(String deploymentId) {
         FormVO formVO = workflowService.getStartFlowForm(deploymentId);
         return Result.success("请填写表单信息",formVO);
     }
@@ -146,8 +144,7 @@ public class WorkFlowController {
      */
     @GetMapping("/getFlowDiagram")
     @ResponseBody
-    public void getFlowDiagram(@RequestParam @NotBlank(message = "部署ID不为空") String deploymentId,
-                               HttpServletResponse response) throws IOException {
+    public void getFlowDiagram(String deploymentId, HttpServletResponse response) throws IOException {
         BufferedImage image = workflowService.getFlowDiagram(deploymentId);
         response.setContentType("image/png");
         response.setHeader("Pragma", "no-cache");
@@ -161,9 +158,8 @@ public class WorkFlowController {
      */
     @GetMapping( "/getCurrentFlowDiagram")
     @ResponseBody
-    public void getCurrentFlowDiagram(@RequestParam @NotBlank(message = "任务ID不为空")String taskId,
-                                      HttpServletResponse response) throws IOException {
-        BufferedImage image = workflowService.getCurrentFlowDiagram(taskId);
+    public void getCurrentFlowDiagram(String processInstanceId, HttpServletResponse response) throws IOException {
+        BufferedImage image = workflowService.getCurrentFlowDiagram(processInstanceId);
         response.setContentType("image/png");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Cache-Control", "no-cache");
@@ -177,10 +173,10 @@ public class WorkFlowController {
      */
     @GetMapping("/approvalHistoricTask")
     @ResponseBody
-    public TableDataInfo approvalHistoricTask(HttpServletRequest request, String taskId) {
+    public TableDataInfo approvalHistoricTask(HttpServletRequest request, String processInstanceId) {
         int page = Integer.parseInt(request.getParameter("page")) - 1;
         int limit = Integer.parseInt(request.getParameter("limit"));
-        return workflowService.approvalHistoricTask(page, limit, taskId);
+        return workflowService.approvalHistoricTask(page, limit, processInstanceId);
     }
 
     /**

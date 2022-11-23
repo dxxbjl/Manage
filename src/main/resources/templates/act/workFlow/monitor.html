@@ -25,13 +25,16 @@
         let $ = layui.$,
             form = layui.form,
             table = layui.table,
-            id = [[${id}]];
-        $("#flowDiagram").attr("src", ctx + '/workFlow/getCurrentFlowDiagram?taskId=' + id);
+            processInstanceId = [[${processInstanceId}]];
+        $("#flowDiagram").attr("src", ctx + '/workFlow/getCurrentFlowDiagram?processInstanceId=' + processInstanceId);
         // 查询列表接口
         table.render({
             elem: '#approvalHistoricTaskTable',
             height: 'full-110',
             url:  ctx + '/workFlow/approvalHistoricTask',
+            where:{
+                "processInstanceId": processInstanceId
+            },
             cellMinWidth: 80,
             page: true, //开启分页
             cols: [[ //表头

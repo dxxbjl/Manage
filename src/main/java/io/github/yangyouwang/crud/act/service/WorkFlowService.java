@@ -68,6 +68,7 @@ public class WorkFlowService {
         List<TaskVO> taskVOList = tasks.stream().map(s -> {
             TaskVO taskVO = new TaskVO();
             taskVO.setId(s.getId());
+            taskVO.setProcessInstanceId(s.getProcessInstanceId());
             ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(s.getProcessInstanceId()).singleResult();
             taskVO.setFlowName(processInstance.getName());
             taskVO.setName(s.getName());
@@ -119,6 +120,7 @@ public class WorkFlowService {
         List<TaskVO> taskVOList = tasks.stream().map(s -> {
             TaskVO taskVO = new TaskVO();
             taskVO.setId(s.getId());
+            taskVO.setProcessInstanceId(s.getProcessInstanceId());
             ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(s.getProcessInstanceId()).singleResult();
             taskVO.setFlowName(processInstance.getName());
             taskVO.setName(s.getName());
@@ -217,16 +219,22 @@ public class WorkFlowService {
                 null, 1.0d);
     }
 
-    public BufferedImage getCurrentFlowDiagram(String taskId) throws IOException {
-        HistoricTaskInstance task = historyService
-                .createHistoricTaskInstanceQuery()
-                .taskId(taskId)
-                .singleResult();
-        // 流程定义
-        BpmnModel bpmnModel = repositoryService.getBpmnModel(task.getProcessDefinitionId());
+    public BufferedImage getCurrentFlowDiagram(String processInstanceId) throws IOException {
+        // 查询流程实例ID查询流程实例
+        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery()
+                .processInstanceId(processInstanceId).singleResult();
+        if (processInstance == null) {
+            // 查询历史流程实例
+            HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery()
+                    .processInstanceId(processInstanceId).singleResult();
+            return getFlowDiagram(historicProcessInstance.getDeploymentId());
+        }
+        // 根据流程定义ID获取BPMN模型对象
+        BpmnModel bpmnModel = repositoryService.getBpmnModel(processInstance.getProcessDefinitionId());
+        // 生成流程图
         ProcessDiagramGenerator processDiagramGenerator = new DefaultProcessDiagramGenerator();
         InputStream inputStream = processDiagramGenerator.generateDiagram(bpmnModel, "png",
-                runtimeService.getActiveActivityIds(task.getExecutionId()),
+                runtimeService.getActiveActivityIds(processInstance.getId()),
                 Collections.emptyList(), "宋体", "宋体", "宋体", null, 1.0d);
         return ImageIO.read(inputStream);
     }
@@ -244,9 +252,10 @@ public class WorkFlowService {
         }
     }
 
-    public TableDataInfo approvalHistoricTask(int page, int limit, String taskId) {
+    public TableDataInfo approvalHistoricTask(int page, int limit, String processInstanceId) {
         HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery()
-                .taskId(taskId).orderByHistoricTaskInstanceEndTime().asc();
+                .processInstanceId(processInstanceId)
+                .orderByHistoricTaskInstanceEndTime().asc();
         List<HistoricTaskInstance> historicTaskInstances = query.listPage(page, limit);
         List<ApprovalHistoricTaskVO> approvalHistoricTaskVOList = historicTaskInstances.stream().map(s -> {
             ApprovalHistoricTaskVO approvalHistoricTaskVO = new ApprovalHistoricTaskVO();
