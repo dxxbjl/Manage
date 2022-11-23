@@ -8,10 +8,19 @@
 <div class="layui-fluid">
     <div class="layui-card">
         <div class="layui-card-header layuiadmin-card-header-auto">
-            <img height="100%" width="100%" alt="流程图" id="flowDiagram" onclick="fun.preview(this)"/>
+            流程进度审批历史
         </div>
         <div class="layui-card-body">
-            <table id="approvalHistoricTaskTable" lay-filter="approvalHistoricTaskTable"></table>
+            <div class="layui-row">
+                <div class="layui-col-md6">
+                    <table id="approvalHistoricTaskTable" lay-filter="approvalHistoricTaskTable"></table>
+                </div>
+                <div class="layui-col-md6">
+                    <div align="center">
+                        <img height="100%" width="100%" alt="流程图" id="flowDiagram" onclick="fun.preview(this)"/>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
