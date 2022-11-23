@@ -45,7 +45,13 @@
                 "processInstanceId": processInstanceId
             },
             cellMinWidth: 80,
-            page: true, //开启分页
+            page: false,
+            parseData: function (result) {
+                return {
+                    "code":0,
+                    "data": result.data
+                }
+            },
             cols: [[ //表头
                 {field: 'name', title: '节点名称'},
                 {field: 'assignee', title: '审批人'},

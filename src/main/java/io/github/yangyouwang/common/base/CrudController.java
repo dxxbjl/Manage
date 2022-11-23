@@ -36,11 +36,11 @@ public class CrudController {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     protected TableDataInfo getDataTable(List<?> list)
     {
-        TableDataInfo rspData = new TableDataInfo();
-        rspData.setCode(0);
-        rspData.setData(list);
-        rspData.setCount(new PageInfo(list).getTotal());
-        return rspData;
+        TableDataInfo tableDataInfo = new TableDataInfo();
+        tableDataInfo.setCode(0);
+        tableDataInfo.setData(list);
+        tableDataInfo.setCount(new PageInfo(list).getTotal());
+        return tableDataInfo;
     }
 
 }

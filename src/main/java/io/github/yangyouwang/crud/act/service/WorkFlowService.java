@@ -3,6 +3,10 @@ package io.github.yangyouwang.crud.act.service;
 import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.github.yangyouwang.core.util.SecurityUtils;
 import io.github.yangyouwang.core.util.StringUtil;
+import io.github.yangyouwang.crud.act.factory.FlowFactory;
+import io.github.yangyouwang.crud.act.factory.FormFactory;
+import io.github.yangyouwang.crud.act.factory.HistoricFactory;
+import io.github.yangyouwang.crud.act.factory.TaskFactory;
 import io.github.yangyouwang.crud.act.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.bpmn.model.BpmnModel;
@@ -13,8 +17,8 @@ import org.activiti.engine.form.TaskFormData;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricProcessInstanceQuery;
 import org.activiti.engine.history.HistoricTaskInstance;
-import org.activiti.engine.history.HistoricTaskInstanceQuery;
 import org.activiti.engine.impl.identity.Authentication;
+import org.activiti.engine.query.Query;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -58,109 +62,6 @@ public class WorkFlowService {
     @Autowired
     private FormService formService;
 
-    public TableDataInfo myFlow(String name, int page, int limit) {
-        String userName = SecurityUtils.getUserName();
-        TaskQuery query = taskService.createTaskQuery()
-                .taskAssignee(userName)
-                .orderByTaskCreateTime().desc();
-        if (StringUtils.isNotBlank(name)) {
-            query.processDefinitionNameLike("%" + name + "%");
-        }
-        List<Task> tasks = query.listPage(page, limit);
-        List<TaskVO> taskVOList = tasks.stream().map(s -> {
-            TaskVO taskVO = new TaskVO();
-            taskVO.setId(s.getId());
-            taskVO.setProcessInstanceId(s.getProcessInstanceId());
-            ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(s.getProcessInstanceId()).singleResult();
-            taskVO.setFlowName(processInstance.getName());
-            taskVO.setName(s.getName());
-            taskVO.setAssignee(s.getAssignee());
-            taskVO.setCreateTime(s.getCreateTime());
-            return taskVO;
-        }).collect(Collectors.toList());
-        TableDataInfo rspData = new TableDataInfo();
-        rspData.setCode(0);
-        rspData.setData(taskVOList);
-        rspData.setCount(query.count());
-        return rspData;
-    }
-
-    public TableDataInfo flow(String name, int page, int limit) {
-        ProcessDefinitionQuery query = repositoryService.createProcessDefinitionQuery()
-                .orderByProcessDefinitionVersion().asc();
-        if (StringUtils.isNotBlank(name)) {
-            query.processDefinitionNameLike("%" + name + "%");
-        }
-        List<ProcessDefinition> processDefinitions = query.listPage(page, limit);
-        List<FlowVO> flowVOList = processDefinitions.stream().map(s -> {
-            FlowVO flowVO = new FlowVO();
-            flowVO.setId(s.getId());
-            flowVO.setCategory(s.getCategory());
-            flowVO.setName(s.getName());
-            flowVO.setKey(s.getKey());
-            flowVO.setDescription(s.getDescription());
-            flowVO.setVersion(s.getVersion());
-            flowVO.setDeploymentId(s.getDeploymentId());
-            return flowVO;
-        }).collect(Collectors.toList());
-        TableDataInfo rspData = new TableDataInfo();
-        rspData.setCode(0);
-        rspData.setData(flowVOList);
-        rspData.setCount(query.count());
-        return rspData;
-    }
-
-    public TableDataInfo toDoTask(int page, int limit,String name) {
-        String userName = SecurityUtils.getUserName();
-        TaskQuery query = taskService.createTaskQuery()
-                .taskCandidateOrAssigned(userName)
-                .orderByTaskCreateTime().desc();
-        if (StringUtils.isNotBlank(name)) {
-            query.processDefinitionNameLike("%" + name + "%");
-        }
-        List<Task> tasks = query.listPage(page, limit);
-        List<TaskVO> taskVOList = tasks.stream().map(s -> {
-            TaskVO taskVO = new TaskVO();
-            taskVO.setId(s.getId());
-            taskVO.setProcessInstanceId(s.getProcessInstanceId());
-            ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(s.getProcessInstanceId()).singleResult();
-            taskVO.setFlowName(processInstance.getName());
-            taskVO.setName(s.getName());
-            taskVO.setAssignee(s.getAssignee());
-            taskVO.setCreateTime(s.getCreateTime());
-            return taskVO;
-        }).collect(Collectors.toList());
-        TableDataInfo rspData = new TableDataInfo();
-        rspData.setCode(0);
-        rspData.setData(taskVOList);
-        rspData.setCount(query.count());
-        return rspData;
-    }
-
-    public TableDataInfo historicTask(int page, int limit, String name) {
-        String userName = SecurityUtils.getUserName();
-        HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery()
-                .involvedUser(userName);
-        if (StringUtils.isNotBlank(name)) {
-            query.processInstanceNameLike("%" + name + "%");
-        }
-        query.orderByProcessInstanceStartTime().desc();
-        List<HistoricProcessInstance> historicProcessInstances = query.listPage(page, limit);
-        List<HistoricTaskVO> historicTaskVOList = historicProcessInstances.stream().map(s -> {
-            HistoricTaskVO historicTaskVO = new HistoricTaskVO();
-            historicTaskVO.setId(s.getId());
-            historicTaskVO.setName(s.getName());
-            historicTaskVO.setDescription(s.getDescription());
-            historicTaskVO.setStartTime(s.getStartTime());
-            historicTaskVO.setEndTime(s.getEndTime());
-            return historicTaskVO;
-        }).collect(Collectors.toList());
-        TableDataInfo rspData = new TableDataInfo();
-        rspData.setCode(0);
-        rspData.setData(historicTaskVOList);
-        rspData.setCount(query.count());
-        return rspData;
-    }
 
     public String start(StartDTO startDTO) {
         ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
@@ -187,20 +88,8 @@ public class WorkFlowService {
         // 内置表单配置
         StartFormData startFormData = formService.getStartFormData(processDefinition.getId());
         List<FormProperty> formProperties = startFormData.getFormProperties();
-        List<FormVO.FormPropertyVO> formPropertyVOList = formProperties.stream().map(s -> {
-            FormVO.FormPropertyVO formPropertyVO = new FormVO.FormPropertyVO();
-            formPropertyVO.setId(s.getId());
-            formPropertyVO.setName(s.getName());
-            formPropertyVO.setValue(s.getValue());
-            String type = s.getType().getName();
-            formPropertyVO.setTypeName(type);
-            if("enum".equals(type)) {
-                formPropertyVO.setValues(s.getType().getInformation("values"));
-            } else if("date".equals(type)){
-                formPropertyVO.setDatePatterns(s.getType().getInformation("datePattern"));
-            }
-            return formPropertyVO;
-        }).collect(Collectors.toList());
+        List<FormVO.FormPropertyVO> formPropertyVOList = formProperties.stream()
+                .map(s -> FormFactory.createFormProperty(s)).collect(Collectors.toList());
         FormVO formVO = new FormVO();
         formVO.setHasStartFormKey(processDefinition.hasStartFormKey());
         formVO.setFormProperties(formPropertyVOList);
@@ -216,20 +105,8 @@ public class WorkFlowService {
             // 外置表单
         }
         List<FormProperty> formProperties =  taskFormData.getFormProperties();
-        List<FormVO.FormPropertyVO> formPropertyVOList = formProperties.stream().map(s -> {
-            FormVO.FormPropertyVO formPropertyVO = new FormVO.FormPropertyVO();
-            formPropertyVO.setId(s.getId());
-            formPropertyVO.setName(s.getName());
-            formPropertyVO.setValue(s.getValue());
-            String type = s.getType().getName();
-            formPropertyVO.setTypeName(type);
-            if("enum".equals(type)) {
-                formPropertyVO.setValues(s.getType().getInformation("values"));
-            } else if("date".equals(type)){
-                formPropertyVO.setDatePatterns(s.getType().getInformation("datePattern"));
-            }
-            return formPropertyVO;
-        }).collect(Collectors.toList());
+        List<FormVO.FormPropertyVO> formPropertyVOList = formProperties.stream()
+                .map(s -> FormFactory.createFormProperty(s)).collect(Collectors.toList());
         FormVO formVO = new FormVO();
         formVO.setFormProperties(formPropertyVOList);
         formVO.setHasStartFormKey(false);
@@ -288,12 +165,88 @@ public class WorkFlowService {
         }
     }
 
-    public TableDataInfo historic(int page, int limit, String processInstanceId) {
-        HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery()
+    public TableDataInfo getMyFlowList(int page, int limit, String assignee) {
+        String userName = SecurityUtils.getUserName();
+        TaskQuery query = taskService.createTaskQuery()
+                .taskAssignee(userName)
+                .orderByTaskCreateTime().desc();
+        if (StringUtils.isNotBlank(assignee)) {
+            query.taskAssigneeLike("%" + assignee + "%");
+        }
+        List<Task> tasks = query.listPage(page - 1, limit);
+        List<TaskVO> taskVOList = tasks.stream().map(s -> {
+            TaskVO taskVO = TaskFactory.createTask(s);
+            ProcessInstance processInstance = runtimeService.createProcessInstanceQuery()
+                    .processInstanceId(s.getProcessInstanceId()).singleResult();
+            taskVO.setFlowName(processInstance.getName());
+            return taskVO;
+        }).collect(Collectors.toList());
+        return getDataTable(taskVOList,query);
+    }
+
+    public TableDataInfo getFlowList(int page, int limit, String name) {
+        ProcessDefinitionQuery query = repositoryService.createProcessDefinitionQuery()
+                .orderByProcessDefinitionVersion().asc();
+        if (StringUtils.isNotBlank(name)) {
+            query.processDefinitionNameLike("%" + name + "%");
+        }
+        List<ProcessDefinition> processDefinitions = query.listPage(page - 1, limit);
+        List<FlowVO> flowVOList = processDefinitions.stream()
+                .map(s -> FlowFactory.createFlow(s)).collect(Collectors.toList());
+        return getDataTable(flowVOList,query);
+    }
+
+    public TableDataInfo getToDoTaskList(int page, int limit, String assignee) {
+        String userName = SecurityUtils.getUserName();
+        TaskQuery query = taskService.createTaskQuery()
+                .taskCandidateOrAssigned(userName)
+                .orderByTaskCreateTime().desc();
+        if (StringUtils.isNotBlank(assignee)) {
+            query.taskAssigneeLike("%" + assignee + "%");
+        }
+        List<Task> tasks = query.listPage(page - 1, limit);
+        List<TaskVO> taskVOList = tasks.stream().map(s -> {
+            TaskVO taskVO = TaskFactory.createTask(s);
+            ProcessInstance processInstance = runtimeService.createProcessInstanceQuery()
+                    .processInstanceId(s.getProcessInstanceId()).singleResult();
+            taskVO.setFlowName(processInstance.getName());
+            return taskVO;
+        }).collect(Collectors.toList());
+        return getDataTable(taskVOList,query);
+    }
+
+    public TableDataInfo getHistoricTaskList(int page, int limit, String name) {
+        String userName = SecurityUtils.getUserName();
+        HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery()
+                .involvedUser(userName);
+        if (StringUtils.isNotBlank(name)) {
+            query.processInstanceNameLike("%" + name + "%");
+        }
+        query.orderByProcessInstanceStartTime().desc();
+        List<HistoricProcessInstance> historicProcessInstances = query.listPage(page - 1, limit);
+        List<HistoricTaskVO> historicTaskVOList = historicProcessInstances.stream()
+                .map(s -> HistoricFactory.createHistoricTask(s)).collect(Collectors.toList());
+        return getDataTable(historicTaskVOList,query);
+    }
+
+    /**
+     * 响应请求分页数据
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    protected TableDataInfo getDataTable(List<?> list, Query query)
+    {
+        TableDataInfo tableDataInfo = new TableDataInfo();
+        tableDataInfo.setCode(0);
+        tableDataInfo.setData(list);
+        tableDataInfo.setCount(query.count());
+        return tableDataInfo;
+    }
+
+    public List<HistoricVO> getHistoricListByProcessInstanceId(String processInstanceId) {
+        List<HistoricTaskInstance> historicTaskInstances = historyService.createHistoricTaskInstanceQuery()
                 .processInstanceId(processInstanceId)
-                .orderByHistoricTaskInstanceEndTime().asc();
-        List<HistoricTaskInstance> historicTaskInstances = query.listPage(page, limit);
-        List<HistoricVO> historicVOList = historicTaskInstances.stream().map(s -> {
+                .orderByHistoricTaskInstanceEndTime().asc().list();
+        return historicTaskInstances.stream().map(s -> {
             HistoricVO historicVO = new HistoricVO();
             historicVO.setName(s.getName());
             historicVO.setAssignee(s.getAssignee());
@@ -303,10 +256,5 @@ public class WorkFlowService {
             historicVO.setComment(StringUtils.join(comment,","));
             return historicVO;
         }).collect(Collectors.toList());
-        TableDataInfo rspData = new TableDataInfo();
-        rspData.setCode(0);
-        rspData.setData(historicVOList);
-        rspData.setCount(query.count());
-        return rspData;
     }
 }

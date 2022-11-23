@@ -2,9 +2,7 @@ package io.github.yangyouwang.crud.act.controller;
 
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.TableDataInfo;
-import io.github.yangyouwang.crud.act.model.CompleteDTO;
-import io.github.yangyouwang.crud.act.model.FormVO;
-import io.github.yangyouwang.crud.act.model.StartDTO;
+import io.github.yangyouwang.crud.act.model.*;
 import io.github.yangyouwang.crud.act.service.WorkFlowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -13,12 +11,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
+
 /**
  * 工作流控制层
  * @author yangyouwang
@@ -39,7 +38,6 @@ public class WorkFlowController {
     public String flowPage(){
         return SUFFIX + "/flow";
     }
-
 
     /**
      * 跳转代办任务
@@ -88,10 +86,8 @@ public class WorkFlowController {
      */
     @GetMapping("/myFlow")
     @ResponseBody
-    public TableDataInfo myFlow(String name, HttpServletRequest request) {
-        int page = Integer.parseInt(request.getParameter("page")) - 1;
-        int limit = Integer.parseInt(request.getParameter("limit"));
-        return workflowService.myFlow(name, page, limit);
+    public TableDataInfo myFlowList(int page, int limit, String assignee) {
+        return workflowService.getMyFlowList(page, limit, assignee);
     }
 
     /**
@@ -99,10 +95,8 @@ public class WorkFlowController {
      */
     @GetMapping("/flow")
     @ResponseBody
-    public TableDataInfo flow(String name, HttpServletRequest request) {
-        int page = Integer.parseInt(request.getParameter("page")) - 1;
-        int limit = Integer.parseInt(request.getParameter("limit"));
-        return workflowService.flow(name, page, limit);
+    public TableDataInfo flowList(int page, int limit, String name) {
+        return workflowService.getFlowList(page, limit, name);
     }
 
     /**
@@ -110,10 +104,8 @@ public class WorkFlowController {
      */
     @GetMapping("/toDoTask")
     @ResponseBody
-    public TableDataInfo toDoTask(HttpServletRequest request, String name) {
-        int page = Integer.parseInt(request.getParameter("page")) - 1;
-        int limit = Integer.parseInt(request.getParameter("limit"));
-        return workflowService.toDoTask(page, limit, name);
+    public TableDataInfo toDoTaskList(int page, int limit, String assignee) {
+        return workflowService.getToDoTaskList(page, limit, assignee);
     }
 
     /**
@@ -121,10 +113,8 @@ public class WorkFlowController {
      */
     @GetMapping("/historicTask")
     @ResponseBody
-    public TableDataInfo historicTask(HttpServletRequest request, String name) {
-        int page = Integer.parseInt(request.getParameter("page")) - 1;
-        int limit = Integer.parseInt(request.getParameter("limit"));
-        return workflowService.historicTask(page, limit, name);
+    public TableDataInfo historicTaskList(int page, int limit, String name) {
+        return workflowService.getHistoricTaskList(page,limit,name);
     }
 
     /**
@@ -187,10 +177,9 @@ public class WorkFlowController {
      */
     @GetMapping("/historic")
     @ResponseBody
-    public TableDataInfo historic(String processInstanceId,HttpServletRequest request) {
-        int page = Integer.parseInt(request.getParameter("page")) - 1;
-        int limit = Integer.parseInt(request.getParameter("limit"));
-        return workflowService.historic(page, limit, processInstanceId);
+    public Result historicList(String processInstanceId) {
+        List<HistoricVO> historicVOList = workflowService.getHistoricListByProcessInstanceId(processInstanceId);
+        return Result.success(historicVOList);
     }
 
     /**
