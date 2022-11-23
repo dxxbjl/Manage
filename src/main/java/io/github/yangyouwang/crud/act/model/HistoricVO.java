@@ -13,7 +13,7 @@ import java.util.Date;
  * @since JDK 1.8
  */
 @Data
-public class ApprovalHistoricTaskVO {
+public class HistoricVO {
     /**
      * 节点名称
      */

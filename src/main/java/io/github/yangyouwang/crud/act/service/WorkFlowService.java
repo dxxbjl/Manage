@@ -252,24 +252,24 @@ public class WorkFlowService {
         }
     }
 
-    public TableDataInfo approvalHistoricTask(int page, int limit, String processInstanceId) {
+    public TableDataInfo historic(int page, int limit, String processInstanceId) {
         HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery()
                 .processInstanceId(processInstanceId)
                 .orderByHistoricTaskInstanceEndTime().asc();
         List<HistoricTaskInstance> historicTaskInstances = query.listPage(page, limit);
-        List<ApprovalHistoricTaskVO> approvalHistoricTaskVOList = historicTaskInstances.stream().map(s -> {
-            ApprovalHistoricTaskVO approvalHistoricTaskVO = new ApprovalHistoricTaskVO();
-            approvalHistoricTaskVO.setName(s.getName());
-            approvalHistoricTaskVO.setAssignee(s.getAssignee());
-            approvalHistoricTaskVO.setEndTime(s.getEndTime());
+        List<HistoricVO> historicVOList = historicTaskInstances.stream().map(s -> {
+            HistoricVO historicVO = new HistoricVO();
+            historicVO.setName(s.getName());
+            historicVO.setAssignee(s.getAssignee());
+            historicVO.setEndTime(s.getEndTime());
             List<Comment> taskComments = taskService.getTaskComments(s.getId());
             List<String> comment = taskComments.stream().map(Comment::getFullMessage).collect(Collectors.toList());
-            approvalHistoricTaskVO.setComment(StringUtils.join(comment,","));
-            return approvalHistoricTaskVO;
+            historicVO.setComment(StringUtils.join(comment,","));
+            return historicVO;
         }).collect(Collectors.toList());
         TableDataInfo rspData = new TableDataInfo();
         rspData.setCode(0);
-        rspData.setData(approvalHistoricTaskVOList);
+        rspData.setData(historicVOList);
         rspData.setCount(query.count());
         return rspData;
     }

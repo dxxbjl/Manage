@@ -171,12 +171,12 @@ public class WorkFlowController {
      * 查看审批历史
      * @return 请求列表
      */
-    @GetMapping("/approvalHistoricTask")
+    @GetMapping("/historic")
     @ResponseBody
-    public TableDataInfo approvalHistoricTask(HttpServletRequest request, String processInstanceId) {
+    public TableDataInfo historic(HttpServletRequest request, String processInstanceId) {
         int page = Integer.parseInt(request.getParameter("page")) - 1;
         int limit = Integer.parseInt(request.getParameter("limit"));
-        return workflowService.approvalHistoricTask(page, limit, processInstanceId);
+        return workflowService.historic(page, limit, processInstanceId);
     }
 
     /**
