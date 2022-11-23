@@ -62,7 +62,6 @@ public class WorkFlowService {
     @Autowired
     private FormService formService;
 
-
     public String start(StartDTO startDTO) {
         ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
                 .deploymentId(startDTO.getDeploymentId()).singleResult();
@@ -89,7 +88,7 @@ public class WorkFlowService {
         StartFormData startFormData = formService.getStartFormData(processDefinition.getId());
         List<FormProperty> formProperties = startFormData.getFormProperties();
         List<FormVO.FormPropertyVO> formPropertyVOList = formProperties.stream()
-                .map(s -> FormFactory.createFormProperty(s)).collect(Collectors.toList());
+                .map(FormFactory::createFormProperty).collect(Collectors.toList());
         FormVO formVO = new FormVO();
         formVO.setHasStartFormKey(processDefinition.hasStartFormKey());
         formVO.setFormProperties(formPropertyVOList);
@@ -106,7 +105,7 @@ public class WorkFlowService {
         }
         List<FormProperty> formProperties =  taskFormData.getFormProperties();
         List<FormVO.FormPropertyVO> formPropertyVOList = formProperties.stream()
-                .map(s -> FormFactory.createFormProperty(s)).collect(Collectors.toList());
+                .map(FormFactory::createFormProperty).collect(Collectors.toList());
         FormVO formVO = new FormVO();
         formVO.setFormProperties(formPropertyVOList);
         formVO.setHasStartFormKey(false);
@@ -192,7 +191,7 @@ public class WorkFlowService {
         }
         List<ProcessDefinition> processDefinitions = query.listPage(page - 1, limit);
         List<FlowVO> flowVOList = processDefinitions.stream()
-                .map(s -> FlowFactory.createFlow(s)).collect(Collectors.toList());
+                .map(FlowFactory::createFlow).collect(Collectors.toList());
         return getDataTable(flowVOList,query);
     }
 
@@ -225,7 +224,7 @@ public class WorkFlowService {
         query.orderByProcessInstanceStartTime().desc();
         List<HistoricProcessInstance> historicProcessInstances = query.listPage(page - 1, limit);
         List<HistoricTaskVO> historicTaskVOList = historicProcessInstances.stream()
-                .map(s -> HistoricFactory.createHistoricTask(s)).collect(Collectors.toList());
+                .map(HistoricFactory::createHistoricTask).collect(Collectors.toList());
         return getDataTable(historicTaskVOList,query);
     }
 

@@ -63,7 +63,7 @@
                             </div>
                             <div class="layui-tab-item">
                                 <div align="center">
-                                    <img height="100%" width="100%" alt="流程图" id="flowDiagram" onclick="fun.preview(this)"/>
+                                    <img height="100%" width="100%" alt="流程图" id="flowDiagram" onclick="fun.preview(this)" style="display:none;"/>
                                 </div>
                             </div>
                         </div>
@@ -250,7 +250,7 @@
      * @param deploymentId 部署ID
      */
     function getFlowDiagram(deploymentId) {
-        $("#flowDiagram").attr("src", ctx + '/workFlow/getFlowDiagram?deploymentId=' + deploymentId);
+        $("#flowDiagram").show().attr("src", ctx + '/workFlow/getFlowDiagram?deploymentId=' + deploymentId);
     }
     /**
      * 发起流程
