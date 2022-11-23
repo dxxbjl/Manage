@@ -279,8 +279,11 @@ public class WorkFlowService {
             String taskId = task.getId();
             // 添加审批意见
             taskService.addComment(taskId,processInstanceId,completeDTO.getComment());
+            // 设置下一个节点审批人
+            Map<String, Object> variables = new HashMap<>();
+            variables.put("assignee", completeDTO.getAssignee());
             // 完成任务
-            taskService.complete(taskId);
+            taskService.complete(taskId,variables);
             log.info(userName + "：完成任务");
         }
     }

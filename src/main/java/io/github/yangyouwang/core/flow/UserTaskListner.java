@@ -10,7 +10,9 @@ public class UserTaskListner implements TaskListener {
 
     @Override
     public void notify(DelegateTask delegateTask) {
-        String assignee = delegateTask.getVariable("assignee").toString();
-        delegateTask.setAssignee(assignee);
+        if (delegateTask.hasVariable("assignee")) {
+            String assignee = delegateTask.getVariable("assignee").toString();
+            delegateTask.setAssignee(assignee);
+        }
     }
 }

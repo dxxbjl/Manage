@@ -12,6 +12,10 @@ public class CompleteDTO {
      */
     private String processInstanceId;
     /**
+     * 审批人
+     */
+    private String assignee;
+    /**
      * 审批决策
      */
     private String pass;
