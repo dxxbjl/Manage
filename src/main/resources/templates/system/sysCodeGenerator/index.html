@@ -61,7 +61,7 @@
                 </div>
                 <div class="layui-inline">
                     <div class="layui-input-inline">
-                        <button type="button" class="layui-btn" lay-submit lay-filter="save-submit" id="save-submit">确认</button>
+                        <button type="button" class="layui-btn" lay-submit lay-filter="save-submit" id="save-submit">生成</button>
                     </div>
                 </div>
             </div>
@@ -113,9 +113,9 @@
         table.render({
             elem: '#fieldList'
             ,cellMinWidth: 80
+            ,height: 'full-110'
             ,cols: [
                 [
-                    {type: 'checkbox', fixed: 'left'},
                     {field: 'columnName', title: '字段名'},
                     {field: 'typeName', title: '字段类型'},
                     {field: 'columnSize', title: '字段长度'},
