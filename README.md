@@ -142,7 +142,6 @@ sec:authorize="hasAuthority('权限标识')" // thymeleaf声明
     工作流
    ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/9.png "9.png")
    ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/10.png "10.png")
-   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/16.png "16.png")
 
     登录日志管理
    ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/11.png "11.png")
