@@ -41,9 +41,4 @@ public class CodeConfigVO {
      */
     @ApiModelProperty("作者")
     private String author;
-    /**
-     * 代码路径
-     */
-    @ApiModelProperty("代码路径")
-    private String projectPath;
 }

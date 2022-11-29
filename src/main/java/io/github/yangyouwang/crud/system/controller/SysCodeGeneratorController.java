@@ -13,18 +13,26 @@ import io.github.yangyouwang.common.domain.BaseEntity;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.core.config.properties.CodeGeneratorProperties;
 import io.github.yangyouwang.crud.system.model.CodeConfigVO;
-import io.github.yangyouwang.crud.system.model.CodeGeneratorDTO;
+import io.github.yangyouwang.crud.system.model.CodeBuildDTO;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * Description: 代码生成接口控制层 <br/>
@@ -51,8 +59,6 @@ public class SysCodeGeneratorController extends CrudController {
     public String indexPage(ModelMap map) {
         CodeConfigVO codeConfigVO = new CodeConfigVO();
         BeanUtils.copyProperties(codeGeneratorProperties,codeConfigVO);
-        String projectPath = System.getProperty("user.dir");
-        codeConfigVO.setProjectPath(projectPath);
         map.put("codeConfig",codeConfigVO);
         return SUFFIX + "/index";
     }
@@ -124,22 +130,47 @@ public class SysCodeGeneratorController extends CrudController {
     }
     /**
      * 代码生成接口
-     * @param codeGeneratorDTO 代码生成DTO
+     * @param codeBuildDTO 代码生成DTO
      * @return 结果
      */
-    @PostMapping("/create")
+    @PostMapping("/build")
     @ResponseBody
-    public Result codeGenerator(@RequestBody @Validated CodeGeneratorDTO codeGeneratorDTO, BindingResult bindingResult) {
+    public Result build(@RequestBody @Validated CodeBuildDTO codeBuildDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
-            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
+            throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        String projectPath = codeGeneratorDTO.getProjectPath();
+        String path = System.getProperty("user.dir");
+        this.codeBuild(codeBuildDTO,path);
+        return Result.success("生成代码在项目工程中");
+    }
+
+    /**
+     * 代码生成并下载ZIP压缩包
+     * @param codeBuildDTO 代码生成DTO
+     */
+    @GetMapping("/buildZip")
+    public void buildZip(CodeBuildDTO codeBuildDTO,  HttpServletResponse response)
+            throws Exception {
+        String path = System.getProperty("user.dir") + "/temp";
+        this.codeBuild(codeBuildDTO, path);
+        response.setHeader("Content-disposition", "attachment; filename=code.zip");
+        response.setHeader("Access-Control-Expose-Headers", "Content-disposition");
+        ZipDirectory(path, response.getOutputStream());
+        // 递归删除目录
+        FileSystemUtils.deleteRecursively(new File(path));
+    }
+
+    /**
+     * 生成代码逻辑
+     * @param codeBuildDTO 生成代码DTO
+     */
+    public void codeBuild(CodeBuildDTO codeBuildDTO,String path) {
         // 代码生成器
         AutoGenerator mpg = new AutoGenerator();
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
-        gc.setOutputDir(projectPath + "/src/main/java");
-        gc.setAuthor(codeGeneratorDTO.getAuthor());
+        gc.setOutputDir(path + "/src/main/java");
+        gc.setAuthor(codeGeneratorProperties.getAuthor());
         gc.setOpen(false);
         //实体属性 Swagger2 注解
         gc.setSwagger2(true);
@@ -152,14 +183,14 @@ public class SysCodeGeneratorController extends CrudController {
         mpg.setGlobalConfig(gc);
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl(codeGeneratorDTO.getUrl());
-        dsc.setDriverName(codeGeneratorDTO.getDriverName());
-        dsc.setUsername(codeGeneratorDTO.getUsername());
-        dsc.setPassword(codeGeneratorDTO.getPassword());
+        dsc.setUrl(codeGeneratorProperties.getUrl());
+        dsc.setDriverName(codeGeneratorProperties.getDriverName());
+        dsc.setUsername(codeGeneratorProperties.getUsername());
+        dsc.setPassword(codeGeneratorProperties.getPassword());
         mpg.setDataSource(dsc);
         // 包配置
         PackageConfig pc = new PackageConfig();
-        pc.setModuleName(codeGeneratorDTO.getModuleName());
+        pc.setModuleName(codeBuildDTO.getModuleName());
         pc.setParent("io.github.yangyouwang.crud");
         mpg.setPackageInfo(pc);
         // 自定义配置
@@ -175,7 +206,7 @@ public class SysCodeGeneratorController extends CrudController {
         focList.add(new FileOutConfig("/templates/ftl/java/service.java.ftl") {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                return projectPath + "/src/main/java/io/github/yangyouwang/crud/" + pc.getModuleName()
+                return path + "/src/main/java/io/github/yangyouwang/crud/" + pc.getModuleName()
                         + "/service/" + tableInfo.getEntityName() + "Service" + StringPool.DOT_JAVA;
             }
         });
@@ -183,7 +214,7 @@ public class SysCodeGeneratorController extends CrudController {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-                return projectPath + "/src/main/resources/mapper/" + pc.getModuleName()
+                return path + "/src/main/resources/mapper/" + pc.getModuleName()
                         + StringPool.SLASH + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });
@@ -191,7 +222,7 @@ public class SysCodeGeneratorController extends CrudController {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输入文件名称
-                return projectPath + "/src/main/resources/templates/" + pc.getModuleName()
+                return path + "/src/main/resources/templates/" + pc.getModuleName()
                         + StringPool.SLASH + tableInfo.getEntityPath() + StringPool.SLASH + "list.html";
             }
         });
@@ -199,7 +230,7 @@ public class SysCodeGeneratorController extends CrudController {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输入文件名称
-                return projectPath + "/src/main/resources/templates/" + pc.getModuleName()
+                return path + "/src/main/resources/templates/" + pc.getModuleName()
                         + StringPool.SLASH + tableInfo.getEntityPath() + StringPool.SLASH + "start.html";
             }
         });
@@ -207,7 +238,7 @@ public class SysCodeGeneratorController extends CrudController {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输入文件名称
-                return projectPath + "/src/main/resources/templates/" + pc.getModuleName()
+                return path + "/src/main/resources/templates/" + pc.getModuleName()
                         + StringPool.SLASH + tableInfo.getEntityPath() + StringPool.SLASH + "edit.html";
             }
         });
@@ -215,7 +246,7 @@ public class SysCodeGeneratorController extends CrudController {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输入文件名称
-                return projectPath + "/src/main/resources/sql/" + pc.getModuleName()
+                return path + "/src/main/resources/sql/" + pc.getModuleName()
                         + StringPool.SLASH + tableInfo.getEntityPath() + StringPool.SLASH + "menu.sql";
             }
         });
@@ -240,7 +271,7 @@ public class SysCodeGeneratorController extends CrudController {
         strategy.setSuperEntityColumns("id","create_by","create_time","update_by","update_time","deleted","remark");
         strategy.setEntityLombokModel(true);
         strategy.setRestControllerStyle(false);
-        String[] tables = new String[]{codeGeneratorDTO.getTables()};
+        String[] tables = new String[]{codeBuildDTO.getTables()};
         strategy.setInclude(tables);
         //url中驼峰转连字符
         strategy.setControllerMappingHyphenStyle(true);
@@ -251,6 +282,40 @@ public class SysCodeGeneratorController extends CrudController {
         mpg.setStrategy(strategy);
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());
         mpg.execute();
-        return Result.success("生成代码在项目工程中");
+    }
+
+    /**
+     * 一次性压缩多个文件，文件存放至一个文件夹中
+     */
+    public static void ZipDirectory(String directoryPath, ServletOutputStream outputStream) {
+        try {
+            ZipOutputStream output = new ZipOutputStream(outputStream);
+            List<File> files = getFiles(new File(directoryPath));
+            for (File file : files) {
+                try (InputStream input = new FileInputStream(file)) {
+                    output.putNextEntry(new ZipEntry(file.getPath().substring(directoryPath.length() + 1)));
+                    int temp;
+                    while ((temp = input.read()) != -1) {
+                        output.write(temp);
+                    }
+                }
+            }
+            output.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static List<File> getFiles(File file) {
+        List<File> files = new ArrayList<>();
+        for (File subFile : Objects.requireNonNull(file.listFiles())) {
+            if (subFile.isDirectory()) {
+                List<File> subFiles = getFiles(subFile);
+                files.addAll(subFiles);
+            } else {
+                files.add(subFile);
+            }
+        }
+        return files;
     }
 }
