@@ -203,6 +203,10 @@ INSERT INTO `sys_menu` VALUES (3055, '用户详情', 3054, 1, '', '#', 'M', 'Y',
 INSERT INTO `sys_menu` VALUES (3056, '登录日志管理', 1, 9, 'layui-icon-location', '/sysLoginLog/listPage', 'C', 'Y', 'sysLoginLog:list', '', NULL, 'admin', '2022-09-15 22:10:11', 0, '');
 INSERT INTO `sys_menu` VALUES (3057, '删除登录日志', 3056, 1, '', '#', 'F', 'Y', 'sysLoginLog:del', 'admin', '2022-08-29 22:31:24', '', NULL, 0, '删除登录日志');
 INSERT INTO `sys_menu` VALUES (3058, '代码生成', 1, 10, 'layui-icon-flag', '/sysCodeGenerator/index', 'C', 'Y', '', 'admin', '2022-08-30 23:37:28', 'admin', '2022-08-30 23:39:09', 0, '');
+INSERT INTO `sys_menu` VALUES (3059, '表单管理', 3013, 2, 'layui-icon-username', '/act/formData/listPage', 'C', 'Y', 'formData:list', '', NULL, 'admin', '2022-12-02 00:42:47', 0, '');
+INSERT INTO `sys_menu` VALUES (3060, '添加表单', 3059, 1, '', '#', 'F', 'Y', 'formData:add', '', NULL, '', NULL, 0, '');
+INSERT INTO `sys_menu` VALUES (3061, '编辑表单', 3059, 2, '', '#', 'F', 'Y', 'formData:edit', '', NULL, '', NULL, 0, '');
+INSERT INTO `sys_menu` VALUES (3062, '删除表单', 3059, 3, '', '#', 'F', 'Y', 'formData:del', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3063, '部门管理', 1, 3, 'layui-icon-home', '/system/sysDept/listPage', 'C', 'Y', 'sysDept:list', '', NULL, 'admin', '2022-09-15 22:11:13', 0, '');
 INSERT INTO `sys_menu` VALUES (3064, '添加部门表', 3063, 1, '', '#', 'F', 'Y', 'sysDept:add', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3065, '编辑部门表', 3063, 2, '', '#', 'F', 'Y', 'sysDept:edit', '', NULL, '', NULL, 0, '');
@@ -228,9 +232,9 @@ INSERT INTO `sys_menu` VALUES (3084, '新闻管理', 3051, 5, 'layui-icon-home',
 INSERT INTO `sys_menu` VALUES (3085, '添加新闻', 3084, 1, '', '#', 'F', 'Y', 'news:add', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3086, '编辑新闻', 3084, 2, '', '#', 'F', 'Y', 'news:edit', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3087, '删除新闻', 3084, 3, '', '#', 'F', 'Y', 'news:del', '', NULL, '', NULL, 0, '');
-INSERT INTO `sys_menu` VALUES (3089, '我的流程', 3013, 2, 'layui-icon-username', '/workFlow/flowPage', 'C', 'Y', '', 'admin', '2022-11-14 06:42:06', 'admin', '2022-11-21 16:25:45', 0, '');
-INSERT INTO `sys_menu` VALUES (3090, '代办任务', 3013, 3, 'layui-icon-username', '/workFlow/toDoTaskPage', 'C', 'Y', '', 'admin', '2022-11-14 06:42:29', 'admin', '2022-11-21 16:25:56', 0, '');
-INSERT INTO `sys_menu` VALUES (3091, '已办任务', 3013, 4, 'layui-icon-username', '/workFlow/historicTaskPage', 'C', 'Y', '', 'admin', '2022-11-14 06:42:59', 'admin', '2022-11-21 16:26:19', 0, '');
+INSERT INTO `sys_menu` VALUES (3089, '我的流程', 3013, 3, 'layui-icon-username', '/workFlow/flowPage', 'C', 'Y', '', 'admin', '2022-11-11 10:42:06', 'admin', '2022-12-02 00:43:32', 0, '');
+INSERT INTO `sys_menu` VALUES (3090, '代办任务', 3013, 4, 'layui-icon-username', '/workFlow/toDoTaskPage', 'C', 'Y', '', 'admin', '2022-11-13 10:42:29', 'admin', '2022-12-02 00:43:41', 0, '');
+INSERT INTO `sys_menu` VALUES (3091, '已办任务', 3013, 5, 'layui-icon-username', '/workFlow/historicTaskPage', 'C', 'Y', '', 'admin', '2022-11-13 10:42:59', 'admin', '2022-12-02 00:43:51', 0, '');
 
 -- ----------------------------
 -- Table structure for sys_role

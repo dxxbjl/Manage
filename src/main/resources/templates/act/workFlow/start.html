@@ -122,6 +122,8 @@
     {{#  }); }}
 </script>
 <div th:replace="common/script::footer"></div>
+<script th:src="@{/static/lib/form-builder/form-builder.min.js}"></script>
+<script th:src="@{/static/lib/form-builder/form-render.min.js}"></script>
 <script th:inline="javascript">
   layui.config({
       base: '/static/layuiadmin/' //静态资源所在路径
@@ -182,6 +184,8 @@
         // 获取流程图片
         getFlowDiagram(obj.data.deploymentId);
     });
+  });
+   let formRenderInstance = null;
      /**
      * 获取启动表单
      * @param deploymentId 部署ID
