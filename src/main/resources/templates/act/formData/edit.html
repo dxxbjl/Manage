@@ -3,11 +3,6 @@
 <head>
   <title>表单构建</title>
   <div th:replace="common/link::header"></div>
-  <style>
-    body {
-      background-color: #fff;
-    }
-  </style>
 </head>
 <body>
 <div class="layui-fluid">
@@ -36,13 +31,13 @@
         <div class="layui-form-item">
           <label class="layui-form-label">创建者</label>
           <div class="layui-input-block">
-            <input type="text" class="layui-input" name="createBy" disabled="disabled"/>
+            <input type="text" class="layui-input layui-disabled" name="createBy" disabled="disabled"/>
           </div>
         </div>
         <div class="layui-form-item">
           <label class="layui-form-label">创建时间</label>
           <div class="layui-input-block">
-            <input type="text" class="layui-input" name="createTime" disabled="disabled"/>
+            <input type="text" class="layui-input layui-disabled" name="createTime" disabled="disabled"/>
           </div>
         </div>
         <div class="layui-form-item layui-hide">
