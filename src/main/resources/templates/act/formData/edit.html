@@ -6,47 +6,54 @@
 </head>
 <body>
 <div class="layui-fluid">
-  <div class="layui-row">
-    <div class="layui-col-md4">
-      <div class="layui-form layui-form-pane" lay-filter="formDataForm" id="formDataForm">
-        <input type="hidden" name="id" id="id">
-        <div class="layui-form-item">
-          <label class="layui-form-label">表单名称</label>
-          <div class="layui-input-block">
-            <input type="text" class="layui-input" name="formName" placeholder="请输入表单名称"/>
+  <div class="layui-card">
+    <div class="layui-card-header layuiadmin-card-header-auto">
+      自定义表单
+    </div>
+    <div class="layui-card-body">
+      <div class="layui-row">
+        <div class="layui-col-md4">
+          <div class="layui-form layui-form-pane" lay-filter="formDataForm" id="formDataForm">
+            <input type="hidden" name="id" id="id">
+            <div class="layui-form-item">
+              <label class="layui-form-label">表单名称</label>
+              <div class="layui-input-block">
+                <input type="text" class="layui-input" name="formName" placeholder="请输入表单名称"/>
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">表单KEY</label>
+              <div class="layui-input-block">
+                <input type="text" name="formKey" lay-verify="required" placeholder="请输入表单KEY" class="layui-input">
+              </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+              <label class="layui-form-label">备注</label>
+              <div class="layui-input-block">
+                <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">创建者</label>
+              <div class="layui-input-block">
+                <input type="text" class="layui-input layui-disabled" name="createBy" disabled="disabled"/>
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">创建时间</label>
+              <div class="layui-input-block">
+                <input type="text" class="layui-input layui-disabled" name="createTime" disabled="disabled"/>
+              </div>
+            </div>
+            <div class="layui-form-item layui-hide">
+              <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
+            </div>
           </div>
         </div>
-        <div class="layui-form-item">
-          <label class="layui-form-label">表单KEY</label>
-          <div class="layui-input-block">
-            <input type="text" name="formKey" lay-verify="required" placeholder="请输入表单KEY" class="layui-input">
-          </div>
-        </div>
-        <div class="layui-form-item layui-form-text">
-          <label class="layui-form-label">备注</label>
-          <div class="layui-input-block">
-            <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
-          </div>
-        </div>
-        <div class="layui-form-item">
-          <label class="layui-form-label">创建者</label>
-          <div class="layui-input-block">
-            <input type="text" class="layui-input layui-disabled" name="createBy" disabled="disabled"/>
-          </div>
-        </div>
-        <div class="layui-form-item">
-          <label class="layui-form-label">创建时间</label>
-          <div class="layui-input-block">
-            <input type="text" class="layui-input layui-disabled" name="createTime" disabled="disabled"/>
-          </div>
-        </div>
-        <div class="layui-form-item layui-hide">
-          <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
+        <div class="layui-col-md8">
+          <div class="build-wrap"></div>
         </div>
       </div>
-    </div>
-    <div class="layui-col-md8">
-      <div class="build-wrap"></div>
     </div>
   </div>
 </div>
