@@ -20,9 +20,9 @@ public class StringUtil {
      * @param paramStr 参数
      * @return 返回Map
      */
-    public static Map<String, String> paramToMap(String paramStr) {
+    public static Map<String, Object> paramToMap(String paramStr) {
         String[] params = paramStr.split("&");
-        Map<String, String> resMap = new HashMap<String, String>();
+        Map<String, Object> resMap = new HashMap<String, Object>();
         for (int i = 0; i < params.length; i++) {
             String[] param = params[i].split("=");
             if (param.length >= 2) {

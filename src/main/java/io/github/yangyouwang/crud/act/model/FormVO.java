@@ -3,6 +3,7 @@ package io.github.yangyouwang.crud.act.model;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 流程表单
@@ -18,9 +19,28 @@ public class FormVO {
      * 动态表单配置
      */
     private List<FormPropertyVO> formProperties;
+    /***
+     * 自定义表单
+     */
+    private FormDataVO formData;
+
 
     /**
-     * 动态表单
+     * 自定义表单 VO
+     */
+    @Data
+    public static class FormDataVO {
+        /**
+         * 表单配置
+         */
+        private String key;
+        /**
+         * 表单值
+         */
+        private Map value;
+    }
+    /**
+     * 动态表单 VO
      */
     @Data
     public static class FormPropertyVO {

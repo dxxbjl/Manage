@@ -18,7 +18,10 @@
       <div class="layui-row">
         <div class="layui-col-md6">
           <form class="layui-form layui-form-pane" lay-filter="flowForm" id="flowForm">
+            <!--内置表单-->
             <div id="flowFormView"></div>
+            <!--自定义表单-->
+            <div id="buildWrap"></div>
             <div class="layui-form-item">
               <label class="layui-form-label">审批决策</label>
               <div class="layui-input-inline">
@@ -93,6 +96,8 @@
     {{#  }); }}
   </script>
 <div th:replace="common/script::footer"></div>
+<script th:src="@{/static/lib/form-builder/form-builder.min.js}"></script>
+<script th:src="@{/static/lib/form-builder/form-render.min.js}"></script>
 <script th:inline="javascript">
   layui.config({
     base: '/static/layuiadmin/' //静态资源所在路径
@@ -116,14 +121,17 @@
           let data = result.data;
           if (data.hasStartFormKey) {
             // 外置表单
+            $('#buildWrap').formRender({
+              formData: data.formData.key,
+              dataType: 'xml'
+            });
+            form.val('flowForm',data.formData.value);
             return;
           }
           // 内置表单
           let formProperty = data.formProperties;
-          let flowFormTpl = document.getElementById('flowFormTpl').innerHTML
-                  ,flowFormView = document.getElementById('flowFormView');
-          laytpl(flowFormTpl).render(formProperty, function(html){
-            flowFormView.innerHTML = html;
+          laytpl($("#flowFormTpl").html()).render(formProperty, function(html) {
+            $("#flowFormView").html(html);
           });
           $.each(formProperty,function(index,value){
             // 日期类型做特殊处理
@@ -189,14 +197,15 @@
         layer.msg('请选择审批人');
         return;
       }
+      let assignee = users[users.length - 1].userName;
       $.ajax({
         type: 'POST',
         url:  ctx + '/workFlow/complete',
         data: JSON.stringify({
           ...
           data.field,
-          processInstanceId: processInstanceId,
-          assignee: users[users.length - 1].userName
+          processInstanceId,
+          assignee
         }),
         contentType:'application/json;charset=UTF-8',
         dataType: 'json',

@@ -53,7 +53,10 @@
                                 <div class="layui-fluid">
                                     <div class="layui-row">
                                         <form class="layui-form layui-form-pane" lay-filter="flowForm" id="flowForm">
+                                            <!--内置表单-->
                                             <div id="flowFormView"></div>
+                                            <!--自定义表单-->
+                                            <div id="buildWrap"></div>
                                         </form>
                                     </div>
                                 </div>
@@ -184,47 +187,6 @@
         // 获取流程图片
         getFlowDiagram(obj.data.deploymentId);
     });
-  });
-   let formRenderInstance = null;
-     /**
-     * 获取启动表单
-     * @param deploymentId 部署ID
-     */
-    function getStartForm(deploymentId) {
-         $.ajax({
-             type: 'GET',
-             url:  ctx + '/workFlow/getStartForm?deploymentId=' + deploymentId,
-             contentType:'application/json;charset=UTF-8',
-             dataType: 'json',
-             success: function(result) {
-                 layer.msg(result.message);
-                 if (result.code === 200) {
-                     let data = result.data;
-                     if (data.hasStartFormKey) {
-                         // 外置表单
-                        return;
-                     }
-                     // 内置表单
-                     let formProperty = data.formProperties;
-                     let flowFormTpl = document.getElementById('flowFormTpl').innerHTML
-                         ,flowFormView = document.getElementById('flowFormView');
-                     laytpl(flowFormTpl).render(formProperty, function(html){
-                         flowFormView.innerHTML = html;
-                     });
-                     $.each(formProperty,function(index,value){
-                         // 日期类型做特殊处理
-                         if (value.typeName === 'date') {
-                             laydate.render({
-                                 elem: '#' + value.id,
-                                 format: value.datePatterns
-                             });
-                         }
-                     });
-                     form.render(null, 'flowForm');
-                 }
-             }
-         });
-    }
     // 查询列表接口
     table.render({
         elem: '#userTable',
@@ -257,6 +219,51 @@
         $("#flowDiagram").show().attr("src", ctx + '/workFlow/getFlowDiagram?deploymentId=' + deploymentId);
     }
     /**
+     * 获取启动表单
+     * @param deploymentId 部署ID
+     */
+    function getStartForm(deploymentId) {
+        $.ajax({
+            type: 'GET',
+            url:  ctx + '/workFlow/getStartForm?deploymentId=' + deploymentId,
+            contentType:'application/json;charset=UTF-8',
+            dataType: 'json',
+            success: function(result) {
+                layer.msg(result.message);
+                if (result.code === 200) {
+                    let data = result.data;
+                    // 清空内置表单
+                    $('#flowFormView').empty();
+                    // 清空自定义表单
+                    $('#buildWrap').empty();
+                    // 外置表单
+                    if (data.hasStartFormKey) {
+                        $('#buildWrap').formRender({
+                            formData: data.formData.key,
+                            dataType: 'xml'
+                        });
+                        return;
+                    }
+                    // 内置表单
+                    let formProperty = data.formProperties;
+                    laytpl($("#flowFormTpl").html()).render(formProperty, function(html) {
+                        $("#flowFormView").html(html);
+                    });
+                    $.each(formProperty,function(index,value) {
+                        // 日期类型做特殊处理
+                        if (value.typeName === 'date') {
+                            laydate.render({
+                                elem: '#' + value.id,
+                                format: value.datePatterns
+                            });
+                        }
+                    });
+                    form.render(null, 'flowForm');
+                }
+            }
+        });
+    }
+    /**
      * 发起流程
      */
     form.on('submit(save-submit)', function(data) {
@@ -270,13 +277,19 @@
             layer.msg('请选择审批人');
             return;
         }
+        // 流程部署ID
+        let deploymentId = flows[flows.length - 1].deploymentId;
+        // 审批人
+        let assignee = users[users.length - 1].userName;
+        // 表单数据
+        let flowForm = $('#flowForm').serialize();
         $.ajax({
             type: 'POST',
             url:  ctx + '/workFlow/start',
             data: JSON.stringify({
-                deploymentId : flows[flows.length - 1].deploymentId,
-                flowForm: $('#flowForm').serialize(),
-                assignee: users[users.length - 1].userName
+                deploymentId,
+                flowForm,
+                assignee
             }),
             contentType:'application/json;charset=UTF-8',
             dataType: 'json',

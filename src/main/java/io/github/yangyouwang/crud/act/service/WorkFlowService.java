@@ -1,8 +1,10 @@
 package io.github.yangyouwang.crud.act.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.github.yangyouwang.core.util.SecurityUtils;
 import io.github.yangyouwang.core.util.StringUtil;
+import io.github.yangyouwang.crud.act.entity.FormData;
 import io.github.yangyouwang.crud.act.factory.FlowFactory;
 import io.github.yangyouwang.crud.act.factory.FormFactory;
 import io.github.yangyouwang.crud.act.factory.HistoricFactory;
@@ -62,6 +64,9 @@ public class WorkFlowService {
     @Autowired
     private FormService formService;
 
+    @Autowired
+    private FormDataService formDataService;
+
     public String start(StartDTO startDTO) {
         ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
                 .deploymentId(startDTO.getDeploymentId()).singleResult();
@@ -70,11 +75,12 @@ public class WorkFlowService {
         Authentication.setAuthenticatedUserId(userName);
         // 发起流程
         String businessKey = UUID.randomUUID().toString().replaceAll("-", "");
-        Map variables = StringUtil.paramToMap(startDTO.getFlowForm());
+        // 流程变量
+        Map<String, Object> variables = StringUtil.paramToMap(startDTO.getFlowForm());
         variables.put("assignee", startDTO.getAssignee());
         ProcessInstance processInstance = runtimeService.startProcessInstanceById(processDefinition.getId(), businessKey , variables);
         // 设置流程实例名称
-        runtimeService.setProcessInstanceName(processInstance.getId(),String.format("%s - %s" ,processDefinition.getName(),userName));
+        runtimeService.setProcessInstanceName(processInstance.getId(),String.format("%s发起：%s" ,userName,processDefinition.getName()));
         return businessKey;
     }
 
@@ -82,17 +88,14 @@ public class WorkFlowService {
         ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
                 .deploymentId(deploymentId).singleResult();
         if (processDefinition.hasStartFormKey()) {
-           // 外置表单判断
+            String formKey = formService.getStartFormKey(processDefinition.getId());
+            return getFormData(formKey,null);
         }
         // 内置表单配置
         StartFormData startFormData = formService.getStartFormData(processDefinition.getId());
         List<FormProperty> formProperties = startFormData.getFormProperties();
-        List<FormVO.FormPropertyVO> formPropertyVOList = formProperties.stream()
-                .map(FormFactory::createFormProperty).collect(Collectors.toList());
-        FormVO formVO = new FormVO();
-        formVO.setHasStartFormKey(processDefinition.hasStartFormKey());
-        formVO.setFormProperties(formPropertyVOList);
-        return formVO;
+        // 动态表单
+        return getFormProperty(formProperties);
     }
 
     public FormVO getTaskForm(String processInstanceId) {
@@ -101,14 +104,44 @@ public class WorkFlowService {
         TaskFormData taskFormData = formService.getTaskFormData(task.getId());
         String formKey = taskFormData.getFormKey();
         if (Strings.isNotBlank(formKey)) {
-            // 外置表单
+            Map<String, Object> variables = runtimeService.getVariables(task.getExecutionId());
+            return getFormData(formKey,variables);
         }
         List<FormProperty> formProperties =  taskFormData.getFormProperties();
+        // 动态表单
+        return getFormProperty(formProperties);
+    }
+
+    /**
+     * 返回自定义表单VO对象
+     * @param formKey 表单KEY
+     * @param variables 表单值
+     * @return 自定义表单
+     */
+    private FormVO getFormData(String formKey, Map<String, Object> variables) {
+        // 外置表单
+        FormData formData = formDataService.getOne(new LambdaQueryWrapper<FormData>()
+                .eq(FormData::getFormKey, formKey));
+        FormVO formVO = new FormVO();
+        formVO.setHasStartFormKey(true);
+        FormVO.FormDataVO formDataVO = new FormVO.FormDataVO();
+        formDataVO.setKey(formData.getFormXmlData());
+        formDataVO.setValue(variables);
+        formVO.setFormData(formDataVO);
+        return formVO;
+    }
+
+    /**
+     * 获取动态表单
+     * @param formProperties 表单配置
+     * @return 动态表单
+     */
+    public FormVO getFormProperty(List<FormProperty> formProperties) {
         List<FormVO.FormPropertyVO> formPropertyVOList = formProperties.stream()
                 .map(FormFactory::createFormProperty).collect(Collectors.toList());
         FormVO formVO = new FormVO();
-        formVO.setFormProperties(formPropertyVOList);
         formVO.setHasStartFormKey(false);
+        formVO.setFormProperties(formPropertyVOList);
         return formVO;
     }
 
