@@ -1,6 +1,6 @@
 package io.github.yangyouwang.crud.app.controller;
 
-import io.github.yangyouwang.crud.api.model.UserInfoVO;
+import io.github.yangyouwang.crud.api.model.vo.UserInfoVO;
 import io.github.yangyouwang.crud.app.entity.User;
 import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.github.yangyouwang.crud.app.service.UserService;

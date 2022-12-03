@@ -46,6 +46,7 @@
 		<pagehelper.version>1.3.0</pagehelper.version>
 		<bcprov-jdk15on.version>1.65</bcprov-jdk15on.version>
 		<commons-beanutils.version>1.9.4</commons-beanutils.version>
+		<qq.version>2.0</qq.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -346,6 +347,12 @@
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
 			<version>${commons-beanutils.version}</version>
+		</dependency>
+		<!--QQSDK-->
+		<dependency>
+			<groupId>net.gplatform</groupId>
+			<artifactId>Sdk4J</artifactId>
+			<version>${qq.version}</version>
 		</dependency>
 	</dependencies>
 	<build>

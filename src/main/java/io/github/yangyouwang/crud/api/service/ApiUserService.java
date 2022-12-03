@@ -12,7 +12,10 @@ import io.github.yangyouwang.core.config.properties.WeChatProperties;
 import io.github.yangyouwang.core.util.DateTimeUtil;
 import io.github.yangyouwang.core.util.JwtTokenUtil;
 import io.github.yangyouwang.core.util.RestTemplateUtil;
-import io.github.yangyouwang.crud.api.model.*;
+import io.github.yangyouwang.crud.api.model.dto.*;
+import io.github.yangyouwang.crud.api.model.vo.UserAuthVO;
+import io.github.yangyouwang.crud.api.model.vo.UserInfoVO;
+import io.github.yangyouwang.crud.api.model.vo.WxAuthVO;
 import io.github.yangyouwang.crud.app.entity.Oauth;
 import io.github.yangyouwang.crud.app.entity.SmsCode;
 import io.github.yangyouwang.crud.app.entity.User;
@@ -136,7 +139,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
      * @param wxUserInfoDTO 加密微信用户信息
      * @return 手机号
      */
-    public String decodeUserInfo(WxUserInfoDTO wxUserInfoDTO) {
+    public String decodeWxUser(WxUserInfoDTO wxUserInfoDTO) {
         String userPhoneNumber = getUserPhoneNumber(wxUserInfoDTO.getSessionKey(), wxUserInfoDTO.getIv(), wxUserInfoDTO.getEncryptedData());
         Long userId = ApiContext.getUserId();
         User user = new User();
@@ -244,5 +247,14 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         Assert.notNull(user, "用户不存在");
         BeanUtils.copyProperties(userInfoDTO,user);
         return updateById(user);
+    }
+
+    /**
+     * QQ登录授权
+     * @param qqAuthDTO QQ授权DTO
+     * @return 授权秘钥
+     */
+    public UserAuthVO qqAuth(QQAuthDTO qqAuthDTO) {
+        return null;
     }
 }

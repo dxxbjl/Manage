@@ -5,7 +5,10 @@ import io.github.yangyouwang.common.annotation.PassToken;
 import io.github.yangyouwang.common.annotation.ResponseResultBody;
 import io.github.yangyouwang.common.constant.ApiVersionConstant;
 import io.github.yangyouwang.common.domain.Result;
-import io.github.yangyouwang.crud.api.model.*;
+import io.github.yangyouwang.crud.api.model.dto.*;
+import io.github.yangyouwang.crud.api.model.vo.UserAuthVO;
+import io.github.yangyouwang.crud.api.model.vo.UserInfoVO;
+import io.github.yangyouwang.crud.api.model.vo.WxAuthVO;
 import io.github.yangyouwang.crud.api.service.ApiUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -37,7 +40,7 @@ public class ApiUserController {
      * @return 响应
      */
     @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
-    @PostMapping("/wx_auth")
+    @PostMapping("/wx/auth")
     @ApiOperation(value="微信授权", notes="微信授权")
     @PassToken
     public WxAuthVO wxAuth(@Valid @RequestBody WxAuthDTO wxAuthDTO, BindingResult bindingResult) {
@@ -51,7 +54,7 @@ public class ApiUserController {
      * @return 响应
      */
     @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
-    @PostMapping("/password_auth")
+    @PostMapping("/password/auth")
     @ApiOperation(value="用户名密码授权", notes="用户名密码授权")
     @PassToken
     public UserAuthVO passwordAuth(@Valid @RequestBody PasswordAuthDTO passwordAuthDTO, BindingResult bindingResult) {
@@ -65,7 +68,7 @@ public class ApiUserController {
      * @return 响应
      */
     @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
-    @PostMapping("/mobile_auth")
+    @PostMapping("/mobile/auth")
     @ApiOperation(value="手机号验证码授权", notes="手机号验证码授权")
     @PassToken
     public UserAuthVO mobileAuth(@Valid @RequestBody MobileAuthDTO mobileAuthDTO, BindingResult bindingResult) {
@@ -74,12 +77,28 @@ public class ApiUserController {
         }
         return apiUserService.mobileAuth(mobileAuthDTO);
     }
+
+    /**
+     * QQ授权
+     * @return 响应
+     */
+    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @PostMapping("/qq/auth")
+    @ApiOperation(value="手机号验证码授权", notes="手机号验证码授权")
+    @PassToken
+    public UserAuthVO qqAuth(@Valid @RequestBody QQAuthDTO qqAuthDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
+        }
+        return apiUserService.qqAuth(qqAuthDTO);
+    }
+
     /**
      * 用户详情
      * @return 响应
      */
     @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
-    @GetMapping("/user_info")
+    @GetMapping("/info")
     @ApiOperation(value="用户详情", notes="用户详情")
     public UserInfoVO userInfo() {
         return apiUserService.getUserInfo();
@@ -91,13 +110,13 @@ public class ApiUserController {
      * @return 响应
      */
     @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
-    @PostMapping("/decode_user_info")
+    @PostMapping("/decode/wx")
     @ApiOperation(value="解密微信用户信息", notes="解密微信用户信息")
-    public Result decodeUserInfo(@Valid @RequestBody WxUserInfoDTO wxUserInfoDTO, BindingResult bindingResult) {
+    public Result decodeWxUser(@Valid @RequestBody WxUserInfoDTO wxUserInfoDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        String userPhoneNumber = apiUserService.decodeUserInfo(wxUserInfoDTO);
+        String userPhoneNumber = apiUserService.decodeWxUser(wxUserInfoDTO);
         String message = String.format("绑定手机号为：%s", userPhoneNumber);
         return Result.success(message,userPhoneNumber);
     }
@@ -108,7 +127,7 @@ public class ApiUserController {
      * @return 响应
      */
     @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
-    @PostMapping("/modify_user")
+    @PostMapping("/modify")
     @ApiOperation(value="更新用户信息", notes="更新用户信息")
     public Result modifyUser(@Valid @RequestBody UserInfoDTO userInfoDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {

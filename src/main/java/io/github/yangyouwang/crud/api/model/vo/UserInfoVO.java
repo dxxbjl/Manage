@@ -1,4 +1,4 @@
-package io.github.yangyouwang.crud.api.model;
+package io.github.yangyouwang.crud.api.model.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
@@ -9,16 +9,16 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 /**
- * Description: 用户信息DTO<br/>
- * date: 2022/8/27 21:33<br/>
+ * Description: 用户详情VO对象<br/>
+ * date: 2022/8/12 16:35<br/>
  *
  * @author yangyouwang<br />
  * @version v1.0
  * @since JDK 1.8
  */
 @Data
-@ApiModel("用户信息DTO")
-public class UserInfoDTO {
+@ApiModel("用户详情VO")
+public class UserInfoVO {
 
     @ApiModelProperty(value = "用户昵称或网络名称")
     private String nickName;
@@ -28,6 +28,9 @@ public class UserInfoDTO {
 
     @ApiModelProperty(value = "性别：1时是男性，值为2时是女性，值为0时是未知")
     private Integer gender;
+
+    @ApiModelProperty(value = "性别：1时是男性，值为2时是女性，值为0时是未知")
+    private String genderLabel;
 
     @ApiModelProperty(value = "生日")
     @DateTimeFormat(pattern = "yyyy-MM-dd")

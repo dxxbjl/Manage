@@ -1,4 +1,4 @@
-package io.github.yangyouwang.crud.api.model;
+package io.github.yangyouwang.crud.api.model.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

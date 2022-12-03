@@ -6,7 +6,7 @@ spring:
       - classpath:sql/app.sql
       - classpath:sql/act.sql
       - classpath:sql/qrtz.sql
-    initialization-mode: always
+    initialization-mode: never
     dynamic:
       primary: master #设置默认的数据源或者数据源组,默认值即为master
       datasource:
@@ -101,3 +101,9 @@ wechat:
   mchId: xxx
   appID: xxx
   appSecret: xxx
+# QQ配置
+qq:
+  oauth:
+    backUrl: xxxxxxxxxxxxx
+  appid: xxxxxxx
+  appkey: xxxxxxxxxxxxxxxxx

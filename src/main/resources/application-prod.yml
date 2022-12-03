@@ -101,3 +101,9 @@ wechat:
   mchId: xxx
   appID: xxx
   appSecret: xxx
+# QQ配置
+qq:
+  oauth:
+    backUrl: xxxxxxxxxxxxx
+  appid: xxxxxxx
+  appkey: xxxxxxxxxxxxxxxxx

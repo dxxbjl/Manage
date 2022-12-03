@@ -39,7 +39,7 @@ public class ApiDemoController {
 
     @ApiOperation(value="获取token")
     @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
-    @GetMapping("/getToken")
+    @GetMapping("/get_token")
     @PassToken
     public Map<String,Object> getToken() {
         Map<String,Object> result = new HashMap<>(16);

@@ -1,7 +1,7 @@
 package io.github.yangyouwang.crud.app.service;
 
 import io.github.yangyouwang.common.constant.ConfigConsts;
-import io.github.yangyouwang.crud.api.model.UserInfoVO;
+import io.github.yangyouwang.crud.api.model.vo.UserInfoVO;
 import io.github.yangyouwang.crud.app.entity.User;
 import io.github.yangyouwang.crud.app.mapper.UserMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

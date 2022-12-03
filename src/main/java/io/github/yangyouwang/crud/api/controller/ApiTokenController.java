@@ -31,7 +31,7 @@ public class ApiTokenController {
 
     @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
     @ApiOperation(value="生成幂等token接口")
-    @GetMapping("/createToken")
+    @GetMapping("/create_token")
     public Result createToken() {
         String uuid = UUID.randomUUID().toString();
         String token = CacheConsts.REDIS_TOKEN_PREFIX  + uuid;

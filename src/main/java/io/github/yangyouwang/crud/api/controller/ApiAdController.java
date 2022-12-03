@@ -7,7 +7,7 @@ import io.github.yangyouwang.common.annotation.ResponseResultBody;
 import io.github.yangyouwang.common.constant.ApiVersionConstant;
 import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.core.util.StringUtil;
-import io.github.yangyouwang.crud.api.model.AdVO;
+import io.github.yangyouwang.crud.api.model.vo.AdVO;
 import io.github.yangyouwang.crud.app.entity.Ad;
 import io.github.yangyouwang.crud.app.service.AdService;
 import io.swagger.annotations.Api;
