@@ -16,10 +16,17 @@ import org.activiti.engine.*;
 import org.activiti.engine.form.FormProperty;
 import org.activiti.engine.form.StartFormData;
 import org.activiti.engine.form.TaskFormData;
+import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricProcessInstanceQuery;
 import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.identity.Authentication;
+import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import org.activiti.engine.impl.pvm.PvmTransition;
+import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.activiti.engine.impl.pvm.process.ProcessDefinitionImpl;
+import org.activiti.engine.impl.pvm.process.TransitionImpl;
 import org.activiti.engine.query.Query;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
@@ -285,7 +292,7 @@ public class WorkFlowService {
     public List<HistoricVO> getHistoricListByProcessInstanceId(String processInstanceId) {
         List<HistoricTaskInstance> historicTaskInstances = historyService.createHistoricTaskInstanceQuery()
                 .processInstanceId(processInstanceId)
-                .orderByHistoricTaskInstanceEndTime().asc().list();
+                .orderByHistoricTaskInstanceStartTime().asc().list();
         return historicTaskInstances.stream().map(s -> {
             HistoricVO historicVO = new HistoricVO();
             historicVO.setName(s.getName());
@@ -293,8 +300,93 @@ public class WorkFlowService {
             historicVO.setEndTime(s.getEndTime());
             List<Comment> taskComments = taskService.getTaskComments(s.getId());
             List<String> comment = taskComments.stream().map(Comment::getFullMessage).collect(Collectors.toList());
-            historicVO.setComment(StringUtils.join(comment,","));
+            historicVO.setComment(StringUtils.join(comment," "));
             return historicVO;
         }).collect(Collectors.toList());
+    }
+
+    public void reject(RejectDTO rejectDTO) {
+        String userName = SecurityUtils.getUserName();
+        String processInstanceId = rejectDTO.getProcessInstanceId();
+        String comment = rejectDTO.getComment();
+        Task task = taskService.createTaskQuery()
+                .taskAssignee(userName)
+                .processInstanceId(processInstanceId)
+                .singleResult();
+        if(task != null) {
+            String taskId = task.getId();
+            this.reject(taskId);
+        }
+    }
+
+    /**
+     * 驳回任务
+     * @param taskId 任务ID
+     */
+    public void reject(String taskId) {
+        Map variables = new HashMap<>();
+        //获取当前任务
+        HistoricTaskInstance currTask = historyService.createHistoricTaskInstanceQuery()
+                .taskId(taskId)
+                .singleResult();
+        //获取流程实例
+        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery()
+                .processInstanceId(currTask.getProcessInstanceId())
+                .singleResult();
+        //获取流程定义
+        ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) repositoryService)
+                .getDeployedProcessDefinition(currTask.getProcessDefinitionId());
+        if (processDefinitionEntity == null) {
+            System.out.println("不存在的流程定义。");
+
+        }
+        //获取当前activity
+        ActivityImpl currActivity = ((ProcessDefinitionImpl) processDefinitionEntity)
+                .findActivity(currTask.getTaskDefinitionKey());
+
+        //获取当前任务流入
+        List<PvmTransition> histTransitionList = currActivity
+                .getIncomingTransitions();
+
+
+        //清除当前活动出口
+        List<PvmTransition> originPvmTransitionList = new ArrayList<PvmTransition>();
+        List<PvmTransition> pvmTransitionList = currActivity.getOutgoingTransitions();
+        for (PvmTransition pvmTransition : pvmTransitionList) {
+            originPvmTransitionList.add(pvmTransition);
+        }
+        pvmTransitionList.clear();
+
+        //查找上一个user task节点
+        List<HistoricActivityInstance> historicActivityInstances = historyService
+                .createHistoricActivityInstanceQuery().activityType("userTask")
+                .processInstanceId(processInstance.getId())
+                .finished()
+                .orderByHistoricActivityInstanceEndTime().desc().list();
+        TransitionImpl transitionImpl = null;
+        if (historicActivityInstances.size() > 0) {
+            ActivityImpl lastActivity = ((ProcessDefinitionImpl) processDefinitionEntity)
+                    .findActivity(historicActivityInstances.get(0).getActivityId());
+            //创建当前任务的新出口
+            transitionImpl = currActivity.createOutgoingTransition(lastActivity.getId());
+            transitionImpl.setDestination(lastActivity);
+        }else
+        {
+            System.out.println("上级节点不存在。");
+        }
+        variables = processInstance.getProcessVariables();
+        // 完成任务
+        List<Task> tasks = taskService.createTaskQuery()
+                .processInstanceId(processInstance.getId())
+                .taskDefinitionKey(currTask.getTaskDefinitionKey()).list();
+        for (Task task : tasks) {
+            taskService.complete(task.getId(), variables);
+            historyService.deleteHistoricTaskInstance(task.getId());
+        }
+        // 恢复方向
+        currActivity.getOutgoingTransitions().remove(transitionImpl);
+        for (PvmTransition pvmTransition : originPvmTransitionList) {
+            pvmTransitionList.add(pvmTransition);
+        }
     }
 }

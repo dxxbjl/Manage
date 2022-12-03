@@ -22,21 +22,17 @@
             <div id="flowFormView"></div>
             <!--自定义表单-->
             <div id="buildWrap"></div>
-            <div class="layui-form-item">
-              <label class="layui-form-label">审批决策</label>
-              <div class="layui-input-inline">
-                <input type="radio" name="pass" value="Y" checked title="通过">
-                <input type="radio" name="pass" value="N" title="不通过">
-              </div>
-            </div>
-            <div class="layui-form-item">
+            <div class="layui-form-item layui-form-text">
               <label class="layui-form-label">意见</label>
-              <div class="layui-input-inline">
-                <textarea class="layui-textarea" name="comment" lay-verify="required" placeholder="请输入意见"></textarea>
+              <div class="layui-input-block">
+                <textarea class="layui-textarea" name="comment" placeholder="请输入意见"></textarea>
               </div>
             </div>
-            <div class="layui-form-item layui-hide">
-              <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
+            <div class="layui-form-item" style="text-align:center">
+              <div class="layui-btn-container">
+                <input type="button" class="layui-btn layui-btn-primary" lay-submit lay-filter="reject-submit" id="reject-submit" value="驳回">
+                <input type="button" class="layui-btn layui-btn-normal" lay-submit lay-filter="ok-submit" id="ok-submit" value="同意">
+              </div>
             </div>
           </form>
         </div>
@@ -191,7 +187,8 @@
         ,btn: ['确定']
       });
     });
-    form.on('submit(save-submit)', function(data) {
+    // 同意
+    form.on('submit(ok-submit)', function(data) {
       let users = layui.table.checkStatus('userTable').data;
       if (users.length === 0) {
         layer.msg('请选择审批人');
@@ -206,6 +203,29 @@
           data.field,
           processInstanceId,
           assignee
+        }),
+        contentType:'application/json;charset=UTF-8',
+        dataType: 'json',
+        success: function(result) {
+          layer.msg(result.message);
+          if (result.code === 200) {
+            let index = parent.layer.getFrameIndex(window.name);
+            // 关闭
+            parent.layer.close(index);
+            // 刷新
+            parent.location.reload();
+          }
+        }
+      });
+    });
+    // 驳回
+    form.on('submit(reject-submit)', function(data) {
+      $.ajax({
+        type: 'POST',
+        url:  ctx + '/workFlow/reject',
+        data: JSON.stringify({
+          ...data.field,
+          processInstanceId
         }),
         contentType:'application/json;charset=UTF-8',
         dataType: 'json',

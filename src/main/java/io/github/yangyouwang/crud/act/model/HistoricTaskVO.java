@@ -18,9 +18,9 @@ public class HistoricTaskVO {
      */
     private String name;
     /**
-     * 描述
+     * 发起人
      */
-    private String description;
+    private String startUser;
     /**
      * 开始日期
      */
@@ -29,4 +29,8 @@ public class HistoricTaskVO {
      * 结束日期
      */
     private Date endTime;
+    /**
+     * 业务ID
+     */
+    private String businessKey;
 }

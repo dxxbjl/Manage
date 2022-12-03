@@ -26,7 +26,7 @@
       <div class="layui-card-body">
         <table id="toDoTaskTable" lay-filter="toDoTaskTable"></table>
         <script type="text/html" id="tableBar">
-          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="approval">审批</a>
+          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="approval">任务审批</a>
           <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="monitor">审批历史</a>
         </script>
       </div>
@@ -93,16 +93,12 @@
           layer.open({
             type: 2
             ,shade: 0.3
-            ,title: '审批'
+            ,title: '任务审批'
             ,content: ctx + '/workFlow/approvalPage?processInstanceId=' + id
             ,maxmin: true
             ,scrollbar: false
             ,area: ['100%', '100%']
-            ,btn: ['确定', '取消']
-            ,yes: function(index, layero){
-              let submit = layero.find('iframe').contents().find('#save-submit');
-              submit.trigger('click');
-            }
+            ,btn: ['确定']
           });
         },
         /**

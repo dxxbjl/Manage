@@ -209,4 +209,19 @@ public class WorkFlowController {
         workflowService.complete(completeDTO);
         return Result.success();
     }
+
+    /**
+     *  驳回任务
+     * @param rejectDTO 驳回任务对象
+     */
+    @PostMapping("/reject")
+    @ResponseBody
+    public Result reject(@RequestBody @Valid RejectDTO rejectDTO, BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
+        }
+        workflowService.reject(rejectDTO);
+        return Result.success();
+    }
+
 }

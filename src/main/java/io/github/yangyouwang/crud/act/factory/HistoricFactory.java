@@ -17,9 +17,10 @@ public class HistoricFactory {
         HistoricTaskVO historicTaskVO = new HistoricTaskVO();
         historicTaskVO.setId(historicProcessInstance.getId());
         historicTaskVO.setName(historicProcessInstance.getName());
-        historicTaskVO.setDescription(historicProcessInstance.getDescription());
+        historicTaskVO.setStartUser(historicProcessInstance.getStartUserId());
         historicTaskVO.setStartTime(historicProcessInstance.getStartTime());
         historicTaskVO.setEndTime(historicProcessInstance.getEndTime());
+        historicTaskVO.setBusinessKey(historicProcessInstance.getBusinessKey());
         return historicTaskVO;
     }
 }
