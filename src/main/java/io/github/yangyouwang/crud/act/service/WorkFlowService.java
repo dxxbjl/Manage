@@ -75,12 +75,20 @@ public class WorkFlowService {
         Authentication.setAuthenticatedUserId(userName);
         // 发起流程
         String businessKey = UUID.randomUUID().toString().replaceAll("-", "");
-        // 流程变量
-        Map<String, Object> variables = StringUtil.paramToMap(startDTO.getFlowForm());
-        variables.put("assignee", startDTO.getAssignee());
-        ProcessInstance processInstance = runtimeService.startProcessInstanceById(processDefinition.getId(), businessKey , variables);
+        // 表单存入流程变量
+        Map<String, Object> flowForm = StringUtil.paramToMap(startDTO.getFlowForm());
+        ProcessInstance processInstance = runtimeService.startProcessInstanceById(processDefinition.getId(), businessKey , flowForm);
         // 设置流程实例名称
         runtimeService.setProcessInstanceName(processInstance.getId(),String.format("%s发起：%s" ,userName,processDefinition.getName()));
+        // 完成第一个任务
+        Task task = taskService.createTaskQuery()
+                .processInstanceId(processInstance.getId())
+                .singleResult();
+        // 设置审批人
+        Map<String, Object> assignee = new HashMap<>();
+        assignee.put("assignee", startDTO.getAssignee());
+        // 完成任务
+        taskService.complete(task.getId(),assignee);
         return businessKey;
     }
 

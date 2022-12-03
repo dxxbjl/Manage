@@ -64,7 +64,7 @@ public class WorkFlowController {
     }
 
     /**
-     * 流程监控页面
+     * 审批历史页面
      */
     @GetMapping("/monitorPage")
     public String monitorPage(String processInstanceId, ModelMap map) {
