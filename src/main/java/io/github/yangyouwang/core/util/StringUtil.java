@@ -4,6 +4,8 @@ import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.security.authentication.event.*;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -31,7 +33,11 @@ public class StringUtil {
                 for (int j = 2; j < param.length; j++) {
                     value += "=" + param[j];
                 }
-                resMap.put(key, value);
+                try {
+                    resMap.put(key, URLDecoder.decode(value,"utf-8"));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return resMap;
