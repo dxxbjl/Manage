@@ -86,8 +86,8 @@ public class WorkFlowController {
      */
     @GetMapping("/myFlow")
     @ResponseBody
-    public TableDataInfo myFlowList(int page, int limit, String assignee) {
-        return workflowService.getMyFlowList(page, limit, assignee);
+    public TableDataInfo myFlowList(int page, int limit, String name) {
+        return workflowService.getMyFlowList(page, limit, name);
     }
 
     /**
@@ -104,8 +104,8 @@ public class WorkFlowController {
      */
     @GetMapping("/toDoTask")
     @ResponseBody
-    public TableDataInfo toDoTaskList(int page, int limit, String assignee) {
-        return workflowService.getToDoTaskList(page, limit, assignee);
+    public TableDataInfo toDoTaskList(int page, int limit, String name) {
+        return workflowService.getToDoTaskList(page, limit, name);
     }
 
     /**

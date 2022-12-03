@@ -197,13 +197,13 @@ public class WorkFlowService {
         }
     }
 
-    public TableDataInfo getMyFlowList(int page, int limit, String assignee) {
+    public TableDataInfo getMyFlowList(int page, int limit, String name) {
         String userName = SecurityUtils.getUserName();
         TaskQuery query = taskService.createTaskQuery()
                 .taskAssignee(userName)
                 .orderByTaskCreateTime().desc();
-        if (StringUtils.isNotBlank(assignee)) {
-            query.taskAssigneeLike("%" + assignee + "%");
+        if (StringUtils.isNotBlank(name)) {
+            query.processDefinitionNameLike("%" + name + "%");
         }
         List<Task> tasks = query.listPage(page - 1, limit);
         List<TaskVO> taskVOList = tasks.stream().map(s -> {
@@ -228,13 +228,13 @@ public class WorkFlowService {
         return getDataTable(flowVOList,query);
     }
 
-    public TableDataInfo getToDoTaskList(int page, int limit, String assignee) {
+    public TableDataInfo getToDoTaskList(int page, int limit, String name) {
         String userName = SecurityUtils.getUserName();
         TaskQuery query = taskService.createTaskQuery()
                 .taskCandidateOrAssigned(userName)
                 .orderByTaskCreateTime().desc();
-        if (StringUtils.isNotBlank(assignee)) {
-            query.taskAssigneeLike("%" + assignee + "%");
+        if (StringUtils.isNotBlank(name)) {
+            query.processDefinitionNameLike("%" + name + "%");
         }
         List<Task> tasks = query.listPage(page - 1, limit);
         List<TaskVO> taskVOList = tasks.stream().map(s -> {
