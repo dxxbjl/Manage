@@ -9,7 +9,6 @@ import io.github.yangyouwang.crud.api.model.dto.*;
 import io.github.yangyouwang.crud.api.model.vo.UserAuthVO;
 import io.github.yangyouwang.crud.api.model.vo.UserInfoVO;
 import io.github.yangyouwang.crud.api.model.vo.MpWxAuthVO;
-import io.github.yangyouwang.crud.api.model.vo.WxAuthVO;
 import io.github.yangyouwang.crud.api.service.ApiUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
 import java.util.Objects;
 
 /**
@@ -80,18 +80,31 @@ public class ApiUserController {
     }
 
     /**
-     * QQ授权
+     * 获取QQ授权code
      * @return 响应
      */
     @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
-    @PostMapping("/qq/auth")
-    @ApiOperation(value="QQ授权", notes="QQ授权")
+    @GetMapping("/qq/code")
+    @ApiOperation(value="获取QQ授权code", notes="获取QQ授权code")
     @PassToken
-    public UserAuthVO qqAuth(@Valid @RequestBody QQAuthDTO qqAuthDTO, BindingResult bindingResult) {
+    public Result qqCode() throws UnsupportedEncodingException {
+        String code = apiUserService.getQQCode();
+        return Result.success("qq登录code",code);
+    }
+
+    /**
+     * QQ授权回调
+     * @return 响应
+     */
+    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @GetMapping("/qq/auth/callback")
+    @ApiOperation(value="QQ授权回调", notes="QQ授权回调")
+    @PassToken
+    public UserAuthVO qqAuthCallback(String code, BindingResult bindingResult) throws UnsupportedEncodingException {
         if (bindingResult.hasErrors()) {
             throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        return apiUserService.qqAuth(qqAuthDTO);
+        return apiUserService.qqAuthCallback(code);
     }
 
     /**
@@ -102,7 +115,7 @@ public class ApiUserController {
     @PostMapping("/wx/auth")
     @ApiOperation(value="微信APP授权", notes="微信APP授权")
     @PassToken
-    public WxAuthVO wxAuth(@Valid @RequestBody WxAuthDTO wxAuthDTO, BindingResult bindingResult) {
+    public UserAuthVO wxAuth(@Valid @RequestBody WxAuthDTO wxAuthDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }

@@ -109,7 +109,6 @@ wechat:
   appSecret: xxx
 # QQ配置
 qq:
-  oauth:
-    backUrl: xxxxxxxxxxxxx
-  appid: xxxxxxx
-  appkey: xxxxxxxxxxxxxxxxx
+  appID: xxxxxxx
+  appSecret: xxxxxxxxxxxxxxxxx
+  redirectUrl: xxxxxxxxxxxxx

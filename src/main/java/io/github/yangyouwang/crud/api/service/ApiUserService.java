@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.enums.ResultStatus;
+import io.github.yangyouwang.core.config.properties.QQProperties;
 import io.github.yangyouwang.core.util.api.ApiContext;
 import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.core.config.properties.WeChatProperties;
@@ -16,7 +17,6 @@ import io.github.yangyouwang.crud.api.model.dto.*;
 import io.github.yangyouwang.crud.api.model.vo.UserAuthVO;
 import io.github.yangyouwang.crud.api.model.vo.UserInfoVO;
 import io.github.yangyouwang.crud.api.model.vo.MpWxAuthVO;
-import io.github.yangyouwang.crud.api.model.vo.WxAuthVO;
 import io.github.yangyouwang.crud.app.entity.Oauth;
 import io.github.yangyouwang.crud.app.entity.SmsCode;
 import io.github.yangyouwang.crud.app.entity.User;
@@ -24,6 +24,7 @@ import io.github.yangyouwang.crud.app.mapper.UserMapper;
 import io.github.yangyouwang.crud.app.service.OauthService;
 import io.github.yangyouwang.crud.app.service.SmsCodeService;
 import io.github.yangyouwang.crud.system.service.SysDictValueService;
+import org.apache.commons.codec.CharEncoding;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -36,11 +37,14 @@ import javax.annotation.Resource;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.AlgorithmParameters;
 import java.security.Security;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Description: 用户业务层 <br/>
@@ -64,6 +68,10 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
 
     @Resource
     private SmsCodeService smsCodeService;
+
+    @Resource
+    private QQProperties qqProperties;
+
     /**
      * 微信小程序授权
      * @return 响应
@@ -254,12 +262,29 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
     }
 
     /**
-     * QQ登录授权
-     * @param qqAuthDTO QQ授权DTO
+     * 获取QQ授权code
+     * @return 响应
+     */
+    public String getQQCode() throws UnsupportedEncodingException {
+        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+        String api = ConfigConsts.QQ_CODE_API.replace("CLIENTID",qqProperties.getAppID())
+                .replace("STATE",uuid)
+                .replace("REDIRECTURI", URLEncoder.encode(qqProperties.getRedirectUrl(), CharEncoding.UTF_8));
+        return RestTemplateUtil.get(api);
+    }
+
+    /**
+     * QQ授权回调
+     * @param code QQ
      * @return 授权秘钥
      */
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED,rollbackFor = Throwable.class)
-    public UserAuthVO qqAuth(QQAuthDTO qqAuthDTO) {
+    public UserAuthVO qqAuthCallback(String code) throws UnsupportedEncodingException {
+        String api = ConfigConsts.QQ_AUTH_API.replace("CLIENTID",qqProperties.getAppID())
+                .replace("CLIENTSECRET",qqProperties.getAppSecret())
+                .replace("CODE",code)
+                .replace("REDIRECTURI", URLEncoder.encode(qqProperties.getRedirectUrl(), CharEncoding.UTF_8));
+        String result = RestTemplateUtil.get(api);
+
         return null;
     }
 
@@ -268,7 +293,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
      * @return 响应
      */
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED,rollbackFor = Throwable.class)
-    public WxAuthVO wxAuth(WxAuthDTO wxAuthDTO) {
+    public UserAuthVO wxAuth(WxAuthDTO wxAuthDTO) {
         return null;
     }
 }
