@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import io.github.yangyouwang.common.constant.ConfigConsts;
+import io.github.yangyouwang.common.enums.AppOauthType;
 import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.core.config.properties.QQProperties;
 import io.github.yangyouwang.core.util.api.ApiContext;
@@ -13,6 +14,7 @@ import io.github.yangyouwang.core.config.properties.WeChatProperties;
 import io.github.yangyouwang.core.util.DateTimeUtil;
 import io.github.yangyouwang.core.util.JwtTokenUtil;
 import io.github.yangyouwang.core.util.RestTemplateUtil;
+import io.github.yangyouwang.crud.api.factory.UserFactory;
 import io.github.yangyouwang.crud.api.model.dto.*;
 import io.github.yangyouwang.crud.api.model.vo.UserAuthVO;
 import io.github.yangyouwang.crud.api.model.vo.UserInfoVO;
@@ -88,25 +90,18 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         MpWxAuthVO wxAuthVO = new MpWxAuthVO();
         String sessionKey = jsonObject.getString("session_key");
         String openId = jsonObject.getString("openid");
-        Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>().eq(Oauth::getAppSecret,openId).eq(Oauth::getAppType,ConfigConsts.WX_APP_TYPE));
+        Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>().eq(Oauth::getAppSecret,openId)
+                .eq(Oauth::getAppType,AppOauthType.WX.name()));
         if (Objects.nonNull(oauth)) {
             // 登录成功
             wxAuthVO.setSessionKey(sessionKey);
             wxAuthVO.setToken(JwtTokenUtil.buildJWT(oauth.getUserId().toString()));
             return wxAuthVO;
         }
-        User user = new User();
-        user.setAvatar(mpWxAuthDTO.getAvatarUrl());
-        user.setNickName(mpWxAuthDTO.getNickName());
-        user.setGender(mpWxAuthDTO.getGender());
-        user.setStatus(ConfigConsts.USER_STATUS_AVAILABLE);
-        this.save(user);
-        oauth = new Oauth();
-        oauth.setUserId(user.getId());
-        oauth.setAppSecret(openId);
-        oauth.setAppType(ConfigConsts.WX_APP_TYPE);
-        oauthService.save(oauth);
         // 登录成功
+        User user = UserFactory.createUser(mpWxAuthDTO.getAvatarUrl(), mpWxAuthDTO.getNickName(), mpWxAuthDTO.getGender());
+        this.save(user);
+        oauthService.save(UserFactory.createOauth(user.getId(), openId, AppOauthType.WX));
         wxAuthVO.setSessionKey(sessionKey);
         wxAuthVO.setToken(JwtTokenUtil.buildJWT(oauth.getUserId().toString()));
         return wxAuthVO;
@@ -135,7 +130,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         User user = this.getOne(new LambdaQueryWrapper<User>().eq(User::getMobile, passwordAuthDTO.getMobile()));
         Assert.notNull(user, "用户不存在");
         Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>()
-                .eq(Oauth::getUserId, user.getId()).eq(Oauth::getAppType,ConfigConsts.PASSWORD_APP_TYPE));
+                .eq(Oauth::getUserId, user.getId()).eq(Oauth::getAppType,AppOauthType.PASSWORD.name()));
         if (!oauth.getAppSecret().equals(passwordAuthDTO.getAppSecret())) {
             throw new CrudException(ResultStatus.LOGIN_ERROR);
         }
@@ -225,7 +220,8 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         // 响应
         UserAuthVO userAuthVO = new UserAuthVO();
         // 查询用户
-        Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>().eq(Oauth::getAppSecret,mobile).eq(Oauth::getAppType,ConfigConsts.PHONE_APP_TYPE));
+        Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>().eq(Oauth::getAppSecret,mobile)
+                .eq(Oauth::getAppType,AppOauthType.PHONE.name()));
         if (Objects.nonNull(oauth)) {
             // 登录成功
             userAuthVO.setToken(JwtTokenUtil.buildJWT(oauth.getUserId().toString()));
@@ -235,11 +231,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         user.setMobile(mobile);
         user.setStatus(ConfigConsts.USER_STATUS_AVAILABLE);
         this.save(user);
-        oauth = new Oauth();
-        oauth.setUserId(user.getId());
-        oauth.setAppSecret(mobile);
-        oauth.setAppType(ConfigConsts.PHONE_APP_TYPE);
-        oauthService.save(oauth);
+        oauthService.save(UserFactory.createOauth(user.getId(),mobile,AppOauthType.PHONE));
         // 登录成功
         userAuthVO.setToken(JwtTokenUtil.buildJWT(user.getId().toString()));
         return userAuthVO;
@@ -280,18 +272,19 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         String authApi = ConfigConsts.QQ_AUTH_API.replace("CLIENTID",qqProperties.getAppID())
                 .replace("CLIENTSECRET",qqProperties.getAppSecret())
                 .replace("CODE",qqAuthDTO.getCode());
+        String redirectUrl = qqProperties.getRedirectUrl();
         try {
-            authApi.replace("REDIRECTURI", URLEncoder.encode(qqProperties.getRedirectUrl(), CharEncoding.UTF_8));
+            redirectUrl = URLEncoder.encode(redirectUrl, CharEncoding.UTF_8);
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("解析回调地址出错");
         }
+        authApi.replace("REDIRECTURI",redirectUrl);
         String token = RestTemplateUtil.get(authApi);
         // 获取openId
         String openIdApi = ConfigConsts.QQ_OPENID_API.replace("ACCESSTOKEN", token);
         String openId = RestTemplateUtil.get(openIdApi);
-        Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>()
-                .eq(Oauth::getAppSecret, openId)
-                .eq(Oauth::getAppType, ConfigConsts.QQ_PC_TYPE));
+        Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>().eq(Oauth::getAppSecret, openId)
+                .eq(Oauth::getAppType, AppOauthType.QQ.name()));
         UserAuthVO userAuthVO = new UserAuthVO();
         if (Objects.nonNull(oauth)) {
             // 登录成功
@@ -302,21 +295,13 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         String userApi = ConfigConsts.QQ_GET_USER_INFO_API.replace("APPID", qqProperties.getAppID())
                 .replace("OPENID", openId);
         JSONObject jsonObject = JSONObject.parseObject(RestTemplateUtil.get(userApi));
-        String avatarImg = jsonObject.getString("figureurl_qq");
+        String avatar = jsonObject.getString("figureurl_qq");
         String nickname = jsonObject.getString("nickname");
         Integer gender = jsonObject.getInteger("gender");
-        User user = new User();
-        user.setAvatar(avatarImg);
-        user.setNickName(nickname);
-        user.setGender(gender);
-        user.setStatus(ConfigConsts.USER_STATUS_AVAILABLE);
-        this.save(user);
-        oauth = new Oauth();
-        oauth.setUserId(user.getId());
-        oauth.setAppSecret(openId);
-        oauth.setAppType(ConfigConsts.WX_APP_TYPE);
-        oauthService.save(oauth);
         // 登录成功
+        User user = UserFactory.createUser(avatar, nickname, gender);
+        this.save(user);
+        oauthService.save(UserFactory.createOauth(user.getId(), openId, AppOauthType.QQ));
         userAuthVO.setToken(JwtTokenUtil.buildJWT(oauth.getUserId().toString()));
         return userAuthVO;
     }

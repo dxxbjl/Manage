@@ -29,6 +29,4 @@ public class Oauth {
 
     @ApiModelProperty(value = "用户id")
     private Long userId;
-
-
 }

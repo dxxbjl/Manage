@@ -53,22 +53,6 @@ public interface ConfigConsts {
      */
     String QQ_GET_USER_INFO_API = "https://graph.qq.com/user/get_user_info?access_token=ACCESSTOKEN&oauth_consumer_key=APPID&openid=OPENID";
     /**
-     * 登录类型 微信
-     */
-    String WX_APP_TYPE = "wx";
-    /**
-     * 登录类型 qq
-     */
-    String QQ_PC_TYPE = "qq";
-    /**
-     * 登录类型 password 账号密码
-     */
-    String PASSWORD_APP_TYPE = "password";
-    /**
-     * 登录类型 phone 手机号验证码
-     */
-    String PHONE_APP_TYPE = "phone";
-    /**
      * 可用状态
      */
     int USER_STATUS_AVAILABLE = 0;
