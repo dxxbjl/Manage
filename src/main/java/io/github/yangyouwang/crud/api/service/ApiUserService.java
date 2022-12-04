@@ -15,6 +15,7 @@ import io.github.yangyouwang.core.util.RestTemplateUtil;
 import io.github.yangyouwang.crud.api.model.dto.*;
 import io.github.yangyouwang.crud.api.model.vo.UserAuthVO;
 import io.github.yangyouwang.crud.api.model.vo.UserInfoVO;
+import io.github.yangyouwang.crud.api.model.vo.MpWxAuthVO;
 import io.github.yangyouwang.crud.api.model.vo.WxAuthVO;
 import io.github.yangyouwang.crud.app.entity.Oauth;
 import io.github.yangyouwang.crud.app.entity.SmsCode;
@@ -63,19 +64,22 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
 
     @Resource
     private SmsCodeService smsCodeService;
-
+    /**
+     * 微信小程序授权
+     * @return 响应
+     */
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED,rollbackFor = Throwable.class)
-    public WxAuthVO wxAuth(WxAuthDTO wxAuthDTO) {
+    public MpWxAuthVO mpWxAuth(MpWxAuthDTO mpWxAuthDTO) {
         // 根据微信code获取openId
         String api = ConfigConsts.WEIXIN_OPENID_API.replace("APPID",weChatProperties.getAppID())
                 .replace("SECRET",weChatProperties.getAppSecret())
-                .replace("JSCODE",wxAuthDTO.getCode());
+                .replace("JSCODE",mpWxAuthDTO.getCode());
         String res = RestTemplateUtil.get(api);
         JSONObject jsonObject = JSONObject.parseObject(res);
         if (jsonObject.containsKey("errcode")) {
             throw new CrudException(ResultStatus.WX_LOGIN_ERROR);
         }
-        WxAuthVO wxAuthVO = new WxAuthVO();
+        MpWxAuthVO wxAuthVO = new MpWxAuthVO();
         String sessionKey = jsonObject.getString("session_key");
         String openId = jsonObject.getString("openid");
         Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>().eq(Oauth::getAppSecret,openId).eq(Oauth::getAppType,ConfigConsts.WX_APP_TYPE));
@@ -86,9 +90,9 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
             return wxAuthVO;
         }
         User user = new User();
-        user.setAvatar(wxAuthDTO.getAvatarUrl());
-        user.setNickName(wxAuthDTO.getNickName());
-        user.setGender(wxAuthDTO.getGender());
+        user.setAvatar(mpWxAuthDTO.getAvatarUrl());
+        user.setNickName(mpWxAuthDTO.getNickName());
+        user.setGender(mpWxAuthDTO.getGender());
         user.setStatus(ConfigConsts.USER_STATUS_AVAILABLE);
         this.save(user);
         oauth = new Oauth();
@@ -254,7 +258,17 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
      * @param qqAuthDTO QQ授权DTO
      * @return 授权秘钥
      */
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED,rollbackFor = Throwable.class)
     public UserAuthVO qqAuth(QQAuthDTO qqAuthDTO) {
+        return null;
+    }
+
+    /**
+     * 微信APP授权
+     * @return 响应
+     */
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED,rollbackFor = Throwable.class)
+    public WxAuthVO wxAuth(WxAuthDTO wxAuthDTO) {
         return null;
     }
 }

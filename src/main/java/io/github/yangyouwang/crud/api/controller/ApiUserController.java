@@ -8,6 +8,7 @@ import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.crud.api.model.dto.*;
 import io.github.yangyouwang.crud.api.model.vo.UserAuthVO;
 import io.github.yangyouwang.crud.api.model.vo.UserInfoVO;
+import io.github.yangyouwang.crud.api.model.vo.MpWxAuthVO;
 import io.github.yangyouwang.crud.api.model.vo.WxAuthVO;
 import io.github.yangyouwang.crud.api.service.ApiUserService;
 import io.swagger.annotations.Api;
@@ -36,18 +37,18 @@ public class ApiUserController {
 
     private final ApiUserService apiUserService;
     /**
-     * 微信授权
+     * 微信小程序授权
      * @return 响应
      */
     @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
-    @PostMapping("/wx/auth")
-    @ApiOperation(value="微信授权", notes="微信授权")
+    @PostMapping("/mp/wx/auth")
+    @ApiOperation(value="微信小程序授权", notes="微信小程序授权")
     @PassToken
-    public WxAuthVO wxAuth(@Valid @RequestBody WxAuthDTO wxAuthDTO, BindingResult bindingResult) {
+    public MpWxAuthVO mpWxAuth(@Valid @RequestBody MpWxAuthDTO mpWxAuthDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        return apiUserService.wxAuth(wxAuthDTO);
+        return apiUserService.mpWxAuth(mpWxAuthDTO);
     }
     /**
      * 用户名密码授权
@@ -84,13 +85,28 @@ public class ApiUserController {
      */
     @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
     @PostMapping("/qq/auth")
-    @ApiOperation(value="手机号验证码授权", notes="手机号验证码授权")
+    @ApiOperation(value="QQ授权", notes="QQ授权")
     @PassToken
     public UserAuthVO qqAuth(@Valid @RequestBody QQAuthDTO qqAuthDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
         return apiUserService.qqAuth(qqAuthDTO);
+    }
+
+    /**
+     * 微信APP授权
+     * @return 响应
+     */
+    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @PostMapping("/wx/auth")
+    @ApiOperation(value="微信APP授权", notes="微信APP授权")
+    @PassToken
+    public WxAuthVO wxAuth(@Valid @RequestBody WxAuthDTO wxAuthDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
+        }
+        return apiUserService.wxAuth(wxAuthDTO);
     }
 
     /**
