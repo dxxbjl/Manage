@@ -37,17 +37,29 @@ public interface ConfigConsts {
      */
     String WEIXIN_OPENID_API = "https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code";
     /**
-     * QQ获取Authorization Code
+     * QQ获取AuthorizationCode
      */
-    String QQ_CODE_API = "https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=CLIENTID&redirect_uri=REDIRECTURI&state=STATE";
+    String QQ_CODE_API = "https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=CLIENTID&redirect_uri=REDIRECTURI&state=ok";
     /**
      * QQ授权
      */
     String QQ_AUTH_API = "https://graph.qq.com/oauth2.0/token?grant_type=authorization_code&client_id=CLIENTID&client_secret=CLIENTSECRET&code=CODE&redirect_uri=REDIRECTURI";
     /**
-     * 登录类型 wx 微信
+     * QQ获取openid
+     */
+    String QQ_OPENID_API = "https://graph.qq.com/oauth2.0/me?access_token=ACCESSTOKEN";
+    /**
+     * QQ获取用户信息
+     */
+    String QQ_GET_USER_INFO_API = "https://graph.qq.com/user/get_user_info?access_token=ACCESSTOKEN&oauth_consumer_key=APPID&openid=OPENID";
+    /**
+     * 登录类型 微信
      */
     String WX_APP_TYPE = "wx";
+    /**
+     * 登录类型 qq
+     */
+    String QQ_PC_TYPE = "qq";
     /**
      * 登录类型 password 账号密码
      */

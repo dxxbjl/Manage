@@ -87,26 +87,24 @@ public class ApiUserController {
     @GetMapping("/qq/code")
     @ApiOperation(value="获取QQ授权code", notes="获取QQ授权code")
     @PassToken
-    public Result qqCode() throws UnsupportedEncodingException {
+    public Result qqCode() {
         String code = apiUserService.getQQCode();
         return Result.success("qq登录code",code);
     }
-
     /**
      * QQ授权回调
      * @return 响应
      */
     @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
-    @GetMapping("/qq/auth/callback")
+    @PostMapping("/qq/auth/callback")
     @ApiOperation(value="QQ授权回调", notes="QQ授权回调")
     @PassToken
-    public UserAuthVO qqAuthCallback(String code, BindingResult bindingResult) throws UnsupportedEncodingException {
+    public UserAuthVO qqAuthCallback(@Valid @RequestBody QQAuthDTO qqAuthDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        return apiUserService.qqAuthCallback(code);
+        return apiUserService.qqAuthCallback(qqAuthDTO);
     }
-
     /**
      * 微信APP授权
      * @return 响应
@@ -121,7 +119,6 @@ public class ApiUserController {
         }
         return apiUserService.wxAuth(wxAuthDTO);
     }
-
     /**
      * 用户详情
      * @return 响应
@@ -132,7 +129,6 @@ public class ApiUserController {
     public UserInfoVO userInfo() {
         return apiUserService.getUserInfo();
     }
-
     /**
      * 解密微信用户信息
      * @param wxUserInfoDTO 加密微信用户信息
@@ -149,7 +145,6 @@ public class ApiUserController {
         String message = String.format("绑定手机号为：%s", userPhoneNumber);
         return Result.success(message,userPhoneNumber);
     }
-
     /**
      * 更新用户信息
      * @param userInfoDTO 用户信息

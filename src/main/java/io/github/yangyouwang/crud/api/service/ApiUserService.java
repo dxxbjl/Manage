@@ -44,8 +44,6 @@ import java.security.Security;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
-import java.util.UUID;
-
 /**
  * Description: 用户业务层 <br/>
  * date: 2022/8/3 20:46<br/>
@@ -160,7 +158,6 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         this.updateById(user);
         return userPhoneNumber;
     }
-
     /**
      * 根据微信密钥获取用户手机号
      * @param sessionKey 加密秘钥
@@ -260,34 +257,69 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         BeanUtils.copyProperties(userInfoDTO,user);
         return updateById(user);
     }
-
     /**
      * 获取QQ授权code
      * @return 响应
      */
-    public String getQQCode() throws UnsupportedEncodingException {
-        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-        String api = ConfigConsts.QQ_CODE_API.replace("CLIENTID",qqProperties.getAppID())
-                .replace("STATE",uuid)
-                .replace("REDIRECTURI", URLEncoder.encode(qqProperties.getRedirectUrl(), CharEncoding.UTF_8));
+    public String getQQCode() {
+        String api = ConfigConsts.QQ_CODE_API.replace("CLIENTID",qqProperties.getAppID());
+        try {
+            api.replace("REDIRECTURI", URLEncoder.encode(qqProperties.getRedirectUrl(), CharEncoding.UTF_8));
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("解析回调地址出错");
+        }
         return RestTemplateUtil.get(api);
     }
-
     /**
      * QQ授权回调
-     * @param code QQ
+     * @param qqAuthDTO QQ授权对象
      * @return 授权秘钥
      */
-    public UserAuthVO qqAuthCallback(String code) throws UnsupportedEncodingException {
-        String api = ConfigConsts.QQ_AUTH_API.replace("CLIENTID",qqProperties.getAppID())
+    public UserAuthVO qqAuthCallback(QQAuthDTO qqAuthDTO) {
+        // 获取token
+        String authApi = ConfigConsts.QQ_AUTH_API.replace("CLIENTID",qqProperties.getAppID())
                 .replace("CLIENTSECRET",qqProperties.getAppSecret())
-                .replace("CODE",code)
-                .replace("REDIRECTURI", URLEncoder.encode(qqProperties.getRedirectUrl(), CharEncoding.UTF_8));
-        String result = RestTemplateUtil.get(api);
-
-        return null;
+                .replace("CODE",qqAuthDTO.getCode());
+        try {
+            authApi.replace("REDIRECTURI", URLEncoder.encode(qqProperties.getRedirectUrl(), CharEncoding.UTF_8));
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("解析回调地址出错");
+        }
+        String token = RestTemplateUtil.get(authApi);
+        // 获取openId
+        String openIdApi = ConfigConsts.QQ_OPENID_API.replace("ACCESSTOKEN", token);
+        String openId = RestTemplateUtil.get(openIdApi);
+        Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>()
+                .eq(Oauth::getAppSecret, openId)
+                .eq(Oauth::getAppType, ConfigConsts.QQ_PC_TYPE));
+        UserAuthVO userAuthVO = new UserAuthVO();
+        if (Objects.nonNull(oauth)) {
+            // 登录成功
+            userAuthVO.setToken(JwtTokenUtil.buildJWT(oauth.getUserId().toString()));
+            return userAuthVO;
+        }
+        // 获取用户信息
+        String userApi = ConfigConsts.QQ_GET_USER_INFO_API.replace("APPID", qqProperties.getAppID())
+                .replace("OPENID", openId);
+        JSONObject jsonObject = JSONObject.parseObject(RestTemplateUtil.get(userApi));
+        String avatarImg = jsonObject.getString("figureurl_qq");
+        String nickname = jsonObject.getString("nickname");
+        Integer gender = jsonObject.getInteger("gender");
+        User user = new User();
+        user.setAvatar(avatarImg);
+        user.setNickName(nickname);
+        user.setGender(gender);
+        user.setStatus(ConfigConsts.USER_STATUS_AVAILABLE);
+        this.save(user);
+        oauth = new Oauth();
+        oauth.setUserId(user.getId());
+        oauth.setAppSecret(openId);
+        oauth.setAppType(ConfigConsts.WX_APP_TYPE);
+        oauthService.save(oauth);
+        // 登录成功
+        userAuthVO.setToken(JwtTokenUtil.buildJWT(oauth.getUserId().toString()));
+        return userAuthVO;
     }
-
     /**
      * 微信APP授权
      * @return 响应
