@@ -11,9 +11,13 @@ package io.github.yangyouwang.common.enums;
  */
 public enum AppOauthType {
     /**
-     * 微信登录
+     * 微信小程序登录
      */
-    WX,
+    MP_WX,
+    /**
+     * 微信APP登录
+     */
+    WX_APP,
     /**
      * QQ登录
      */

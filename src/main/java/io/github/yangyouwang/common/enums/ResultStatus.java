@@ -33,13 +33,9 @@ public enum ResultStatus {
      */
     NO_PERMISSION(401,"无权限"),
     /**
-     * 微信小程序授权失败
-     */
-    WX_LOGIN_ERROR(402,"微信小程序授权失败"),
-    /**
      * 用户名或密码错误
      */
-    LOGIN_ERROR(403,"用户名或密码错误"),
+    LOGIN_ERROR(402,"用户名或密码错误"),
     /**
      * 新增数据出错
      */

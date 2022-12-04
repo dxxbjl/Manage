@@ -1,6 +1,7 @@
 package io.github.yangyouwang.crud.api.model.dto;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -14,4 +15,7 @@ import lombok.Data;
 @Data
 @ApiModel("微信授权DTO")
 public class WxAuthDTO {
+
+    @ApiModelProperty(value = "授权码")
+    private String code;
 }

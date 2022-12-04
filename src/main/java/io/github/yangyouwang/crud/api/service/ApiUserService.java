@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import io.github.yangyouwang.common.constant.ApiConsts;
 import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.enums.AppOauthType;
 import io.github.yangyouwang.common.enums.ResultStatus;
@@ -79,19 +80,19 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED,rollbackFor = Throwable.class)
     public MpWxAuthVO mpWxAuth(MpWxAuthDTO mpWxAuthDTO) {
         // 根据微信code获取openId
-        String api = ConfigConsts.WEIXIN_OPENID_API.replace("APPID",weChatProperties.getAppID())
+        String api = ApiConsts.WX_OPENID_API.replace("APPID",weChatProperties.getAppID())
                 .replace("SECRET",weChatProperties.getAppSecret())
                 .replace("JSCODE",mpWxAuthDTO.getCode());
         String res = RestTemplateUtil.get(api);
         JSONObject jsonObject = JSONObject.parseObject(res);
         if (jsonObject.containsKey("errcode")) {
-            throw new CrudException(ResultStatus.WX_LOGIN_ERROR);
+            throw new RuntimeException("微信小程序授权失败");
         }
         MpWxAuthVO wxAuthVO = new MpWxAuthVO();
         String sessionKey = jsonObject.getString("session_key");
         String openId = jsonObject.getString("openid");
         Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>().eq(Oauth::getAppSecret,openId)
-                .eq(Oauth::getAppType,AppOauthType.WX.name()));
+                .eq(Oauth::getAppType,AppOauthType.MP_WX.name()));
         if (Objects.nonNull(oauth)) {
             // 登录成功
             wxAuthVO.setSessionKey(sessionKey);
@@ -101,7 +102,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         // 登录成功
         User user = UserFactory.createUser(mpWxAuthDTO.getAvatarUrl(), mpWxAuthDTO.getNickName(), mpWxAuthDTO.getGender());
         this.save(user);
-        oauthService.save(UserFactory.createOauth(user.getId(), openId, AppOauthType.WX));
+        oauthService.save(UserFactory.createOauth(user.getId(), openId, AppOauthType.MP_WX));
         wxAuthVO.setSessionKey(sessionKey);
         wxAuthVO.setToken(JwtTokenUtil.buildJWT(oauth.getUserId().toString()));
         return wxAuthVO;
@@ -254,7 +255,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
      * @return 响应
      */
     public String getQQCode() {
-        String api = ConfigConsts.QQ_CODE_API.replace("CLIENTID",qqProperties.getAppID());
+        String api = ApiConsts.QQ_CODE_API.replace("CLIENTID",qqProperties.getAppID());
         try {
             api.replace("REDIRECTURI", URLEncoder.encode(qqProperties.getRedirectUrl(), CharEncoding.UTF_8));
         } catch (UnsupportedEncodingException e) {
@@ -267,9 +268,10 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
      * @param qqAuthDTO QQ授权对象
      * @return 授权秘钥
      */
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED,rollbackFor = Throwable.class)
     public UserAuthVO qqAuthCallback(QQAuthDTO qqAuthDTO) {
         // 获取token
-        String authApi = ConfigConsts.QQ_AUTH_API.replace("CLIENTID",qqProperties.getAppID())
+        String authApi = ApiConsts.QQ_AUTH_API.replace("CLIENTID",qqProperties.getAppID())
                 .replace("CLIENTSECRET",qqProperties.getAppSecret())
                 .replace("CODE",qqAuthDTO.getCode());
         String redirectUrl = qqProperties.getRedirectUrl();
@@ -281,7 +283,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         authApi.replace("REDIRECTURI",redirectUrl);
         String token = RestTemplateUtil.get(authApi);
         // 获取openId
-        String openIdApi = ConfigConsts.QQ_OPENID_API.replace("ACCESSTOKEN", token);
+        String openIdApi = ApiConsts.QQ_OPENID_API.replace("ACCESSTOKEN", token);
         String openId = RestTemplateUtil.get(openIdApi);
         Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>().eq(Oauth::getAppSecret, openId)
                 .eq(Oauth::getAppType, AppOauthType.QQ.name()));
@@ -292,7 +294,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
             return userAuthVO;
         }
         // 获取用户信息
-        String userApi = ConfigConsts.QQ_GET_USER_INFO_API.replace("APPID", qqProperties.getAppID())
+        String userApi = ApiConsts.QQ_GET_USER_INFO_API.replace("APPID", qqProperties.getAppID())
                 .replace("OPENID", openId);
         JSONObject jsonObject = JSONObject.parseObject(RestTemplateUtil.get(userApi));
         String avatar = jsonObject.getString("figureurl_qq");
@@ -311,6 +313,40 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
      */
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED,rollbackFor = Throwable.class)
     public UserAuthVO wxAuth(WxAuthDTO wxAuthDTO) {
-        return null;
+        String authApi = ApiConsts.WX_AUTH_API.replace("APPID",weChatProperties.getAppID())
+                .replace("SECRET",weChatProperties.getAppSecret())
+                .replace("CODE",wxAuthDTO.getCode());
+        String authRes = RestTemplateUtil.get(authApi);
+        JSONObject authJsonObject = JSONObject.parseObject(authRes);
+        if(authJsonObject.containsKey("errcode")) {
+            throw new RuntimeException("微信授权失败");
+        }
+        String openId = authJsonObject.getString("openid");
+        Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>().eq(Oauth::getAppSecret,openId)
+                .eq(Oauth::getAppType,AppOauthType.WX_APP.name()));
+        UserAuthVO userAuthVO = new UserAuthVO();
+        if (Objects.nonNull(oauth)) {
+            // 登录成功
+            userAuthVO.setToken(JwtTokenUtil.buildJWT(oauth.getUserId().toString()));
+            return userAuthVO;
+        }
+        // 获取微信用户信息
+        String accessToken = authJsonObject.getString("access_token");
+        String userApi = ApiConsts.WX_GET_USER_INFO_API.replace("ACCESSTOKEN",accessToken)
+                .replace("OPENID",openId);
+        String userRes = RestTemplateUtil.get(userApi);
+        JSONObject userJsonObject = JSONObject.parseObject(userRes);
+        if(userJsonObject.containsKey("errcode")) {
+            throw new RuntimeException("获取微信用户信息失败");
+        }
+        String avatar = userJsonObject.getString("headimgurl");
+        String nickname = userJsonObject.getString("nickname");
+        Integer gender = userJsonObject.getInteger("sex");
+        // 登录成功
+        User user = UserFactory.createUser(avatar, nickname, gender);
+        this.save(user);
+        oauthService.save(UserFactory.createOauth(user.getId(), openId, AppOauthType.WX_APP));
+        userAuthVO.setToken(JwtTokenUtil.buildJWT(oauth.getUserId().toString()));
+        return userAuthVO;
     }
 }

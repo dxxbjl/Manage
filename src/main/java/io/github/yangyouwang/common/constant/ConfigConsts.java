@@ -33,26 +33,6 @@ public interface ConfigConsts {
      */
     List<String> IMG_TYPE = Arrays.asList("PNG","JPG","JPEG","BMP","GIF","SVG");
     /**
-     * 微信小程序获取openid
-     */
-    String WEIXIN_OPENID_API = "https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code";
-    /**
-     * QQ获取AuthorizationCode
-     */
-    String QQ_CODE_API = "https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=CLIENTID&redirect_uri=REDIRECTURI&state=ok";
-    /**
-     * QQ授权
-     */
-    String QQ_AUTH_API = "https://graph.qq.com/oauth2.0/token?grant_type=authorization_code&client_id=CLIENTID&client_secret=CLIENTSECRET&code=CODE&redirect_uri=REDIRECTURI";
-    /**
-     * QQ获取openid
-     */
-    String QQ_OPENID_API = "https://graph.qq.com/oauth2.0/me?access_token=ACCESSTOKEN";
-    /**
-     * QQ获取用户信息
-     */
-    String QQ_GET_USER_INFO_API = "https://graph.qq.com/user/get_user_info?access_token=ACCESSTOKEN&oauth_consumer_key=APPID&openid=OPENID";
-    /**
      * 可用状态
      */
     int USER_STATUS_AVAILABLE = 0;
