@@ -1,4 +1,5 @@
 # 简约后台管理系统
+   ![logo](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/logo.jpg "logo.jpg")
 
 ## 项目介绍
     1.需求定义：外包项目如雨后春笋，开发工期被迫压缩，为了开发人员专注开发项目业务，早点下班能陪老婆、孩子。
@@ -82,7 +83,29 @@ sec:authorize="hasAuthority('权限标识')" // thymeleaf声明
 ```
  SampleSms.sendSms(手机号,模版号,签名); 
 ```   
-    11.前端获取字典值渲染layui表单页面
+    11.导出Excel文件
+```
+   //导出Excel
+   EasyExcel.write(response.getOutputStream())
+              //自动关闭流
+              .autoCloseStream(Boolean.FALSE)
+              //指定excel文件的type
+              .excelType(ExcelTypeEnum.XLSX)
+              // 标题头
+              .head(导出类.class)
+              //给定工作表名称
+              .sheet(fileName)
+              //给定样式
+              .registerWriteHandler(EasyExcelUtil.getStyleStrategy())
+              //给定导出数据
+              .doWrite(datas);
+              
+   // excel数据转换成系统字典
+   @ExcelProperty(value = {"用户性别"}, index = 0, converter = BaseDictDataConverter.class)
+   // key = 字典KEY
+   @DictType(key = ConfigConsts.DICT_KEY_SEX)
+```
+    12.字典组件
 ```
    layui.config({
         base: '/static/layuiadmin/' //静态资源所在路径
@@ -98,7 +121,27 @@ sec:authorize="hasAuthority('权限标识')" // thymeleaf声明
      crud.setSelect("id节点","字典类型",'默认值');
   })
 ```   
-    
+    13.下拉框多选组件
+```
+   crud.initXmSelect("自定义select接口","id节点");
+```  
+    14.图片上传组件
+```
+    crud.uploadImg("id节点");
+```  
+    15.向导页面组件
+```
+   按钮设置点击事件
+   $('按钮ID节点').on('click', function () {
+      // 树结构向导
+      crud.treeWizard("自定义select接口",function (result) {
+        form.val('表单的lay-filter属性值', {
+          赋值id值: result.id,
+          赋值name值: result.name
+        });
+      });
+   });
+```
 ## 部分截图
     
     登陆功能
@@ -142,6 +185,7 @@ sec:authorize="hasAuthority('权限标识')" // thymeleaf声明
     工作流
    ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/9.png "9.png")
    ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/10.png "10.png")
+   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/16.png "16.png")
 
     登录日志管理
    ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/11.png "11.png")
