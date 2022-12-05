@@ -362,4 +362,27 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         oauth.setAppSecret(passwordTwo);
         return oauthService.updateById(oauth);
     }
+
+    /**
+     * 用户注册
+     * @param registerUserDTO 用户注册DTO
+     * @return 响应
+     */
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED,rollbackFor = Throwable.class)
+    public boolean registerUser(RegisterUserDTO registerUserDTO) {
+        String mobile = registerUserDTO.getMobile();
+        String code = registerUserDTO.getCode();
+        String password = registerUserDTO.getPassword();
+        //校验手机验证码
+        apiSmsCodeService.checkMobileCode(mobile,code);
+        User oldUser = this.getOne(new LambdaQueryWrapper<User>()
+                .eq(User::getMobile,mobile));
+        if (Objects.nonNull(oldUser)) {
+            throw new RuntimeException("用户已注册，注册失败");
+        }
+        // 用户注册
+        User user = UserFactory.createUser(mobile);
+        this.save(user);
+        return oauthService.save(UserFactory.createOauth(user.getId(),password,AppOauthType.PASSWORD));
+    }
 }

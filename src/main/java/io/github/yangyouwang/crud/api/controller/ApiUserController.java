@@ -175,4 +175,21 @@ public class ApiUserController {
         boolean flag = apiUserService.modifyPassword(modifyPasswordDTO);
         return Result.success(flag);
     }
+
+    /**
+     * 用户注册
+     * @param registerUserDTO 用户注册DTO
+     * @return 响应
+     */
+    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @PostMapping("/register")
+    @ApiOperation(value="用户注册", notes="用户注册")
+    @PassToken
+    public Result registerUser(@Valid @RequestBody RegisterUserDTO registerUserDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
+        }
+        boolean flag = apiUserService.registerUser(registerUserDTO);
+        return Result.success(flag);
+    }
 }
