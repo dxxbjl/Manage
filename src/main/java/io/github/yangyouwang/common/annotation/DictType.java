@@ -4,6 +4,7 @@ import java.lang.annotation.*;
 
 /**
 *   字典类型自定义注解
+ * @author yangyouwang
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)

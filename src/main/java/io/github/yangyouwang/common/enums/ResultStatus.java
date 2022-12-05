@@ -53,33 +53,29 @@ public enum ResultStatus {
      */
     DATA_EXIST_ERROR(504,"当前层级存在下级节点"),
     /**
-     * 手机号格式错误
-     */
-    MOBILE_ERROR(505,"手机号格式错误"),
-    /**
      * 验证码不存在
      */
-    VERIFICATION_CODE_NOT_EXIST(506,"验证码不存在"),
+    VERIFICATION_CODE_NOT_EXIST(505,"验证码不存在"),
     /**
      * 验证码失效
      */
-    VERIFICATION_CODE_INVALID(507,"验证码失效"),
+    VERIFICATION_CODE_INVALID(506,"验证码失效"),
     /**
      * 发送短信失败
      */
-    SEND_SMS_ERROR(508,"发送短信失败"),
+    SEND_SMS_ERROR(507,"发送短信失败"),
     /**
      * 验证码不能为空
      */
-    VALIDATE_CODE_NULL_ERROR(509,"验证码不能为空"),
+    VALIDATE_CODE_NULL_ERROR(508,"验证码不能为空"),
     /**
      * 验证码不存在
      */
-    VALIDATE_CODE_NOT_EXIST_ERROR(510,"验证码不存在"),
+    VALIDATE_CODE_NOT_EXIST_ERROR(509,"验证码不存在"),
     /**
      * 验证码不匹配
      */
-    VALIDATE_CODE_NO_MATCH_ERROR(511,"验证码不匹配");
+    VALIDATE_CODE_NO_MATCH_ERROR(510,"验证码不匹配");
 
     /**
      * 业务异常码
