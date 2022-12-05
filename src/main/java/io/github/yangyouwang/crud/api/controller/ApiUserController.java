@@ -178,18 +178,18 @@ public class ApiUserController {
 
     /**
      * 用户注册
-     * @param registerUserDTO 用户注册DTO
+     * @param registerDTO 用户注册DTO
      * @return 响应
      */
     @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
     @PostMapping("/register")
     @ApiOperation(value="用户注册", notes="用户注册")
     @PassToken
-    public Result registerUser(@Valid @RequestBody RegisterUserDTO registerUserDTO, BindingResult bindingResult) {
+    public Result userRegister(@Valid @RequestBody RegisterDTO registerDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        boolean flag = apiUserService.registerUser(registerUserDTO);
+        boolean flag = apiUserService.userRegister(registerDTO);
         return Result.success(flag);
     }
 }

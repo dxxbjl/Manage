@@ -16,7 +16,7 @@ import javax.validation.constraints.NotBlank;
  */
 @Data
 @ApiModel("用户注册DTO")
-public class RegisterUserDTO {
+public class RegisterDTO {
 
     @Phone
     @NotBlank

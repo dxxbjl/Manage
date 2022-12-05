@@ -365,14 +365,14 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
 
     /**
      * 用户注册
-     * @param registerUserDTO 用户注册DTO
+     * @param registerDTO 用户注册DTO
      * @return 响应
      */
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED,rollbackFor = Throwable.class)
-    public boolean registerUser(RegisterUserDTO registerUserDTO) {
-        String mobile = registerUserDTO.getMobile();
-        String code = registerUserDTO.getCode();
-        String password = registerUserDTO.getPassword();
+    public boolean userRegister(RegisterDTO registerDTO) {
+        String mobile = registerDTO.getMobile();
+        String code = registerDTO.getCode();
+        String password = registerDTO.getPassword();
         //校验手机验证码
         apiSmsCodeService.checkMobileCode(mobile,code);
         User oldUser = this.getOne(new LambdaQueryWrapper<User>()
