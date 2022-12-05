@@ -128,7 +128,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         Assert.notNull(user, "用户不存在");
         Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>()
                 .eq(Oauth::getUserId, user.getId()).eq(Oauth::getAppType,AppOauthType.PASSWORD.name()));
-        if (!oauth.getAppSecret().equals(passwordAuthDTO.getAppSecret())) {
+        if (Objects.isNull(oauth) || !oauth.getAppSecret().equals(passwordAuthDTO.getAppSecret())) {
             throw new CrudException(ResultStatus.LOGIN_ERROR);
         }
         UserAuthVO userAuthVO = new UserAuthVO();
