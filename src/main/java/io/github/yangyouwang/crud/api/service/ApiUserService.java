@@ -228,12 +228,10 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
             userAuthVO.setToken(JwtTokenUtil.buildJWT(oauth.getUserId().toString()));
             return userAuthVO;
         }
-        User user = new User();
-        user.setMobile(mobile);
-        user.setStatus(ConfigConsts.USER_STATUS_AVAILABLE);
+        // 登录成功
+        User user = UserFactory.createUser(mobile);
         this.save(user);
         oauthService.save(UserFactory.createOauth(user.getId(),mobile,AppOauthType.PHONE));
-        // 登录成功
         userAuthVO.setToken(JwtTokenUtil.buildJWT(user.getId().toString()));
         return userAuthVO;
     }

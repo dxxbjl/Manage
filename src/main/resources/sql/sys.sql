@@ -69,12 +69,12 @@ CREATE TABLE `sys_dict_value`  (
 -- ----------------------------
 -- Records of sys_dict_value
 -- ----------------------------
-INSERT INTO `sys_dict_value` VALUES (22, 17, '0', '男', 0, 'Y', 'admin', '2022-06-25 21:58:53', 'admin', '2022-06-25 21:58:53', 0, '');
-INSERT INTO `sys_dict_value` VALUES (23, 17, '1', '女', 1, 'Y', 'admin', '2022-06-25 21:59:02', 'admin', '2022-06-25 21:59:02', 0, NULL);
+INSERT INTO `sys_dict_value` VALUES (22, 17, '1', '男', 1, 'Y', 'admin', '2022-06-25 01:58:53', 'admin', '2022-12-05 18:14:08', 0, '');
+INSERT INTO `sys_dict_value` VALUES (23, 17, '2', '女', 2, 'Y', 'admin', '2022-06-25 01:59:02', 'admin', '2022-12-05 18:14:19', 0, '');
 INSERT INTO `sys_dict_value` VALUES (24, 18, 'M', '目录', 1, 'Y', 'admin', '2022-06-25 21:56:49', 'admin', '2022-06-25 21:56:49', 0, NULL);
 INSERT INTO `sys_dict_value` VALUES (25, 18, 'C', '菜单', 2, 'Y', 'admin', '2022-06-25 21:28:28', 'admin', '2022-06-25 21:28:28', 0, NULL);
 INSERT INTO `sys_dict_value` VALUES (26, 18, 'F', '按钮', 3, 'Y', 'admin', '2022-06-25 21:28:30', 'admin', '2022-06-25 21:28:30', 0, NULL);
-INSERT INTO `sys_dict_value` VALUES (27, 17, '2', '未知', 2, 'Y', 'admin', '2022-06-25 21:26:22', 'admin', '2022-06-25 21:26:22', 0, NULL);
+INSERT INTO `sys_dict_value` VALUES (27, 17, '0', '未知', 0, 'Y', 'admin', '2022-06-25 01:26:22', 'admin', '2022-12-05 18:14:28', 0, '');
 INSERT INTO `sys_dict_value` VALUES (30, 19, 'Y', '启用', 1, 'Y', 'admin', '2022-06-25 21:29:01', 'admin', '2022-06-25 21:29:01', 0, NULL);
 INSERT INTO `sys_dict_value` VALUES (31, 19, 'N', '禁用', 2, 'Y', 'admin', '2022-06-25 21:29:13', 'admin', '2022-06-25 21:29:13', 0, NULL);
 INSERT INTO `sys_dict_value` VALUES (32, 20, 'leaveProcess', '请假流程', 1, 'Y', 'admin', '2022-06-25 21:29:01', 'admin', '2022-06-25 21:29:01', 0, '');
@@ -293,7 +293,7 @@ CREATE TABLE `sys_user`  (
   `enabled` char(1) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '是否启用 Y 启用 N 禁用',
   `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '用户邮箱',
   `phonenumber` varchar(11) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '手机号码',
-  `sex` char(1) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '0' COMMENT '用户性别（0男 1女 2未知）',
+  `sex` char(1) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '0' COMMENT '用户性别（1男 2女 0未知）',
   `avatar` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '头像路径',
   `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '' COMMENT '创建者',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
@@ -307,8 +307,8 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 26, '管理员', 'admin', '$2a$10$u3Re8vB2J3pPAw8RYdpSA.5z/RR/oCg/2/WcSzEe.JZ0DJIz.VacO', 'Y', '616505453@qq.com', '17515087128', '0', NULL, '', NULL, 'admin', '2022-09-05 07:51:57', 0, '超级管理员');
-INSERT INTO `sys_user` VALUES (24, 25, '李四', 'test', '$2a$10$6ppgQN77P8WufCdWftbJGO4D8qRMcoPruIAga2yvm0./K4oBh1Q1C', 'Y', '616505453@qq.com', '17515087128', '0', NULL, 'admin', '2021-03-30 20:25:07', 'admin', '2021-12-09 23:14:09', 0, '测试账号');
+INSERT INTO `sys_user` VALUES (1, 26, '管理员', 'admin', '$2a$10$u3Re8vB2J3pPAw8RYdpSA.5z/RR/oCg/2/WcSzEe.JZ0DJIz.VacO', 'Y', '616505453@qq.com', '17515087128', '1', NULL, '', NULL, 'admin', '2022-09-05 07:51:57', 0, '超级管理员');
+INSERT INTO `sys_user` VALUES (24, 25, '李四', 'test', '$2a$10$6ppgQN77P8WufCdWftbJGO4D8qRMcoPruIAga2yvm0./K4oBh1Q1C', 'Y', '616505453@qq.com', '17515087128', '1', NULL, 'admin', '2021-03-30 20:25:07', 'admin', '2021-12-09 23:14:09', 0, '测试账号');
 
 -- ----------------------------
 -- Table structure for sys_user_role

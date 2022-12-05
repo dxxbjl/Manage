@@ -2,6 +2,7 @@ package io.github.yangyouwang.crud.api.factory;
 
 import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.enums.AppOauthType;
+import io.github.yangyouwang.core.util.StringUtil;
 import io.github.yangyouwang.crud.app.entity.Oauth;
 import io.github.yangyouwang.crud.app.entity.User;
 
@@ -14,7 +15,19 @@ import io.github.yangyouwang.crud.app.entity.User;
  * @since JDK 1.8
  */
 public class UserFactory {
-
+    /**
+     * 创建用户对象
+     * @param mobile 手机号
+     * @return 用户Bean
+     */
+    public static User createUser(String mobile) {
+        User user = new User();
+        String nickName = StringUtil.randomName(true,3);
+        user.setNickName(nickName);
+        user.setMobile(mobile);
+        user.setStatus(ConfigConsts.USER_STATUS_AVAILABLE);
+        return user;
+    }
     /**
      * 创建用户对象
      * @param avatar 头像
@@ -30,7 +43,6 @@ public class UserFactory {
         user.setStatus(ConfigConsts.USER_STATUS_AVAILABLE);
         return user;
     }
-
     /**
      * 创建用户授权对象
      * @param userId 用户ID
