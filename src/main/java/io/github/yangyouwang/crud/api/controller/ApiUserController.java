@@ -159,4 +159,20 @@ public class ApiUserController {
         boolean flag = apiUserService.modifyUser(userInfoDTO);
         return Result.success(flag);
     }
+
+    /**
+     * 修改密码
+     * @param modifyPasswordDTO 修改密码DTO
+     * @return 响应
+     */
+    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @PostMapping("/modifyPassword")
+    @ApiOperation(value="修改密码", notes="修改密码")
+    public Result modifyPassword(@Valid @RequestBody ModifyPasswordDTO modifyPasswordDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
+        }
+        boolean flag = apiUserService.modifyPassword(modifyPasswordDTO);
+        return Result.success(flag);
+    }
 }

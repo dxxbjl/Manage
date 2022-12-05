@@ -1,0 +1,47 @@
+package io.github.yangyouwang.crud.api.service;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.github.yangyouwang.common.constant.ConfigConsts;
+import io.github.yangyouwang.core.util.DateTimeUtil;
+import io.github.yangyouwang.crud.app.entity.SmsCode;
+import io.github.yangyouwang.crud.app.mapper.SmsCodeMapper;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.Objects;
+
+/**
+ * Description: 短信验证码表 服务实现类 <br/>
+ * date: 2022/12/5 22:48<br/>
+ *
+ * @author yangyouwang<br />
+ * @version v1.0
+ * @since JDK 1.8
+ */
+@Service
+public class ApiSmsCodeService extends ServiceImpl<SmsCodeMapper, SmsCode> {
+    /**
+     * 校验手机验证码
+     * @param mobile 手机号
+     * @param code 验证码
+     */
+    public void checkMobileCode(String mobile,String code) {
+        SmsCode smsCode = this.getOne(new LambdaQueryWrapper<SmsCode>()
+                .eq(SmsCode::getMobile, mobile)
+                .eq(SmsCode::getCode, code)
+                .eq(SmsCode::getUsable, ConfigConsts.USABLE_EFFECTIVE)
+                .eq(SmsCode::getSended, ConfigConsts.SEND_HAS_BEEN_SENT));
+        if(Objects.isNull(smsCode)) {
+            throw new RuntimeException("验证码不存在");
+        }
+        // 当前时间小于过期时间
+        boolean flag = DateTimeUtil.compare(new Date(),smsCode.getDeadLine());
+        if (!flag) {
+            throw new RuntimeException("验证码失效");
+        }
+        // 验证码作废
+        smsCode.setUsable(ConfigConsts.USABLE_INVALID);
+        this.updateById(smsCode);
+    }
+}

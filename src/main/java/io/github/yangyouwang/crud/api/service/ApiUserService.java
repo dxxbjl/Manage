@@ -12,7 +12,6 @@ import io.github.yangyouwang.core.config.properties.QQProperties;
 import io.github.yangyouwang.core.util.api.ApiContext;
 import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.core.config.properties.WeChatProperties;
-import io.github.yangyouwang.core.util.DateTimeUtil;
 import io.github.yangyouwang.core.util.JwtTokenUtil;
 import io.github.yangyouwang.core.util.RestTemplateUtil;
 import io.github.yangyouwang.crud.api.factory.UserFactory;
@@ -21,11 +20,9 @@ import io.github.yangyouwang.crud.api.model.vo.UserAuthVO;
 import io.github.yangyouwang.crud.api.model.vo.UserInfoVO;
 import io.github.yangyouwang.crud.api.model.vo.MpWxAuthVO;
 import io.github.yangyouwang.crud.app.entity.Oauth;
-import io.github.yangyouwang.crud.app.entity.SmsCode;
 import io.github.yangyouwang.crud.app.entity.User;
 import io.github.yangyouwang.crud.app.mapper.UserMapper;
 import io.github.yangyouwang.crud.app.service.OauthService;
-import io.github.yangyouwang.crud.app.service.SmsCodeService;
 import io.github.yangyouwang.crud.system.service.SysDictValueService;
 import org.apache.commons.codec.CharEncoding;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -45,7 +42,6 @@ import java.net.URLEncoder;
 import java.security.AlgorithmParameters;
 import java.security.Security;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Objects;
 /**
  * Description: 用户业务层 <br/>
@@ -68,7 +64,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
     private SysDictValueService sysDictValueService;
 
     @Resource
-    private SmsCodeService smsCodeService;
+    private ApiSmsCodeService apiSmsCodeService;
 
     @Resource
     private QQProperties qqProperties;
@@ -202,22 +198,8 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
      */
     public UserAuthVO mobileAuth(MobileAuthDTO mobileAuthDTO) {
         String mobile = mobileAuthDTO.getMobile();
-        SmsCode smsCode = smsCodeService.getOne(new LambdaQueryWrapper<SmsCode>()
-                .eq(SmsCode::getMobile, mobile)
-                .eq(SmsCode::getCode, mobileAuthDTO.getCode())
-                .eq(SmsCode::getUsable, ConfigConsts.USABLE_EFFECTIVE)
-                .eq(SmsCode::getSended, ConfigConsts.SEND_HAS_BEEN_SENT));
-        if(Objects.isNull(smsCode)) {
-            throw new RuntimeException("验证码不存在");
-        }
-        // 当前时间小于过期时间
-        boolean flag = DateTimeUtil.compare(new Date(),smsCode.getDeadLine());
-        if (!flag) {
-            throw new RuntimeException("验证码失效");
-        }
-        // 验证码作废
-        smsCode.setUsable(ConfigConsts.USABLE_INVALID);
-        smsCodeService.updateById(smsCode);
+        String code = mobileAuthDTO.getCode();
+        apiSmsCodeService.checkMobileCode(mobile,code);
         // 响应
         UserAuthVO userAuthVO = new UserAuthVO();
         // 查询用户
@@ -346,5 +328,38 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         oauthService.save(UserFactory.createOauth(user.getId(), openId, AppOauthType.WX_APP));
         userAuthVO.setToken(JwtTokenUtil.buildJWT(oauth.getUserId().toString()));
         return userAuthVO;
+    }
+
+    /**
+     * 修改密码
+     * @param modifyPasswordDTO 修改密码DTO
+     * @return 响应
+     */
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED,rollbackFor = Throwable.class)
+    public boolean modifyPassword(ModifyPasswordDTO modifyPasswordDTO) {
+        String mobile = modifyPasswordDTO.getMobile();
+        String code = modifyPasswordDTO.getCode();
+        String passwordOne = modifyPasswordDTO.getPasswordOne();
+        String passwordTwo = modifyPasswordDTO.getPasswordTwo();
+        if (!passwordOne.equals(passwordTwo)) {
+            throw new RuntimeException("输入两次密码不一致，修改密码失败");
+        }
+        //校验手机验证码
+        apiSmsCodeService.checkMobileCode(mobile,code);
+        // 获取当前用户
+        Long userId = ApiContext.getUserId();
+        User user = this.getById(userId);
+        Assert.notNull(user, "用户不存在");
+        if (!mobile.equals(user.getMobile())) {
+            throw new RuntimeException("当前绑定手机号不一致，修改密码失败");
+        }
+        Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>()
+                .eq(Oauth::getUserId, user.getId()).eq(Oauth::getAppType,AppOauthType.PASSWORD.name()));
+        Assert.notNull(oauth, "未设置用户密码");
+        if (!oauth.getAppSecret().equals(passwordOne)) {
+            throw new RuntimeException("旧密码输入错误");
+        }
+        oauth.setAppSecret(passwordTwo);
+        return oauthService.updateById(oauth);
     }
 }
