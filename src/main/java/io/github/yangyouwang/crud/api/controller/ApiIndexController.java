@@ -7,6 +7,7 @@ import io.github.yangyouwang.common.constant.ApiVersionConstant;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.crud.api.model.dto.MobileCodeDTO;
 import io.github.yangyouwang.crud.api.service.ApiIndexService;
+import io.github.yangyouwang.crud.api.service.ApiSmsCodeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,8 @@ public class ApiIndexController {
 
     private final ApiIndexService apiIndexService;
 
+    private final ApiSmsCodeService apiSmsCodeService;
+
     /**
      * 通知公告接口
      * @return 响应
@@ -58,7 +61,7 @@ public class ApiIndexController {
             throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
         String mobile = mobileCodeDTO.getMobile();
-        boolean flag = apiIndexService.sendMobileCode(mobile);
+        boolean flag = apiSmsCodeService.sendMobileCode(mobile);
         return Result.success(flag);
     }
 }
