@@ -208,12 +208,12 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
                 .eq(SmsCode::getUsable, ConfigConsts.USABLE_EFFECTIVE)
                 .eq(SmsCode::getSended, ConfigConsts.SEND_HAS_BEEN_SENT));
         if(Objects.isNull(smsCode)) {
-            throw new CrudException(ResultStatus.VERIFICATION_CODE_NOT_EXIST);
+            throw new RuntimeException("验证码不存在");
         }
         // 当前时间小于过期时间
         boolean flag = DateTimeUtil.compare(new Date(),smsCode.getDeadLine());
         if (!flag) {
-            throw new CrudException(ResultStatus.VERIFICATION_CODE_INVALID);
+            throw new RuntimeException("验证码失效");
         }
         // 验证码作废
         smsCode.setUsable(ConfigConsts.USABLE_INVALID);

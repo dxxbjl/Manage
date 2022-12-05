@@ -9,8 +9,6 @@ import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
-import io.github.yangyouwang.common.enums.ResultStatus;
-import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.core.config.properties.SmsProperties;
 import io.github.yangyouwang.core.util.SpringUtils;
 import java.text.SimpleDateFormat;
@@ -71,7 +69,7 @@ public class SampleSms {
             request.setOutId("yourOutId");
             return acsClient.getAcsResponse(request);
         } catch (ClientException e) {
-            throw new CrudException(ResultStatus.SEND_SMS_ERROR);
+            throw new RuntimeException("发送短信失败");
         }
     }
 
@@ -102,7 +100,7 @@ public class SampleSms {
             //hint 此处可能会抛出异常，注意catch
             return acsClient.getAcsResponse(request);
         } catch (ClientException e) {
-            throw new CrudException(ResultStatus.SEND_SMS_ERROR);
+            throw new RuntimeException("发送短信失败");
         }
     }
 }

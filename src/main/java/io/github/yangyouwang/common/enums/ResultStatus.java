@@ -51,31 +51,7 @@ public enum ResultStatus {
     /**
      * 当前层级存在下级节点
      */
-    DATA_EXIST_ERROR(504,"当前层级存在下级节点"),
-    /**
-     * 验证码不存在
-     */
-    VERIFICATION_CODE_NOT_EXIST(505,"验证码不存在"),
-    /**
-     * 验证码失效
-     */
-    VERIFICATION_CODE_INVALID(506,"验证码失效"),
-    /**
-     * 发送短信失败
-     */
-    SEND_SMS_ERROR(507,"发送短信失败"),
-    /**
-     * 验证码不能为空
-     */
-    VALIDATE_CODE_NULL_ERROR(508,"验证码不能为空"),
-    /**
-     * 验证码不存在
-     */
-    VALIDATE_CODE_NOT_EXIST_ERROR(509,"验证码不存在"),
-    /**
-     * 验证码不匹配
-     */
-    VALIDATE_CODE_NO_MATCH_ERROR(510,"验证码不匹配");
+    DATA_EXIST_ERROR(504,"当前层级存在下级节点");
 
     /**
      * 业务异常码
