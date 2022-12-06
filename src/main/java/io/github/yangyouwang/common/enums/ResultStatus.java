@@ -33,10 +33,6 @@ public enum ResultStatus {
      */
     NO_PERMISSION(401,"无权限"),
     /**
-     * 用户名或密码错误
-     */
-    LOGIN_ERROR(402,"用户名或密码错误"),
-    /**
      * 新增数据出错
      */
     SAVE_DATA_ERROR(501,"新增数据出错"),

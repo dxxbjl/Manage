@@ -6,6 +6,7 @@ import io.github.yangyouwang.common.annotation.ResponseResultBody;
 import io.github.yangyouwang.common.constant.ApiVersionConstant;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.crud.api.model.dto.*;
+import io.github.yangyouwang.crud.api.model.vo.UserApplyVO;
 import io.github.yangyouwang.crud.api.model.vo.UserAuthVO;
 import io.github.yangyouwang.crud.api.model.vo.UserInfoVO;
 import io.github.yangyouwang.crud.api.model.vo.MpWxAuthVO;
@@ -17,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -191,5 +193,16 @@ public class ApiUserController {
         }
         apiUserService.userRegister(registerDTO);
         return Result.success("注册成功");
+    }
+
+    /**
+     * 获取用户绑定应用列表
+     * @return 响应
+     */
+    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @GetMapping("/user_apply")
+    @ApiOperation(value="获取用户绑定应用列表", notes="获取用户绑定应用列表")
+    public List<UserApplyVO> userApply() {
+        return apiUserService.getUserApplyList();
     }
 }

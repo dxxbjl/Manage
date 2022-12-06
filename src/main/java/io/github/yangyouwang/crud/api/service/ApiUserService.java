@@ -7,15 +7,14 @@ import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import io.github.yangyouwang.common.constant.ApiConsts;
 import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.enums.AppOauthType;
-import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.core.config.properties.QQProperties;
 import io.github.yangyouwang.core.util.api.ApiContext;
-import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.core.config.properties.WeChatProperties;
 import io.github.yangyouwang.core.util.JwtTokenUtil;
 import io.github.yangyouwang.core.util.RestTemplateUtil;
 import io.github.yangyouwang.crud.api.factory.UserFactory;
 import io.github.yangyouwang.crud.api.model.dto.*;
+import io.github.yangyouwang.crud.api.model.vo.UserApplyVO;
 import io.github.yangyouwang.crud.api.model.vo.UserAuthVO;
 import io.github.yangyouwang.crud.api.model.vo.UserInfoVO;
 import io.github.yangyouwang.crud.api.model.vo.MpWxAuthVO;
@@ -42,7 +41,10 @@ import java.net.URLEncoder;
 import java.security.AlgorithmParameters;
 import java.security.Security;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+
 /**
  * Description: 用户业务层 <br/>
  * date: 2022/8/3 20:46<br/>
@@ -120,13 +122,14 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
      * 用户名密码授权
      * @return 响应
      */
+    @Transactional(readOnly = true)
     public UserAuthVO passwordAuth(PasswordAuthDTO passwordAuthDTO) {
         User user = this.getOne(new LambdaQueryWrapper<User>().eq(User::getMobile, passwordAuthDTO.getMobile()));
         Assert.notNull(user, "用户不存在");
         Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>()
                 .eq(Oauth::getUserId, user.getId()).eq(Oauth::getAppType,AppOauthType.PASSWORD.name()));
         if (Objects.isNull(oauth) || !oauth.getAppSecret().equals(passwordAuthDTO.getAppSecret())) {
-            throw new CrudException(ResultStatus.LOGIN_ERROR);
+            throw new RuntimeException("用户名或密码错误");
         }
         UserAuthVO userAuthVO = new UserAuthVO();
         userAuthVO.setToken(JwtTokenUtil.buildJWT(oauth.getUserId().toString()));
@@ -138,6 +141,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
      * @param wxUserInfoDTO 加密微信用户信息
      * @return 手机号
      */
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public String decodeWxUser(WxUserInfoDTO wxUserInfoDTO) {
         String userPhoneNumber = getUserPhoneNumber(wxUserInfoDTO.getSessionKey(), wxUserInfoDTO.getIv(), wxUserInfoDTO.getEncryptedData());
         // 查询手机号是否存在
@@ -196,6 +200,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
      * 手机号验证码授权
      * @return 响应
      */
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
     public UserAuthVO mobileAuth(MobileAuthDTO mobileAuthDTO) {
         String mobile = mobileAuthDTO.getMobile();
         String code = mobileAuthDTO.getCode();
@@ -389,5 +394,25 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         User user = UserFactory.createUser(mobile);
         this.save(user);
         return oauthService.save(UserFactory.createOauth(user.getId(),password,AppOauthType.PASSWORD));
+    }
+    /**
+     * 获取用户绑定应用列表
+     * @return 响应
+     */
+    @Transactional(readOnly = true)
+    public List<UserApplyVO> getUserApplyList() {
+        Long userId = ApiContext.getUserId();
+        return Arrays.stream(AppOauthType.values()).map(s -> {
+            String appType = s.name();
+            Oauth oldOauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>()
+                    .eq(Oauth::getUserId, userId).eq(Oauth::getAppType,appType));
+            UserApplyVO userApplyVO = new UserApplyVO();
+            userApplyVO.setAppType(appType);
+            if (Objects.nonNull(oldOauth)) {
+                // 绑定
+                userApplyVO.setState(ConfigConsts.ENABLED_YES);
+            }
+            return userApplyVO;
+        }).collect(Collectors.toList());
     }
 }
