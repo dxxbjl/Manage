@@ -355,10 +355,11 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         }
         Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>()
                 .eq(Oauth::getUserId, user.getId()).eq(Oauth::getAppType,AppOauthType.PASSWORD.name()));
-        Assert.notNull(oauth, "未设置用户密码");
-        if (!oauth.getAppSecret().equals(passwordOne)) {
-            throw new RuntimeException("旧密码输入错误");
+        if (Objects.isNull(oauth)) {
+            // 设置登录密码
+            return oauthService.save(UserFactory.createOauth(user.getId(),passwordTwo,AppOauthType.PASSWORD));
         }
+        // 修改登录密码
         oauth.setAppSecret(passwordTwo);
         return oauthService.updateById(oauth);
     }
