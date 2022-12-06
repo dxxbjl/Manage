@@ -140,6 +140,9 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
      */
     public String decodeWxUser(WxUserInfoDTO wxUserInfoDTO) {
         String userPhoneNumber = getUserPhoneNumber(wxUserInfoDTO.getSessionKey(), wxUserInfoDTO.getIv(), wxUserInfoDTO.getEncryptedData());
+        // 查询手机号是否存在
+        User oldUser = this.getOne(new LambdaQueryWrapper<User>().eq(User::getMobile, userPhoneNumber));
+        Assert.isNull(oldUser, "手机号已绑定，绑定失败");
         Long userId = ApiContext.getUserId();
         User user = new User();
         user.setId(userId);
