@@ -157,7 +157,7 @@ public class ApiUserController {
             throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
         apiUserService.modifyUser(userInfoDTO);
-        return Result.success("用户信息修改成功");
+        return Result.success("修改成功");
     }
 
     /**
@@ -173,7 +173,7 @@ public class ApiUserController {
             throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
         apiUserService.modifyPassword(modifyPasswordDTO);
-        return Result.success("密码修改成功");
+        return Result.success("修改成功");
     }
 
     /**
