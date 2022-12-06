@@ -200,17 +200,24 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         String mobile = mobileAuthDTO.getMobile();
         String code = mobileAuthDTO.getCode();
         apiSmsCodeService.checkMobileCode(mobile,code);
-        // 响应
-        UserAuthVO userAuthVO = new UserAuthVO();
-        // 查询用户
+        // 查询授权用户
         Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>().eq(Oauth::getAppSecret,mobile)
                 .eq(Oauth::getAppType,AppOauthType.PHONE.name()));
+        UserAuthVO userAuthVO = new UserAuthVO();
         if (Objects.nonNull(oauth)) {
-            // 登录成功
+            // 如果手机号验证码已授权
             userAuthVO.setToken(JwtTokenUtil.buildJWT(oauth.getUserId().toString()));
             return userAuthVO;
         }
-        // 登录成功
+        User oldUser = this.getOne(new LambdaQueryWrapper<User>()
+                .eq(User::getMobile,mobile));
+        if (Objects.nonNull(oldUser)) {
+            // 手机号已存在
+            oauthService.save(UserFactory.createOauth(oldUser.getId(),mobile,AppOauthType.PHONE));
+            userAuthVO.setToken(JwtTokenUtil.buildJWT(oldUser.getId().toString()));
+            return userAuthVO;
+        }
+        // 如果手机号未注册
         User user = UserFactory.createUser(mobile);
         this.save(user);
         oauthService.save(UserFactory.createOauth(user.getId(),mobile,AppOauthType.PHONE));
@@ -222,12 +229,12 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
      * @param userInfoDTO 用户信息
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public void modifyUser(UserInfoDTO userInfoDTO) {
+    public boolean modifyUser(UserInfoDTO userInfoDTO) {
         Long userId = ApiContext.getUserId();
         User user = getById(userId);
         Assert.notNull(user, "用户不存在");
         BeanUtils.copyProperties(userInfoDTO,user);
-        updateById(user);
+        return updateById(user);
     }
     /**
      * 获取QQ授权code
@@ -334,7 +341,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
      * @param modifyPasswordDTO 修改密码DTO
      */
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED,rollbackFor = Throwable.class)
-    public void modifyPassword(ModifyPasswordDTO modifyPasswordDTO) {
+    public boolean modifyPassword(ModifyPasswordDTO modifyPasswordDTO) {
         String mobile = modifyPasswordDTO.getMobile();
         String code = modifyPasswordDTO.getCode();
         String passwordOne = modifyPasswordDTO.getPasswordOne();
@@ -353,14 +360,13 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         }
         Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>()
                 .eq(Oauth::getUserId, user.getId()).eq(Oauth::getAppType,AppOauthType.PASSWORD.name()));
-        if (Objects.isNull(oauth)) {
-            // 设置登录密码
-            oauthService.save(UserFactory.createOauth(user.getId(),passwordTwo,AppOauthType.PASSWORD));
-        } else {
+        if (Objects.nonNull(oauth)) {
             // 修改登录密码
             oauth.setAppSecret(passwordTwo);
-            oauthService.updateById(oauth);
+            return oauthService.updateById(oauth);
         }
+        // 设置登录密码
+        return oauthService.save(UserFactory.createOauth(user.getId(),passwordTwo,AppOauthType.PASSWORD));
     }
 
     /**
@@ -368,20 +374,28 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
      * @param registerDTO 用户注册DTO
      */
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED,rollbackFor = Throwable.class)
-    public void userRegister(RegisterDTO registerDTO) {
+    public boolean userRegister(RegisterDTO registerDTO) {
         String mobile = registerDTO.getMobile();
         String code = registerDTO.getCode();
         String password = registerDTO.getPassword();
         //校验手机验证码
         apiSmsCodeService.checkMobileCode(mobile,code);
+        // 查询用户是否存在
         User oldUser = this.getOne(new LambdaQueryWrapper<User>()
                 .eq(User::getMobile,mobile));
         if (Objects.nonNull(oldUser)) {
-            throw new RuntimeException("用户已注册，注册失败");
+            // 手机号、密码是否注册过
+            Oauth oldOauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>()
+                    .eq(Oauth::getUserId, oldUser.getId()).eq(Oauth::getAppType,AppOauthType.PASSWORD.name()));
+            if (Objects.nonNull(oldOauth)) {
+                throw new RuntimeException("用户已注册，注册失败");
+            }
+            // 用户注册
+           return oauthService.save(UserFactory.createOauth(oldUser.getId(),password,AppOauthType.PASSWORD));
         }
         // 用户注册
         User user = UserFactory.createUser(mobile);
         this.save(user);
-        oauthService.save(UserFactory.createOauth(user.getId(),password,AppOauthType.PASSWORD));
+        return oauthService.save(UserFactory.createOauth(user.getId(),password,AppOauthType.PASSWORD));
     }
 }
