@@ -64,10 +64,10 @@ public class ApiSmsCodeService extends ServiceImpl<SmsCodeMapper, SmsCode> {
         nowTime.add(Calendar.MINUTE, 5);
         smsCode.setDeadLine(nowTime.getTime());
         // 发送验证码
-//        SendSmsResponse sendSmsResponse = SampleSms.sendSms(mobile, "SMS_176520044", "{\"code\":"+code+"}");
-//        if(!sendSmsResponse.getCode().equals("OK")) {
-//            throw new RuntimeException(sendSmsResponse.getMessage());
-//        }
+        SendSmsResponse sendSmsResponse = SampleSms.sendSms(mobile, "SMS_176520044", "{\"code\":"+code+"}");
+        if(!sendSmsResponse.getCode().equals("OK")) {
+            throw new RuntimeException(sendSmsResponse.getMessage());
+        }
         //请求成功
         smsCode.setUsable(ConfigConsts.USABLE_EFFECTIVE);
         smsCode.setSended(ConfigConsts.SEND_HAS_BEEN_SENT);

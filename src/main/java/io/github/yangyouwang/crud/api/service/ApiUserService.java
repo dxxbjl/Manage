@@ -390,7 +390,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
             if (Objects.nonNull(oldOauth)) {
                 throw new RuntimeException("用户已注册，注册失败");
             }
-            // 用户注册
+            // 手机号存在 新增手机号密码认证
            return oauthService.save(UserFactory.createOauth(oldUser.getId(),password,AppOauthType.PASSWORD));
         }
         // 用户注册
