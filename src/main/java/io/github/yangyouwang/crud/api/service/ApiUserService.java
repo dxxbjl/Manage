@@ -84,11 +84,11 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         if (jsonObject.containsKey("errcode")) {
             throw new RuntimeException("微信小程序授权失败");
         }
-        MpWxAuthVO wxAuthVO = new MpWxAuthVO();
         String sessionKey = jsonObject.getString("session_key");
         String openId = jsonObject.getString("openid");
         Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>().eq(Oauth::getAppSecret,openId)
                 .eq(Oauth::getAppType,AppOauthType.MP_WX.name()));
+        MpWxAuthVO wxAuthVO = new MpWxAuthVO();
         if (Objects.nonNull(oauth)) {
             // 登录成功
             wxAuthVO.setSessionKey(sessionKey);
