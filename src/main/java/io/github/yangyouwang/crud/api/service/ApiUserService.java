@@ -220,15 +220,14 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
     /**
      * 更新用户信息
      * @param userInfoDTO 用户信息
-     * @return 响应
      */
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public boolean modifyUser(UserInfoDTO userInfoDTO) {
+    public void modifyUser(UserInfoDTO userInfoDTO) {
         Long userId = ApiContext.getUserId();
         User user = getById(userId);
         Assert.notNull(user, "用户不存在");
         BeanUtils.copyProperties(userInfoDTO,user);
-        return updateById(user);
+        updateById(user);
     }
     /**
      * 获取QQ授权code
@@ -333,10 +332,9 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
     /**
      * 修改密码
      * @param modifyPasswordDTO 修改密码DTO
-     * @return 响应
      */
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED,rollbackFor = Throwable.class)
-    public boolean modifyPassword(ModifyPasswordDTO modifyPasswordDTO) {
+    public void modifyPassword(ModifyPasswordDTO modifyPasswordDTO) {
         String mobile = modifyPasswordDTO.getMobile();
         String code = modifyPasswordDTO.getCode();
         String passwordOne = modifyPasswordDTO.getPasswordOne();
@@ -357,20 +355,20 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
                 .eq(Oauth::getUserId, user.getId()).eq(Oauth::getAppType,AppOauthType.PASSWORD.name()));
         if (Objects.isNull(oauth)) {
             // 设置登录密码
-            return oauthService.save(UserFactory.createOauth(user.getId(),passwordTwo,AppOauthType.PASSWORD));
+            oauthService.save(UserFactory.createOauth(user.getId(),passwordTwo,AppOauthType.PASSWORD));
+        } else {
+            // 修改登录密码
+            oauth.setAppSecret(passwordTwo);
+            oauthService.updateById(oauth);
         }
-        // 修改登录密码
-        oauth.setAppSecret(passwordTwo);
-        return oauthService.updateById(oauth);
     }
 
     /**
      * 用户注册
      * @param registerDTO 用户注册DTO
-     * @return 响应
      */
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED,rollbackFor = Throwable.class)
-    public boolean userRegister(RegisterDTO registerDTO) {
+    public void userRegister(RegisterDTO registerDTO) {
         String mobile = registerDTO.getMobile();
         String code = registerDTO.getCode();
         String password = registerDTO.getPassword();
@@ -384,6 +382,6 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         // 用户注册
         User user = UserFactory.createUser(mobile);
         this.save(user);
-        return oauthService.save(UserFactory.createOauth(user.getId(),password,AppOauthType.PASSWORD));
+        oauthService.save(UserFactory.createOauth(user.getId(),password,AppOauthType.PASSWORD));
     }
 }

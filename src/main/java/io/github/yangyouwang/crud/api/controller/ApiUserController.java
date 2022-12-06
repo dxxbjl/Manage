@@ -156,8 +156,8 @@ public class ApiUserController {
         if (bindingResult.hasErrors()) {
             throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        boolean flag = apiUserService.modifyUser(userInfoDTO);
-        return Result.success(flag);
+        apiUserService.modifyUser(userInfoDTO);
+        return Result.success("用户信息修改成功");
     }
 
     /**
@@ -172,8 +172,8 @@ public class ApiUserController {
         if (bindingResult.hasErrors()) {
             throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        boolean flag = apiUserService.modifyPassword(modifyPasswordDTO);
-        return Result.success(flag);
+        apiUserService.modifyPassword(modifyPasswordDTO);
+        return Result.success("密码修改成功");
     }
 
     /**
@@ -189,7 +189,7 @@ public class ApiUserController {
         if (bindingResult.hasErrors()) {
             throw new RuntimeException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
-        boolean flag = apiUserService.userRegister(registerDTO);
-        return Result.success(flag);
+        apiUserService.userRegister(registerDTO);
+        return Result.success("注册成功");
     }
 }
