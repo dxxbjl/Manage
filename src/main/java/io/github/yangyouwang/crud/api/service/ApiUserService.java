@@ -81,9 +81,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
                 .replace("JSCODE",mpWxAuthDTO.getCode());
         String res = RestTemplateUtil.get(api);
         JSONObject jsonObject = JSONObject.parseObject(res);
-        if (jsonObject.containsKey("errcode")) {
-            throw new RuntimeException("微信小程序授权失败");
-        }
+        Assert.isTrue(!jsonObject.containsKey("errcode"),"微信小程序授权失败");
         String sessionKey = jsonObject.getString("session_key");
         String openId = jsonObject.getString("openid");
         Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>().eq(Oauth::getAppSecret,openId)
@@ -100,7 +98,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         this.save(user);
         oauthService.save(UserFactory.createOauth(user.getId(), openId, AppOauthType.MP_WX));
         wxAuthVO.setSessionKey(sessionKey);
-        wxAuthVO.setToken(JwtTokenUtil.buildJWT(oauth.getUserId().toString()));
+        wxAuthVO.setToken(JwtTokenUtil.buildJWT(user.getId().toString()));
         return wxAuthVO;
     }
     /**
@@ -114,7 +112,6 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         Assert.notNull(user, "用户不存在");
         UserInfoVO userInfoVO = new UserInfoVO();
         BeanUtils.copyProperties(user,userInfoVO);
-        // 性别
         String sex = sysDictValueService.getDictValueName(ConfigConsts.DICT_KEY_SEX, user.getGender().toString());
         userInfoVO.setGenderLabel(sex);
         return userInfoVO;
@@ -290,7 +287,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         User user = UserFactory.createUser(avatar, nickname, gender);
         this.save(user);
         oauthService.save(UserFactory.createOauth(user.getId(), openId, AppOauthType.QQ));
-        userAuthVO.setToken(JwtTokenUtil.buildJWT(oauth.getUserId().toString()));
+        userAuthVO.setToken(JwtTokenUtil.buildJWT(user.getId().toString()));
         return userAuthVO;
     }
     /**
@@ -303,11 +300,9 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
                 .replace("SECRET",weChatProperties.getAppSecret())
                 .replace("CODE",wxAuthDTO.getCode());
         String authRes = RestTemplateUtil.get(authApi);
-        JSONObject authJsonObject = JSONObject.parseObject(authRes);
-        if(authJsonObject.containsKey("errcode")) {
-            throw new RuntimeException("微信授权失败");
-        }
-        String openId = authJsonObject.getString("openid");
+        JSONObject jsonObject = JSONObject.parseObject(authRes);
+        Assert.isTrue(!jsonObject.containsKey("errcode"),"微信授权失败");
+        String openId = jsonObject.getString("openid");
         Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>().eq(Oauth::getAppSecret,openId)
                 .eq(Oauth::getAppType,AppOauthType.WX_APP.name()));
         UserAuthVO userAuthVO = new UserAuthVO();
@@ -317,7 +312,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
             return userAuthVO;
         }
         // 获取微信用户信息
-        String accessToken = authJsonObject.getString("access_token");
+        String accessToken = jsonObject.getString("access_token");
         String userApi = ApiConsts.WX_GET_USER_INFO_API.replace("ACCESSTOKEN",accessToken)
                 .replace("OPENID",openId);
         String userRes = RestTemplateUtil.get(userApi);
@@ -332,7 +327,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         User user = UserFactory.createUser(avatar, nickname, gender);
         this.save(user);
         oauthService.save(UserFactory.createOauth(user.getId(), openId, AppOauthType.WX_APP));
-        userAuthVO.setToken(JwtTokenUtil.buildJWT(oauth.getUserId().toString()));
+        userAuthVO.setToken(JwtTokenUtil.buildJWT(user.getId().toString()));
         return userAuthVO;
     }
 
@@ -346,18 +341,14 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         String code = modifyPasswordDTO.getCode();
         String passwordOne = modifyPasswordDTO.getPasswordOne();
         String passwordTwo = modifyPasswordDTO.getPasswordTwo();
-        if (!passwordOne.equals(passwordTwo)) {
-            throw new RuntimeException("输入两次密码不一致，修改密码失败");
-        }
+        Assert.isTrue(passwordOne.equals(passwordTwo),"输入两次密码不一致，修改密码失败");
         //校验手机验证码
         apiSmsCodeService.checkMobileCode(mobile,code);
         // 获取当前用户
         Long userId = ApiContext.getUserId();
         User user = this.getById(userId);
         Assert.notNull(user, "用户不存在");
-        if (!mobile.equals(user.getMobile())) {
-            throw new RuntimeException("当前绑定手机号不一致，修改密码失败");
-        }
+        Assert.isTrue(mobile.equals(user.getMobile()),"当前绑定手机号不一致，修改密码失败");
         Oauth oauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>()
                 .eq(Oauth::getUserId, user.getId()).eq(Oauth::getAppType,AppOauthType.PASSWORD.name()));
         if (Objects.nonNull(oauth)) {
@@ -387,9 +378,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
             // 手机号、密码是否注册过
             Oauth oldOauth = oauthService.getOne(new LambdaQueryWrapper<Oauth>()
                     .eq(Oauth::getUserId, oldUser.getId()).eq(Oauth::getAppType,AppOauthType.PASSWORD.name()));
-            if (Objects.nonNull(oldOauth)) {
-                throw new RuntimeException("用户已注册，注册失败");
-            }
+            Assert.isNull(oldOauth, "用户已注册，注册失败");
             // 手机号存在 新增手机号密码认证
            return oauthService.save(UserFactory.createOauth(oldUser.getId(),password,AppOauthType.PASSWORD));
         }

@@ -10,10 +10,10 @@ import io.github.yangyouwang.crud.app.entity.SmsCode;
 import io.github.yangyouwang.crud.app.mapper.SmsCodeMapper;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Objects;
 
 /**
  * Description: 短信验证码表 服务实现类 <br/>
@@ -36,14 +36,10 @@ public class ApiSmsCodeService extends ServiceImpl<SmsCodeMapper, SmsCode> {
                 .eq(SmsCode::getCode, code)
                 .eq(SmsCode::getUsable, ConfigConsts.USABLE_EFFECTIVE)
                 .eq(SmsCode::getSended, ConfigConsts.SEND_HAS_BEEN_SENT));
-        if(Objects.isNull(smsCode)) {
-            throw new RuntimeException("验证码不存在");
-        }
+        Assert.notNull(smsCode,"验证码不存在");
         // 当前时间小于过期时间
         boolean flag = DateTimeUtil.compare(new Date(),smsCode.getDeadLine());
-        if (!flag) {
-            throw new RuntimeException("验证码失效");
-        }
+        Assert.isTrue(flag,"验证码失效");
         // 验证码作废
         smsCode.setUsable(ConfigConsts.USABLE_INVALID);
         this.updateById(smsCode);
@@ -65,9 +61,7 @@ public class ApiSmsCodeService extends ServiceImpl<SmsCodeMapper, SmsCode> {
         smsCode.setDeadLine(nowTime.getTime());
         // 发送验证码
         SendSmsResponse sendSmsResponse = SampleSms.sendSms(mobile, "SMS_176520044", "{\"code\":"+code+"}");
-        if(!sendSmsResponse.getCode().equals("OK")) {
-            throw new RuntimeException(sendSmsResponse.getMessage());
-        }
+        Assert.isTrue(sendSmsResponse.getCode().equals("OK"),sendSmsResponse.getMessage());
         //请求成功
         smsCode.setUsable(ConfigConsts.USABLE_EFFECTIVE);
         smsCode.setSended(ConfigConsts.SEND_HAS_BEEN_SENT);
