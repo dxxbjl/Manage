@@ -89,4 +89,31 @@ public class CommonController extends CrudController {
         ajax.put("url", url);
         return Result.success(ajax);
     }
+
+
+    /**
+     * 上传视频MinIo
+     */
+    @PostMapping("/uploadVideoMinIo")
+    @ResponseBody
+    @CrudLog(title = "上传视频MinIo",businessType = BusinessType.INSERT)
+    public Result uploadVideoMinIo(MultipartFile file) throws Exception {
+        if(StringUtils.isEmpty(file.getName())){
+            return Result.failure("上传文件名称为空",file.getOriginalFilename());
+        }
+        log.info("正在做上传操作，上传文件为：{}",file.getOriginalFilename());
+        String suffix = Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+        if(!ConfigConsts.VIDEO_TYPE.contains(suffix.toUpperCase())){
+            return Result.failure("上传文件不符合规范",file.getOriginalFilename());
+        }
+        // TODO: 2022/12/8 视频切片
+        String bucketName = minioProperties.getBucketName();
+        String fileName = minIoUtil.minioUpload(file, file.getOriginalFilename(), bucketName);
+        String url = minIoUtil.getShowUtrl(fileName, bucketName);
+        Map<String,Object> ajax = new HashMap<>(16);
+        ajax.put("fileName", fileName);
+        ajax.put("url", url);
+        return Result.success(ajax);
+    }
+
 }

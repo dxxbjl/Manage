@@ -33,6 +33,10 @@ public interface ConfigConsts {
      */
     List<String> IMG_TYPE = Arrays.asList("PNG","JPG","JPEG","BMP","GIF","SVG");
     /**
+     * 上传视频类型
+     */
+    List<String> VIDEO_TYPE = Arrays.asList("MP4","AVI","WMV");
+    /**
      * 可用状态
      */
     int USER_STATUS_AVAILABLE = 0;

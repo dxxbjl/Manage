@@ -162,6 +162,36 @@ layui.extend({
             });
         },
         /**
+         * 普通视频上传
+         */
+        uploadVideo: function(obj) {
+            let uploadInst = upload.render({
+                elem: '#upload-video-btn'
+                ,url: ctx + '/common/uploadVideoMinIo'
+                ,accept: 'video'
+                ,before: function(obj){
+                    //预读本地文件示例，不支持ie8
+                    obj.preview(function(index, file, result){
+                        $('#upload-video').attr('src', result); //图片链接（base64）
+                    });
+                }
+                ,done: function(res){
+                    layer.msg(res.message);
+                    if (res.code === 200) {
+                        $("#" + obj).val(res.data.url);
+                    }
+                }
+                ,error: function(){
+                    //演示失败状态，并实现重传
+                    let uploadText = $('#upload-video-text');
+                    uploadText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                    uploadText.find('.demo-reload').on('click', function(){
+                        uploadInst.upload();
+                    });
+                }
+            });
+        },
+        /**
          * 普通图片上传
          */
         uploadImg: function(obj) {
@@ -319,6 +349,24 @@ layui.extend({
                 }
             }
             return "未知";
+        },
+        /**
+         * 设置tab名称
+         * @param name
+         */
+        setTabName:function (name) {
+            $(".layui-tab-title").empty();
+            let list = options(name);
+            if(!list){
+                return;
+            }
+            $.each(list,function(index,item) {
+                if (index == 0) {
+                    $(".layui-tab-title").append(`<li class="layui-this" data-id="${item.dictValueKey}">${item.dictValueName}</li>`)
+                } else {
+                    $(".layui-tab-title").append(`<li data-id="${item.dictValueKey}">${item.dictValueName}</li>`)
+                }
+            });
         },
         /**
          * layui 动态渲染select
