@@ -12,7 +12,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">名称</label>
                     <div class="layui-input-block">
-                        <input type="text" name="name" placeholder="请输入名称" class="layui-input">
+                        <input type="text" name="keyword" placeholder="请输入名称" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -54,9 +54,8 @@
             treetable = layui.treetable;
         //监听搜索
         form.on('submit(search)', function(data) {
-            let field = data.field;
-            //执行重载
-            initTable(field);
+            let keyword = data.field.keyword;
+            crud.treeTableSearch('categoryTable',keyword);
         });
         //监听重置
         form.on('submit(reset)', function(data) {

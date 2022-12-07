@@ -7,9 +7,7 @@ import io.github.yangyouwang.core.util.converter.impl.ListToTreeImpl;
 import io.github.yangyouwang.crud.app.entity.Category;
 import io.github.yangyouwang.crud.app.mapper.CategoryMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Service;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.Collections;
@@ -29,19 +27,6 @@ public class CategoryService extends ServiceImpl<CategoryMapper, Category> {
 
   @Resource
   private CategoryMapper categoryMapper;
-  /**
-  * 分类表分页列表
-  * @param param 参数
-  * @return 结果
-  */
-  public List<Category> page(Category param) {
-    QueryWrapper<Category> queryWrapper = new QueryWrapper<>();
-    queryWrapper.lambda()
-          // 名称
-          .like(!StringUtils.isEmpty(param.getName()), Category::getName, param.getName())
-            .orderByAsc(Category::getParentId,Category::getOrderNum);
-    return list(queryWrapper);
-  }
 
   /**
   * 分类表详情

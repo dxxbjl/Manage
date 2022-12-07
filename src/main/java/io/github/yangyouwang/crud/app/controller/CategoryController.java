@@ -1,5 +1,6 @@
 package io.github.yangyouwang.crud.app.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.github.yangyouwang.common.domain.TreeSelectNode;
 import io.github.yangyouwang.crud.app.entity.Category;
 import io.github.yangyouwang.crud.app.service.CategoryService;
@@ -49,9 +50,10 @@ public class CategoryController extends CrudController {
   @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer")})
   @GetMapping(value = "/page")
   @ResponseBody
-  public Result page(Category param) {
-    List<Category> data = categoryService.page(param);
-    return Result.success(data);
+  public Result page() {
+    List<Category> list = categoryService.list(new LambdaQueryWrapper<Category>()
+            .orderByAsc(Category::getParentId,Category::getOrderNum));
+    return Result.success(list);
   }
 
    @GetMapping("/editPage/{id}")

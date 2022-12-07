@@ -10,7 +10,6 @@ import io.github.yangyouwang.crud.system.entity.SysMenu;
 import io.github.yangyouwang.crud.system.service.SysMenuService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -73,15 +72,13 @@ public class SysMenuController extends CrudController {
 
     /**
      * 列表请求
-     * @param sysMenu 请求菜单列表对象
      * @return 请求列表
      */
     @PreAuthorize("hasAuthority('menu:list')")
     @GetMapping("/page")
     @ResponseBody
-    public Result page(SysMenu sysMenu) {
+    public Result page() {
         List<SysMenu> list = sysMenuService.list(new LambdaQueryWrapper<SysMenu>()
-                .like(StringUtils.isNotBlank(sysMenu.getMenuName()), SysMenu::getMenuName , sysMenu.getMenuName())
                 .orderByAsc(SysMenu::getParentId,SysMenu::getOrderNum));
         return Result.success(list);
     }

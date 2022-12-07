@@ -10,9 +10,9 @@
       <form class="layui-form layui-card-header layuiadmin-card-header-auto">
         <div class="layui-form-item">
           <div class="layui-inline">
-            <label class="layui-form-label">菜单名称</label>
+            <label class="layui-form-label">名称</label>
             <div class="layui-input-block">
-              <input type="text" name="menuName" placeholder="请输入菜单名称" class="layui-input">
+              <input type="text" name="keyword" placeholder="请输入名称" class="layui-input">
             </div>
           </div>
           <div class="layui-inline">
@@ -57,9 +57,8 @@
               treetable = layui.treetable;
       //监听搜索
       form.on('submit(search)', function(data) {
-          let field = data.field;
-          //执行重载
-          initTable(field);
+        let keyword = data.field.keyword;
+        crud.treeTableSearch('menuTable',keyword);
       });
       //监听重置
       form.on('submit(reset)', function(data) {

@@ -1,5 +1,6 @@
 package io.github.yangyouwang.crud.system.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.domain.TreeSelectNode;
 import io.github.yangyouwang.common.enums.BusinessType;
@@ -50,9 +51,10 @@ public class SysDeptController extends CrudController {
   @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer")})
   @GetMapping(value = "/page")
   @ResponseBody
-  public Result page(SysDept param) {
-    List<SysDept> data = sysDeptService.page(param);
-    return Result.success(data);
+  public Result page() {
+    List<SysDept> list = sysDeptService.list(new LambdaQueryWrapper<SysDept>()
+            .orderByAsc(SysDept::getParentId,SysDept::getOrderNum));
+    return Result.success(list);
   }
 
    @GetMapping("/editPage/{id}")

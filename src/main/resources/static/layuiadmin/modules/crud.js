@@ -1,10 +1,11 @@
 layui.extend({
     xmSelect: 'xm-select'
-}).define(['jquery','cookie','upload','xmSelect'], function(exports){
+}).define(['jquery','cookie','upload','xmSelect','treetable'], function(exports){
     let $ = layui.jquery,
         cookie = layui.cookie,
         upload = layui.upload,
-        xmSelect = layui.xmSelect;
+        xmSelect = layui.xmSelect,
+        treetable = layui.treetable;
     let options = function(name) {
         let list = [];
         if (name && $.cookie(name)) {
@@ -50,6 +51,39 @@ layui.extend({
         }
     }
     let crud = {
+        /**
+         * 树结构搜索高亮展示
+         * @param dom id节点
+         * @param keyword 检索字段
+         */
+        treeTableSearch(dom, keyword) {
+            // 检索字段
+            if (!keyword) {
+                layer.msg("未输入关键字");
+                return;
+            }
+            // 统计检索匹配数量
+            let searchCount = 0;
+            // 获取td
+            let $tds = $('#' + dom).next('.treeTable').find('.layui-table-body tbody tr td');
+            // 查询
+            $tds.each(function () {
+                $(this).css('background-color', 'transparent');
+                if (keyword && $(this).text().indexOf(keyword.trim()) >= 0) {
+                    $(this).css('background-color', 'rgba(250,230,160,0.5)');
+                    //火狐 ie不支持body,谷歌支持的是body，所以为了兼容写body和html   stop()方法停止当前正在运行的动画
+                    $('body,html').stop(true);
+                    $('body,html').animate({scrollTop: $(this).offset().top - 150}, 500);
+                    searchCount++;
+                }
+            });
+            if(searchCount === 0) {
+                layer.msg("无匹配");
+                treetable.foldAll('#' + dom);
+                return;
+            }
+            treetable.expandAll('#' + dom);
+        },
         /**
          * 多选下拉框
          * @param url 地址

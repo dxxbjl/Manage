@@ -10,9 +10,7 @@ import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.crud.system.entity.SysDept;
 import io.github.yangyouwang.crud.system.mapper.SysDeptMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Service;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.Collections;
@@ -31,24 +29,6 @@ public class SysDeptService extends ServiceImpl<SysDeptMapper, SysDept> {
 
   @Resource
   private SysDeptMapper sysDeptMapper;
-  /**
-  * 部门表分页列表
-  * @param param 参数
-  * @return 结果
-  */
-  public List<SysDept> page(SysDept param) {
-    QueryWrapper<SysDept> queryWrapper = new QueryWrapper<>();
-    queryWrapper.lambda()
-      // 部门名称
-          .like(!StringUtils.isEmpty(param.getDeptName()), SysDept::getDeptName, param.getDeptName())
-          // 负责人
-          .eq(!StringUtils.isEmpty(param.getLeader()), SysDept::getLeader, param.getLeader())
-          // 手机号
-          .eq(!StringUtils.isEmpty(param.getPhone()), SysDept::getPhone, param.getPhone())
-          .orderByAsc(SysDept::getParentId,SysDept::getOrderNum)
-    ;
-    return list(queryWrapper);
-  }
 
   /**
   * 部门表详情
