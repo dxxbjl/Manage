@@ -45,6 +45,7 @@ INSERT INTO `sys_dict_type` VALUES (19, 'enabled', '是否启用', 3, 'Y', 'admi
 INSERT INTO `sys_dict_type` VALUES (20, 'actCategory', '流程分类', 4, 'Y', 'admin', '2022-09-01 19:59:56', 'admin', '2022-09-01 20:09:15', 0, '流程分类');
 INSERT INTO `sys_dict_type` VALUES (21, 'noticeType', '公告类型', 5, 'Y', 'admin', '2022-10-04 20:46:07', 'admin', '2022-10-04 22:18:42', 0, '公告类型');
 INSERT INTO `sys_dict_type` VALUES (22, 'executeStatus', '执行状态', 6, 'Y', 'admin', '2022-10-26 18:17:07', '', NULL, 0, '执行状态');
+INSERT INTO `sys_dict_type` VALUES (23, 'sysYesNo', '系统是否', 7, 'Y', 'admin', '2022-12-07 04:01:25', 'admin', '2022-12-08 00:02:29', 0, '');
 
 -- ----------------------------
 -- Table structure for sys_dict_value
@@ -83,6 +84,9 @@ INSERT INTO `sys_dict_value` VALUES (34, 21, '1', '通知', 1, 'Y', 'admin', '20
 INSERT INTO `sys_dict_value` VALUES (35, 21, '2', '公告', 2, 'Y', 'admin', '2022-06-25 21:29:01', 'admin', '2022-06-25 21:29:01', 0, '');
 INSERT INTO `sys_dict_value` VALUES (36, 22, '0', '正常', 1, 'Y', 'admin', '2022-06-25 21:29:01', 'admin', '2022-06-25 21:29:01', 0, '正常');
 INSERT INTO `sys_dict_value` VALUES (37, 22, '1', '失败', 2, 'Y', 'admin', '2022-06-25 21:29:01', 'admin', '2022-06-25 21:29:01', 0, '失败');
+INSERT INTO `sys_dict_value` VALUES (40, 23, 'Y', '是', 1, 'Y', 'admin', '2022-12-08 00:02:02', '', NULL, 0, '');
+INSERT INTO `sys_dict_value` VALUES (41, 23, 'N', '否', 2, 'Y', 'admin', '2022-12-08 00:02:11', '', NULL, 0, '');
+
 -- ----------------------------
 -- Table structure for sys_log
 -- ----------------------------
