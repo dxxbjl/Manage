@@ -28,7 +28,7 @@ layui.extend({
                     //文件流
                     data.append('file', file);
                     $.ajax({
-                        url: ctx + '/common/uploadMinIo',
+                        url: ctx + '/common/uploadImgMinIo',
                         type: 'POST',
                         data: data,
                         dataType: 'json',
@@ -166,8 +166,8 @@ layui.extend({
          */
         uploadImg: function(obj) {
             let uploadInst = upload.render({
-                elem: '#upload-btn'
-                ,url: ctx + '/common/uploadMinIo'
+                elem: '#upload-img-btn'
+                ,url: ctx + '/common/uploadImgMinIo'
                 ,before: function(obj){
                     //预读本地文件示例，不支持ie8
                     obj.preview(function(index, file, result){
@@ -182,7 +182,7 @@ layui.extend({
                 }
                 ,error: function(){
                     //演示失败状态，并实现重传
-                    let uploadText = $('#upload-text');
+                    let uploadText = $('#upload-img-text');
                     uploadText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
                     uploadText.find('.demo-reload').on('click', function(){
                         uploadInst.upload();

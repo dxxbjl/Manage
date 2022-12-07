@@ -67,12 +67,12 @@ public class CommonController extends CrudController {
     }
 
     /**
-     * MinIo上传请求
+     * 上传图片MinIo
      */
-    @PostMapping("/uploadMinIo")
+    @PostMapping("/uploadImgMinIo")
     @ResponseBody
     @CrudLog(title = "上传图片MinIo",businessType = BusinessType.INSERT)
-    public Result uploadMinIoFile(MultipartFile file) throws Exception {
+    public Result uploadImgMinIo(MultipartFile file) throws Exception {
         if(StringUtils.isEmpty(file.getName())){
             return Result.failure("上传文件名称为空",file.getOriginalFilename());
         }
