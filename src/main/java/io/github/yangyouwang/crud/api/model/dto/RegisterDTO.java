@@ -1,6 +1,6 @@
 package io.github.yangyouwang.crud.api.model.dto;
 
-import io.github.yangyouwang.common.annotation.check.Phone;
+import io.github.yangyouwang.common.annotation.validation.Phone;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package io.github.yangyouwang.common.annotation.check;
+package io.github.yangyouwang.common.annotation.validation;
 
 import static java.lang.annotation.ElementType.CONSTRUCTOR;
 import static java.lang.annotation.ElementType.FIELD;
