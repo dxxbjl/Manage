@@ -3,6 +3,7 @@ package io.github.yangyouwang.core.security.filter;
 import com.alibaba.fastjson.JSON;
 import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.domain.Result;
+import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.core.exception.CrudException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -52,14 +53,14 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
     private void validate(HttpServletRequest request) {
         String code = request.getParameter("code");
         if (StringUtils.isBlank(code)) {
-            throw new RuntimeException("验证码不能为空");
+            throw new CrudException(ResultStatus.VALIDATE_CODE_NULL_ERROR);
         }
         Object checkCode = request.getSession(false).getAttribute(ConfigConsts.IMAGE_CODE_SESSION);
         if (Objects.isNull(checkCode)) {
-            throw new RuntimeException("验证码不存在");
+            throw new CrudException(ResultStatus.VALIDATE_CODE_NOT_EXIST_ERROR);
         }
         if (!StringUtils.equalsIgnoreCase(code,checkCode.toString())) {
-            throw new RuntimeException("验证码不匹配");
+            throw new CrudException(ResultStatus.VALIDATE_CODE_NO_MATCH_ERROR);
         }
         request.getSession(false).removeAttribute(ConfigConsts.IMAGE_CODE_SESSION);
     }
