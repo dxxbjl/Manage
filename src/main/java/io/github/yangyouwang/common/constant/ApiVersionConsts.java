@@ -7,7 +7,7 @@ package io.github.yangyouwang.common.constant;
  * @description: api版本号常量类
  * @date 2020/10/25上午9:09
  */
-public interface ApiVersionConstant {
+public interface ApiVersionConsts {
 
     /**
      * app v1

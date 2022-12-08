@@ -1,7 +1,7 @@
 package io.github.yangyouwang.core.config;
 
 import io.github.yangyouwang.common.annotation.ApiVersion;
-import io.github.yangyouwang.common.constant.ApiVersionConstant;
+import io.github.yangyouwang.common.constant.ApiVersionConsts;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -58,11 +58,11 @@ public class SwaggerConfig {
     public Docket appV1(){
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
-                .groupName(ApiVersionConstant.SWAGGER_API_V1)
+                .groupName(ApiVersionConsts.SWAGGER_API_V1)
                 .select()
                 .apis(input -> {
                     ApiVersion apiVersion = input.getHandlerMethod().getMethodAnnotation(ApiVersion.class);
-                    return apiVersion != null && Arrays.asList(apiVersion.group()).contains(ApiVersionConstant.SWAGGER_API_V1);
+                    return apiVersion != null && Arrays.asList(apiVersion.group()).contains(ApiVersionConsts.SWAGGER_API_V1);
                 })
                 .paths(PathSelectors.any())
                 .build()

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.github.yangyouwang.common.annotation.ApiVersion;
 import io.github.yangyouwang.common.annotation.PassToken;
 import io.github.yangyouwang.common.annotation.ResponseResultBody;
-import io.github.yangyouwang.common.constant.ApiVersionConstant;
+import io.github.yangyouwang.common.constant.ApiVersionConsts;
 import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.core.util.StringUtil;
 import io.github.yangyouwang.crud.api.model.vo.AdVO;
@@ -44,7 +44,7 @@ public class ApiAdController {
      * 轮播图列表接口
      * @return 响应
      */
-    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @ApiVersion(value = ApiVersionConsts.API_V1,group = ApiVersionConsts.SWAGGER_API_V1)
     @GetMapping("/get_ad_list")
     @ApiOperation(value="轮播图列表接口", notes="轮播图列表接口")
     @PassToken

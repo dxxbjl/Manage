@@ -1,6 +1,6 @@
 package io.github.yangyouwang.core.util;
 
-import io.github.yangyouwang.common.constant.JwtConstants;
+import io.github.yangyouwang.common.constant.JwtConsts;
 import io.github.yangyouwang.core.util.api.ApiContext;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -93,7 +93,7 @@ public class JwtTokenUtil {
                 .compact();
 
         // 在JWT字符串前添加"Bearer "字符串，用于加入"Authorization"请求头
-        return JwtConstants.JWT_SEPARATOR + compact;
+        return JwtConsts.JWT_SEPARATOR + compact;
     }
 
     /**
@@ -108,7 +108,7 @@ public class JwtTokenUtil {
      * @return JWT字符串
      */
     public static String buildJWT(String sub, String aud, String jti, String iss, Date nbf, Integer duration) {
-        return buildJWT(JWT_ALG, generateKey(JWT_ALG, JwtConstants.SECRET), sub, aud, jti, iss, nbf, duration);
+        return buildJWT(JWT_ALG, generateKey(JWT_ALG, JwtConsts.SECRET), sub, aud, jti, iss, nbf, duration);
     }
 
     /**
@@ -131,7 +131,7 @@ public class JwtTokenUtil {
      * @return JWT字符串
      */
     public static String buildJWT(String sub) {
-        return buildJWT(sub, null, UUID.randomUUID().toString(), null, null, JwtConstants.EXPIRATION);
+        return buildJWT(sub, null, UUID.randomUUID().toString(), null, null, JwtConsts.EXPIRATION);
     }
 
     /**
@@ -144,7 +144,7 @@ public class JwtTokenUtil {
      */
     public static Jws<Claims> parseJWT(Key key, String claimsJws) {
         // 移除 JWT 前的"Bearer "字符串
-        claimsJws = StringUtils.substringAfter(claimsJws, JwtConstants.JWT_SEPARATOR);
+        claimsJws = StringUtils.substringAfter(claimsJws, JwtConsts.JWT_SEPARATOR);
         // 解析 JWT 字符串
         return Jwts.parser().setSigningKey(key).parseClaimsJws(claimsJws);
     }
@@ -158,7 +158,7 @@ public class JwtTokenUtil {
     public static Boolean checkJWT(String claimsJws) {
         boolean flag = false;
         try {
-            SecretKey key = generateKey(JWT_ALG, JwtConstants.SECRET);
+            SecretKey key = generateKey(JWT_ALG, JwtConsts.SECRET);
             // 获取 JWT 的 payload 部分
             flag = (parseJWT(key, claimsJws).getBody() != null);
         } catch (Exception e) {
@@ -196,7 +196,7 @@ public class JwtTokenUtil {
      * @return ture or false
      */
     public static Boolean checkJWT(String claimsJws, String sub) {
-        return checkJWT(generateKey(JWT_ALG, JwtConstants.SECRET), claimsJws, sub);
+        return checkJWT(generateKey(JWT_ALG, JwtConsts.SECRET), claimsJws, sub);
     }
 
     /**
@@ -204,7 +204,7 @@ public class JwtTokenUtil {
      * @param token token
      */
     public static void parseJWT(String token) {
-        SecretKey key = generateKey(JWT_ALG, JwtConstants.SECRET);
+        SecretKey key = generateKey(JWT_ALG, JwtConsts.SECRET);
         Claims claims = parseJWT(key, token).getBody();
         ApiContext.setUserId(Long.parseLong(claims.getSubject()));
     }

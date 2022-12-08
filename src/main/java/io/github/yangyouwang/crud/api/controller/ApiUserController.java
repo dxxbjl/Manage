@@ -3,7 +3,7 @@ package io.github.yangyouwang.crud.api.controller;
 import io.github.yangyouwang.common.annotation.ApiVersion;
 import io.github.yangyouwang.common.annotation.PassToken;
 import io.github.yangyouwang.common.annotation.ResponseResultBody;
-import io.github.yangyouwang.common.constant.ApiVersionConstant;
+import io.github.yangyouwang.common.constant.ApiVersionConsts;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.crud.api.model.dto.*;
 import io.github.yangyouwang.crud.api.model.vo.UserApplyVO;
@@ -41,7 +41,7 @@ public class ApiUserController {
      * 微信小程序授权
      * @return 响应
      */
-    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @ApiVersion(value = ApiVersionConsts.API_V1,group = ApiVersionConsts.SWAGGER_API_V1)
     @PostMapping("/mp/wx/auth")
     @ApiOperation(value="微信小程序授权", notes="微信小程序授权")
     @PassToken
@@ -55,7 +55,7 @@ public class ApiUserController {
      * 用户名密码授权
      * @return 响应
      */
-    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @ApiVersion(value = ApiVersionConsts.API_V1,group = ApiVersionConsts.SWAGGER_API_V1)
     @PostMapping("/password/auth")
     @ApiOperation(value="用户名密码授权", notes="用户名密码授权")
     @PassToken
@@ -69,7 +69,7 @@ public class ApiUserController {
      * 手机号验证码授权
      * @return 响应
      */
-    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @ApiVersion(value = ApiVersionConsts.API_V1,group = ApiVersionConsts.SWAGGER_API_V1)
     @PostMapping("/mobile/auth")
     @ApiOperation(value="手机号验证码授权", notes="手机号验证码授权")
     @PassToken
@@ -84,7 +84,7 @@ public class ApiUserController {
      * 获取QQ授权code
      * @return 响应
      */
-    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @ApiVersion(value = ApiVersionConsts.API_V1,group = ApiVersionConsts.SWAGGER_API_V1)
     @GetMapping("/qq/code")
     @ApiOperation(value="获取QQ授权code", notes="获取QQ授权code")
     @PassToken
@@ -96,7 +96,7 @@ public class ApiUserController {
      * QQ授权回调
      * @return 响应
      */
-    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @ApiVersion(value = ApiVersionConsts.API_V1,group = ApiVersionConsts.SWAGGER_API_V1)
     @PostMapping("/qq/auth/callback")
     @ApiOperation(value="QQ授权回调", notes="QQ授权回调")
     @PassToken
@@ -110,7 +110,7 @@ public class ApiUserController {
      * 微信APP授权
      * @return 响应
      */
-    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @ApiVersion(value = ApiVersionConsts.API_V1,group = ApiVersionConsts.SWAGGER_API_V1)
     @PostMapping("/wx/auth")
     @ApiOperation(value="微信APP授权", notes="微信APP授权")
     @PassToken
@@ -124,7 +124,7 @@ public class ApiUserController {
      * 用户详情
      * @return 响应
      */
-    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @ApiVersion(value = ApiVersionConsts.API_V1,group = ApiVersionConsts.SWAGGER_API_V1)
     @GetMapping("/info")
     @ApiOperation(value="用户详情", notes="用户详情")
     public UserInfoVO userInfo() {
@@ -135,7 +135,7 @@ public class ApiUserController {
      * @param wxUserInfoDTO 加密微信用户信息
      * @return 响应
      */
-    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @ApiVersion(value = ApiVersionConsts.API_V1,group = ApiVersionConsts.SWAGGER_API_V1)
     @PostMapping("/decode/wx")
     @ApiOperation(value="解密微信用户信息", notes="解密微信用户信息")
     public Result decodeWxUser(@Valid @RequestBody WxUserInfoDTO wxUserInfoDTO, BindingResult bindingResult) {
@@ -151,7 +151,7 @@ public class ApiUserController {
      * @param userInfoDTO 用户信息
      * @return 响应
      */
-    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @ApiVersion(value = ApiVersionConsts.API_V1,group = ApiVersionConsts.SWAGGER_API_V1)
     @PostMapping("/modify")
     @ApiOperation(value="更新用户信息", notes="更新用户信息")
     public Result modifyUser(@Valid @RequestBody UserInfoDTO userInfoDTO, BindingResult bindingResult) {
@@ -167,7 +167,7 @@ public class ApiUserController {
      * @param modifyPasswordDTO 修改密码DTO
      * @return 响应
      */
-    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @ApiVersion(value = ApiVersionConsts.API_V1,group = ApiVersionConsts.SWAGGER_API_V1)
     @PostMapping("/modifyPassword")
     @ApiOperation(value="修改密码", notes="修改密码")
     public Result modifyPassword(@Valid @RequestBody ModifyPasswordDTO modifyPasswordDTO, BindingResult bindingResult) {
@@ -183,7 +183,7 @@ public class ApiUserController {
      * @param registerDTO 用户注册DTO
      * @return 响应
      */
-    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @ApiVersion(value = ApiVersionConsts.API_V1,group = ApiVersionConsts.SWAGGER_API_V1)
     @PostMapping("/register")
     @ApiOperation(value="用户注册", notes="用户注册")
     @PassToken
@@ -199,7 +199,7 @@ public class ApiUserController {
      * 获取用户绑定应用列表
      * @return 响应
      */
-    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @ApiVersion(value = ApiVersionConsts.API_V1,group = ApiVersionConsts.SWAGGER_API_V1)
     @GetMapping("/user_apply")
     @ApiOperation(value="获取用户绑定应用列表", notes="获取用户绑定应用列表")
     public List<UserApplyVO> userApply() {

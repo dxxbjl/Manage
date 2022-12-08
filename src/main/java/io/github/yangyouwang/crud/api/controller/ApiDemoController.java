@@ -1,7 +1,7 @@
 package io.github.yangyouwang.crud.api.controller;
 
 import io.github.yangyouwang.common.annotation.*;
-import io.github.yangyouwang.common.constant.ApiVersionConstant;
+import io.github.yangyouwang.common.constant.ApiVersionConsts;
 import io.github.yangyouwang.core.util.api.ApiContext;
 import io.github.yangyouwang.core.util.JwtTokenUtil;
 import io.swagger.annotations.Api;
@@ -27,7 +27,7 @@ import java.util.Map;
 public class ApiDemoController {
 
     @ApiOperation(value="测试hello接口")
-    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @ApiVersion(value = ApiVersionConsts.API_V1,group = ApiVersionConsts.SWAGGER_API_V1)
     @GetMapping("/hello")
     @ApiIdempotent
     public Map<String,Object> hello() {
@@ -38,7 +38,7 @@ public class ApiDemoController {
     }
 
     @ApiOperation(value="获取token")
-    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @ApiVersion(value = ApiVersionConsts.API_V1,group = ApiVersionConsts.SWAGGER_API_V1)
     @GetMapping("/get_token")
     @PassToken
     public Map<String,Object> getToken() {
@@ -49,7 +49,7 @@ public class ApiDemoController {
     }
 
     @ApiOperation(value="抛异常记录日志接口")
-    @ApiVersion(value = ApiVersionConstant.API_V1,group = ApiVersionConstant.SWAGGER_API_V1)
+    @ApiVersion(value = ApiVersionConsts.API_V1,group = ApiVersionConsts.SWAGGER_API_V1)
     @GetMapping("/log")
     @PassToken
     public void log() {

@@ -3,7 +3,7 @@ package io.github.yangyouwang.core.web.interceptor;
 import io.github.yangyouwang.common.annotation.ApiIdempotent;
 import io.github.yangyouwang.common.annotation.PassToken;
 import io.github.yangyouwang.common.constant.CacheConsts;
-import io.github.yangyouwang.common.constant.JwtConstants;
+import io.github.yangyouwang.common.constant.JwtConsts;
 import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.core.util.JwtTokenUtil;
@@ -50,10 +50,10 @@ public class ApiRestInteceptor extends HandlerInterceptorAdapter {
             }
         }
         // 获取 HTTP HEAD 中的 TOKEN
-        String authorization = request.getHeader(JwtConstants.AUTH_HEADER);
+        String authorization = request.getHeader(JwtConsts.AUTH_HEADER);
         // 校验 TOKEN
         if (StringUtils.isNotBlank(authorization) &&
-                authorization.startsWith(JwtConstants.JWT_SEPARATOR)) {
+                authorization.startsWith(JwtConsts.JWT_SEPARATOR)) {
             boolean flag = JwtTokenUtil.checkJWT(authorization);
             if (flag) {
                 JwtTokenUtil.parseJWT(authorization);
@@ -68,7 +68,7 @@ public class ApiRestInteceptor extends HandlerInterceptorAdapter {
         Method method = handlerMethod.getMethod();
         if (method.isAnnotationPresent(ApiIdempotent.class)) {
             //  幂等性校验, 校验通过则放行, 校验失败则抛出异常, 并通过统一异常处理返回友好提示
-            String token = request.getParameter(JwtConstants.TOKEN);
+            String token = request.getParameter(JwtConsts.TOKEN);
             if (Strings.isBlank(token)) {
                 throw new CrudException(ResultStatus.IDEMPOTENT_NOT_EXIST);
             }

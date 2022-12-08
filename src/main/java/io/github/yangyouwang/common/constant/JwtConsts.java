@@ -6,7 +6,7 @@ package io.github.yangyouwang.common.constant;
  * @author: 杨有旺
  * @create: 2019-09-04 14:32
  **/
-public interface JwtConstants {
+public interface JwtConsts {
 
     /**
      * token
