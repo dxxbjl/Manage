@@ -1,5 +1,6 @@
-package io.github.yangyouwang.common.annotation.validation;
+package io.github.yangyouwang.core.web.validation;
 
+import io.github.yangyouwang.common.annotation.validation.IdCard;
 import lombok.extern.slf4j.Slf4j;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
