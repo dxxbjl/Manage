@@ -1,13 +1,16 @@
 package io.github.yangyouwang.core.aliyun;
 
+import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.dm.model.v20151123.SingleSendMailRequest;
 import com.aliyuncs.dm.model.v20151123.SingleSendMailResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.http.MethodType;
+import com.aliyuncs.profile.DefaultProfile;
+import com.aliyuncs.profile.IClientProfile;
 import io.github.yangyouwang.core.config.properties.MailProperties;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,18 +20,36 @@ import org.springframework.stereotype.Component;
  * @description: 简单发送邮件工具类
  * @date 2020/7/6下午11:21
  */
-@Component
 @Slf4j
+@Component
 public class SampleEmail {
+    /**
+     * 产品名称:云通信短信API产品,开发者无需替换
+     */
+    private static final String product = "Dysmsapi";
+    /**
+     * 产品域名,开发者无需替换
+     */
+    private static final String domain = "dysmsapi.aliyuncs.com";
 
-    private final IAcsClient iAcsClient;
-    private final MailProperties mailProperties;
-    @Autowired
-    public SampleEmail(IAcsClient iAcsClient, MailProperties mailProperties) {
-        this.iAcsClient = iAcsClient;
-        this.mailProperties = mailProperties;
+    private MailProperties mailProperties;
+
+    private IAcsClient client;
+
+    public SampleEmail(ObjectProvider<MailProperties> sampleEmailObjectProvider) {
+        this.mailProperties=sampleEmailObjectProvider.getIfAvailable(MailProperties::new);
+        initEmail();
     }
 
+    private void initEmail() {
+        try {
+            IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", mailProperties.getAccessKeyId(), mailProperties.getAccessKeySecret());
+            DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", product, domain);
+            client = new DefaultAcsClient(profile);
+        } catch (Exception e) {
+            throw new RuntimeException("初始化邮箱服务出错了");
+        }
+    }
 
     /**
      * 发送验证码
@@ -42,7 +63,7 @@ public class SampleEmail {
         final SingleSendMailRequest request = buildRequest(toAddress, title, body);
         try {
             //如果调用成功，正常返回httpResponse；如果调用失败则抛出异常，需要在异常中捕获错误异常码；错误异常码请参考对应的API文档;
-            SingleSendMailResponse httpResponse = iAcsClient.getAcsResponse(request);
+            SingleSendMailResponse httpResponse = client.getAcsResponse(request);
             return httpResponse;
         } catch (ClientException e) {
             //捕获错误异常码

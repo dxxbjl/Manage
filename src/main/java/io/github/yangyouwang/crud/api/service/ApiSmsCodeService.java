@@ -12,6 +12,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import javax.annotation.Resource;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -25,6 +26,9 @@ import java.util.Date;
  */
 @Service
 public class ApiSmsCodeService extends ServiceImpl<SmsCodeMapper, SmsCode> {
+
+    @Resource
+    private SampleSms sampleSms;
     /**
      * 校验手机验证码
      * @param mobile 手机号
@@ -60,7 +64,7 @@ public class ApiSmsCodeService extends ServiceImpl<SmsCodeMapper, SmsCode> {
         nowTime.add(Calendar.MINUTE, 5);
         smsCode.setDeadLine(nowTime.getTime());
         // 发送验证码
-        SendSmsResponse sendSmsResponse = SampleSms.sendSms(mobile, "SMS_176520044", "{\"code\":"+code+"}");
+        SendSmsResponse sendSmsResponse = sampleSms.sendSms(mobile, "SMS_176520044", "{\"code\":"+code+"}");
         Assert.isTrue(sendSmsResponse.getCode().equals("OK"),sendSmsResponse.getMessage());
         //请求成功
         smsCode.setUsable(ConfigConsts.USABLE_EFFECTIVE);

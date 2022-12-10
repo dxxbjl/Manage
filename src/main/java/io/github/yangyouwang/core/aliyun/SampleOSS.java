@@ -18,17 +18,25 @@ import java.util.UUID;
  */
 @Component
 public class SampleOSS {
-
-    private static final String FILE_DIR = "/";
     /**
      * oss 工具客户端
      */
     private OSSClient ossClient;
-    private final OSSProperties ossProperties;
+
+    private OSSProperties ossProperties;
 
     public SampleOSS(ObjectProvider<OSSProperties> ossPropertiesObjectProvider) {
         this.ossProperties=ossPropertiesObjectProvider.getIfAvailable(OSSProperties::new);
         initOSS(ossProperties);
+    }
+    /**
+     * 初始化 oss 客户端
+     *
+     */
+    private void initOSS(OSSProperties ossProperties) {
+        ossClient = new OSSClient(ossProperties.getEndPoint(),
+                new DefaultCredentialProvider(ossProperties.getAccessKeyId(), ossProperties.getAccessKeySecret()),
+                new ClientConfiguration());
     }
     /**
      * 上传文件至阿里云 OSS
@@ -39,13 +47,13 @@ public class SampleOSS {
      * @param fileDir 文件保存目录
      * @return oss 中的相对文件路径
      */
-    public  String upload(MultipartFile file, String fileDir) {
+    public String upload(MultipartFile file, String fileDir) {
         StringBuilder fileUrl = new StringBuilder();
         try {
             String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf('.'));
             String fileName = System.currentTimeMillis() + "-" + UUID.randomUUID().toString().substring(0, 18) + suffix;
-            if (!fileDir.endsWith(FILE_DIR)) {
-                fileDir = fileDir.concat(FILE_DIR);
+            if (!fileDir.endsWith("/")) {
+                fileDir = fileDir.concat("/");
             }
             fileUrl.append(fileDir).append(fileName);
 
@@ -54,20 +62,6 @@ public class SampleOSS {
             e.printStackTrace();
             return null;
         }
-        fileUrl = fileUrl.insert(0, ossProperties.getUrl());
-        return fileUrl.toString();
-    }
-
-    /**
-     * 初始化 oss 客户端
-     *
-     * @param ossProperties
-     * @return
-     */
-    private void initOSS(OSSProperties ossProperties) {
-        ossClient = new OSSClient(ossProperties.getEndPoint(),
-                new DefaultCredentialProvider(ossProperties.getAccessKeyId(), ossProperties.getAccessKeySecret()),
-                new ClientConfiguration());
-
+        return fileUrl.insert(0, ossProperties.getUrl()).toString();
     }
 }
