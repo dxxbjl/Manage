@@ -31,10 +31,11 @@
 		<joda.version>2.9.9</joda.version>
 		<commons.version>2.5</commons.version>
 		<commons-codec.version>1.10</commons-codec.version>
-		<aliyun-oss.version>3.4.2</aliyun-oss.version>
-		<aliyun-java-sdk-core.version>3.0.0</aliyun-java-sdk-core.version>
+		<aliyun-oss.version>3.10.2</aliyun-oss.version>
+		<aliyun-java-sdk-core.version>4.5.1</aliyun-java-sdk-core.version>
 		<aliyun-java-sdk-dm.version>3.1.0</aliyun-java-sdk-dm.version>
 		<aliyun-java-sdk-dysmsapi.version>1.0.0</aliyun-java-sdk-dysmsapi.version>
+		<aliyun-java-sdk-vod.version>2.16.11</aliyun-java-sdk-vod.version>
 		<hutool.version>4.1.14</hutool.version>
 		<easyexcel.version>2.1.6</easyexcel.version>
 		<activiti.version>5.22.0</activiti.version>
@@ -252,6 +253,19 @@
 			<groupId>com.aliyun</groupId>
 			<artifactId>aliyun-java-sdk-dysmsapi</artifactId>
 			<version>${aliyun-java-sdk-dysmsapi.version}</version>
+		</dependency>
+		<!--阿里云视频-->
+		<dependency>
+			<groupId>com.aliyun</groupId>
+			<artifactId>aliyun-java-sdk-vod</artifactId>
+			<version>${aliyun-java-sdk-vod.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.aliyun.vod</groupId>
+			<artifactId>upload</artifactId>
+			<version>1.4.15</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/lib/aliyun-java-vod-upload-1.4.15.jar</systemPath>
 		</dependency>
 		<!-- hutool -->
 		<dependency>

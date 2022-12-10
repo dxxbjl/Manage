@@ -172,8 +172,15 @@ layui.extend({
                 ,before: function(obj){
                     //预读本地文件示例，不支持ie8
                     obj.preview(function(index, file, result){
-                        $('#upload-video').attr('src', result); //图片链接（base64）
+                        $('#upload-video').attr('src', result);
                     });
+                }
+                ,choose: function(obj) {
+                    let files = obj.pushFile();
+                    console.log(files)
+                }
+                ,progress: function(e , percent) {
+                    console.log(e);
                 }
                 ,done: function(res){
                     layer.msg(res.message);
