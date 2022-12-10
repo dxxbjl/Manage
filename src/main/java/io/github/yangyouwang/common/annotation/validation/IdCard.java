@@ -1,6 +1,6 @@
 package io.github.yangyouwang.common.annotation.validation;
 
-import io.github.yangyouwang.core.web.validation.IdCardValidator;
+import io.github.yangyouwang.core.validation.IdCardValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

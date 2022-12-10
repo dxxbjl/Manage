@@ -1,4 +1,4 @@
-package io.github.yangyouwang.core.util;
+package io.github.yangyouwang.core.util.excel;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.write.metadata.style.WriteCellStyle;

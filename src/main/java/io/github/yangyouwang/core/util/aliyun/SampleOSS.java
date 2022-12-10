@@ -1,4 +1,4 @@
-package io.github.yangyouwang.core.aliyun;
+package io.github.yangyouwang.core.util.aliyun;
 
 import com.aliyun.oss.ClientConfiguration;
 import com.aliyun.oss.OSSClient;

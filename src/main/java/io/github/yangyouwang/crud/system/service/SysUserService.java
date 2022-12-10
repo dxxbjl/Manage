@@ -6,7 +6,7 @@ import com.alibaba.excel.support.ExcelTypeEnum;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.constant.ConfigConsts;
-import io.github.yangyouwang.core.util.EasyExcelUtil;
+import io.github.yangyouwang.core.util.excel.EasyExcelUtil;
 import io.github.yangyouwang.core.util.StringUtil;
 import io.github.yangyouwang.crud.system.entity.*;
 import io.github.yangyouwang.crud.system.mapper.SysMenuMapper;

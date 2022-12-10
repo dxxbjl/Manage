@@ -1,4 +1,4 @@
-package io.github.yangyouwang.core.util.api;
+package io.github.yangyouwang.common.api;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

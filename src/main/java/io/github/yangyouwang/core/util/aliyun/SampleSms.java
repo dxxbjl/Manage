@@ -1,4 +1,4 @@
-package io.github.yangyouwang.core.aliyun;
+package io.github.yangyouwang.core.util.aliyun;
 
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;

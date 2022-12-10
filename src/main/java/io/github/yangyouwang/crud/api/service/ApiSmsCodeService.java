@@ -4,7 +4,7 @@ import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.constant.ConfigConsts;
-import io.github.yangyouwang.core.aliyun.SampleSms;
+import io.github.yangyouwang.core.util.aliyun.SampleSms;
 import io.github.yangyouwang.core.util.DateTimeUtil;
 import io.github.yangyouwang.crud.app.entity.SmsCode;
 import io.github.yangyouwang.crud.app.mapper.SmsCodeMapper;
