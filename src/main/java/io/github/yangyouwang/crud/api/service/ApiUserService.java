@@ -8,7 +8,7 @@ import io.github.yangyouwang.common.constant.ApiConsts;
 import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.enums.AppOauthType;
 import io.github.yangyouwang.core.config.properties.QQProperties;
-import io.github.yangyouwang.common.api.ApiContext;
+import io.github.yangyouwang.common.domain.ApiContext;
 import io.github.yangyouwang.core.config.properties.WeChatProperties;
 import io.github.yangyouwang.core.util.JwtTokenUtil;
 import io.github.yangyouwang.core.util.RestTemplateUtil;

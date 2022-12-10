@@ -1,5 +1,5 @@
 package io.github.yangyouwang.core.util;
-import io.github.yangyouwang.common.api.ApiContext;
+import io.github.yangyouwang.common.domain.ApiContext;
 import io.github.yangyouwang.crud.app.mapper.UserMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
