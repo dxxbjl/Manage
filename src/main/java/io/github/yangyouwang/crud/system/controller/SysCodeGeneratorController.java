@@ -231,7 +231,7 @@ public class SysCodeGeneratorController extends CrudController {
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输入文件名称
                 return path + "/src/main/resources/templates/" + pc.getModuleName()
-                        + StringPool.SLASH + tableInfo.getEntityPath() + StringPool.SLASH + "start.html";
+                        + StringPool.SLASH + tableInfo.getEntityPath() + StringPool.SLASH + "add.html";
             }
         });
         focList.add(new FileOutConfig("templates/ftl/html/edit.html.ftl") {
