@@ -83,11 +83,14 @@
             url: ctx + '/sysCodeGenerator/tableSelect',
             dataType: 'json',
             type: 'get',
-            success: function (data) {
-                $.each(data, function (index, value) {
-                    $('#tables').append(new Option(value,value));
-                });
-                layui.form.render("select");
+            success: function (result) {
+                layer.msg(result.message);
+                if (result.code === 200) {
+                    $.each(result, function (index, value) {
+                        $('#tables').append(new Option(value,value));
+                    });
+                    layui.form.render("select");
+                }
             }
         })
         form.on('select(tables)', function(data) {
