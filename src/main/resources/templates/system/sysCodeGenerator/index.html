@@ -84,14 +84,14 @@
             dataType: 'json',
             type: 'get',
             success: function (result) {
-                if (result.code === 200) {
-                    $.each(result, function (index, value) {
-                        $('#tables').append(new Option(value,value));
-                    });
-                    layui.form.render("select");
-                } else {
+                if (result.code === 500) {
                     layer.msg(result.message);
+                    return;
                 }
+                $.each(result, function (index, value) {
+                    $('#tables').append(new Option(value,value));
+                });
+                layui.form.render("select");
             }
         })
         form.on('select(tables)', function(data) {
