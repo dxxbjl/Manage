@@ -295,7 +295,7 @@ layui.extend({
          */
         showVideo: function (video) {
             if (video) {
-                return `<button data-video="${video}" class="layui-btn" onclick="fun.playVideo(this)">播放</button>`
+                return `<button data-video="${video}" class="layui-btn layui-btn-xs" onclick="fun.playVideo(this)">播放</button>`
             }
             return '暂无';
         },
