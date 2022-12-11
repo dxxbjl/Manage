@@ -11,6 +11,7 @@
     <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="menu_id" jdbcType="VARCHAR" property="menuIds" />
+    <result column="user_id" jdbcType="VARCHAR" property="userIds" />
   </resultMap>
   <sql id="Base_Column_List">
     id, role_name, role_key, remark, create_by, create_time, update_by, update_time
@@ -18,10 +19,12 @@
     <select id="findRoleById" resultMap="BaseResultMap">
     select
         r.id, r.role_name, r.role_key, r.remark, r.create_by, r.create_time, r.update_by, r.update_time,
-        group_concat(m.id) as menu_id, r.create_by, r.create_time
+        group_concat(m.id) as menu_id,group_concat(u.id) as user_id, r.create_by, r.create_time
     from sys_role r
     left join sys_role_menu rm on r.id = rm.role_id
     left join sys_menu m on rm.menu_id = m.id
+    left join sys_user_role ur on r.id = ur.role_id
+    left join sys_user u on ur.user_id = u.id
     where r.deleted = 0 and r.id = #{id}
     group by r.id
     </select>

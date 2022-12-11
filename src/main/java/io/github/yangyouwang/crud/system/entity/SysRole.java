@@ -30,4 +30,9 @@ public class SysRole extends BaseEntity {
      */
     @TableField(exist = false)
     private String menuIds;
+    /**
+     * 用户ID数组
+     */
+    @TableField(exist = false)
+    private String userIds;
 }

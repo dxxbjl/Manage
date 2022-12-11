@@ -5,6 +5,7 @@ import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.base.CrudController;
 import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.TableDataInfo;
+import io.github.yangyouwang.common.domain.XmSelectNode;
 import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.core.util.SecurityUtils;
 import io.github.yangyouwang.crud.system.entity.SysUser;
@@ -232,5 +233,16 @@ public class SysUserController extends CrudController {
     @RequestMapping("/exportExcel")
     public void export(HttpServletRequest request, HttpServletResponse response) {
         sysUserService.exportSysUser(response);
+    }
+
+    /**
+     * 根据用户ids查询选中用户树结构
+     * @param ids 用户id列表
+     * @return 用户树结构
+     */
+    @GetMapping("/xmSelect")
+    @ResponseBody
+    public List<XmSelectNode> xmSelect(@RequestParam(value = "ids",required = false) String ids) {
+        return sysUserService.xmSelect(ids);
     }
 }

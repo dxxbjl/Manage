@@ -9,16 +9,24 @@
   <div class="layui-row">
     <div class="layui-form layui-form-pane" lay-filter="sys-role-form" id="sys-role-form">
       <div class="layui-form-item">
-        <label class="layui-form-label">角色名称</label>
-        <div class="layui-input-block">
-          <input type="text" name="roleName" lay-verify="required" placeholder="请输入角色名称" class="layui-input">
+        <div class="layui-inline">
+          <label class="layui-form-label">角色名称</label>
+          <div class="layui-input-inline">
+            <input type="text" name="roleName" lay-verify="required" placeholder="请输入角色名称" class="layui-input">
+          </div>
         </div>
-      </div>
-      <div class="layui-form-item">
         <div class="layui-inline">
           <label class="layui-form-label">角色别名</label>
           <div class="layui-input-inline">
             <input type="text" name="roleKey" lay-verify="required" placeholder="请输入角色别名" class="layui-input">
+          </div>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label">用户</label>
+          <div class="layui-input-inline">
+            <div id="userIds" class="xm-select-demo"></div>
           </div>
         </div>
         <div class="layui-inline">
@@ -85,6 +93,8 @@
     });
     // 菜单多选
     crud.initXmSelect("/sysMenu/xmSelect","menuIds");
+    // 用户多选
+    crud.initXmSelect("/sysUser/xmSelect","userIds");
   });
 </script>
 </body>

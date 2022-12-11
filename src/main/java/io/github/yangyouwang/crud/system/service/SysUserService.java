@@ -6,6 +6,7 @@ import com.alibaba.excel.support.ExcelTypeEnum;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.constant.ConfigConsts;
+import io.github.yangyouwang.common.domain.XmSelectNode;
 import io.github.yangyouwang.core.util.excel.EasyExcelUtil;
 import io.github.yangyouwang.core.util.StringUtil;
 import io.github.yangyouwang.crud.system.entity.*;
@@ -33,11 +34,14 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+import org.thymeleaf.util.ArrayUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.util.Optional.ofNullable;
 
 
 /**
@@ -254,5 +258,25 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
         sysUser.setPassWord(password);
         this.updateById(sysUser);
         return String.format("密码重置为：%s",ConfigConsts.DEFAULT_PASSWORD);
+    }
+    /**
+     * 根据用户ids查询选中用户列表
+     * @param ids 用户ids
+     * @return 用户列表
+     */
+    public List<XmSelectNode> xmSelect(String ids) {
+        List<SysUser> sysUsers = this.list(new LambdaQueryWrapper<SysUser>()
+                .eq(SysUser::getEnabled,ConfigConsts.ENABLED_YES));
+        if (sysUsers.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return sysUsers.stream().map(sysUser -> {
+            XmSelectNode treeNode = new XmSelectNode();
+            treeNode.setName(sysUser.getNickName());
+            treeNode.setValue(sysUser.getId());
+            treeNode.setId(sysUser.getId());
+            ofNullable(ids).ifPresent(optIds -> treeNode.setSelected(ArrayUtils.contains(StringUtil.getId(optIds),sysUser.getId())));
+            return treeNode;
+        }).collect(Collectors.toList());
     }
 }

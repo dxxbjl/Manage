@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.yangyouwang.common.domain.XmSelectNode;
 import io.github.yangyouwang.core.util.StringUtil;
+import io.github.yangyouwang.crud.system.entity.SysUserRole;
 import io.github.yangyouwang.crud.system.mapper.SysRoleMapper;
 import io.github.yangyouwang.crud.system.mapper.SysRoleMenuMapper;
 import io.github.yangyouwang.crud.system.entity.SysRole;
 import io.github.yangyouwang.crud.system.entity.SysRoleMenu;
+import io.github.yangyouwang.crud.system.mapper.SysUserRoleMapper;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -40,6 +42,9 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
     @Resource
     private SysRoleMenuMapper sysRoleMenuMapper;
 
+    @Resource
+    private SysUserRoleMapper sysUserRoleMapper;
+
     /**
      * 跳转编辑
      * @param id 角色id
@@ -64,6 +69,8 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
             // 关联菜单
             SysRoleService proxy = (SysRoleService) AopContext.currentProxy();
             proxy.insertRoleMenuBatch(sysRole.getId(), StringUtil.getId(sysRole.getMenuIds()));
+            // 关联用户
+            proxy.insertRoleUserBatch(sysRole.getId(), StringUtil.getId(sysRole.getUserIds()));
         }
     }
 
@@ -75,10 +82,13 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
     public void edit(SysRole sysRole) {
         boolean flag = this.updateById(sysRole);
         if (flag) {
+            SysRoleService proxy = (SysRoleService) AopContext.currentProxy();
             // 删除角色菜单
             sysRoleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>().eq(SysRoleMenu::getRoleId, sysRole.getId()));
-            SysRoleService proxy = (SysRoleService) AopContext.currentProxy();
             proxy.insertRoleMenuBatch(sysRole.getId(), StringUtil.getId(sysRole.getMenuIds()));
+            // 删除角色用户
+            sysUserRoleMapper.delete(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getRoleId, sysRole.getId()));
+            proxy.insertRoleUserBatch(sysRole.getId(), StringUtil.getId(sysRole.getUserIds()));
         }
     }
 
@@ -97,6 +107,24 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
                 return roleMenu;
             }).collect(Collectors.toList());
             sysRoleMenuMapper.insertBatchSomeColumn(roleMenus);
+        }
+    }
+
+    /**
+     * 批量新增角色关联用户
+     * @param roleId 角色id
+     * @param userIds 用户id
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
+    public void insertRoleUserBatch(Long roleId, Long[] userIds) {
+        if (userIds.length > 0) {
+            List<SysUserRole> userRoles = Arrays.stream(userIds).map(s -> {
+                SysUserRole userRole = new SysUserRole();
+                userRole.setRoleId(roleId);
+                userRole.setUserId(s);
+                return userRole;
+            }).collect(Collectors.toList());
+            sysUserRoleMapper.insertBatchSomeColumn(userRoles);
         }
     }
 
