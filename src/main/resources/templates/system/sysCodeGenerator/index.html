@@ -84,12 +84,13 @@
             dataType: 'json',
             type: 'get',
             success: function (result) {
-                layer.msg(result.message);
                 if (result.code === 200) {
                     $.each(result, function (index, value) {
                         $('#tables').append(new Option(value,value));
                     });
                     layui.form.render("select");
+                } else {
+                    layer.msg(result.message);
                 }
             }
         })
