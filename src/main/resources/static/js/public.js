@@ -71,6 +71,18 @@ let fun = {
         return obj.map(x => {return x.id});
     },
     /**
+     * 播放视频
+     */
+    playVideo: function(that) {
+        layer.open({
+            type: 1,
+            title: '播放视频',
+            content: `<video width="100%" height="100%"  controls="controls" autobuffer="autobuffer" autoplay="autoplay" loop="loop">
+                            <source src="${$(that).data("video")}" type="video/mp4"/>
+                        </video>`,
+        });
+    },
+    /**
      * 预览图片
      * @param that 图片对象
      */

@@ -291,6 +291,15 @@ layui.extend({
             return window.editor.getData();
         },
         /**
+         * 播放视频
+         */
+        showVideo: function (video) {
+            if (video) {
+                return `<button data-video="${video}" class="layui-btn" onclick="fun.playVideo(this)">播放</button>`
+            }
+            return '暂无';
+        },
+        /**
          * 显示图片
          */
         showImg: function (img) {
