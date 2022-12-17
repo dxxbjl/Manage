@@ -6,58 +6,63 @@
 </head>
 <body>
 <div class="layui-fluid">
-  <div class="layui-row">
-    <div class="layui-form layui-form-pane" lay-filter="sys-role-form" id="sys-role-form">
-      <div class="layui-form-item">
-        <div class="layui-inline">
-          <label class="layui-form-label">角色名称</label>
-          <div class="layui-input-inline">
-            <input type="text" name="roleName" lay-verify="required" placeholder="请输入角色名称" class="layui-input">
+  <div class="layui-card">
+    <div class="layui-card-header">基本信息</div>
+    <div class="layui-card-body">
+      <div class="layui-row">
+        <div class="layui-form layui-form-pane" lay-filter="sys-role-form" id="sys-role-form">
+          <div class="layui-form-item">
+            <div class="layui-inline">
+              <label class="layui-form-label">角色名称</label>
+              <div class="layui-input-inline">
+                <input type="text" name="roleName" lay-verify="required" placeholder="请输入角色名称" class="layui-input">
+              </div>
+            </div>
+            <div class="layui-inline">
+              <label class="layui-form-label">角色别名</label>
+              <div class="layui-input-inline">
+                <input type="text" name="roleKey" lay-verify="required" placeholder="请输入角色别名" class="layui-input">
+              </div>
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <div class="layui-inline">
+              <label class="layui-form-label">用户</label>
+              <div class="layui-input-inline">
+                <div id="userIds" class="xm-select-demo"></div>
+              </div>
+            </div>
+            <div class="layui-inline">
+              <label class="layui-form-label">菜单</label>
+              <div class="layui-input-inline">
+                <div id="menuIds" class="xm-select-demo"></div>
+              </div>
+            </div>
+          </div>
+          <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+              <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <div class="layui-inline">
+              <label class="layui-form-label">创建者</label>
+              <div class="layui-input-inline">
+                <input type="text" class="layui-input layui-disabled" name="createBy" disabled="disabled"/>
+              </div>
+            </div>
+            <div class="layui-inline">
+              <label class="layui-form-label">创建时间</label>
+              <div class="layui-input-inline">
+                <input type="text" class="layui-input layui-disabled" name="createTime" disabled="disabled"/>
+              </div>
+            </div>
+          </div>
+          <div class="layui-form-item layui-hide">
+            <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
           </div>
         </div>
-        <div class="layui-inline">
-          <label class="layui-form-label">角色别名</label>
-          <div class="layui-input-inline">
-            <input type="text" name="roleKey" lay-verify="required" placeholder="请输入角色别名" class="layui-input">
-          </div>
-        </div>
-      </div>
-      <div class="layui-form-item">
-        <div class="layui-inline">
-          <label class="layui-form-label">用户</label>
-          <div class="layui-input-inline">
-            <div id="userIds" class="xm-select-demo"></div>
-          </div>
-        </div>
-        <div class="layui-inline">
-          <label class="layui-form-label">菜单</label>
-          <div class="layui-input-inline">
-            <div id="menuIds" class="xm-select-demo"></div>
-          </div>
-        </div>
-      </div>
-      <div class="layui-form-item layui-form-text">
-        <label class="layui-form-label">备注</label>
-        <div class="layui-input-block">
-          <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
-        </div>
-      </div>
-      <div class="layui-form-item">
-        <div class="layui-inline">
-          <label class="layui-form-label">创建者</label>
-          <div class="layui-input-inline">
-            <input type="text" class="layui-input layui-disabled" name="createBy" disabled="disabled"/>
-          </div>
-        </div>
-        <div class="layui-inline">
-          <label class="layui-form-label">创建时间</label>
-          <div class="layui-input-inline">
-            <input type="text" class="layui-input layui-disabled" name="createTime" disabled="disabled"/>
-          </div>
-        </div>
-      </div>
-      <div class="layui-form-item layui-hide">
-        <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
       </div>
     </div>
   </div>

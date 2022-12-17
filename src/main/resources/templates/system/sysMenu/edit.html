@@ -6,93 +6,98 @@
 </head>
 <body>
 <div class="layui-fluid">
-  <div class="layui-row">
-    <div class="layui-form layui-form-pane" lay-filter="sys-menu-form" id="sys-menu-form">
-      <input type="hidden" name="id" id="id">
-      <div class="layui-form-item">
-        <div class="layui-inline">
-          <label class="layui-form-label">菜单名称</label>
-          <div class="layui-input-inline">
-            <input type="text" name="menuName" lay-verify="required" placeholder="请输入菜单名称" class="layui-input">
-          </div>
-        </div>
-        <div class="layui-inline">
-          <label class="layui-form-label">上级菜单</label>
-          <div class="layui-input-inline">
-            <div class="layui-row">
-              <div class="layui-col-md9">
-                <input name="parentId" type="hidden" value="0">
-                <input name="parentName" type="text" class="layui-input layui-disabled" placeholder="顶级" disabled>
+  <div class="layui-card">
+    <div class="layui-card-header">基本信息</div>
+    <div class="layui-card-body">
+      <div class="layui-row">
+        <div class="layui-form layui-form-pane" lay-filter="sys-menu-form" id="sys-menu-form">
+          <input type="hidden" name="id" id="id">
+          <div class="layui-form-item">
+            <div class="layui-inline">
+              <label class="layui-form-label">菜单名称</label>
+              <div class="layui-input-inline">
+                <input type="text" name="menuName" lay-verify="required" placeholder="请输入菜单名称" class="layui-input">
               </div>
-              <div class="layui-col-md3">
-                <button type="button" class="layui-btn layui-btn-primary menuWizard">选择</button>
+            </div>
+            <div class="layui-inline">
+              <label class="layui-form-label">上级菜单</label>
+              <div class="layui-input-inline">
+                <div class="layui-row">
+                  <div class="layui-col-md9">
+                    <input name="parentId" type="hidden" value="0">
+                    <input name="parentName" type="text" class="layui-input layui-disabled" placeholder="顶级" disabled>
+                  </div>
+                  <div class="layui-col-md3">
+                    <button type="button" class="layui-btn layui-btn-primary menuWizard">选择</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="layui-form-item">
-        <div class="layui-inline">
-          <label class="layui-form-label">请求地址</label>
-          <div class="layui-input-inline">
-            <input type="text" name="url" lay-verify="required" placeholder="请输入请求地址" class="layui-input">
+          <div class="layui-form-item">
+            <div class="layui-inline">
+              <label class="layui-form-label">请求地址</label>
+              <div class="layui-input-inline">
+                <input type="text" name="url" lay-verify="required" placeholder="请输入请求地址" class="layui-input">
+              </div>
+            </div>
+            <div class="layui-inline">
+              <label class="layui-form-label">菜单类型</label>
+              <div class="layui-input-inline">
+                <select lay-filter="menuType" name="menuType" id="menuType"></select>
+              </div>
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <div class="layui-inline">
+              <label class="layui-form-label">权限标识</label>
+              <div class="layui-input-inline">
+                <input type="text" name="perms" placeholder="请输入权限标识" class="layui-input">
+              </div>
+            </div>
+            <div class="layui-inline">
+              <label class="layui-form-label">选择图标</label>
+              <div class="layui-input-inline">
+                <input type="text" id="iconPicker" name="icon" lay-filter="iconPicker" class="layui-input">
+              </div>
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <div class="layui-inline">
+              <label class="layui-form-label">显示顺序</label>
+              <div class="layui-input-inline">
+                <input type="number" name="orderNum" lay-verify="required" placeholder="请输入显示顺序" class="layui-input">
+              </div>
+            </div>
+            <div class="layui-inline">
+              <label class="layui-form-label">菜单状态</label>
+              <div class="layui-input-inline" id="visible"></div>
+            </div>
+          </div>
+          <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+              <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <div class="layui-inline">
+              <label class="layui-form-label">创建者</label>
+              <div class="layui-input-inline">
+                <input type="text" class="layui-input layui-disabled" name="createBy" disabled="disabled"/>
+              </div>
+            </div>
+            <div class="layui-inline">
+              <label class="layui-form-label">创建时间</label>
+              <div class="layui-input-inline">
+                <input type="text" class="layui-input layui-disabled" name="createTime" disabled="disabled"/>
+              </div>
+            </div>
+          </div>
+          <div class="layui-form-item layui-hide">
+            <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
           </div>
         </div>
-        <div class="layui-inline">
-          <label class="layui-form-label">菜单类型</label>
-          <div class="layui-input-inline">
-            <select lay-filter="menuType" name="menuType" id="menuType"></select>
-          </div>
-        </div>
-      </div>
-      <div class="layui-form-item">
-        <div class="layui-inline">
-          <label class="layui-form-label">权限标识</label>
-          <div class="layui-input-inline">
-            <input type="text" name="perms" placeholder="请输入权限标识" class="layui-input">
-          </div>
-        </div>
-        <div class="layui-inline">
-          <label class="layui-form-label">选择图标</label>
-          <div class="layui-input-inline">
-            <input type="text" id="iconPicker" name="icon" lay-filter="iconPicker" class="layui-input">
-          </div>
-        </div>
-      </div>
-      <div class="layui-form-item">
-        <div class="layui-inline">
-          <label class="layui-form-label">显示顺序</label>
-          <div class="layui-input-inline">
-            <input type="number" name="orderNum" lay-verify="required" placeholder="请输入显示顺序" class="layui-input">
-          </div>
-        </div>
-        <div class="layui-inline">
-          <label class="layui-form-label">菜单状态</label>
-          <div class="layui-input-inline" id="visible"></div>
-        </div>
-      </div>
-      <div class="layui-form-item layui-form-text">
-        <label class="layui-form-label">备注</label>
-        <div class="layui-input-block">
-          <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
-        </div>
-      </div>
-      <div class="layui-form-item">
-        <div class="layui-inline">
-          <label class="layui-form-label">创建者</label>
-          <div class="layui-input-inline">
-            <input type="text" class="layui-input layui-disabled" name="createBy" disabled="disabled"/>
-          </div>
-        </div>
-        <div class="layui-inline">
-          <label class="layui-form-label">创建时间</label>
-          <div class="layui-input-inline">
-            <input type="text" class="layui-input layui-disabled" name="createTime" disabled="disabled"/>
-          </div>
-        </div>
-      </div>
-      <div class="layui-form-item layui-hide">
-        <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
       </div>
     </div>
   </div>

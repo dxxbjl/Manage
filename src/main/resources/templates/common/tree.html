@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>选择</title>
+    <title>选择节点</title>
     <div th:replace="common/link::header"></div>
 </head>
 <body>
 <div class="layui-fluid">
-    <div class="layui-row">
-        <div id="deptTree" class="ztree"></div>
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div id="deptTree" class="ztree"></div>
+        </div>
     </div>
 </div>
 <div th:replace="common/script::footer"></div>

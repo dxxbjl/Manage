@@ -6,73 +6,78 @@
 </head>
 <body>
 <div class="layui-fluid">
-  <div class="layui-row">
-    <div class="layui-form layui-form-pane" lay-filter="categoryForm" id="categoryForm">
-        <input type="hidden" name="id" id="id">
-        <div class="layui-form-item">
-            <label class="layui-form-label">图标</label>
-            <div class="layui-input-inline">
-                <div class="layui-upload">
-                    <input type="hidden" id="icon" name="icon">
-                    <div class="layui-upload-list">
-                        <img class="layui-upload-img" onclick="fun.preview(this)" id="upload-img">
-                        <p id="upload-img-text"></p>
+    <div class="layui-card">
+        <div class="layui-card-header">基本信息</div>
+        <div class="layui-card-body">
+            <div class="layui-row">
+                <div class="layui-form layui-form-pane" lay-filter="categoryForm" id="categoryForm">
+                    <input type="hidden" name="id" id="id">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">图标</label>
+                        <div class="layui-input-inline">
+                            <div class="layui-upload">
+                                <input type="hidden" id="icon" name="icon">
+                                <div class="layui-upload-list">
+                                    <img class="layui-upload-img" onclick="fun.preview(this)" id="upload-img">
+                                    <p id="upload-img-text"></p>
+                                </div>
+                                <button type="button" class="layui-btn layui-btn-radius layui-btn-primary" id="upload-img-btn">上传</button>
+                            </div>
+                        </div>
                     </div>
-                    <button type="button" class="layui-btn layui-btn-radius layui-btn-primary" id="upload-img-btn">上传</button>
-                </div>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">名称</label>
-            <div class="layui-input-block">
-                <input type="text" lay-verify="required"  class="layui-input" name="name" placeholder="请输入名称"/>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                <label class="layui-form-label">上级分类</label>
-                <div class="layui-input-inline">
-                    <div class="layui-col-md9">
-                        <input name="parentId" type="hidden" value="0">
-                        <input name="parentName" type="text" class="layui-input layui-disabled" placeholder="顶级" disabled>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">名称</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required"  class="layui-input" name="name" placeholder="请输入名称"/>
+                        </div>
                     </div>
-                    <div class="layui-col-md3">
-                        <button type="button" class="layui-btn layui-btn-primary categoryWizard">选择</button>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">上级分类</label>
+                            <div class="layui-input-inline">
+                                <div class="layui-col-md9">
+                                    <input name="parentId" type="hidden" value="0">
+                                    <input name="parentName" type="text" class="layui-input layui-disabled" placeholder="顶级" disabled>
+                                </div>
+                                <div class="layui-col-md3">
+                                    <button type="button" class="layui-btn layui-btn-primary categoryWizard">选择</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">顺序</label>
+                            <div class="layui-input-inline">
+                                <input type="number" lay-verify="required"  class="layui-input" name="orderNum" placeholder="请输入顺序"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">备注</label>
+                        <div class="layui-input-block">
+                            <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">创建者</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input layui-disabled" name="createBy" disabled="disabled"/>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">创建时间</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input layui-disabled" name="createTime" disabled="disabled"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-hide">
+                        <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
                     </div>
                 </div>
             </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">顺序</label>
-                <div class="layui-input-inline">
-                    <input type="number" lay-verify="required"  class="layui-input" name="orderNum" placeholder="请输入顺序"/>
-                </div>
-            </div>
         </div>
-        <div class="layui-form-item layui-form-text">
-          <label class="layui-form-label">备注</label>
-          <div class="layui-input-block">
-            <textarea class="layui-textarea" name="remark" placeholder="请输入备注"></textarea>
-          </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                <label class="layui-form-label">创建者</label>
-                <div class="layui-input-inline">
-                    <input type="text" class="layui-input layui-disabled" name="createBy" disabled="disabled"/>
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">创建时间</label>
-                <div class="layui-input-inline">
-                    <input type="text" class="layui-input layui-disabled" name="createTime" disabled="disabled"/>
-                </div>
-            </div>
-        </div>
-      <div class="layui-form-item layui-hide">
-        <input type="button" lay-submit lay-filter="save-submit" id="save-submit" value="确认">
-      </div>
     </div>
-  </div>
 </div>
 <div th:replace="common/script::footer"></div>
 <script th:inline="javascript">
