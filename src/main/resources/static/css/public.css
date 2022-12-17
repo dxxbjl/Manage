@@ -54,7 +54,10 @@
 .ck-editor__editable {
     min-height: 300px !important;
 }
-.layui-upload-img {
+.layui-upload {
+    text-align: center;
+}
+.layui-upload .layui-upload-img {
     width: 100px;
     height: 100px;
 }
