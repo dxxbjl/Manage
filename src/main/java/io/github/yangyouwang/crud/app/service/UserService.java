@@ -26,6 +26,9 @@ import java.util.List;
 public class UserService extends ServiceImpl<UserMapper, User> {
 
   @Resource
+  private UserMapper userMapper;
+
+  @Resource
   private SysDictValueService sysDictValueService;
   /**
   * 用户表分页列表
@@ -42,8 +45,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
           // 邮箱
           .eq(!StringUtils.isEmpty(param.getEmail()), User::getEmail, param.getEmail())
           .orderByDesc(User::getCreateTime);
-    ;
-    return list(queryWrapper);
+    return userMapper.getUserList(queryWrapper);
   }
 
   /**

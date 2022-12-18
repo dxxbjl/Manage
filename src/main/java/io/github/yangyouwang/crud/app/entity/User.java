@@ -56,4 +56,8 @@ public class User {
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     @TableField(value = "create_time",fill = FieldFill.INSERT)
     private Date createTime;
+
+    @TableField(exist = false)
+    @ApiModelProperty(value = "类型：wx微信、phone手机、password密码")
+    private String appType;
 }

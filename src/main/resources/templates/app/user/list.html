@@ -84,8 +84,9 @@
             ,page: true //开启分页
             ,cols: [[ //表头
                 {field: 'id', title: 'ID', hide:true},
-                {field: 'nickName', title: '用户昵称'},
-                {field: 'avatar', title: "用户头像图片", templet: function (d) { return crud.showImg(d.avatar); }},
+                {field: 'nickName', title: '昵称'},
+                {field: 'avatar', title: "头像", templet: function (d) { return crud.showImg(d.avatar); }},
+                {field: 'appType', title: "登录方式"},
                 {field: 'gender', title: "性别",templet: function (d) { return crud.getDictValue('sex',d.gender);}},
                 {field: 'birthday', title: '生日'},
                 {field: 'mobile', title: '手机号'},
