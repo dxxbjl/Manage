@@ -3,6 +3,7 @@ package io.github.yangyouwang.common.base;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import io.github.yangyouwang.common.domain.TableDataInfo;
+import org.springframework.util.Assert;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -26,6 +27,8 @@ public class CrudController {
     public void startPage()
     {
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+        Assert.notNull(request.getParameter("page"), "page参数不存在");
+        Assert.notNull(request.getParameter("limit"), "limit参数不存在");
         int page = Integer.parseInt(request.getParameter("page"));
         int limit = Integer.parseInt(request.getParameter("limit"));
         PageHelper.startPage(page, limit);
