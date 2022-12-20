@@ -410,7 +410,7 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
             userApplyVO.setAppType(appType);
             if (Objects.nonNull(oldOauth)) {
                 // 绑定
-                userApplyVO.setState(ConfigConsts.ENABLED_YES);
+                userApplyVO.setState(ConfigConsts.SYS_YES);
             }
             return userApplyVO;
         }).collect(Collectors.toList());

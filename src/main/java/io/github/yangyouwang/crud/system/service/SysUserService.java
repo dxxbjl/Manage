@@ -99,7 +99,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
             Long[] ids = StringUtil.getId(roleIds);
             menuRole = sysMenuMapper.findMenuRoleByRoleIds(ids);
         }
-        return new User(user.getUserName(), user.getPassWord(), ConfigConsts.ENABLED_YES.equals(user.getEnabled()),
+        return new User(user.getUserName(), user.getPassWord(), ConfigConsts.SYS_YES.equals(user.getEnabled()),
                 true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList(String.join(",",menuRole)));
     }
 
@@ -266,7 +266,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
      */
     public List<XmSelectNode> xmSelect(String ids) {
         List<SysUser> sysUsers = this.list(new LambdaQueryWrapper<SysUser>()
-                .eq(SysUser::getEnabled,ConfigConsts.ENABLED_YES));
+                .eq(SysUser::getEnabled,ConfigConsts.SYS_YES));
         if (sysUsers.isEmpty()) {
             return Collections.emptyList();
         }

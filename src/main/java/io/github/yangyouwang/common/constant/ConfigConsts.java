@@ -17,9 +17,9 @@ public interface ConfigConsts {
      */
     String ADMIN_USER = "admin";
     /**
-     * 是否启用 是
+     * 系统是
      */
-    String ENABLED_YES = "Y";
+    String SYS_YES = "Y";
     /**
      * 字典性别key
      */

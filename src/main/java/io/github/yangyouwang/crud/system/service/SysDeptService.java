@@ -82,7 +82,7 @@ public class SysDeptService extends ServiceImpl<SysDeptMapper, SysDept> {
    */
   public List<TreeSelectNode> treeSelect() {
     List<SysDept> depts = this.list(new LambdaQueryWrapper<SysDept>()
-            .eq(SysDept::getEnabled,ConfigConsts.ENABLED_YES));
+            .eq(SysDept::getEnabled,ConfigConsts.SYS_YES));
     // 父部门ID是否存在顶级
     boolean flag = depts.stream().anyMatch(s -> 0 == s.getParentId());
     if (depts.isEmpty() || !flag) {

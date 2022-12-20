@@ -52,7 +52,7 @@ public class ApiAdController {
         // 获取轮播图列表
         List<Ad> adList = adService.list(new LambdaQueryWrapper<Ad>()
                 .select(Ad::getId,Ad::getAdUrl)
-                .eq(Ad::getEnabled, ConfigConsts.ENABLED_YES).orderByDesc(Ad::getCreateBy));
+                .eq(Ad::getEnabled, ConfigConsts.SYS_YES).orderByDesc(Ad::getCreateBy));
         return adList.stream().map(s -> {
             AdVO adVO = new AdVO();
             adVO.setId(s.getId());

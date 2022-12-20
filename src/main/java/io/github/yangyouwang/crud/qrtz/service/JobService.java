@@ -114,7 +114,7 @@ public class JobService extends ServiceImpl<JobMapper, QrtzJob> {
   public boolean changeJob(QrtzJob param) {
     QrtzJob job = getById(param.getId());
     try {
-      if (ConfigConsts.ENABLED_YES.equals(param.getEnabled())) {
+      if (ConfigConsts.SYS_YES.equals(param.getEnabled())) {
         // 恢复某个定时任务
         quartzManager.resumeJob(job);
       } else {

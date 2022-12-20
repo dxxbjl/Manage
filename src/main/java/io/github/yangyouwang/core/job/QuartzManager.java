@@ -59,11 +59,11 @@ public class QuartzManager {
             scheduler.scheduleJob(jobDetail, trigger);
             // 执行调度任务
             if (!scheduler.isShutdown() &&
-                    ConfigConsts.ENABLED_YES.equals(task.getEnabled())) {
+                    ConfigConsts.SYS_YES.equals(task.getEnabled())) {
                 scheduler.start();
             }
             // 暂停调度任务
-            if (!ConfigConsts.ENABLED_YES.equals(task.getEnabled())) {
+            if (!ConfigConsts.SYS_YES.equals(task.getEnabled())) {
                 scheduler.pauseJob(getJobKey(task.getJobName(), task.getJobGroup()));
             }
         } catch (Exception ex) {
@@ -124,7 +124,7 @@ public class QuartzManager {
         trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
         scheduler.rescheduleJob(triggerKey, trigger);
         //暂停任务
-        if(!ConfigConsts.ENABLED_YES.equals(task.getEnabled())){
+        if(!ConfigConsts.SYS_YES.equals(task.getEnabled())){
             scheduler.pauseJob(getJobKey(task.getJobName(), task.getJobGroup()));
         }
     }

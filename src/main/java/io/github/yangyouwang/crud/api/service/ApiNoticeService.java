@@ -26,7 +26,7 @@ public class ApiNoticeService extends ServiceImpl<NoticeMapper, Notice> {
     public Object getNotice() {
         // 通知公告
         List<Notice> noticeList = this.list(new LambdaQueryWrapper<Notice>()
-                .eq(Notice::getNoticeStatus, ConfigConsts.ENABLED_YES));
+                .eq(Notice::getNoticeStatus, ConfigConsts.SYS_YES));
         List<String> noticeVOList = noticeList.stream().map(Notice::getNoticeTitle).collect(Collectors.toList());
         return String.join(" ", noticeVOList);
     }

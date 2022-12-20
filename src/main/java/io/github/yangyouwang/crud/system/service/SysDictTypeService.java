@@ -84,11 +84,11 @@ public class SysDictTypeService extends ServiceImpl<SysDictTypeMapper, SysDictTy
     public void cacheDict() {
         List<SysDictType> sysDictTypes = sysDictTypeMapper.selectDictPage(new LambdaQueryWrapper<SysDictType>());
         sysDictTypes.forEach(sysDictType -> {
-            List<SysDictValue> dictValues = sysDictType.getDictValues().stream().filter(s -> ConfigConsts.ENABLED_YES.equals(s.getEnabled())).collect(Collectors.toList());
+            List<SysDictValue> dictValues = sysDictType.getDictValues().stream().filter(s -> ConfigConsts.SYS_YES.equals(s.getEnabled())).collect(Collectors.toList());
             String dictValue = JSONArray.parseArray(JSON.toJSONString(dictValues)).toJSONString();
             try {
                 Cookie cookie = new Cookie(sysDictType.getDictKey(), URLEncoder.encode(dictValue, "utf-8"));
-                if (ConfigConsts.ENABLED_YES.equals(sysDictType.getEnabled())) {
+                if (ConfigConsts.SYS_YES.equals(sysDictType.getEnabled())) {
                     cookie.setMaxAge(7 * 24 * 60 * 60);
                 } else {
                     cookie.setMaxAge(0);

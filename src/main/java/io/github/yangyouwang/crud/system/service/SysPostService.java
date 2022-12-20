@@ -94,7 +94,7 @@ public class SysPostService extends ServiceImpl<SysPostMapper, SysPost> {
   @Transactional(readOnly = true)
   public List<XmSelectNode> xmSelect(String ids) {
     List<SysPost> sysPosts = this.list(new LambdaQueryWrapper<SysPost>()
-            .eq(SysPost::getEnabled,ConfigConsts.ENABLED_YES));
+            .eq(SysPost::getEnabled,ConfigConsts.SYS_YES));
     return sysPosts.stream().map(sysPost -> {
       XmSelectNode treeNode = new XmSelectNode();
       treeNode.setName(sysPost.getPostName());
