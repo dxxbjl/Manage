@@ -6,11 +6,13 @@ import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.core.util.SecurityUtils;
 import io.github.yangyouwang.core.util.StringUtil;
 import io.github.yangyouwang.crud.system.entity.SysUser;
-import io.github.yangyouwang.crud.system.model.SysMenuDTO;
+import io.github.yangyouwang.crud.system.model.SysMenuVO;
+import io.github.yangyouwang.crud.system.model.SysUserVO;
 import io.github.yangyouwang.crud.system.service.SysDictTypeService;
 import io.github.yangyouwang.crud.system.service.SysMenuService;
 import io.github.yangyouwang.crud.system.service.SysUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,9 +55,11 @@ public class SysIndexController extends CrudController {
         // 用户信息
         String userName = SecurityUtils.getUserName();
         SysUser sysUser = sysUserService.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUserName, userName));
-        map.put("sysUser",sysUser);
+        SysUserVO sysUserVO = new SysUserVO();
+        BeanUtils.copyProperties(sysUser,sysUserVO);
+        map.put("sysUser",sysUserVO);
         // 菜单权限
-        List<SysMenuDTO> sysMenus = sysMenuService.selectMenusByUser(sysUser.getId(),userName);
+        List<SysMenuVO> sysMenus = sysMenuService.selectMenusByUser(sysUser.getId(),userName);
         map.put("sysMenus",sysMenus);
         return "index";
     }

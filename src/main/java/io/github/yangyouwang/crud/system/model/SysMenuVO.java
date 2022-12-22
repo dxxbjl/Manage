@@ -17,7 +17,7 @@ import java.util.List;
  * @date 2021/3/254:43 PM
  */
 @Data
-public class SysMenuDTO implements Treeable, Serializable {
+public class SysMenuVO implements Treeable, Serializable {
 
     private static final long serialVersionUID = -8531060973483500513L;
     /**

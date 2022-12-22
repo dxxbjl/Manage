@@ -22,7 +22,7 @@ import java.util.Date;
  * @date 2021/3/254:43 PM
  */
 @Data
-public class SysUserDTO extends BaseRowModel implements Serializable {
+public class SysUserVO extends BaseRowModel implements Serializable {
 
     private static final long serialVersionUID = -4440639783323640070L;
     /**

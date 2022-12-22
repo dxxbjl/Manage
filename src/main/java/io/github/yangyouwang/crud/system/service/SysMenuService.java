@@ -15,7 +15,7 @@ import io.github.yangyouwang.crud.system.mapper.SysMenuMapper;
 import io.github.yangyouwang.crud.system.mapper.SysRoleMenuMapper;
 import io.github.yangyouwang.crud.system.entity.SysMenu;
 import io.github.yangyouwang.crud.system.entity.SysRoleMenu;
-import io.github.yangyouwang.crud.system.model.SysMenuDTO;
+import io.github.yangyouwang.crud.system.model.SysMenuVO;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -54,7 +54,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
      * @return 菜单信息
      */
     @Transactional(readOnly = true)
-    public List<SysMenuDTO> selectMenusByUser(Long userId,String userName) {
+    public List<SysMenuVO> selectMenusByUser(Long userId, String userName) {
         List<SysMenu> menus;
         if (ConfigConsts.ADMIN_USER.equals(userName)) {
             menus = sysMenuMapper.findMenu();
@@ -64,13 +64,13 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
         if (menus.isEmpty()) {
             throw new AccessDeniedException("暂未分配菜单");
         }
-        List<SysMenuDTO> sysMenuDTOS = menus.stream().map(sysMenu -> {
-            SysMenuDTO sysMenuDTO = new SysMenuDTO();
-            BeanUtil.copyProperties(sysMenu, sysMenuDTO, true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
-            return sysMenuDTO;
+        List<SysMenuVO> sysMenuVOList = menus.stream().map(sysMenu -> {
+            SysMenuVO sysMenuVO = new SysMenuVO();
+            BeanUtil.copyProperties(sysMenu, sysMenuVO, true, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+            return sysMenuVO;
         }).collect(Collectors.toList());
         ListToTree treeBuilder = new ListToTreeImpl();
-        return treeBuilder.toTree(sysMenuDTOS);
+        return treeBuilder.toTree(sysMenuVOList);
     }
 
     /**

@@ -3,8 +3,6 @@ package io.github.yangyouwang.core.security.filter;
 import com.alibaba.fastjson.JSON;
 import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.common.domain.Result;
-import io.github.yangyouwang.common.enums.ResultStatus;
-import io.github.yangyouwang.core.exception.CrudException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -34,11 +32,11 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
                 && StringUtils.equalsIgnoreCase(request.getMethod(), "POST")) {
             try {
                 validate(request);
-            } catch (CrudException e) {
+            } catch (Exception e) {
                 response.setCharacterEncoding("utf-8");
                 response.setContentType("application/json;charset=UTF-8");
                 PrintWriter writer = response.getWriter();
-                writer.write(JSON.toJSONString(Result.ok(e.getResultStatus())));
+                writer.write(JSON.toJSONString(Result.failure(e.getMessage())));
                 writer.flush();
                 return;
             }
@@ -53,14 +51,14 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
     private void validate(HttpServletRequest request) {
         String code = request.getParameter("code");
         if (StringUtils.isBlank(code)) {
-            throw new CrudException(ResultStatus.VALIDATE_CODE_NULL_ERROR);
+            throw new RuntimeException("验证码不能为空");
         }
         Object checkCode = request.getSession(false).getAttribute(ConfigConsts.IMAGE_CODE_SESSION);
         if (Objects.isNull(checkCode)) {
-            throw new CrudException(ResultStatus.VALIDATE_CODE_NOT_EXIST_ERROR);
+            throw new RuntimeException("验证码不存在");
         }
         if (!StringUtils.equalsIgnoreCase(code,checkCode.toString())) {
-            throw new CrudException(ResultStatus.VALIDATE_CODE_NO_MATCH_ERROR);
+            throw new RuntimeException("验证码不匹配");
         }
         request.getSession(false).removeAttribute(ConfigConsts.IMAGE_CODE_SESSION);
     }

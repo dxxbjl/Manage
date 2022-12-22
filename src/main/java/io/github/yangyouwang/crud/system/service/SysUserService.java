@@ -16,7 +16,7 @@ import io.github.yangyouwang.crud.system.mapper.SysUserPostMapper;
 import io.github.yangyouwang.crud.system.mapper.SysUserRoleMapper;
 import io.github.yangyouwang.crud.system.model.ModifyPassDTO;
 import io.github.yangyouwang.crud.system.model.ResetPassDTO;
-import io.github.yangyouwang.crud.system.model.SysUserDTO;
+import io.github.yangyouwang.crud.system.model.SysUserVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
@@ -207,10 +207,10 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
             String fileName = "用户信息" + System.currentTimeMillis();
             EasyExcelUtil.setResponse(response,fileName);
             List<SysUser> list = sysUserMapper.findUserList(new LambdaQueryWrapper());
-            List<SysUserDTO> datas = list.stream().map(sysUser -> {
-                SysUserDTO sysUserDTO = new SysUserDTO();
-                BeanUtils.copyProperties(sysUser,sysUserDTO);
-                return sysUserDTO;
+            List<SysUserVO> datas = list.stream().map(sysUser -> {
+                SysUserVO sysUserVO = new SysUserVO();
+                BeanUtils.copyProperties(sysUser,sysUserVO);
+                return sysUserVO;
             }).collect(Collectors.toList());
             //导出excel
             EasyExcel.write(response.getOutputStream())
@@ -219,7 +219,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
                     //指定excel文件的type
                     .excelType(ExcelTypeEnum.XLSX)
                     // 标题头
-                    .head(SysUserDTO.class)
+                    .head(SysUserVO.class)
                     //给定工作表名称
                     .sheet(fileName)
                     //给定样式

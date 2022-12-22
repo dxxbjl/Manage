@@ -47,19 +47,7 @@ public enum ResultStatus {
     /**
      * 当前层级存在下级节点
      */
-    DATA_EXIST_ERROR(504,"当前层级存在下级节点"),
-    /**
-     * 验证码不能为空
-     */
-    VALIDATE_CODE_NULL_ERROR(505,"验证码不能为空"),
-    /**
-     * 验证码不存在
-     */
-    VALIDATE_CODE_NOT_EXIST_ERROR(506,"验证码不存在"),
-    /**
-     * 验证码不匹配
-     */
-    VALIDATE_CODE_NO_MATCH_ERROR(507,"验证码不匹配");
+    DATA_EXIST_ERROR(504,"当前层级存在下级节点");
 
     /**
      * 业务异常码
