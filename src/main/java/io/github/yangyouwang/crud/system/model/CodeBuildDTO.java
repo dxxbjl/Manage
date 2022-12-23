@@ -26,4 +26,9 @@ public class CodeBuildDTO {
      */
     @ApiModelProperty("表名")
     private String tables;
+    /**
+     * 菜单ID
+     */
+    @ApiModelProperty("菜单ID")
+    private Long menuId;
 }

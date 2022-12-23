@@ -197,7 +197,9 @@ public class SysCodeGeneratorController extends CrudController {
         InjectionConfig cfg = new InjectionConfig() {
             @Override
             public void initMap() {
-                // to do nothing
+                Map<String, Object> map = new HashMap<>(16);
+                map.put("menuId", codeBuildDTO.getMenuId());
+                this.setMap(map);
             }
         };
         // 自定义输出配置
