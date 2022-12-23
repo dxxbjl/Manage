@@ -21,7 +21,9 @@ import org.thymeleaf.util.ArrayUtils;
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static java.util.Optional.*;
@@ -99,7 +101,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
     public void insertRoleMenuBatch(Long roleId, Long[] menuIds) {
-        if (menuIds.length > 0) {
+        if (menuIds != null && menuIds.length > 0) {
             List<SysRoleMenu> roleMenus = Arrays.stream(menuIds).map(s -> {
                 SysRoleMenu roleMenu = new SysRoleMenu();
                 roleMenu.setRoleId(roleId);
@@ -117,7 +119,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
     public void insertRoleUserBatch(Long roleId, Long[] userIds) {
-        if (userIds.length > 0) {
+        if (userIds != null && userIds.length > 0) {
             List<SysUserRole> userRoles = Arrays.stream(userIds).map(s -> {
                 SysUserRole userRole = new SysUserRole();
                 userRole.setRoleId(roleId);
@@ -129,15 +131,23 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
     }
 
     /**
-     * 删除请求
-     * @param id 角色id
+     * 检查角色关联菜单、用户
+     * @param ids 角色ids
      */
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED,rollbackFor = Throwable.class)
-    public void remove(Long id) {
-        this.removeById(id);
-        // 删除角色关联菜单
-        sysRoleMenuMapper.delete(new LambdaQueryWrapper<SysRoleMenu>()
-                .eq(SysRoleMenu::getRoleId,id));
+    @Transactional(readOnly = true)
+    public void checkRole(Collection ids) {
+        // 查询角色关联菜单
+        Integer roleMenuCount = sysRoleMenuMapper.selectCount(new LambdaQueryWrapper<SysRoleMenu>()
+                .in(SysRoleMenu::getRoleId, ids));
+        if (roleMenuCount > 0) {
+            throw new RuntimeException("角色存在菜单，删除失败!");
+        }
+        // 查询角色关联人员
+        Integer userRoleCount = sysUserRoleMapper.selectCount(new LambdaQueryWrapper<SysUserRole>()
+                .in(SysUserRole::getRoleId, ids));
+        if (userRoleCount > 0) {
+            throw new RuntimeException("角色存在用户，删除失败!");
+        }
     }
 
     /**
@@ -153,7 +163,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
             treeNode.setName(sysRole.getRoleName());
             treeNode.setValue(sysRole.getId());
             treeNode.setId(sysRole.getId());
-            ofNullable(ids).ifPresent(optIds -> treeNode.setSelected(ArrayUtils.contains(StringUtil.getId(optIds),sysRole.getId())));
+            ofNullable(ids).ifPresent(optIds -> treeNode.setSelected(ArrayUtils.contains(Objects.requireNonNull(StringUtil.getId(optIds)),sysRole.getId())));
             return treeNode;
         }).collect(Collectors.toList());
     }

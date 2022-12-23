@@ -11,7 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 import org.springframework.validation.BindingResult;
@@ -33,12 +33,12 @@ import java.util.List;
 @Api(tags = "部门表")
 @Controller
 @RequestMapping("/system/sysDept")
+@RequiredArgsConstructor
 public class SysDeptController extends CrudController {
 
   private static final String SUFFIX = "system/sysDept";
 
-  @Autowired
-  private SysDeptService sysDeptService;
+  private final SysDeptService sysDeptService;
 
   @GetMapping("/listPage")
   public String listPage(){

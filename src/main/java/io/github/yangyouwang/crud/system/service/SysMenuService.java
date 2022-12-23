@@ -26,6 +26,7 @@ import org.thymeleaf.util.ArrayUtils;
 import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static java.util.Optional.ofNullable;
@@ -132,7 +133,7 @@ public class SysMenuService extends ServiceImpl<SysMenuMapper, SysMenu> {
             treeNode.setValue(sysMenu.getId());
             treeNode.setId(sysMenu.getId());
             treeNode.setParentId(sysMenu.getParentId());
-            ofNullable(ids).ifPresent(optIds -> treeNode.setSelected(ArrayUtils.contains(StringUtil.getId(optIds),sysMenu.getId())));
+            ofNullable(ids).ifPresent(optIds -> treeNode.setSelected(ArrayUtils.contains(Objects.requireNonNull(StringUtil.getId(optIds)),sysMenu.getId())));
             return treeNode;
         }).collect(Collectors.toList());
         ListToTree treeBuilder = new ListToTreeImpl();

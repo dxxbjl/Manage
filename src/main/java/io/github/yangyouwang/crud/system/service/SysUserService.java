@@ -157,7 +157,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
     public void insertUserRoleBatch(Long userId, Long[] roleIds) {
-        if (roleIds.length > 0) {
+        if (roleIds != null && roleIds.length > 0) {
             List<SysUserRole> userRoles = Arrays.stream(roleIds).map(s -> {
                 SysUserRole userRole = new SysUserRole();
                 userRole.setUserId(userId);
@@ -175,7 +175,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
     public void insertUserPostBatch(Long userId, Long[] postIds) {
-        if (postIds.length > 0) {
+        if (postIds != null && postIds.length > 0) {
             List<SysUserPost> userPosts = Arrays.stream(postIds).map(s -> {
                 SysUserPost userPost = new SysUserPost();
                 userPost.setUserId(userId);
@@ -275,7 +275,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
             treeNode.setName(sysUser.getNickName());
             treeNode.setValue(sysUser.getId());
             treeNode.setId(sysUser.getId());
-            ofNullable(ids).ifPresent(optIds -> treeNode.setSelected(ArrayUtils.contains(StringUtil.getId(optIds),sysUser.getId())));
+            ofNullable(ids).ifPresent(optIds -> treeNode.setSelected(ArrayUtils.contains(Objects.requireNonNull(StringUtil.getId(optIds)),sysUser.getId())));
             return treeNode;
         }).collect(Collectors.toList());
     }

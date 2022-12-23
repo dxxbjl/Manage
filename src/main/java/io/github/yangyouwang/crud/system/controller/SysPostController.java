@@ -11,7 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 import org.springframework.validation.BindingResult;
@@ -34,12 +34,12 @@ import java.util.List;
 @Api(tags = "岗位")
 @Controller
 @RequestMapping("/system/sysPost")
+@RequiredArgsConstructor
 public class SysPostController extends CrudController {
 
   private static final String SUFFIX = "system/sysPost";
 
-  @Autowired
-  private SysPostService sysPostService;
+  private final SysPostService sysPostService;
 
   @GetMapping("/listPage")
   public String listPage(){

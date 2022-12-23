@@ -8,7 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 import org.springframework.validation.BindingResult;
@@ -31,12 +31,12 @@ import java.util.List;
 @Api(tags = "任务日志")
 @Controller
 @RequestMapping("/qrtz/jobLog")
+@RequiredArgsConstructor
 public class JobLogController extends CrudController {
 
   private static final String SUFFIX = "qrtz/jobLog";
 
-  @Autowired
-  private JobLogService jobLogService;
+  private final JobLogService jobLogService;
 
   @GetMapping("/listPage")
   public String listPage(String jobId, ModelMap map) {

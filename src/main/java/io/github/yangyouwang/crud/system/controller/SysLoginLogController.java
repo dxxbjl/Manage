@@ -10,7 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
@@ -28,12 +28,12 @@ import java.util.List;
 @Api(tags = "用户登录日志记录表")
 @Controller
 @RequestMapping("/sysLoginLog")
+@RequiredArgsConstructor
 public class SysLoginLogController extends CrudController {
 
   private static final String SUFFIX = "system/sysLoginLog";
 
-  @Autowired
-  private SysLoginLogService sysLoginLogService;
+  private final SysLoginLogService sysLoginLogService;
 
   @GetMapping("/listPage")
   public String listPage(){

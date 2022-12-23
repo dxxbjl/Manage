@@ -32,7 +32,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SysLogController extends CrudController {
 
-
     private static final String SUFFIX = "system/sysLog";
 
     private final SysLogService sysLogService;

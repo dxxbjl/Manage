@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.ArrayUtils;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static java.util.Optional.ofNullable;
@@ -100,7 +101,7 @@ public class SysPostService extends ServiceImpl<SysPostMapper, SysPost> {
       treeNode.setName(sysPost.getPostName());
       treeNode.setValue(sysPost.getId());
       treeNode.setId(sysPost.getId());
-      ofNullable(ids).ifPresent(optIds -> treeNode.setSelected(ArrayUtils.contains(StringUtil.getId(optIds),sysPost.getId())));
+      ofNullable(ids).ifPresent(optIds -> treeNode.setSelected(ArrayUtils.contains(Objects.requireNonNull(StringUtil.getId(optIds)),sysPost.getId())));
       return treeNode;
     }).collect(Collectors.toList());
   }
