@@ -18,8 +18,8 @@
   </sql>
     <select id="findRoleById" resultMap="BaseResultMap">
     select
-        r.id, r.role_name, r.role_key, r.remark, r.create_by, r.create_time, r.update_by, r.update_time,
-        group_concat(m.id) as menu_id,group_concat(u.id) as user_id, r.create_by, r.create_time
+        r.id, r.role_name, r.role_key, r.remark, r.create_by, r.create_time,
+        group_concat(m.id) as menu_id,group_concat(u.id) as user_id
     from sys_role r
     left join sys_role_menu rm on r.id = rm.role_id
     left join sys_menu m on rm.menu_id = m.id
