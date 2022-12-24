@@ -1,6 +1,6 @@
 package io.github.yangyouwang.crud.act.factory;
 
-import io.github.yangyouwang.crud.act.model.FormVO;
+import io.github.yangyouwang.crud.act.model.vo.FormVO;
 import org.activiti.engine.form.FormProperty;
 
 /**

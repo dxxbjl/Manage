@@ -1,6 +1,6 @@
 package io.github.yangyouwang.crud.act.factory;
 
-import io.github.yangyouwang.crud.act.model.FlowVO;
+import io.github.yangyouwang.crud.act.model.vo.FlowVO;
 import org.activiti.engine.repository.ProcessDefinition;
 
 /**

@@ -1,6 +1,6 @@
 package io.github.yangyouwang.crud.act.factory;
 
-import io.github.yangyouwang.crud.act.model.TaskVO;
+import io.github.yangyouwang.crud.act.model.vo.TaskVO;
 import org.activiti.engine.task.Task;
 
 /**

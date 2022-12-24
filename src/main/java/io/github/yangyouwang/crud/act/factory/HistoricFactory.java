@@ -1,6 +1,6 @@
 package io.github.yangyouwang.crud.act.factory;
 
-import io.github.yangyouwang.crud.act.model.HistoricTaskVO;
+import io.github.yangyouwang.crud.act.model.vo.HistoricTaskVO;
 import org.activiti.engine.history.HistoricProcessInstance;
 
 /**

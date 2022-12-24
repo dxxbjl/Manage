@@ -14,9 +14,10 @@ import io.github.yangyouwang.crud.system.mapper.SysMenuMapper;
 import io.github.yangyouwang.crud.system.mapper.SysUserMapper;
 import io.github.yangyouwang.crud.system.mapper.SysUserPostMapper;
 import io.github.yangyouwang.crud.system.mapper.SysUserRoleMapper;
-import io.github.yangyouwang.crud.system.model.ModifyPassDTO;
-import io.github.yangyouwang.crud.system.model.ResetPassDTO;
-import io.github.yangyouwang.crud.system.model.SysUserVO;
+import io.github.yangyouwang.crud.system.model.dto.ModifyPassDTO;
+import io.github.yangyouwang.crud.system.model.dto.ResetPassDTO;
+import io.github.yangyouwang.crud.system.model.dto.UserParamDTO;
+import io.github.yangyouwang.crud.system.model.vo.SysUserVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
@@ -71,14 +72,14 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> implemen
 
     /**
      * 查询用户列表
-     * @param sysUser 请求参数
+     * @param userParamDTO 请求参数
      * @return 用户列表
      */
-    public List<SysUser> list(SysUser sysUser) {
+    public List<SysUser> list(UserParamDTO userParamDTO) {
         return sysUserMapper.findUserList(new LambdaQueryWrapper<SysUser>()
-                .in(!CollectionUtils.isEmpty(sysUser.getDeptIds()), SysUser::getDeptId, sysUser.getDeptIds())
-                .like(StringUtils.isNotBlank(sysUser.getNickName()),SysUser::getNickName, sysUser.getNickName())
-                .like(StringUtils.isNotBlank(sysUser.getPhonenumber()), SysUser::getPhonenumber, sysUser.getPhonenumber()));
+                .in(!CollectionUtils.isEmpty(userParamDTO.getDeptIds()), SysUser::getDeptId, userParamDTO.getDeptIds())
+                .like(StringUtils.isNotBlank(userParamDTO.getNickName()),SysUser::getNickName, userParamDTO.getNickName())
+                .like(StringUtils.isNotBlank(userParamDTO.getPhonenumber()), SysUser::getPhonenumber, userParamDTO.getPhonenumber()));
     }
 
     @Override

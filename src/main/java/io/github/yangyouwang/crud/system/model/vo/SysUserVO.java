@@ -1,4 +1,4 @@
-package io.github.yangyouwang.crud.system.model;
+package io.github.yangyouwang.crud.system.model.vo;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;

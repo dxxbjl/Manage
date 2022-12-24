@@ -1,4 +1,4 @@
-package io.github.yangyouwang.crud.system.model;
+package io.github.yangyouwang.crud.system.model.vo;
 
 
 import io.github.yangyouwang.core.util.converter.Treeable;

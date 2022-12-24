@@ -9,8 +9,9 @@ import io.github.yangyouwang.common.domain.XmSelectNode;
 import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.core.util.SecurityUtils;
 import io.github.yangyouwang.crud.system.entity.SysUser;
-import io.github.yangyouwang.crud.system.model.ModifyPassDTO;
-import io.github.yangyouwang.crud.system.model.ResetPassDTO;
+import io.github.yangyouwang.crud.system.model.dto.ModifyPassDTO;
+import io.github.yangyouwang.crud.system.model.dto.ResetPassDTO;
+import io.github.yangyouwang.crud.system.model.dto.UserParamDTO;
 import io.github.yangyouwang.crud.system.service.SysUserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -133,15 +134,15 @@ public class SysUserController extends CrudController {
 
     /**
      * 列表请求
-     * @param sysUser 用户列表对象
+     * @param userParamDTO 用户列表对象
      * @return 请求列表
      */
     @PreAuthorize("hasAuthority('user:list')")
     @GetMapping("/page")
     @ResponseBody
-    public TableDataInfo page(SysUser sysUser) {
+    public TableDataInfo page(UserParamDTO userParamDTO) {
         startPage();
-        List<SysUser> list = sysUserService.list(sysUser);
+        List<SysUser> list = sysUserService.list(userParamDTO);
         return getDataTable(list);
     }
 

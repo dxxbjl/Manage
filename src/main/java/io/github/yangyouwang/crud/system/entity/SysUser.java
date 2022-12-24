@@ -5,8 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.github.yangyouwang.common.domain.BaseEntity;
 import lombok.Data;
 
-import java.util.List;
-
 /**
  * @author yangyouwang
  * @title: SysUser
@@ -74,9 +72,4 @@ public class SysUser extends BaseEntity {
      */
     @TableField(exist = false)
     private String postName;
-    /**
-     * 根据部门ids模糊查询用户
-     */
-    @TableField(exist = false)
-    private List<Object> deptIds;
 }

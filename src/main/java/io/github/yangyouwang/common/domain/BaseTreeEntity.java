@@ -2,7 +2,6 @@ package io.github.yangyouwang.common.domain;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -23,12 +22,10 @@ public abstract class BaseTreeEntity implements Serializable {
     private Long id;
 
     /** 上级ID */
-    @ApiModelProperty(value = "上级ID")
     private Long parentId;
 
     /** 上级名称 */
-    @TableField(exist=false)
-    @ApiModelProperty(value = "上级名称")
+    @TableField(exist = false)
     private String parentName;
 
     /** 创建者 */

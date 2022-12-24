@@ -15,7 +15,7 @@ import io.github.yangyouwang.crud.system.mapper.SysMenuMapper;
 import io.github.yangyouwang.crud.system.mapper.SysRoleMenuMapper;
 import io.github.yangyouwang.crud.system.entity.SysMenu;
 import io.github.yangyouwang.crud.system.entity.SysRoleMenu;
-import io.github.yangyouwang.crud.system.model.SysMenuVO;
+import io.github.yangyouwang.crud.system.model.vo.SysMenuVO;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
