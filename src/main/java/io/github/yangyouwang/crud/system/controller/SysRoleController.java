@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -131,8 +130,7 @@ public class SysRoleController extends CrudController {
     @DeleteMapping("/remove/{id}")
     @ResponseBody
     public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
-        sysRoleService.checkRole(Collections.singleton(id));
-        sysRoleService.removeById(id);
+        sysRoleService.remove(id);
         return Result.success();
     }
 
@@ -146,8 +144,7 @@ public class SysRoleController extends CrudController {
     @ResponseBody
     @CrudLog(title = "删除角色",businessType = BusinessType.DELETE)
     public Result removes(@RequestBody @Valid List<Long> ids) {
-        sysRoleService.checkRole(ids);
-        sysRoleService.removeByIds(ids);
+        sysRoleService.removes(ids);
         return Result.success();
     }
 

@@ -20,10 +20,7 @@ import org.thymeleaf.util.ArrayUtils;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Optional.*;
@@ -128,6 +125,24 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper,SysRole> {
             }).collect(Collectors.toList());
             sysUserRoleMapper.insertBatchSomeColumn(userRoles);
         }
+    }
+
+    /**
+     * 角色表删除(单个条目)
+     * @param id 主键
+     */
+    public void remove(Long id) {
+        checkRole(Collections.singleton(id));
+        removeById(id);
+    }
+
+    /**
+     * 角色表删除(多个条目)
+     * @param ids 主键数组
+     */
+    public void removes(List<Long> ids) {
+        checkRole(ids);
+        removeByIds(ids);
     }
 
     /**
