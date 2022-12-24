@@ -1,7 +1,6 @@
 package io.github.yangyouwang.crud.system.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import io.github.yangyouwang.common.domain.BaseEntity;
+import io.github.yangyouwang.common.domain.BaseTreeEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -19,7 +18,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value="SysDept对象", description="部门表")
-public class SysDept extends BaseEntity {
+public class SysDept extends BaseTreeEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -37,13 +36,6 @@ public class SysDept extends BaseEntity {
 
     @ApiModelProperty(value = "邮箱")
     private String email;
-
-    @ApiModelProperty(value = "父部门ID")
-    private Long parentId;
-
-    @TableField(exist=false)
-    @ApiModelProperty(value = "父部门名称")
-    private String parentName;
 
     @ApiModelProperty(value = "是否启用 Y 启用 N 禁用")
     private String enabled;

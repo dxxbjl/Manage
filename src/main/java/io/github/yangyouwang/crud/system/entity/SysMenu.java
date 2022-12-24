@@ -1,9 +1,7 @@
 package io.github.yangyouwang.crud.system.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.github.yangyouwang.common.domain.BaseEntity;
-import io.swagger.annotations.ApiModelProperty;
+import io.github.yangyouwang.common.domain.BaseTreeEntity;
 import lombok.Data;
 
 /**
@@ -15,21 +13,12 @@ import lombok.Data;
  */
 @Data
 @TableName("sys_menu")
-public class SysMenu extends BaseEntity {
+public class SysMenu extends BaseTreeEntity {
     private static final long serialVersionUID = -152572856637313896L;
     /**
      * 菜单名称
      */
     private String menuName;
-    /**
-     * 父菜单ID
-     */
-    private Long parentId;
-
-    @TableField(exist=false)
-    @ApiModelProperty(value = "父菜单名称")
-    private String parentName;
-
     /**
      * 显示顺序
      */

@@ -1,8 +1,7 @@
 package io.github.yangyouwang.crud.app.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.github.yangyouwang.common.domain.BaseEntity;
+import io.github.yangyouwang.common.domain.BaseTreeEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -20,7 +19,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @TableName("app_category")
 @ApiModel(value="Category对象", description="分类表")
-public class Category extends BaseEntity {
+public class Category extends BaseTreeEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,11 +31,4 @@ public class Category extends BaseEntity {
 
     @ApiModelProperty(value = "顺序")
     private String orderNum;
-
-    @ApiModelProperty(value = "父分类ID")
-    private Long parentId;
-
-    @TableField(exist=false)
-    @ApiModelProperty(value = "父分类名称")
-    private String parentName;
 }

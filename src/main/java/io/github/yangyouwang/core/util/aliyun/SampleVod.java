@@ -7,8 +7,6 @@ import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.vod.model.v20170321.GetPlayInfoRequest;
 import com.aliyuncs.vod.model.v20170321.GetPlayInfoResponse;
-import com.aliyuncs.vod.model.v20170321.GetVideoPlayAuthRequest;
-import com.aliyuncs.vod.model.v20170321.GetVideoPlayAuthResponse;
 import io.github.yangyouwang.core.config.properties.VodProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
@@ -78,25 +76,5 @@ public class SampleVod {
         } catch (Exception e) {
             throw new RuntimeException("获取视频播放地址出错了：" + e.getLocalizedMessage());
         }
-    }
-
-    /**
-     * 获取视频播放凭证
-     */
-    public void getVideoPlayAuth(String videoId) {
-        //初始化客户端、请求对象和相应对象
-        GetVideoPlayAuthRequest request = new GetVideoPlayAuthRequest();
-        GetVideoPlayAuthResponse response = new GetVideoPlayAuthResponse();
-        try {
-            request.setVideoId(videoId);
-            response = client.getAcsResponse(request);
-            // 播放凭证
-            System.out.print("PlayAuth = " + response.getPlayAuth() + "\n");
-            // VideoMeta信息
-            System.out.print("VideoMeta.Title = " + response.getVideoMeta().getTitle() + "\n");
-        } catch (Exception e) {
-            System.out.print("ErrorMessage = " + e.getLocalizedMessage());
-        }
-        System.out.print("RequestId = " + response.getRequestId() + "\n");
     }
 }
