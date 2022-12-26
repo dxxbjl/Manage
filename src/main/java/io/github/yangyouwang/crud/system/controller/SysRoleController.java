@@ -9,6 +9,9 @@ import io.github.yangyouwang.common.domain.XmSelectNode;
 import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.crud.system.entity.SysRole;
 import io.github.yangyouwang.crud.system.service.SysRoleService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -31,6 +34,7 @@ import java.util.Objects;
  * @description: 角色控制层
  * @date 2021/3/2112:38 AM
  */
+@Api(tags = "角色表")
 @Controller
 @RequestMapping("/sysRole")
 @RequiredArgsConstructor
@@ -76,6 +80,10 @@ public class SysRoleController extends CrudController {
      * @param sysRole 请求角色列表对象
      * @return 请求列表
      */
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer", paramType="query"),
+            @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer", paramType="query")
+    })
     @PreAuthorize("hasAuthority('role:list')")
     @GetMapping("/page")
     @ResponseBody

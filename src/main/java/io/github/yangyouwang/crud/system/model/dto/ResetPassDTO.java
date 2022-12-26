@@ -1,9 +1,9 @@
 package io.github.yangyouwang.crud.system.model.dto;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 /**
  * Description: 重置密码DTO <br/>
@@ -14,9 +14,8 @@ import java.io.Serializable;
  * @since JDK 1.8
  */
 @Data
-public class ResetPassDTO implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+@ApiModel("重置密码DTO")
+public class ResetPassDTO {
 
     /**
      * 主键id

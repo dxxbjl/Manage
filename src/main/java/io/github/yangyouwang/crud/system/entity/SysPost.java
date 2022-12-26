@@ -1,10 +1,10 @@
 package io.github.yangyouwang.crud.system.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.github.yangyouwang.common.domain.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * <p>
@@ -15,11 +15,9 @@ import lombok.EqualsAndHashCode;
  * @since 2022-09-15
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@TableName("sys_post")
 @ApiModel(value="SysPost对象", description="岗位表")
 public class SysPost extends BaseEntity {
-
-    private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "岗位编码")
     private String postCode;

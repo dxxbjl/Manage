@@ -1,19 +1,10 @@
 package io.github.yangyouwang.crud.system.model.dto;
 
-/**
- * Description: <br/>
- * date: 2022/8/2 10:26<br/>
- *
- * @author yangyouwang<br />
- * @version v1.0
- * @since JDK 1.8
- */
-
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 /**
  * @author yangyouwang
@@ -23,9 +14,8 @@ import java.io.Serializable;
  * @date 2021/3/312:55 PM
  */
 @Data
-public class ModifyPassDTO implements Serializable {
-
-    private static final long serialVersionUID = -2784032352485715834L;
+@ApiModel("修改密码")
+public class ModifyPassDTO {
     /**
      * 主键id
      */

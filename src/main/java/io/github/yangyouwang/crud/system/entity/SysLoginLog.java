@@ -5,8 +5,6 @@ import io.github.yangyouwang.common.domain.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-
 /**
  * <p>
  * 用户登录日志记录表
@@ -17,11 +15,8 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @TableName("sys_login_log")
-@EqualsAndHashCode(callSuper = true)
 @ApiModel(value="SysLoginLog对象", description="用户登录日志记录表")
 public class SysLoginLog extends BaseEntity {
-
-    private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "账号")
     private String account;

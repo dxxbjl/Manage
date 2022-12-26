@@ -5,8 +5,6 @@ import io.github.yangyouwang.common.domain.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-
 /**
  * <p>
  * 广告表
@@ -16,12 +14,9 @@ import lombok.EqualsAndHashCode;
  * @since 2022-08-11
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @TableName("app_ad")
 @ApiModel(value="Ad对象", description="广告表")
 public class Ad extends BaseEntity {
-
-    private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "广告标题")
     private String adTitle;
@@ -34,6 +29,4 @@ public class Ad extends BaseEntity {
 
     @ApiModelProperty(value = "是否启用 Y 启用 N 禁用")
     private String enabled;
-
-
 }

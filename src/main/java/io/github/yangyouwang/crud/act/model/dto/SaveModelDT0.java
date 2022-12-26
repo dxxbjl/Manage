@@ -2,8 +2,6 @@ package io.github.yangyouwang.crud.act.model.dto;
 
 import lombok.Data;
 
-import java.io.Serializable;
-
 /**
  * @author yangyouwang
  * @title: SaveModelDT0
@@ -12,9 +10,8 @@ import java.io.Serializable;
  * @date 2020/7/25下午2:16
  */
 @Data
-public class SaveModelDT0 implements Serializable {
+public class SaveModelDT0 {
 
-    private static final long serialVersionUID = 7055017795601515186L;
     private String name;
 
     private String description;

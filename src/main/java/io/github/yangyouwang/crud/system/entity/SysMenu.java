@@ -2,6 +2,7 @@ package io.github.yangyouwang.crud.system.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.github.yangyouwang.common.domain.BaseTreeEntity;
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
@@ -13,8 +14,8 @@ import lombok.Data;
  */
 @Data
 @TableName("sys_menu")
+@ApiModel(value="SysMenu对象", description="菜单表")
 public class SysMenu extends BaseTreeEntity {
-    private static final long serialVersionUID = -152572856637313896L;
     /**
      * 菜单名称
      */

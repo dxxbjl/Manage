@@ -20,8 +20,6 @@ import lombok.Data;
 @ApiModel(value="Oauth对象", description="授权表")
 public class Oauth {
 
-    private static final long serialVersionUID = 1L;
-
     /** 主键id */
     @TableId(type = IdType.AUTO)
     private Long id;

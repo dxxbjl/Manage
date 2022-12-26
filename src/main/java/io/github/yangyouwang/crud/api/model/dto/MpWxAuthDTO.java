@@ -4,8 +4,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.io.Serializable;
-
 /**
  * Description: 微信授权对象DTO <br/>
  * date: 2022/8/3 19:21<br/>
@@ -16,7 +14,7 @@ import java.io.Serializable;
  */
 @Data
 @ApiModel("微信小程序授权DTO")
-public class MpWxAuthDTO implements Serializable {
+public class MpWxAuthDTO {
 
     @ApiModelProperty("code")
     private String code;

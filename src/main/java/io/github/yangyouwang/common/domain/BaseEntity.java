@@ -3,7 +3,6 @@ package io.github.yangyouwang.common.domain;
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -12,10 +11,7 @@ import java.util.Date;
  * @author crud
  */
 @Data
-public abstract class BaseEntity implements Serializable {
-
-    private static final Long serialVersionUID = 1L;
-
+public abstract class BaseEntity {
     /** 主键id */
     @TableId(type = IdType.AUTO)
     private Long id;

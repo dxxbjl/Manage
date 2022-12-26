@@ -13,6 +13,9 @@ import io.github.yangyouwang.crud.system.model.dto.ModifyPassDTO;
 import io.github.yangyouwang.crud.system.model.dto.ResetPassDTO;
 import io.github.yangyouwang.crud.system.model.dto.UserParamDTO;
 import io.github.yangyouwang.crud.system.service.SysUserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,6 +40,7 @@ import java.util.Objects;
  * @description: 用户控制层
  * @date 2021/3/2112:38 AM
  */
+@Api(tags = "用户表")
 @Controller
 @RequestMapping("/sysUser")
 @RequiredArgsConstructor
@@ -137,6 +141,10 @@ public class SysUserController extends CrudController {
      * @param userParamDTO 用户列表对象
      * @return 请求列表
      */
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer", paramType="query"),
+            @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer", paramType="query")
+    })
     @PreAuthorize("hasAuthority('user:list')")
     @GetMapping("/page")
     @ResponseBody

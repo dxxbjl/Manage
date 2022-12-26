@@ -1,9 +1,7 @@
 package io.github.yangyouwang.crud.app.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-
 import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -22,8 +20,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 @TableName("app_user")
 @ApiModel(value="User对象", description="用户表")
 public class User {
-
-    private static final long serialVersionUID = 1L;
 
     /** 主键id */
     @TableId(type = IdType.AUTO)

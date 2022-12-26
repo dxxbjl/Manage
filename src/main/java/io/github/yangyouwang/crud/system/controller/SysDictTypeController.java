@@ -7,6 +7,9 @@ import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.crud.system.entity.SysDictType;
 import io.github.yangyouwang.crud.system.service.SysDictTypeService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,6 +30,7 @@ import java.util.Objects;
  * @description: 字典控制层
  * @date 2021/4/12 11:00
  */
+@Api(tags = "数据字典类型")
 @Controller
 @RequestMapping("/sysDictType")
 @RequiredArgsConstructor
@@ -71,6 +75,10 @@ public class SysDictTypeController extends CrudController {
      * @param sysDictType 请求字典列表参数
      * @return 请求列表
      */
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer", paramType="query"),
+            @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer", paramType="query")
+    })
     @PreAuthorize("hasAuthority('dictType:list')")
     @GetMapping("/page")
     @ResponseBody

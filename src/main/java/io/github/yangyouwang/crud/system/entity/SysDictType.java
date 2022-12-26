@@ -3,6 +3,7 @@ package io.github.yangyouwang.crud.system.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.github.yangyouwang.common.domain.BaseEntity;
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.util.List;
@@ -15,8 +16,8 @@ import java.util.List;
  */
 @Data
 @TableName("sys_dict_type")
+@ApiModel(value="SysDictType对象", description="数据字典类型表")
 public class SysDictType extends BaseEntity {
-    private static final long serialVersionUID = 616049205960190106L;
     /**
      * 类型key
      */

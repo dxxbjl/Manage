@@ -3,19 +3,20 @@ package io.github.yangyouwang.crud.system.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.github.yangyouwang.common.domain.BaseEntity;
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
  * @author yangyouwang
  * @title: SysUser
  * @projectName crud
- * @description: 用户类
+ * @description: 用户表
  * @date 2021/3/2112:22 AM
  */
 @Data
 @TableName("sys_user")
+@ApiModel(value="SysUser对象", description="用户表")
 public class SysUser extends BaseEntity {
-    private static final long serialVersionUID = 4718572152888798906L;
     /**
      * 部门外键
      */

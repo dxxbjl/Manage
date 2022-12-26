@@ -3,6 +3,7 @@ package io.github.yangyouwang.crud.system.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.github.yangyouwang.common.domain.BaseEntity;
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
@@ -14,9 +15,8 @@ import lombok.Data;
  */
 @Data
 @TableName("sys_role")
+@ApiModel(value="SysRole对象", description="角色表")
 public class SysRole extends BaseEntity {
-
-    private static final long serialVersionUID = -8932638904580917498L;
     /**
      * 角色名称
      */

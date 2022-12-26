@@ -1,12 +1,10 @@
 package io.github.yangyouwang.crud.system.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.github.yangyouwang.common.domain.BaseTreeEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-
-
 /**
  * <p>
  * 部门表
@@ -16,11 +14,9 @@ import lombok.EqualsAndHashCode;
  * @since 2022-09-03
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@TableName("sys_dept")
 @ApiModel(value="SysDept对象", description="部门表")
 public class SysDept extends BaseTreeEntity {
-
-    private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "部门名称")
     private String deptName;

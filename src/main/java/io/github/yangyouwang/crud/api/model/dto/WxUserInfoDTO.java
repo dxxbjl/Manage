@@ -3,8 +3,6 @@ package io.github.yangyouwang.crud.api.model.dto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
-import java.io.Serializable;
 /**
  * Description: 加密微信用户信息DTO<br/>
  * date: 2022/8/26 23:19<br/>
@@ -15,7 +13,7 @@ import java.io.Serializable;
  */
 @Data
 @ApiModel("加密微信用户信息DTO")
-public class WxUserInfoDTO implements Serializable {
+public class WxUserInfoDTO {
 
     @ApiModelProperty("敏感数据")
     private String encryptedData;

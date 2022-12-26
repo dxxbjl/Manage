@@ -21,8 +21,6 @@ import lombok.EqualsAndHashCode;
 @ApiModel(value="News对象", description="新闻表")
 public class News extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
-
     @ApiModelProperty(value = "标题")
     private String title;
 

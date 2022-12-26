@@ -6,6 +6,7 @@ import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.github.yangyouwang.crud.act.entity.ActReModel;
 import io.github.yangyouwang.crud.act.service.ActReModelService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,6 +27,7 @@ import java.util.Objects;
  * @description: 流程模型控制层
  * @date 2021/4/10下午2:03
  */
+@Api(tags = "流程模型表")
 @Controller
 @RequestMapping("/actReModel")
 @RequiredArgsConstructor

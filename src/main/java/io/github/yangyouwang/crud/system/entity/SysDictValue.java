@@ -2,6 +2,7 @@ package io.github.yangyouwang.crud.system.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import io.github.yangyouwang.common.domain.BaseEntity;
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 
@@ -13,9 +14,8 @@ import lombok.Data;
  */
 @Data
 @TableName("sys_dict_value")
+@ApiModel(value="SysDictValue对象", description="数据字典项表")
 public class SysDictValue extends BaseEntity {
-
-    private static final long serialVersionUID = -4529258645002738400L;
     /**
      * 字典类型id
      */

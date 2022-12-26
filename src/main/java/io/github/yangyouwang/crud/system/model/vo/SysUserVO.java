@@ -8,12 +8,9 @@ import io.github.yangyouwang.common.constant.ConfigConsts;
 import io.github.yangyouwang.core.util.excel.BaseDictDataConverter;
 import io.github.yangyouwang.core.util.excel.DateConverter;
 import io.github.yangyouwang.core.util.excel.MyStringImageConverter;
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
-
-import java.io.Serializable;
 import java.util.Date;
-
-
 /**
  * @author yangyouwang
  * @title: SysUserDTO
@@ -22,9 +19,8 @@ import java.util.Date;
  * @date 2021/3/254:43 PM
  */
 @Data
-public class SysUserVO extends BaseRowModel implements Serializable {
-
-    private static final long serialVersionUID = -4440639783323640070L;
+@ApiModel("用户响应")
+public class SysUserVO extends BaseRowModel {
     /**
      * 编号
      */

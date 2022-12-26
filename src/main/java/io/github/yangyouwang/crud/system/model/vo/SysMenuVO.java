@@ -3,9 +3,9 @@ package io.github.yangyouwang.crud.system.model.vo;
 
 import io.github.yangyouwang.core.util.converter.Treeable;
 import io.github.yangyouwang.crud.system.entity.SysMenu;
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,9 +17,8 @@ import java.util.List;
  * @date 2021/3/254:43 PM
  */
 @Data
-public class SysMenuVO implements Treeable, Serializable {
-
-    private static final long serialVersionUID = -8531060973483500513L;
+@ApiModel("菜单响应")
+public class SysMenuVO implements Treeable {
     /**
      * 主键id
      */

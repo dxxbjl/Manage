@@ -46,8 +46,9 @@ public class JobLogController extends CrudController {
 
   @ApiOperation(value = "任务日志分页列表", response = QrtzJobLog.class)
   @ApiImplicitParams({
-  @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer"),
-  @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer")})
+          @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer", paramType="query"),
+          @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer", paramType="query")
+  })
   @GetMapping(value = "/page")
   @ResponseBody
   public TableDataInfo page(QrtzJobLog param) {

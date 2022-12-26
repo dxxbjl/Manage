@@ -5,7 +5,7 @@ import io.github.yangyouwang.common.domain.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+
 /**
  * <p>
  * 任务日志
@@ -15,12 +15,9 @@ import lombok.EqualsAndHashCode;
  * @since 2022-10-26
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @TableName("qrtz_job_log")
 @ApiModel(value="JobLog对象", description="任务日志")
 public class QrtzJobLog extends BaseEntity {
-
-    private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "任务外键")
     private Long jobId;

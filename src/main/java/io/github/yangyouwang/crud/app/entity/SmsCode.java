@@ -20,9 +20,6 @@ import lombok.Data;
 @ApiModel(value="SmsCode对象", description="短信验证码表")
 public class SmsCode {
 
-    private static final long serialVersionUID = 1L;
-
-    /** 主键id */
     @TableId(type = IdType.AUTO)
     private Long id;
 

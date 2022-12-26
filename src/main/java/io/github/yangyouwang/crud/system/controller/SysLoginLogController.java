@@ -43,8 +43,9 @@ public class SysLoginLogController extends CrudController {
   @PreAuthorize("hasAuthority('sysLoginLog:list')")
   @ApiOperation(value = "用户登录日志记录表分页列表", response = SysLoginLog.class)
   @ApiImplicitParams({
-  @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer"),
-  @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer")})
+          @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer", paramType="query"),
+          @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer", paramType="query")
+  })
   @GetMapping(value = "/page")
   @ResponseBody
   public TableDataInfo page(SysLoginLog param) {

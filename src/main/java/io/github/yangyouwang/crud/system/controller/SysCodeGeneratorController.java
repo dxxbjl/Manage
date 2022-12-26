@@ -14,6 +14,7 @@ import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.core.config.properties.CodeGeneratorProperties;
 import io.github.yangyouwang.crud.system.model.vo.CodeConfigVO;
 import io.github.yangyouwang.crud.system.model.dto.CodeBuildDTO;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.BeanUtils;
@@ -42,6 +43,7 @@ import java.util.zip.ZipOutputStream;
  * @version v1.0
  * @since JDK 1.8
  */
+@Api(tags = "代码生成")
 @Controller
 @RequestMapping("/sysCodeGenerator")
 @RequiredArgsConstructor

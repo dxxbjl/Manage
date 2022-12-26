@@ -8,6 +8,9 @@ import io.github.yangyouwang.common.domain.TreeSelectNode;
 import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.crud.system.entity.SysMenu;
 import io.github.yangyouwang.crud.system.service.SysMenuService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,6 +32,7 @@ import java.util.Objects;
  * @description: 菜单管理
  * @date 2021/3/2610:22 PM
  */
+@Api(tags = "菜单表")
 @Controller
 @RequestMapping("/sysMenu")
 @RequiredArgsConstructor
@@ -74,6 +78,10 @@ public class SysMenuController extends CrudController {
      * 列表请求
      * @return 请求列表
      */
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer", paramType="query"),
+            @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer", paramType="query")
+    })
     @PreAuthorize("hasAuthority('menu:list')")
     @GetMapping("/page")
     @ResponseBody

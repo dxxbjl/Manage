@@ -45,8 +45,9 @@ public class NoticeController extends CrudController {
 
   @ApiOperation(value = "通知公告表分页列表", response = Notice.class)
   @ApiImplicitParams({
-  @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer"),
-  @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer")})
+          @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer", paramType="query"),
+          @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer", paramType="query")
+  })
   @GetMapping(value = "/page")
   @ResponseBody
   public TableDataInfo page(Notice param) {

@@ -49,8 +49,9 @@ public class JobController extends CrudController {
   @PreAuthorize("hasAuthority('job:list')")
   @ApiOperation(value = "任务表分页列表", response = QrtzJob.class)
   @ApiImplicitParams({
-  @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer"),
-  @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer")})
+          @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer", paramType="query"),
+          @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer", paramType="query")
+  })
   @GetMapping(value = "/page")
   @ResponseBody
   public TableDataInfo page(@Validated QrtzJob job) {

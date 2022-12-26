@@ -6,6 +6,7 @@ import io.github.yangyouwang.common.domain.Result;
 import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.crud.system.entity.SysDictValue;
 import io.github.yangyouwang.crud.system.service.SysDictValueService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,7 @@ import java.util.Objects;
  * @description: 字典控制层
  * @date 2021/4/12 11:00
  */
+@Api(tags = "数据字典项")
 @Controller
 @RequestMapping("/sysDictValue")
 @RequiredArgsConstructor

@@ -11,6 +11,7 @@ import io.github.yangyouwang.crud.system.model.vo.SysUserVO;
 import io.github.yangyouwang.crud.system.service.SysDictTypeService;
 import io.github.yangyouwang.crud.system.service.SysMenuService;
 import io.github.yangyouwang.crud.system.service.SysUserService;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
@@ -34,6 +35,7 @@ import java.io.IOException;
  * @description: 首页控制层
  * @date 2021/3/216:40 PM
  */
+@Api(tags = "首页")
 @Controller
 @RequiredArgsConstructor
 public class SysIndexController extends CrudController {

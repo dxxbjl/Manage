@@ -8,6 +8,9 @@ import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.crud.system.entity.SysLog;
 import io.github.yangyouwang.crud.system.service.SysLogService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -27,6 +30,7 @@ import java.util.List;
  * @description: 日志控制层
  * @date 2021/4/111:06 AM
  */
+@Api(tags = "日志表")
 @Controller
 @RequestMapping("/sysLog")
 @RequiredArgsConstructor
@@ -50,6 +54,10 @@ public class SysLogController extends CrudController {
      * @param sysLog 日志列表对象
      * @return 请求列表
      */
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer", paramType="query"),
+            @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer", paramType="query")
+    })
     @PreAuthorize("hasAuthority('log:list')")
     @GetMapping("/page")
     @ResponseBody

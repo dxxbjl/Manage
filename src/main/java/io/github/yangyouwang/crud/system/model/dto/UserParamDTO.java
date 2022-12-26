@@ -1,5 +1,6 @@
 package io.github.yangyouwang.crud.system.model.dto;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
  * @since JDK 1.8
  */
 @Data
+@ApiModel("用户参数DTO")
 public class UserParamDTO {
     /**
      * 昵称

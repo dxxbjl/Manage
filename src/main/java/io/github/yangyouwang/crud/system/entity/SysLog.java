@@ -2,9 +2,9 @@ package io.github.yangyouwang.crud.system.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -16,8 +16,8 @@ import java.util.Date;
  */
 @Data
 @TableName("sys_log")
-public class SysLog implements Serializable {
-    private static final long serialVersionUID = 5756323850083974770L;
+@ApiModel(value="SysLog对象", description="异常日志表")
+public class SysLog {
     /**
      * 主键id
      */

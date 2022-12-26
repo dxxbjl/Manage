@@ -11,8 +11,6 @@ import io.github.yangyouwang.common.enums.ResultStatus;
  */
 public class CrudException extends RuntimeException {
 
-    private static final long serialVersionUID = -3587103377836762876L;
-
     private ResultStatus resultStatus;
 
     public CrudException(ResultStatus resultStatus) {

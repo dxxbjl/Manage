@@ -1,10 +1,8 @@
 package io.github.yangyouwang.crud.system.entity;
 
-import java.io.Serializable;
-
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
-
 /**
  * 角色菜单中间表
  * sys_role_menu
@@ -12,8 +10,8 @@ import lombok.Data;
  */
 @Data
 @TableName("sys_role_menu")
-public class SysRoleMenu implements Serializable {
-    private static final long serialVersionUID = -7125520458496260519L;
+@ApiModel(value="SysRoleMenu对象", description="角色菜单中间表")
+public class SysRoleMenu {
     /**
      * 角色ID
      */

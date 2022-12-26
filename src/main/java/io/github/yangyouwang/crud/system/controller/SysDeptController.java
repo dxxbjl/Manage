@@ -45,8 +45,9 @@ public class SysDeptController extends CrudController {
 
   @ApiOperation(value = "部门表分页列表", response = SysDept.class)
   @ApiImplicitParams({
-  @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer"),
-  @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer")})
+          @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer", paramType="query"),
+          @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer", paramType="query")
+  })
   @GetMapping(value = "/page")
   @ResponseBody
   public Result page() {
