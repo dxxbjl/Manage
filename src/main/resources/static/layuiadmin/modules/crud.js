@@ -197,6 +197,11 @@ layui.extend({
                     });
                 }
             });
+            $('#clear-video-btn').on('click',function () {
+                $('#upload-video').attr('src', null);
+                $("#" + obj).val('');
+                layer.msg('清除成功');
+            });
         },
         /**
          * 普通图片上传
@@ -225,6 +230,11 @@ layui.extend({
                         uploadInst.upload();
                     });
                 }
+            });
+            $('#clear-img-btn').on('click',function () {
+                $('#upload-img').attr('src', null);
+                $("#" + obj).val('');
+                layer.msg('清除成功');
             });
         },
         /**
