@@ -377,6 +377,22 @@ layui.extend({
             return "未知";
         },
         /**
+         * 设置文字回显
+         * @param name
+         */
+        setText:function (id, name, defaultVal) {
+            let list = options(name);
+            if(!list){
+                return;
+            }
+            $.each(list,function(index,item){
+                if(item.dictValueKey == defaultVal) {
+                    $("#"+id).html(item.dictValueName);
+                    return false;
+                }
+            });
+        },
+        /**
          * 设置tab名称
          * @param name
          */
