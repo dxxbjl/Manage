@@ -46,12 +46,12 @@ public class AdController extends CrudController {
     return SUFFIX + "/list";
   }
 
-  @PreAuthorize("hasAuthority('ad:list')")
   @ApiOperation(value = "广告表分页列表", response = Ad.class)
   @ApiImplicitParams({
           @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer", paramType="query"),
           @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer", paramType="query")
   })
+  @PreAuthorize("hasAuthority('ad:list')")
   @GetMapping(value = "/page")
   @ResponseBody
   public TableDataInfo page(Ad param) {
@@ -73,6 +73,7 @@ public class AdController extends CrudController {
   }
 
   @ApiOperation(value = "广告表新增")
+  @PreAuthorize("hasAuthority('ad:add')")
   @PostMapping(value = "/add")
   @ResponseBody
   @CrudLog(title = "新增广告",businessType = BusinessType.INSERT)
@@ -85,6 +86,7 @@ public class AdController extends CrudController {
   }
 
   @ApiOperation(value = "广告表修改")
+  @PreAuthorize("hasAuthority('ad:edit')")
   @PostMapping(value = "/modify")
   @ResponseBody
   @CrudLog(title = "修改广告",businessType = BusinessType.UPDATE)
@@ -97,6 +99,7 @@ public class AdController extends CrudController {
   }
 
   @ApiOperation(value = "广告表删除(单个条目)")
+  @PreAuthorize("hasAuthority('ad:del')")
   @DeleteMapping(value = "/remove/{id}")
   @ResponseBody
   @CrudLog(title = "删除广告",businessType = BusinessType.DELETE)
@@ -106,6 +109,7 @@ public class AdController extends CrudController {
   }
 
   @ApiOperation(value = "广告表删除(多个条目)")
+  @PreAuthorize("hasAuthority('ad:del')")
   @PostMapping(value = "/removes")
   @ResponseBody
   @CrudLog(title = "删除广告",businessType = BusinessType.DELETE)

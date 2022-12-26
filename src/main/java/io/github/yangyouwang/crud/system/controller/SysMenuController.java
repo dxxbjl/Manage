@@ -96,6 +96,7 @@ public class SysMenuController extends CrudController {
      * @return 添加状态
      */
     @CrudLog(title = "添加菜单",businessType = BusinessType.INSERT)
+    @PreAuthorize("hasAuthority('menu:add')")
     @PostMapping("/add")
     @ResponseBody
     public Result add(@RequestBody @Validated SysMenu sysMenu, BindingResult bindingResult){
@@ -112,6 +113,7 @@ public class SysMenuController extends CrudController {
      * @return 编辑状态
      */
     @CrudLog(title = "更新菜单",businessType = BusinessType.UPDATE)
+    @PreAuthorize("hasAuthority('menu:edit')")
     @PostMapping("/edit")
     @ResponseBody
     public Result edit(@RequestBody @Validated SysMenu sysMenu, BindingResult bindingResult){
@@ -129,6 +131,7 @@ public class SysMenuController extends CrudController {
      */
     @CrudLog(title = "删除菜单",businessType = BusinessType.DELETE)
     @ApiOperation(value = "删除菜单(单个条目)")
+    @PreAuthorize("hasAuthority('menu:del')")
     @DeleteMapping(value = "/remove/{id}")
     @ResponseBody
     public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {

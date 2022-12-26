@@ -73,6 +73,7 @@ public class SysLogController extends CrudController {
 
     @CrudLog(title = "删除日志",businessType = BusinessType.DELETE)
     @ApiOperation(value = "删除日志(单个条目)")
+    @PreAuthorize("hasAuthority('log:del')")
     @DeleteMapping(value = "/remove/{id}")
     @ResponseBody
     public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
@@ -82,6 +83,7 @@ public class SysLogController extends CrudController {
 
     @CrudLog(title = "删除日志",businessType = BusinessType.DELETE)
     @ApiOperation(value = "删除日志(多个条目)")
+    @PreAuthorize("hasAuthority('log:del')")
     @PostMapping(value = "/removes")
     @ResponseBody
     public Result removes(@RequestBody @Valid List<Long> ids) {

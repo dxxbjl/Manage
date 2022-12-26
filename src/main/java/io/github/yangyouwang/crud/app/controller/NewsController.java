@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 import org.springframework.validation.BindingResult;
@@ -48,6 +49,7 @@ public class NewsController extends CrudController {
           @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer", paramType="query"),
           @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer", paramType="query")
   })
+  @PreAuthorize("hasAuthority('news:list')")
   @GetMapping(value = "/page")
   @ResponseBody
   public TableDataInfo page(News param) {
@@ -69,6 +71,7 @@ public class NewsController extends CrudController {
   }
 
   @ApiOperation(value = "新闻表新增")
+  @PreAuthorize("hasAuthority('news:add')")
   @PostMapping(value = "/add")
   @ResponseBody
   public Result add(@RequestBody @Validated News param,BindingResult bindingResult) {
@@ -80,6 +83,7 @@ public class NewsController extends CrudController {
   }
 
   @ApiOperation(value = "新闻表修改")
+  @PreAuthorize("hasAuthority('news:edit')")
   @PostMapping(value = "/modify")
   @ResponseBody
   public Result modify(@RequestBody @Validated News param,BindingResult bindingResult) {
@@ -91,6 +95,7 @@ public class NewsController extends CrudController {
   }
 
   @ApiOperation(value = "新闻表删除(单个条目)")
+  @PreAuthorize("hasAuthority('news:del')")
   @DeleteMapping(value = "/remove/{id}")
   @ResponseBody
   public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
@@ -99,6 +104,7 @@ public class NewsController extends CrudController {
   }
 
   @ApiOperation(value = "新闻表删除(多个条目)")
+  @PreAuthorize("hasAuthority('news:del')")
   @PostMapping(value = "/removes")
   @ResponseBody
   public Result removes(@RequestBody @Valid List<Long> ids) {

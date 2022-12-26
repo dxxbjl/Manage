@@ -8,6 +8,7 @@ import io.github.yangyouwang.crud.act.model.dto.StartDTO;
 import io.github.yangyouwang.crud.act.model.vo.FormVO;
 import io.github.yangyouwang.crud.act.model.vo.HistoricVO;
 import io.github.yangyouwang.crud.act.service.WorkFlowService;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -26,6 +27,7 @@ import java.util.Objects;
  * 工作流控制层
  * @author yangyouwang
  */
+@Api(tags = "工作流")
 @Controller
 @RequestMapping("/workFlow")
 @RequiredArgsConstructor

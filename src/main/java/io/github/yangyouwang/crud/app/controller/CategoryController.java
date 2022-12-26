@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 import org.springframework.validation.BindingResult;
@@ -49,6 +50,7 @@ public class CategoryController extends CrudController {
           @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer", paramType="query"),
           @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer", paramType="query")
   })
+  @PreAuthorize("hasAuthority('category:list')")
   @GetMapping(value = "/page")
   @ResponseBody
   public Result page() {
@@ -72,6 +74,7 @@ public class CategoryController extends CrudController {
   }
 
   @ApiOperation(value = "分类表新增")
+  @PreAuthorize("hasAuthority('category:add')")
   @PostMapping(value = "/add")
   @ResponseBody
   public Result add(@RequestBody @Validated Category param,BindingResult bindingResult) {
@@ -83,6 +86,7 @@ public class CategoryController extends CrudController {
   }
 
   @ApiOperation(value = "分类表修改")
+  @PreAuthorize("hasAuthority('category:edit')")
   @PostMapping(value = "/modify")
   @ResponseBody
   public Result modify(@RequestBody @Validated Category param,BindingResult bindingResult) {
@@ -94,6 +98,7 @@ public class CategoryController extends CrudController {
   }
 
   @ApiOperation(value = "分类表删除(单个条目)")
+  @PreAuthorize("hasAuthority('category:del')")
   @DeleteMapping(value = "/remove/{id}")
   @ResponseBody
   public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
@@ -102,6 +107,7 @@ public class CategoryController extends CrudController {
   }
 
   @ApiOperation(value = "分类表删除(多个条目)")
+  @PreAuthorize("hasAuthority('category:del')")
   @PostMapping(value = "/removes")
   @ResponseBody
   public Result removes(@RequestBody @Valid List<Long> ids) {

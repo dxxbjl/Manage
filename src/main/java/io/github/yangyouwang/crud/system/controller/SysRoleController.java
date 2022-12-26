@@ -102,6 +102,7 @@ public class SysRoleController extends CrudController {
      * @return 添加状态
      */
     @CrudLog(title = "添加角色",businessType = BusinessType.INSERT)
+    @PreAuthorize("hasAuthority('role:add')")
     @PostMapping("/add")
     @ResponseBody
     public Result add(@RequestBody @Validated SysRole sysRole, BindingResult bindingResult){
@@ -118,6 +119,7 @@ public class SysRoleController extends CrudController {
      * @return 编辑状态
      */
     @CrudLog(title = "更新角色",businessType = BusinessType.UPDATE)
+    @PreAuthorize("hasAuthority('role:edit')")
     @PostMapping("/edit")
     @ResponseBody
     public Result edit(@RequestBody @Validated SysRole sysRole, BindingResult bindingResult){
@@ -135,6 +137,7 @@ public class SysRoleController extends CrudController {
      */
     @ApiOperation(value = "删除角色(单个条目)")
     @CrudLog(title = "删除角色",businessType = BusinessType.DELETE)
+    @PreAuthorize("hasAuthority('role:del')")
     @DeleteMapping("/remove/{id}")
     @ResponseBody
     public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
@@ -149,6 +152,7 @@ public class SysRoleController extends CrudController {
      */
     @ApiOperation(value = "删除角色(多个条目)")
     @PostMapping(value = "/removes")
+    @PreAuthorize("hasAuthority('role:del')")
     @ResponseBody
     @CrudLog(title = "删除角色",businessType = BusinessType.DELETE)
     public Result removes(@RequestBody @Valid List<Long> ids) {

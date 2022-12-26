@@ -110,6 +110,7 @@ public class SysUserController extends CrudController {
      * @return 提示
      */
     @CrudLog(title = "重置密码",businessType = BusinessType.UPDATE)
+    @PreAuthorize("hasAuthority('user:edit')")
     @PostMapping("/resetPass")
     @ResponseBody
     public Result resetPass(@RequestBody @Validated ResetPassDTO resetPassDTO, BindingResult bindingResult){
@@ -126,6 +127,7 @@ public class SysUserController extends CrudController {
      * @return 修改状态
      */
     @CrudLog(title = "修改密码",businessType = BusinessType.UPDATE)
+    @PreAuthorize("hasAuthority('user:edit')")
     @PostMapping("/modifyPass")
     @ResponseBody
     public Result modifyPass(@RequestBody @Validated ModifyPassDTO modifyPassDTO, BindingResult bindingResult) {
@@ -160,6 +162,7 @@ public class SysUserController extends CrudController {
      * @return 添加状态
      */
     @CrudLog(title = "添加用户",businessType = BusinessType.INSERT)
+    @PreAuthorize("hasAuthority('user:add')")
     @PostMapping("/add")
     @ResponseBody
     public Result add(@RequestBody @Validated SysUser sysUser, BindingResult bindingResult) {
@@ -176,6 +179,7 @@ public class SysUserController extends CrudController {
      * @return 编辑状态
      */
     @CrudLog(title = "更新用户",businessType = BusinessType.UPDATE)
+    @PreAuthorize("hasAuthority('user:edit')")
     @PostMapping("/edit")
     @ResponseBody
     public Result edit(@RequestBody @Validated SysUser sysUser, BindingResult bindingResult) {
@@ -192,6 +196,7 @@ public class SysUserController extends CrudController {
      * @return 编辑状态
      */
     @CrudLog(title = "更新个人信息",businessType = BusinessType.UPDATE)
+    @PreAuthorize("hasAuthority('user:edit')")
     @PostMapping("/editUserInfo")
     @ResponseBody
     public Result editUserInfo(@RequestBody @Validated SysUser sysUser, BindingResult bindingResult) {
@@ -203,6 +208,7 @@ public class SysUserController extends CrudController {
     }
 
     @ApiOperation(value = "用户删除(单个条目)")
+    @PreAuthorize("hasAuthority('user:del')")
     @DeleteMapping(value = "/remove/{id}")
     @ResponseBody
     @CrudLog(title = "删除用户",businessType = BusinessType.DELETE)
@@ -212,6 +218,7 @@ public class SysUserController extends CrudController {
     }
 
     @ApiOperation(value = "用户删除(多个条目)")
+    @PreAuthorize("hasAuthority('user:del')")
     @PostMapping(value = "/removes")
     @ResponseBody
     @CrudLog(title = "删除用户",businessType = BusinessType.DELETE)

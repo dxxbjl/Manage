@@ -94,6 +94,7 @@ public class SysDictTypeController extends CrudController {
      * @return 添加状态
      */
     @CrudLog(title = "添加字典类型",businessType = BusinessType.INSERT)
+    @PreAuthorize("hasAuthority('dictType:add')")
     @PostMapping("/add")
     @ResponseBody
     public Result add(@RequestBody @Validated SysDictType sysDictType, BindingResult bindingResult){
@@ -110,6 +111,7 @@ public class SysDictTypeController extends CrudController {
      * @return 编辑状态
      */
     @CrudLog(title = "更新字典类型",businessType = BusinessType.UPDATE)
+    @PreAuthorize("hasAuthority('dictType:edit')")
     @PostMapping("/edit")
     @ResponseBody
     public Result edit(@RequestBody @Validated SysDictType sysDictType, BindingResult bindingResult){
@@ -127,6 +129,7 @@ public class SysDictTypeController extends CrudController {
      */
     @CrudLog(title = "删除字典类型",businessType = BusinessType.DELETE)
     @ApiOperation(value = "删除字典类型(单个条目)")
+    @PreAuthorize("hasAuthority('dictType:del')")
     @DeleteMapping(value = "/remove/{id}")
     @ResponseBody
     public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {

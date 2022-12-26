@@ -62,12 +62,12 @@ public class ${table.controllerName} {
     return SUFFIX + "/list";
   }
 
-  @PreAuthorize("hasAuthority('${table.entityPath}:list')")
   @ApiOperation(value = "${table.comment}分页列表", response = ${entity}.class)
   @ApiImplicitParams({
     @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer", paramType="query"),
     @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer", paramType="query")
   })
+  @PreAuthorize("hasAuthority('${table.entityPath}:list')")
   @GetMapping(value = "/page")
   @ResponseBody
   public TableDataInfo page(${entity} param) {
@@ -88,9 +88,9 @@ public class ${table.controllerName} {
     return SUFFIX + "/add";
   }
 
-  @PreAuthorize("hasAuthority('${table.entityPath}:add')")
   @CrudLog(title = "${table.comment}新增",businessType = BusinessType.INSERT)
   @ApiOperation(value = "${table.comment}新增")
+  @PreAuthorize("hasAuthority('${table.entityPath}:add')")
   @PostMapping(value = "/add")
   @ResponseBody
   public Result add(@RequestBody @Validated ${entity} param,BindingResult bindingResult) {
@@ -101,9 +101,9 @@ public class ${table.controllerName} {
     return Result.success();
   }
 
-  @PreAuthorize("hasAuthority('${table.entityPath}:edit')")
   @CrudLog(title = "${table.comment}修改",businessType = BusinessType.UPDATE)
   @ApiOperation(value = "${table.comment}修改")
+  @PreAuthorize("hasAuthority('${table.entityPath}:edit')")
   @PostMapping(value = "/modify")
   @ResponseBody
   public Result modify(@RequestBody @Validated ${entity} param,BindingResult bindingResult) {
@@ -114,9 +114,9 @@ public class ${table.controllerName} {
     return Result.success();
   }
 
-  @PreAuthorize("hasAuthority('${table.entityPath}:del')")
   @CrudLog(title = "${table.comment}删除(单个条目)",businessType = BusinessType.DELETE)
   @ApiOperation(value = "${table.comment}删除(单个条目)")
+  @PreAuthorize("hasAuthority('${table.entityPath}:del')")
   @DeleteMapping(value = "/remove/{id}")
   @ResponseBody
   public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
@@ -124,9 +124,9 @@ public class ${table.controllerName} {
     return Result.success();
   }
 
-  @PreAuthorize("hasAuthority('${table.entityPath}:del')")
   @CrudLog(title = "${table.comment}删除(多个条目)",businessType = BusinessType.DELETE)
   @ApiOperation(value = "${table.comment}删除(多个条目)")
+  @PreAuthorize("hasAuthority('${table.entityPath}:del')")
   @PostMapping(value = "/removes")
   @ResponseBody
   public Result removes(@RequestBody @Valid List<Long> ids) {

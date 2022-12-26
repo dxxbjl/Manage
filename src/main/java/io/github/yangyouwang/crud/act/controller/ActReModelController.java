@@ -87,6 +87,7 @@ public class ActReModelController extends CrudController {
      * @param actReModel 模型添加对象
      * @return 添加状态
      */
+    @PreAuthorize("hasAuthority('model:add')")
     @PostMapping("/add")
     @ResponseBody
     public Result add(@RequestBody @Valid ActReModel actReModel, BindingResult bindingResult){
@@ -124,6 +125,7 @@ public class ActReModelController extends CrudController {
      * @param actReModel 模型编辑对象
      * @return 编辑状态
      */
+    @PreAuthorize("hasAuthority('model:edit')")
     @PostMapping("/edit")
     @ResponseBody
     public Result edit(@RequestBody @Valid ActReModel actReModel, BindingResult bindingResult) {
@@ -140,6 +142,7 @@ public class ActReModelController extends CrudController {
      * @return 删除状态
      */
     @ApiOperation(value = "模型删除(单个条目)")
+    @PreAuthorize("hasAuthority('model:del')")
     @DeleteMapping(value = "/remove/{id}")
     @ResponseBody
     public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable String id) {

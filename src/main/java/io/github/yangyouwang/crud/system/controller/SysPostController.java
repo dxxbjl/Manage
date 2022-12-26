@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 import org.springframework.validation.BindingResult;
@@ -51,6 +52,7 @@ public class SysPostController extends CrudController {
           @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer", paramType="query"),
           @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer", paramType="query")
   })
+  @PreAuthorize("hasAuthority('post:list')")
   @GetMapping(value = "/page")
   @ResponseBody
   public TableDataInfo page(SysPost param) {
@@ -73,6 +75,7 @@ public class SysPostController extends CrudController {
 
   @CrudLog(title = "新增岗位",businessType = BusinessType.INSERT)
   @ApiOperation(value = "岗位新增")
+  @PreAuthorize("hasAuthority('post:add')")
   @PostMapping(value = "/add")
   @ResponseBody
   public Result add(@RequestBody @Validated SysPost param,BindingResult bindingResult) {
@@ -85,6 +88,7 @@ public class SysPostController extends CrudController {
 
   @CrudLog(title = "修改岗位",businessType = BusinessType.UPDATE)
   @ApiOperation(value = "岗位修改")
+  @PreAuthorize("hasAuthority('post:edit')")
   @PostMapping(value = "/modify")
   @ResponseBody
   public Result modify(@RequestBody @Validated SysPost param,BindingResult bindingResult) {
@@ -97,6 +101,7 @@ public class SysPostController extends CrudController {
 
   @CrudLog(title = "删除岗位",businessType = BusinessType.DELETE)
   @ApiOperation(value = "岗位删除(单个条目)")
+  @PreAuthorize("hasAuthority('post:del')")
   @DeleteMapping(value = "/remove/{id}")
   @ResponseBody
   public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
@@ -106,6 +111,7 @@ public class SysPostController extends CrudController {
 
   @CrudLog(title = "删除岗位",businessType = BusinessType.DELETE)
   @ApiOperation(value = "岗位删除(多个条目)")
+  @PreAuthorize("hasAuthority('post:del')")
   @PostMapping(value = "/removes")
   @ResponseBody
   public Result removes(@RequestBody @Valid List<Long> ids) {

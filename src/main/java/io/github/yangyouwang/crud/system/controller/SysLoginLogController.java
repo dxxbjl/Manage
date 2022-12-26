@@ -40,12 +40,12 @@ public class SysLoginLogController extends CrudController {
     return SUFFIX + "/list";
   }
 
-  @PreAuthorize("hasAuthority('sysLoginLog:list')")
   @ApiOperation(value = "用户登录日志记录表分页列表", response = SysLoginLog.class)
   @ApiImplicitParams({
           @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer", paramType="query"),
           @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer", paramType="query")
   })
+  @PreAuthorize("hasAuthority('sysLoginLog:list')")
   @GetMapping(value = "/page")
   @ResponseBody
   public TableDataInfo page(SysLoginLog param) {
@@ -56,6 +56,7 @@ public class SysLoginLogController extends CrudController {
 
   @CrudLog(title = "删除登录日志",businessType = BusinessType.DELETE)
   @ApiOperation(value = "删除登录日志(单个条目)")
+  @PreAuthorize("hasAuthority('sysLoginLog:del')")
   @DeleteMapping(value = "/remove/{id}")
   @ResponseBody
   public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
@@ -65,6 +66,7 @@ public class SysLoginLogController extends CrudController {
 
   @CrudLog(title = "删除登录日志",businessType = BusinessType.DELETE)
   @ApiOperation(value = "删除登录日志(多个条目)")
+  @PreAuthorize("hasAuthority('sysLoginLog:del')")
   @PostMapping(value = "/removes")
   @ResponseBody
   public Result removes(@RequestBody @Valid List<Long> ids) {

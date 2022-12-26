@@ -9,6 +9,7 @@ import io.github.yangyouwang.crud.system.service.SysDictValueService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -42,6 +43,7 @@ public class SysDictValueController extends CrudController {
      */
     @CrudLog(title = "删除字典值",businessType = BusinessType.DELETE)
     @ApiOperation(value = "删除字典值(单个条目)")
+    @PreAuthorize("hasAuthority('dictValue:del')")
     @DeleteMapping(value = "/remove/{id}")
     @ResponseBody
     public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
@@ -77,6 +79,7 @@ public class SysDictValueController extends CrudController {
      * @return 添加状态
      */
     @CrudLog(title = "添加字典值",businessType = BusinessType.INSERT)
+    @PreAuthorize("hasAuthority('dictValue:add')")
     @PostMapping("/add")
     @ResponseBody
     public Result add(@RequestBody @Validated SysDictValue sysDictValue, BindingResult bindingResult){
@@ -93,6 +96,7 @@ public class SysDictValueController extends CrudController {
      * @return 编辑状态
      */
     @CrudLog(title = "更新字典值",businessType = BusinessType.UPDATE)
+    @PreAuthorize("hasAuthority('dictValue:edit')")
     @PostMapping("/edit")
     @ResponseBody
     public Result edit(@RequestBody @Validated SysDictValue sysDictValue, BindingResult bindingResult){

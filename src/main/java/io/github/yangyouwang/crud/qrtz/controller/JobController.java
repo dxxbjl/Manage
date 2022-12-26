@@ -46,12 +46,12 @@ public class JobController extends CrudController {
     return SUFFIX + "/list";
   }
 
-  @PreAuthorize("hasAuthority('job:list')")
   @ApiOperation(value = "任务表分页列表", response = QrtzJob.class)
   @ApiImplicitParams({
           @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer", paramType="query"),
           @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer", paramType="query")
   })
+  @PreAuthorize("hasAuthority('job:list')")
   @GetMapping(value = "/page")
   @ResponseBody
   public TableDataInfo page(@Validated QrtzJob job) {
@@ -75,6 +75,7 @@ public class JobController extends CrudController {
 
   @CrudLog(title = "新增任务",businessType = BusinessType.INSERT)
   @ApiOperation(value = "任务新增")
+  @PreAuthorize("hasAuthority('job:add')")
   @PostMapping(value = "/add")
   @ResponseBody
   public Result add(@RequestBody @Validated QrtzJob param, BindingResult bindingResult) {
@@ -86,6 +87,7 @@ public class JobController extends CrudController {
   }
   @CrudLog(title = "修改任务",businessType = BusinessType.UPDATE)
   @ApiOperation(value = "任务表修改")
+  @PreAuthorize("hasAuthority('job:edit')")
   @PostMapping(value = "/modify")
   @ResponseBody
   public Result modify(@RequestBody @Validated QrtzJob param, BindingResult bindingResult) {
@@ -97,6 +99,7 @@ public class JobController extends CrudController {
   }
   @CrudLog(title = "删除任务",businessType = BusinessType.DELETE)
   @ApiOperation(value = "任务表删除(单个条目)")
+  @PreAuthorize("hasAuthority('job:del')")
   @DeleteMapping(value = "/remove/{id}")
   @ResponseBody
   public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
@@ -106,6 +109,7 @@ public class JobController extends CrudController {
 
   @CrudLog(title = "删除任务",businessType = BusinessType.DELETE)
   @ApiOperation(value = "任务表删除(多个条目)")
+  @PreAuthorize("hasAuthority('job:del')")
   @PostMapping(value = "/removes")
   @ResponseBody
   public Result removes(@RequestBody @Valid List<Long> ids) {
@@ -124,6 +128,7 @@ public class JobController extends CrudController {
      * @return 修改状态响应
      */
     @CrudLog(title = "更新任务状态",businessType = BusinessType.UPDATE)
+    @PreAuthorize("hasAuthority('job:edit')")
     @PostMapping("/changeJob")
     @ResponseBody
     public Result changeJob(@RequestBody @Validated QrtzJob param, BindingResult bindingResult) {
