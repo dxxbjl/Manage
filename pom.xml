@@ -382,6 +382,13 @@
 					<include>application-${profile.active}.yml</include>
 				</includes>
 			</resource>
+			<resource>
+				<directory>lib</directory>
+				<targetPath>BOOT-INF/classes/lib/</targetPath>
+				<includes>
+					<include>*.jar</include>
+				</includes>
+			</resource>
 		</resources>
 		<plugins>
 			<plugin>
@@ -402,6 +409,7 @@
 					<!--热加载-->
 					<fork>true</fork>
 					<addResources>true</addResources>
+					<includeSystemScope>true</includeSystemScope>
 				</configuration>
 			</plugin>
 			<!--Docker打包镜像 插件-->
