@@ -19,14 +19,16 @@
     <select id="getUserList" resultMap="BaseResultMap">
         select
         u.id, u.nick_name, u.avatar, u.gender, u.birthday, u.mobile, u.email, u.status, u.create_time,
-               group_concat(o.app_type) as app_type
+        group_concat(distinct o.app_type separator ',' ) as app_type
         from app_user u
         left join app_oauth o on u.id = o.user_id
+        where 1 = 1
         <if test="ew != null">
             <if test="ew.nonEmptyOfWhere">
                 AND
             </if>
             ${ew.sqlSegment}
         </if>
+        group by u.id
     </select>
 </mapper>
