@@ -87,6 +87,7 @@ public class ${table.controllerName} {
     return SUFFIX + "/add";
   }
 
+  @PreAuthorize("hasAuthority('${table.entityPath}:add')")
   @CrudLog(title = "${table.comment}新增",businessType = BusinessType.INSERT)
   @ApiOperation(value = "${table.comment}新增")
   @PostMapping(value = "/add")
@@ -99,6 +100,7 @@ public class ${table.controllerName} {
     return Result.success();
   }
 
+  @PreAuthorize("hasAuthority('${table.entityPath}:edit')")
   @CrudLog(title = "${table.comment}修改",businessType = BusinessType.UPDATE)
   @ApiOperation(value = "${table.comment}修改")
   @PostMapping(value = "/modify")
@@ -111,6 +113,7 @@ public class ${table.controllerName} {
     return Result.success();
   }
 
+  @PreAuthorize("hasAuthority('${table.entityPath}:del')")
   @CrudLog(title = "${table.comment}删除(单个条目)",businessType = BusinessType.DELETE)
   @ApiOperation(value = "${table.comment}删除(单个条目)")
   @DeleteMapping(value = "/remove/{id}")
@@ -120,6 +123,7 @@ public class ${table.controllerName} {
     return Result.success();
   }
 
+  @PreAuthorize("hasAuthority('${table.entityPath}:del')")
   @CrudLog(title = "${table.comment}删除(多个条目)",businessType = BusinessType.DELETE)
   @ApiOperation(value = "${table.comment}删除(多个条目)")
   @PostMapping(value = "/removes")

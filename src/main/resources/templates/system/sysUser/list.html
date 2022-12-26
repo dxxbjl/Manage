@@ -285,7 +285,7 @@
         changeUserEnabled: function (userId,checked) {
           $.ajax({
             type: 'POST',
-            url:  ctx + '/sysUser/changeUser',
+            url:  ctx + '/sysUser/edit',
             data: JSON.stringify({
               id: userId,
               enabled: checked

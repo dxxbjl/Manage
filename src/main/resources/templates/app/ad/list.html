@@ -188,7 +188,7 @@
             changeAdEnabled: function(id,checked) {
                 $.ajax({
                     type: 'POST',
-                    url:  ctx + '/app/ad/changeAd',
+                    url:  ctx + '/app/ad/modify',
                     data: JSON.stringify({
                         id: id,
                         enabled: checked

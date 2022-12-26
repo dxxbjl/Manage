@@ -194,22 +194,6 @@ public class SysUserController extends CrudController {
         return Result.success(flag);
     }
 
-    /**
-     * 修改用户状态
-     * @param sysUser 修改用户状态对象
-     * @return 修改状态
-     */
-    @CrudLog(title = "更新用户状态",businessType = BusinessType.UPDATE)
-    @PostMapping("/changeUser")
-    @ResponseBody
-    public Result changeUser(@RequestBody @Validated SysUser sysUser, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()){
-            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
-        }
-        boolean flag = sysUserService.updateById(sysUser);
-        return Result.success(flag);
-    }
-
     @ApiOperation(value = "用户删除(单个条目)")
     @DeleteMapping(value = "/remove/{id}")
     @ResponseBody

@@ -1,9 +1,7 @@
 package io.github.yangyouwang.crud.system.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import io.github.yangyouwang.common.annotation.CrudLog;
 import io.github.yangyouwang.common.domain.TreeSelectNode;
-import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.crud.system.entity.SysDept;
 import io.github.yangyouwang.crud.system.service.SysDeptService;
 import io.github.yangyouwang.common.domain.Result;
@@ -117,21 +115,5 @@ public class SysDeptController extends CrudController {
   @ResponseBody
   public List<TreeSelectNode> treeSelect() {
     return sysDeptService.treeSelect();
-  }
-
-  /**
-   * 更新部门状态
-   * @param sysDept 修改部门状态对象
-   * @return 修改状态
-   */
-  @CrudLog(title = "更新部门状态",businessType = BusinessType.UPDATE)
-  @PostMapping("/changeDept")
-  @ResponseBody
-  public Result changeDept(@RequestBody @Validated SysDept sysDept, BindingResult bindingResult) {
-    if (bindingResult.hasErrors()){
-      return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
-    }
-    boolean flag = sysDeptService.updateById(sysDept);
-    return Result.success(flag);
   }
 }

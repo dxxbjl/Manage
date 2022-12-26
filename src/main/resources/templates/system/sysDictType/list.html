@@ -263,7 +263,7 @@
             changeDictTypeEnabled: function (id,checked) {
                 $.ajax({
                     type: 'POST',
-                    url:  ctx + '/sysDictType/changeDictType',
+                    url:  ctx + '/sysDictType/edit',
                     data: JSON.stringify({
                         id: id,
                         enabled: checked
@@ -286,7 +286,7 @@
             changeDictValueEnabled: function (id,checked) {
                 $.ajax({
                     type: 'POST',
-                    url:  ctx + '/sysDictValue/changeDictValue',
+                    url:  ctx + '/sysDictValue/edit',
                     data: JSON.stringify({
                         id: id,
                         enabled: checked

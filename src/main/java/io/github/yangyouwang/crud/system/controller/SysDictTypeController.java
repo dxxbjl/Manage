@@ -113,22 +113,6 @@ public class SysDictTypeController extends CrudController {
     }
 
     /**
-     * 修改字典状态
-     * @param sysDictType 修改字典参数
-     * @return 修改状态
-     */
-    @CrudLog(title = "更新字典类型状态",businessType = BusinessType.UPDATE)
-    @PostMapping("/changeDictType")
-    @ResponseBody
-    public Result changeDictType(@RequestBody @Validated SysDictType sysDictType, BindingResult bindingResult){
-        if (bindingResult.hasErrors()){
-            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
-        }
-        boolean flag = sysDictTypeService.updateById(sysDictType);
-        return Result.success(flag);
-    }
-
-    /**
      * 删除请求
      * @param id 字典id
      * @return 删除状态

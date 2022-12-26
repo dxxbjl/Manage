@@ -112,20 +112,4 @@ public class AdController extends CrudController {
      adService.removes(ids);
      return Result.success();
    }
-
-    /**
-     * 修改轮播图状态
-     * @param param 修改轮播图参数
-     * @return 修改状态
-     */
-    @CrudLog(title = "修改广告状态",businessType = BusinessType.UPDATE)
-    @PostMapping("/changeAd")
-    @ResponseBody
-    public Result changeAd(@RequestBody @Validated Ad param, BindingResult bindingResult){
-        if (bindingResult.hasErrors()){
-            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
-        }
-        boolean flag = adService.updateById(param);
-        return Result.success(flag);
-    }
  }

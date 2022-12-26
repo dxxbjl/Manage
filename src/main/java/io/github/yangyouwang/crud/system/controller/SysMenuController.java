@@ -115,22 +115,6 @@ public class SysMenuController extends CrudController {
     }
 
     /**
-     * 更新菜单状态
-     * @param sysMenu 更新菜单对象
-     * @return 菜单状态
-     */
-    @CrudLog(title = "更新菜单状态",businessType = BusinessType.UPDATE)
-    @PostMapping("/changeMenu")
-    @ResponseBody
-    public Result changeMenu(@RequestBody @Validated SysMenu sysMenu, BindingResult bindingResult){
-        if (bindingResult.hasErrors()){
-            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
-        }
-        boolean flag = sysMenuService.updateById(sysMenu);
-        return Result.success(flag);
-    }
-
-    /**
      * 删除请求
      * @param id 删除id
      * @return 删除状态

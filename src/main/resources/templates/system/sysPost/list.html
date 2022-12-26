@@ -185,7 +185,7 @@
             changePostEnabled: function (postId, checked) {
                 $.ajax({
                     type: 'POST',
-                    url:  ctx + '/system/sysPost/changePost',
+                    url:  ctx + '/system/sysPost/modify',
                     data: JSON.stringify({
                         id: postId,
                         enabled: checked

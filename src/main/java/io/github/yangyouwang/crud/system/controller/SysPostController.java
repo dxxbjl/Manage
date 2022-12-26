@@ -113,22 +113,6 @@ public class SysPostController extends CrudController {
    }
 
   /**
-   * 修改岗位状态
-   * @param param 修改岗位状态对象
-   * @return 修改状态
-   */
-  @CrudLog(title = "更新岗位状态",businessType = BusinessType.UPDATE)
-  @PostMapping("/changePost")
-  @ResponseBody
-  public Result changePost(@RequestBody @Validated SysPost param, BindingResult bindingResult) {
-    if (bindingResult.hasErrors()){
-      return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
-    }
-    boolean flag = sysPostService.updateById(param);
-    return Result.success(flag);
-  }
-
-  /**
    * 根据岗位ids查询选中岗位列表
    * @param ids 岗位ids
    * @return 岗位下拉列表

@@ -127,7 +127,7 @@
             changeNoticeStatus: function (noticeId,checked) {
                 $.ajax({
                     type: 'POST',
-                    url:  ctx + '/app/notice/changeNoticeStatus',
+                    url:  ctx + '/app/notice/modify',
                     data: JSON.stringify({
                         id: noticeId,
                         noticeStatus: checked

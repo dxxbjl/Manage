@@ -100,20 +100,4 @@ public class SysDictValueController extends CrudController {
         boolean flag = sysDictValueService.updateById(sysDictValue);
         return Result.success(flag);
     }
-
-    /**
-     * 修改字典值状态
-     * @param sysDictValue 修改字典值参数
-     * @return 修改状态
-     */
-    @CrudLog(title = "更新字典值状态",businessType = BusinessType.UPDATE)
-    @PostMapping("/changeDictValue")
-    @ResponseBody
-    public Result changeDictValue(@RequestBody @Validated SysDictValue sysDictValue, BindingResult bindingResult){
-        if (bindingResult.hasErrors()){
-            return Result.failure(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
-        }
-        boolean flag = sysDictValueService.updateById(sysDictValue);
-        return Result.success(flag);
-    }
 }

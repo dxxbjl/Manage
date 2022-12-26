@@ -210,7 +210,7 @@
             changeDeptEnabled: function(deptId,checked) {
                 $.ajax({
                     type: 'POST',
-                    url:  ctx + '/system/sysDept/changeDept',
+                    url:  ctx + '/system/sysDept/modify',
                     data: JSON.stringify({
                         id: deptId,
                         enabled: checked

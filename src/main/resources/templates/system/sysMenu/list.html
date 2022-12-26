@@ -212,7 +212,7 @@
           changeMenuVisible: function (id,checked) {
             $.ajax({
               type: 'POST',
-              url:  ctx + '/sysMenu/changeMenu',
+              url:  ctx + '/sysMenu/edit',
               data: JSON.stringify({
                 id: id,
                 visible: checked
