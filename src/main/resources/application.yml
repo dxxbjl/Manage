@@ -8,6 +8,7 @@ server:
     context-path: /
   tomcat:
     uri-encoding: UTF-8
+  max-http-header-size: 65546
 spring:
   servlet:
     multipart:
