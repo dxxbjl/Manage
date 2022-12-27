@@ -198,7 +198,7 @@ layui.extend({
                 }
             });
             $('#clear-video-btn').on('click',function () {
-                $('#upload-video').attr('src', null);
+                $('#upload-video').attr('src', '');
                 $("#" + obj).val('');
                 layer.msg('清除成功');
             });
@@ -232,7 +232,7 @@ layui.extend({
                 }
             });
             $('#clear-img-btn').on('click',function () {
-                $('#upload-img').attr('src', null);
+                $('#upload-img').attr('src', '');
                 $("#" + obj).val('');
                 layer.msg('清除成功');
             });

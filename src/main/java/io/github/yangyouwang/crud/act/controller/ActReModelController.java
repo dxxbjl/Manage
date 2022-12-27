@@ -7,6 +7,8 @@ import io.github.yangyouwang.common.domain.TableDataInfo;
 import io.github.yangyouwang.crud.act.entity.ActReModel;
 import io.github.yangyouwang.crud.act.service.ActReModelService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -73,6 +75,11 @@ public class ActReModelController extends CrudController {
      * @param actReModel 模型列表对象
      * @return 请求列表
      */
+    @ApiOperation(value = "流程模型分页列表", response = ActReModel.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer", paramType="query"),
+            @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer", paramType="query")
+    })
     @PreAuthorize("hasAuthority('model:list')")
     @GetMapping("/page")
     @ResponseBody
@@ -87,6 +94,7 @@ public class ActReModelController extends CrudController {
      * @param actReModel 模型添加对象
      * @return 添加状态
      */
+    @ApiOperation(value = "流程模型新增")
     @PreAuthorize("hasAuthority('model:add')")
     @PostMapping("/add")
     @ResponseBody
@@ -113,6 +121,7 @@ public class ActReModelController extends CrudController {
      * @param id 模型id
      * @return 是否部署成功响应
      */
+    @ApiOperation(value = "部署流程模型")
     @GetMapping("/deploy/{id}")
     @ResponseBody
     public Result deploy(@Valid @NotNull(message = "id不能为空")  @PathVariable("id") String id) {
@@ -125,6 +134,7 @@ public class ActReModelController extends CrudController {
      * @param actReModel 模型编辑对象
      * @return 编辑状态
      */
+    @ApiOperation(value = "流程模型修改")
     @PreAuthorize("hasAuthority('model:edit')")
     @PostMapping("/edit")
     @ResponseBody
