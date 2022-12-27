@@ -5,12 +5,14 @@ import io.github.yangyouwang.common.domain.Result;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import java.io.File;
 import java.lang.annotation.Annotation;
 
 /**
@@ -39,7 +41,10 @@ public class ResponseResultBodyAdvice implements ResponseBodyAdvice<Object> {
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         // 防止重复包裹的问题出现
-        if (body instanceof Result) {
+        if (body == null) {
+            return Result.success();
+        }
+        if (body instanceof Result || body instanceof File || body instanceof ResponseEntity) {
             return body;
         }
         return Result.success(body);

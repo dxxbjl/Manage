@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
@@ -79,17 +80,12 @@ public class WebMvcConfig implements WebMvcConfigurer, WebMvcRegistrations {
                 .allowedHeaders("*");
     }
 
-    @Bean
-    public HttpMessageConverter<String> responseBody(){
-        return new StringHttpMessageConverter(StandardCharsets.UTF_8);
-    }
-
-    /**
-     * 响应UTF-8编码
-     */
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.add(responseBody());
+        // 将jackson序列化的处理调整到最前面
+        converters.add(0, new MappingJackson2HttpMessageConverter());
+        // 响应UTF-8编码
+        converters.add(new StringHttpMessageConverter(StandardCharsets.UTF_8));
     }
 
     /**
