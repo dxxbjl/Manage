@@ -43,8 +43,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
           // 手机号
           .eq(!StringUtils.isEmpty(param.getMobile()), User::getMobile, param.getMobile())
           // 邮箱
-          .eq(!StringUtils.isEmpty(param.getEmail()), User::getEmail, param.getEmail())
-          .orderByDesc(User::getCreateTime);
+          .eq(!StringUtils.isEmpty(param.getEmail()), User::getEmail, param.getEmail());
     return userMapper.getUserList(queryWrapper);
   }
 

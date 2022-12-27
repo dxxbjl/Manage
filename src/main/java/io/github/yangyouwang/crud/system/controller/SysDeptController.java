@@ -49,7 +49,7 @@ public class SysDeptController extends CrudController {
           @ApiImplicitParam(name = "page", value = "第几页", dataType = "Integer", paramType="query"),
           @ApiImplicitParam(name = "limit", value = "每页记录数", dataType = "Integer", paramType="query")
   })
-  @PreAuthorize("hasAuthority('dept:list')")
+  @PreAuthorize("hasAuthority('sysDept:list')")
   @GetMapping(value = "/page")
   @ResponseBody
   public Result page() {
@@ -73,7 +73,7 @@ public class SysDeptController extends CrudController {
   }
 
   @ApiOperation(value = "部门表新增")
-  @PreAuthorize("hasAuthority('dept:add')")
+  @PreAuthorize("hasAuthority('sysDept:add')")
   @PostMapping(value = "/add")
   @ResponseBody
   public Result add(@RequestBody @Validated SysDept param,BindingResult bindingResult) {
@@ -85,7 +85,7 @@ public class SysDeptController extends CrudController {
   }
 
   @ApiOperation(value = "部门表修改")
-  @PreAuthorize("hasAuthority('dept:edit')")
+  @PreAuthorize("hasAuthority('sysDept:edit')")
   @PostMapping(value = "/modify")
   @ResponseBody
   public Result modify(@RequestBody @Validated SysDept param,BindingResult bindingResult) {
@@ -97,7 +97,7 @@ public class SysDeptController extends CrudController {
   }
 
   @ApiOperation(value = "部门表删除(单个条目)")
-  @PreAuthorize("hasAuthority('dept:del')")
+  @PreAuthorize("hasAuthority('sysDept:del')")
   @DeleteMapping(value = "/remove/{id}")
   @ResponseBody
   public Result remove(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {
@@ -106,7 +106,7 @@ public class SysDeptController extends CrudController {
   }
 
   @ApiOperation(value = "部门表删除(多个条目)")
-  @PreAuthorize("hasAuthority('dept:del')")
+  @PreAuthorize("hasAuthority('sysDept:del')")
   @PostMapping(value = "/removes")
   @ResponseBody
   public Result removes(@RequestBody @Valid List<Long> ids) {
