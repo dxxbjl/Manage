@@ -5,6 +5,8 @@ import com.aliyun.vod.upload.req.UploadStreamRequest;
 import com.aliyun.vod.upload.resp.UploadStreamResponse;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.profile.DefaultProfile;
+import com.aliyuncs.vod.model.v20170321.CreateUploadVideoRequest;
+import com.aliyuncs.vod.model.v20170321.CreateUploadVideoResponse;
 import com.aliyuncs.vod.model.v20170321.GetPlayInfoRequest;
 import com.aliyuncs.vod.model.v20170321.GetPlayInfoResponse;
 import io.github.yangyouwang.core.config.properties.VodProperties;
@@ -40,8 +42,8 @@ public class SampleVod {
     private DefaultAcsClient client;
 
     public SampleVod(ObjectProvider<VodProperties> vodPropertiesObjectProvider) {
-       this.vodProperties =  vodPropertiesObjectProvider.getIfAvailable(VodProperties::new);
-       initVod();
+        this.vodProperties =  vodPropertiesObjectProvider.getIfAvailable(VodProperties::new);
+        initVod();
     }
 
     public void initVod() {
@@ -57,8 +59,7 @@ public class SampleVod {
         request.setApiRegionId(regionId);
         UploadVideoImpl uploader = new UploadVideoImpl();
         UploadStreamResponse response = uploader.uploadStream(request);
-        String videoId = response.getVideoId();
-        return getPlayInfo(videoId);
+        return response.getVideoId();
     }
 
     /**
@@ -75,6 +76,18 @@ public class SampleVod {
             return playInfoList.stream().findFirst().get().getPlayURL();
         } catch (Exception e) {
             throw new RuntimeException("获取视频播放地址出错了：" + e.getLocalizedMessage());
+        }
+    }
+
+    public CreateUploadVideoResponse getToken(String name) {
+        CreateUploadVideoRequest request = new CreateUploadVideoRequest();
+        request.setFileName(name);
+        request.setTitle(name);
+        try {
+            return client.getAcsResponse(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("获取上传视频凭证出错了");
         }
     }
 }
