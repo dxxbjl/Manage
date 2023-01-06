@@ -74,14 +74,23 @@ let fun = {
      * 播放视频
      */
     playVideo: function(that) {
-        layer.open({
-            type: 1,
-            offset: 'lt',
-            area: ['100%','100%'],
-            title: '播放视频',
-            content: `<video width="100%" height="100%"  controls="controls" autobuffer="autobuffer" autoplay="autoplay" loop="loop">
-                            <source src="${$(that).data("video")}" type="video/mp4"/>
+        $.ajax({
+            url: ctx + "/common/playUrl?videoId=" + $(that).data("video"),
+            type: 'GET',
+            contentType:'application/json;charset=UTF-8',
+            dataType: 'json',
+            async : false,
+            success: function (result) {
+                layer.open({
+                    type: 1,
+                    offset: 'lt',
+                    area: ['100%','100%'],
+                    title: '播放视频',
+                    content: `<video width="100%" height="100%"  controls="controls" autobuffer="autobuffer" autoplay="autoplay" loop="loop">
+                            <source src="${result.data}" type="video/mp4"/>
                         </video>`,
+                });
+            }
         });
     },
     /**
