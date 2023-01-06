@@ -7,11 +7,6 @@ package io.github.yangyouwang.common.constant;
  * @create: 2019-09-04 14:32
  **/
 public interface JwtConsts {
-
-    /**
-     * token
-     */
-    String TOKEN = "token";
     /**
      * 根据key获取token
      */

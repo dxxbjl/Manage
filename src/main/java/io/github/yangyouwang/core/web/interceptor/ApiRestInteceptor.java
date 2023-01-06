@@ -1,14 +1,11 @@
 package io.github.yangyouwang.core.web.interceptor;
 
-import io.github.yangyouwang.common.annotation.ApiIdempotent;
 import io.github.yangyouwang.common.annotation.PassToken;
-import io.github.yangyouwang.common.constant.CacheConsts;
 import io.github.yangyouwang.common.constant.JwtConsts;
 import io.github.yangyouwang.common.enums.ResultStatus;
 import io.github.yangyouwang.core.exception.CrudException;
 import io.github.yangyouwang.core.util.JwtTokenUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -36,7 +33,7 @@ public class ApiRestInteceptor extends HandlerInterceptorAdapter {
         if (handler instanceof org.springframework.web.servlet.resource.ResourceHttpRequestHandler) {
             return true;
         }
-        return checkJwt(request, handler) && checkApiIdempotent(request, handler);
+        return checkJwt(request, handler);
     }
 
     private boolean checkJwt(HttpServletRequest request, Object handler) {
@@ -61,24 +58,5 @@ public class ApiRestInteceptor extends HandlerInterceptorAdapter {
             }
         }
         throw new CrudException(ResultStatus.NO_PERMISSION);
-    }
-
-    private boolean checkApiIdempotent(HttpServletRequest request, Object handler) {
-        HandlerMethod handlerMethod = (HandlerMethod) handler;
-        Method method = handlerMethod.getMethod();
-        if (method.isAnnotationPresent(ApiIdempotent.class)) {
-            //  幂等性校验, 校验通过则放行, 校验失败则抛出异常, 并通过统一异常处理返回友好提示
-            String token = request.getParameter(JwtConsts.TOKEN);
-            if (Strings.isBlank(token)) {
-                throw new CrudException(ResultStatus.IDEMPOTENT_NOT_EXIST);
-            }
-            String tokenKey = CacheConsts.REDIS_TOKEN_PREFIX + token;
-            boolean flag = redisTemplate.hasKey(tokenKey);
-            if (flag) {
-                return redisTemplate.delete(tokenKey);
-            }
-            throw new CrudException(ResultStatus.NON_IDEMPOTENT);
-        }
-        return true;
     }
 }

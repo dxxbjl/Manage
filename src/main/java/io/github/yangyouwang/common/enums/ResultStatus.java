@@ -20,14 +20,6 @@ public enum ResultStatus {
      * 失败响应
      */
     ERROR(500, "Server Error"),
-     /**
-     * 请求幂等参数不存在
-     */
-    IDEMPOTENT_NOT_EXIST(301,"请求幂等参数不存在"),
-    /**
-     * 请求非幂等
-     */
-    NON_IDEMPOTENT(302,"请求非幂等"),
     /**
      * 无权限响应
      */

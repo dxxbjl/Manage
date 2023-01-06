@@ -53,6 +53,7 @@ public class ApiNewsController extends CrudController {
      * @param id 主键
      * @return 响应
      */
+    @ApiOperation(value = "新闻详情")
     @GetMapping("/info/{id}")
     @PassToken
     public News info(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {

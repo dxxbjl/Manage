@@ -65,6 +65,7 @@ public class ApiAdController {
      * @param id 主键
      * @return 响应
      */
+    @ApiOperation(value = "轮播图详情")
     @GetMapping("/info/{id}")
     @PassToken
     public Ad info(@Valid @NotNull(message = "id不能为空") @PathVariable Long id) {

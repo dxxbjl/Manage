@@ -71,9 +71,6 @@ public class SwaggerConfig {
 
     private List<Parameter> globalOperation(){
         List<Parameter> pars = new ArrayList<>();
-        ParameterBuilder idempotentPar = new ParameterBuilder();
-        idempotentPar.name("token").description("幂等token").modelRef(new ModelRef("string")).parameterType("query").required(false).build();
-        pars.add(idempotentPar.build());
         ParameterBuilder tokenPar = new ParameterBuilder();
         tokenPar.name("Authorization").description("授权token").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
         pars.add(tokenPar.build());
