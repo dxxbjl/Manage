@@ -12,6 +12,7 @@ import io.github.yangyouwang.common.domain.ApiContext;
 import io.github.yangyouwang.core.config.properties.WeChatProperties;
 import io.github.yangyouwang.core.util.JwtTokenUtil;
 import io.github.yangyouwang.core.util.RestTemplateUtil;
+import io.github.yangyouwang.crud.api.check.UserCheck;
 import io.github.yangyouwang.crud.api.factory.UserFactory;
 import io.github.yangyouwang.crud.api.model.dto.*;
 import io.github.yangyouwang.crud.api.model.vo.UserApplyVO;
@@ -131,8 +132,10 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         if (Objects.isNull(oauth) || !oauth.getAppSecret().equals(passwordAuthDTO.getAppSecret())) {
             throw new RuntimeException("用户名或密码错误");
         }
+        Long userId = oauth.getUserId();
+        UserCheck.checkUserStatus(userId);
         UserAuthVO userAuthVO = new UserAuthVO();
-        userAuthVO.setToken(JwtTokenUtil.buildJWT(oauth.getUserId().toString()));
+        userAuthVO.setToken(JwtTokenUtil.buildJWT(userId.toString()));
         return userAuthVO;
     }
 
@@ -211,7 +214,9 @@ public class ApiUserService extends ServiceImpl<UserMapper, User> {
         UserAuthVO userAuthVO = new UserAuthVO();
         if (Objects.nonNull(oauth)) {
             // 如果手机号验证码已授权
-            userAuthVO.setToken(JwtTokenUtil.buildJWT(oauth.getUserId().toString()));
+            Long userId = oauth.getUserId();
+            UserCheck.checkUserStatus(userId);
+            userAuthVO.setToken(JwtTokenUtil.buildJWT(userId.toString()));
             return userAuthVO;
         }
         User oldUser = this.getOne(new LambdaQueryWrapper<User>()
