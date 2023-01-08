@@ -12,15 +12,14 @@
  */
 package io.github.yangyouwang.crud.act.controller;
 
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.util.StreamUtils;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
+import org.activiti.engine.ActivitiException;
+import org.apache.commons.io.IOUtils;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @author Tijs Rademakers
@@ -29,14 +28,14 @@ import java.nio.charset.StandardCharsets;
 @RequestMapping("/service")
 public class StencilsetRestResource {
 
-    @GetMapping(value = "/editor/stencilset")
-    public String getStencilset() {
-        ClassPathResource resource = new ClassPathResource("static/act/stencilset.json");
-        try (InputStream in = resource.getInputStream()) {
-            return StreamUtils.copyToString(in, StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+    @RequestMapping(value="/editor/stencilset", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String getStencilset() {
+        InputStream stencilsetStream = this.getClass().getClassLoader().getResourceAsStream("static/act/stencilset.json");
+        try {
+            return IOUtils.toString(stencilsetStream, "utf-8");
+        } catch (Exception e) {
+            throw new ActivitiException("Error while loading stencil set", e);
         }
     }
 }

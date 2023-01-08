@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.nio.charset.StandardCharsets;
 
 /**
  * @author Tijs Rademakers
@@ -35,21 +34,21 @@ import java.nio.charset.StandardCharsets;
 @RestController
 @RequestMapping("/service")
 public class ModelEditorJsonRestResource implements ModelDataJsonConstants {
-  
+
   protected static final Logger LOGGER = LoggerFactory.getLogger(ModelEditorJsonRestResource.class);
-  
+
   @Resource
   private RepositoryService repositoryService;
-  
+
   @Resource
   private ObjectMapper objectMapper;
-  
+
   @RequestMapping(value="/model/{modelId}/json", method = RequestMethod.GET, produces = "application/json")
   public ObjectNode getEditorJson(@PathVariable String modelId) {
     ObjectNode modelNode = null;
-    
+
     Model model = repositoryService.getModel(modelId);
-      
+
     if (model != null) {
       try {
         if (StringUtils.isNotEmpty(model.getMetaInfo())) {
@@ -60,9 +59,9 @@ public class ModelEditorJsonRestResource implements ModelDataJsonConstants {
         }
         modelNode.put(MODEL_ID, model.getId());
         ObjectNode editorJsonNode = (ObjectNode) objectMapper.readTree(
-            new String(repositoryService.getModelEditorSource(model.getId()), StandardCharsets.UTF_8));
+                new String(repositoryService.getModelEditorSource(model.getId()), "utf-8"));
         modelNode.put("model", editorJsonNode);
-        
+
       } catch (Exception e) {
         LOGGER.error("Error creating model JSON", e);
         throw new ActivitiException("Error creating model JSON", e);
