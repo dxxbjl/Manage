@@ -3,6 +3,7 @@ package io.github.yangyouwang.crud.act.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
@@ -41,6 +42,7 @@ public class ActReModel {
 
     /** 创建时间 */
     @TableField("CREATE_TIME_")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private Date createTime;
 
     /** 最新修改时间 */
