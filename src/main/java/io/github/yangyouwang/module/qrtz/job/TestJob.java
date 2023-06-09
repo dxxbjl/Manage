@@ -1,4 +1,4 @@
-package io.github.yangyouwang.module.job;
+package io.github.yangyouwang.module.qrtz.job;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

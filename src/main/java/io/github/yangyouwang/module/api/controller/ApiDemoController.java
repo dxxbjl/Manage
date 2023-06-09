@@ -7,12 +7,10 @@ import io.github.yangyouwang.common.enums.BusinessType;
 import io.github.yangyouwang.core.security.util.JwtTokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,9 +26,6 @@ import java.util.Map;
 @RequestMapping("/api/{version}/demo")
 @Api(tags = "demo控制层")
 public class ApiDemoController {
-
-    @Resource
-    private RedisTemplate<String,Object> redisTemplate;
 
     @ApiVersion(value = ApiVersionConsts.API_V1,group = ApiVersionConsts.SWAGGER_API_V1)
     @ApiOperation(value="获取用户token")
