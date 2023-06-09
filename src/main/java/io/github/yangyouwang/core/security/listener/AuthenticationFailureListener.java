@@ -3,15 +3,16 @@ package io.github.yangyouwang.core.security.listener;
 import cn.hutool.extra.servlet.ServletUtil;
 import io.github.yangyouwang.core.util.StringUtil;
 import io.github.yangyouwang.module.system.entity.SysLoginLog;
-import io.github.yangyouwang.module.system.service.SysLoginLogService;
+import io.github.yangyouwang.module.system.mapper.SysLoginLogMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
-import org.springframework.security.authentication.event.*;
+import org.springframework.security.authentication.event.AbstractAuthenticationFailureEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.Resource;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -24,10 +25,10 @@ import java.util.Objects;
  */
 @Slf4j
 @Component
-public class AuthenticationFailureListener  implements ApplicationListener<AbstractAuthenticationFailureEvent>  {
+public class AuthenticationFailureListener implements ApplicationListener<AbstractAuthenticationFailureEvent>  {
 
-    @Autowired
-    private SysLoginLogService sysLoginLogService;
+    @Resource
+    private SysLoginLogMapper sysLoginLogMapper;
 
     @Override
     public void onApplicationEvent(AbstractAuthenticationFailureEvent event) {
@@ -41,6 +42,8 @@ public class AuthenticationFailureListener  implements ApplicationListener<Abstr
         sysLoginLog.setAccount(username);
         sysLoginLog.setLoginIp(ip);
         sysLoginLog.setRemark(message);
-        sysLoginLogService.save(sysLoginLog);
+        sysLoginLog.setCreateBy(username);
+        sysLoginLog.setCreateTime(new Date());
+        sysLoginLogMapper.insert(sysLoginLog);
     }
 }

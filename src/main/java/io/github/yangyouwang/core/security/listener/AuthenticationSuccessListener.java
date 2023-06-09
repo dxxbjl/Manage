@@ -2,9 +2,8 @@ package io.github.yangyouwang.core.security.listener;
 
 import cn.hutool.extra.servlet.ServletUtil;
 import io.github.yangyouwang.module.system.entity.SysLoginLog;
-import io.github.yangyouwang.module.system.service.SysLoginLogService;
+import io.github.yangyouwang.module.system.mapper.SysLoginLogMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.core.userdetails.User;
@@ -12,6 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.Resource;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -26,8 +27,8 @@ import java.util.Objects;
 @Component
 public class AuthenticationSuccessListener implements ApplicationListener<AuthenticationSuccessEvent> {
 
-    @Autowired
-    private SysLoginLogService sysLoginLogService;
+    @Resource
+    private SysLoginLogMapper sysLoginLogMapper;
 
     @Override
     public void onApplicationEvent(AuthenticationSuccessEvent event) {
@@ -39,6 +40,8 @@ public class AuthenticationSuccessListener implements ApplicationListener<Authen
         sysLoginLog.setAccount(user.getUsername());
         sysLoginLog.setLoginIp(ip);
         sysLoginLog.setRemark("登录成功");
-        sysLoginLogService.save(sysLoginLog);
+        sysLoginLog.setCreateBy(user.getUsername());
+        sysLoginLog.setCreateTime(new Date());
+        sysLoginLogMapper.insert(sysLoginLog);
     }
 }
