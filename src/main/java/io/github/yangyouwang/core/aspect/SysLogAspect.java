@@ -44,7 +44,7 @@ public class SysLogAspect {
      */
     @AfterReturning(value = "logPointCut() && @annotation(crudLog)", returning = "obj")
     public void doAfterReturning(JoinPoint joinPoint, CrudLog crudLog, Object obj) {
-        SysLog sysLog = handleLog(joinPoint, crudLog);
+        SysLog sysLog = handleOperLog(joinPoint, crudLog);
         sysLogMapper.insert(sysLog);
     }
 
@@ -53,7 +53,15 @@ public class SysLogAspect {
      */
     @AfterThrowing(value = "logPointCut() && @annotation(crudLog)", throwing = "e")
     private void doAfterThrowing(JoinPoint joinPoint, CrudLog crudLog, Exception e) {
-        SysLog sysLog = handleLog(joinPoint,crudLog);
+        SysLog sysLog = handleExceptionLog(joinPoint, crudLog, e);
+        sysLogMapper.insert(sysLog);
+    }
+
+    /**
+     * 错误操作日志
+     */
+    private SysLog handleExceptionLog(JoinPoint joinPoint, CrudLog crudLog, Exception e) {
+        SysLog sysLog = handleOperLog(joinPoint, crudLog);
         StringWriter stackTraceWriter = new StringWriter();
         //异常堆栈信息
         e.printStackTrace(new PrintWriter(stackTraceWriter, true));
@@ -64,10 +72,13 @@ public class SysLogAspect {
         //异常类型
         String exceptionName = e.toString();
         sysLog.setExceptionName(exceptionName);
-        sysLogMapper.insert(sysLog);
+        return sysLog;
     }
 
-    private SysLog handleLog(JoinPoint joinPoint, CrudLog crudLog) {
+    /**
+     * 操作日志
+     */
+    private SysLog handleOperLog(JoinPoint joinPoint, CrudLog crudLog) {
         SysLog sysLog = new SysLog();
         // 标题/业务类型
         sysLog.setTitle(crudLog.title());
