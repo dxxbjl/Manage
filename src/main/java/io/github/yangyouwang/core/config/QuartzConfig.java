@@ -1,6 +1,6 @@
 package io.github.yangyouwang.core.config;
 
-import io.github.yangyouwang.core.job.JobFactory;
+import io.github.yangyouwang.module.qrtz.util.job.JobFactory;
 import org.quartz.Scheduler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

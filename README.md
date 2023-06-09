@@ -19,7 +19,6 @@
 - 日志管理：LogBack
 - 工具类：Apache Commons、Hutool
 - 视图框架：Spring MVC
-- 工作流：Activiti6
 - 定时器：Quartz
 - 数据库连接池：Druid
 - 页面交互：layuiAdmin
@@ -181,11 +180,6 @@ sec:authorize="hasAuthority('权限标识')" // thymeleaf声明
 
     代码生成
    ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/17.png "17.png")
-
-    工作流
-   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/9.png "9.png")
-   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/10.png "10.png")
-   ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/16.png "16.png")
 
     登录日志管理
    ![运行截图](https://gitee.com/yangyouwang/crud/raw/master/src/main/resources/static/img/11.png "11.png")

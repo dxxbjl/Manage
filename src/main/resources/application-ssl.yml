@@ -10,7 +10,6 @@ spring:
     schema:
       - classpath:sql/sys.sql
       - classpath:sql/app.sql
-      - classpath:sql/act.sql
       - classpath:sql/qrtz.sql
     initialization-mode: never
     dynamic:

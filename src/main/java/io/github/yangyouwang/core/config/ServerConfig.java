@@ -1,11 +1,13 @@
 package io.github.yangyouwang.core.config;
 
-import org.springframework.boot.web.context.WebServerInitializedEvent;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 /**
  * Description: 服务配置类 <br/>
@@ -15,23 +17,23 @@ import java.net.UnknownHostException;
  * @version v1.0
  * @since JDK 1.8
  */
+@Slf4j
 @Component
-public class ServerConfig implements ApplicationListener<WebServerInitializedEvent> {
+public class ServerConfig implements ApplicationListener<ContextRefreshedEvent> {
 
-    private int serverPort;
+    /**
+     * 端口
+     */
+    @Value("${server.port}")
+    private String port;
 
-    public String getUrl() {
-        InetAddress address = null;
-        try {
-            address = InetAddress.getLocalHost();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        return "http://" + address.getHostAddress() +":" + this.serverPort;
-    }
-
+    @SneakyThrows
     @Override
-    public void onApplicationEvent(WebServerInitializedEvent event) {
-        this.serverPort = event.getWebServer().getPort();
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+        String url = "http://" + InetAddress.getLocalHost().getHostAddress() +":" + port;
+        log.info("\n----------------------------------------------------------\n\t" +
+                "Application is running! Access URLs:\n\t" +
+                "访问网址:"+ url + "\n" +
+                "----------------------------------------------------------");
     }
 }

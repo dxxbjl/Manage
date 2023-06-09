@@ -42,7 +42,6 @@ CREATE TABLE `sys_dict_type`  (
 INSERT INTO `sys_dict_type` VALUES (17, 'sex', '性别', 1, 'Y', 'admin', '2021-04-16 12:27:04', 'admin', '2022-06-25 21:47:42', 0, '性别字典');
 INSERT INTO `sys_dict_type` VALUES (18, 'menuType', '菜单类型', 2, 'Y', 'admin', '2021-04-16 20:42:06', 'admin', '2022-06-25 22:43:44', 0, '菜单类型');
 INSERT INTO `sys_dict_type` VALUES (19, 'enabled', '是否启用', 3, 'Y', 'admin', '2021-04-29 21:00:41', 'admin', '2021-12-09 23:51:44', 0, '是否启用');
-INSERT INTO `sys_dict_type` VALUES (20, 'actCategory', '流程分类', 4, 'Y', 'admin', '2022-09-01 19:59:56', 'admin', '2022-09-01 20:09:15', 0, '流程分类');
 INSERT INTO `sys_dict_type` VALUES (21, 'noticeType', '公告类型', 5, 'Y', 'admin', '2022-10-04 20:46:07', 'admin', '2022-10-04 22:18:42', 0, '公告类型');
 INSERT INTO `sys_dict_type` VALUES (22, 'executeStatus', '执行状态', 6, 'Y', 'admin', '2022-10-26 18:17:07', '', NULL, 0, '执行状态');
 INSERT INTO `sys_dict_type` VALUES (23, 'sysYesNo', '系统是否', 7, 'Y', 'admin', '2022-12-07 04:01:25', 'admin', '2022-12-08 00:02:29', 0, '');
@@ -78,8 +77,6 @@ INSERT INTO `sys_dict_value` VALUES (26, 18, 'F', '按钮', 3, 'Y', 'admin', '20
 INSERT INTO `sys_dict_value` VALUES (27, 17, '0', '未知', 0, 'Y', 'admin', '2022-06-25 01:26:22', 'admin', '2022-12-05 18:14:28', 0, '');
 INSERT INTO `sys_dict_value` VALUES (30, 19, 'Y', '启用', 1, 'Y', 'admin', '2022-06-25 21:29:01', 'admin', '2022-06-25 21:29:01', 0, NULL);
 INSERT INTO `sys_dict_value` VALUES (31, 19, 'N', '禁用', 2, 'Y', 'admin', '2022-06-25 21:29:13', 'admin', '2022-06-25 21:29:13', 0, NULL);
-INSERT INTO `sys_dict_value` VALUES (32, 20, 'leaveProcess', '请假流程', 1, 'Y', 'admin', '2022-06-25 21:29:01', 'admin', '2022-06-25 21:29:01', 0, '');
-INSERT INTO `sys_dict_value` VALUES (33, 20, 'reimbursementProcess', '报销流程', 2, 'Y', 'admin', '2022-06-25 21:29:01', 'admin', '2022-06-25 21:29:01', 0, '');
 INSERT INTO `sys_dict_value` VALUES (34, 21, '1', '通知', 1, 'Y', 'admin', '2022-06-25 21:29:01', 'admin', '2022-06-25 21:29:01', 0, '');
 INSERT INTO `sys_dict_value` VALUES (35, 21, '2', '公告', 2, 'Y', 'admin', '2022-06-25 21:29:01', 'admin', '2022-06-25 21:29:01', 0, '');
 INSERT INTO `sys_dict_value` VALUES (36, 22, '0', '正常', 1, 'Y', 'admin', '2022-06-25 21:29:01', 'admin', '2022-06-25 21:29:01', 0, '正常');
@@ -176,13 +173,6 @@ INSERT INTO `sys_menu` VALUES (3005, '添加菜单', 102, 1, NULL, '#', 'F', 'Y'
 INSERT INTO `sys_menu` VALUES (3006, '编辑菜单', 102, 2, NULL, '#', 'F', 'Y', 'menu:edit', 'admin', '2021-03-31 17:01:35', 'admin', '2021-04-10 11:27:40', 0, '编辑菜单');
 INSERT INTO `sys_menu` VALUES (3007, '删除菜单', 102, 3, NULL, '#', 'F', 'Y', 'menu:del', 'admin', '2021-03-31 17:01:57', 'admin', '2021-04-10 11:27:49', 0, '删除菜单');
 INSERT INTO `sys_menu` VALUES (3008, '日志管理', 1, 8, 'layui-icon-chart-screen', '/sysLog/listPage', 'C', 'Y', 'log:list', 'admin', '2021-04-01 11:01:52', 'admin', '2022-09-15 22:10:39', 0, '异常日志列表');
-INSERT INTO `sys_menu` VALUES (3013, '流程管理', 0, 3, 'layui-icon-release', '#', 'M', 'Y', '', 'admin', '2021-04-10 20:06:40', 'admin', '2021-05-07 12:11:21', 0, '工作流管理');
-INSERT INTO `sys_menu` VALUES (3014, '模型管理', 3013, 1, 'layui-icon-set-fill', '/actReModel/listPage', 'C', 'Y', 'model:list', 'admin', '2021-04-10 20:10:56', 'admin', '2021-05-12 11:19:24', 0, '模型管理');
-INSERT INTO `sys_menu` VALUES (3015, '添加模型', 3014, 1, NULL, '#', 'F', 'Y', 'model:add', 'admin', '2021-03-31 16:55:04', 'admin', '2021-04-10 11:26:53', 0, '添加模型');
-INSERT INTO `sys_menu` VALUES (3016, '编辑模型', 3014, 2, NULL, '#', 'F', 'Y', 'model:edit', 'admin', '2021-03-31 17:01:35', 'admin', '2021-04-10 11:27:05', 0, '编辑模型');
-INSERT INTO `sys_menu` VALUES (3017, '删除模型', 3014, 3, NULL, '#', 'F', 'Y', 'model:del', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', 0, '删除模型');
-INSERT INTO `sys_menu` VALUES (3018, '设计模型', 3014, 3, NULL, '#', 'F', 'Y', 'model:design', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', 0, '设计模型');
-INSERT INTO `sys_menu` VALUES (3019, '部署模型', 3014, 3, NULL, '#', 'F', 'Y', 'model:deploy', 'admin', '2021-03-31 17:01:57', 'admin', '2021-03-31 17:01:57', 0, '部署模型');
 INSERT INTO `sys_menu` VALUES (3020, '字典管理', 1, 6, 'layui-icon-edit', '/sysDictType/listPage', 'C', 'Y', 'dictType:list', 'admin', '2021-04-13 13:35:48', 'admin', '2022-09-03 23:50:38', 0, '字典管理');
 INSERT INTO `sys_menu` VALUES (3021, '添加字典', 3020, 1, NULL, '#', 'F', 'Y', 'dictType:add', 'admin', '2021-03-31 16:55:04', 'admin', '2021-04-10 11:26:53', 0, '添加字典');
 INSERT INTO `sys_menu` VALUES (3022, '编辑字典', 3020, 2, NULL, '#', 'F', 'Y', 'dictType:edit', 'admin', '2021-03-31 17:01:35', 'admin', '2021-04-10 11:27:05', 0, '编辑字典');
@@ -236,10 +226,6 @@ INSERT INTO `sys_menu` VALUES (3084, '新闻管理', 3051, 5, 'layui-icon-home',
 INSERT INTO `sys_menu` VALUES (3085, '添加新闻', 3084, 1, '', '#', 'F', 'Y', 'news:add', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3086, '编辑新闻', 3084, 2, '', '#', 'F', 'Y', 'news:edit', '', NULL, '', NULL, 0, '');
 INSERT INTO `sys_menu` VALUES (3087, '删除新闻', 3084, 3, '', '#', 'F', 'Y', 'news:del', '', NULL, '', NULL, 0, '');
-INSERT INTO `sys_menu` VALUES (3089, '我的流程', 3013, 3, 'layui-icon-username', '/workFlow/flowPage', 'C', 'Y', '', 'admin', '2022-11-11 10:42:06', 'admin', '2022-12-02 00:43:32', 0, '');
-INSERT INTO `sys_menu` VALUES (3090, '代办任务', 3013, 4, 'layui-icon-username', '/workFlow/toDoTaskPage', 'C', 'Y', '', 'admin', '2022-11-13 10:42:29', 'admin', '2022-12-02 00:43:41', 0, '');
-INSERT INTO `sys_menu` VALUES (3091, '已办任务', 3013, 5, 'layui-icon-username', '/workFlow/historicTaskPage', 'C', 'Y', '', 'admin', '2022-11-13 10:42:59', 'admin', '2022-12-02 00:43:51', 0, '');
-
 -- ----------------------------
 -- Table structure for sys_role
 -- ----------------------------

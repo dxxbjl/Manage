@@ -25,8 +25,8 @@ import java.util.List;
  * @version v1.0
  * @since JDK 1.8
  */
-@Component
 @Slf4j
+@Component
 public class SampleVod {
     /**
      * 区域

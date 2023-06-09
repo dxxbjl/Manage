@@ -15,8 +15,8 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
   autoconfigure:
-    #自动化配置 例外处理
-    exclude: com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure,org.activiti.spring.boot.SecurityAutoConfiguration,org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+    # 排除 Druid 自动配置
+    exclude: com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
   mvc:
     static-path-pattern: /static/**
   # 多环境配置
@@ -92,7 +92,7 @@ mybatis-plus:
     auto-mapping-behavior: full
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath*:mapper/**/*Mapper.xml
-  type-aliases-package: io.github.yangyouwang.crud.**.entity
+  type-aliases-package: io.github.yangyouwang.module.**.entity
   global-config:
     # 逻辑删除配置
     db-config:

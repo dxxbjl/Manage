@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="io.github.yangyouwang.crud.system.mapper.SysDeptMapper">
-    <resultMap id="BaseResultMap" type="io.github.yangyouwang.crud.system.entity.SysDept">
+<mapper namespace="io.github.yangyouwang.module.system.mapper.SysDeptMapper">
+    <resultMap id="BaseResultMap" type="io.github.yangyouwang.module.system.entity.SysDept">
         <id column="id" jdbcType="BIGINT" property="id" />
         <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
         <result column="order_num" jdbcType="INTEGER" property="orderNum" />

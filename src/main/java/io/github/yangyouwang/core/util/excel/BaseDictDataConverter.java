@@ -7,8 +7,8 @@ import com.alibaba.excel.metadata.GlobalConfiguration;
 import com.alibaba.excel.metadata.property.ExcelContentProperty;
 import io.github.yangyouwang.common.annotation.DictType;
 import io.github.yangyouwang.core.util.SpringUtils;
-import io.github.yangyouwang.crud.system.entity.SysDictValue;
-import io.github.yangyouwang.crud.system.service.SysDictValueService;
+import io.github.yangyouwang.module.system.entity.SysDictValue;
+import io.github.yangyouwang.module.system.service.SysDictValueService;
 
 import java.lang.reflect.Field;
 import java.util.List;

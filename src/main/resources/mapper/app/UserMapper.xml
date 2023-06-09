@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="io.github.yangyouwang.crud.app.mapper.UserMapper">
-    <resultMap id="BaseResultMap" type="io.github.yangyouwang.crud.app.entity.User">
+<mapper namespace="io.github.yangyouwang.module.app.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="io.github.yangyouwang.module.app.entity.User">
         <id column="id" jdbcType="BIGINT" property="id" />
         <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
         <result column="avatar" jdbcType="VARCHAR" property="avatar" />
