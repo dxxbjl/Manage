@@ -10,6 +10,7 @@
 - 平台演示地址：[预览](http://www.wbd.plus/) 
 - 账号：admin
 - 密码：123456  
+- 测试
 
 ## 软件架构
 - 核心框架：Spring Boot
