@@ -12,12 +12,12 @@ spring:
         master:
           url: jdbc:mysql://localhost:3306/crud?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&nullCatalogMeansCurrent=true&autoReconnect=true&allowMultiQueries=true&useSSL=false
           username: root
-          password: 123456
+          password: root
           driver-class-name: com.mysql.jdbc.Driver # 3.2.0开始支持SPI可省略此配置
         slave:
           url: jdbc:mysql://localhost:3306/crud?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&nullCatalogMeansCurrent=true&autoReconnect=true&allowMultiQueries=true&useSSL=false
           username: root
-          password: 123456
+          password: root
           driver-class-name: com.mysql.jdbc.Driver
     druid:
       #监控统计拦截的filters
